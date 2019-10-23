@@ -22,14 +22,18 @@
 #define MACH_SCRIPT_H
 
 #include "binary_script.h"
+#include "xmach.h"
 
 class MACH_Script : public Binary_Script
 {
     Q_OBJECT
 
 public:
-    MACH_Script(QIODevice *pDevice);
+    MACH_Script(XMACH *pMACH);
     ~MACH_Script();
+
+private:
+    XMACH *pMACH;
 };
 
 #endif // MACH_SCRIPT_H

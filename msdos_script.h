@@ -22,18 +22,22 @@
 #define MSDOS_SCRIPT_H
 
 #include "binary_script.h"
+#include "xmsdos.h"
 
 class MSDOS_Script : public Binary_Script
 {
     Q_OBJECT
 
 public:
-    explicit MSDOS_Script(QIODevice *pDevice);
+    explicit MSDOS_Script(XMSDOS *pMSDOS);
     ~MSDOS_Script();
 
 signals:
 
 public slots:
+
+private:
+    XMSDOS *pMSDOS;
 };
 
 #endif // MSDOS_SCRIPT_H

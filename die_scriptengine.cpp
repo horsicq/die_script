@@ -26,9 +26,47 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
     _addFunction(_includeScript,"includeScript");
 
-    pBinaryScript=new Binary_Script(pDevice);
-
-    _addClass(pBinaryScript,"Binary");
+    if(stype==STYPE_BINARY)
+    {
+        pBinary=new XBinary(pDevice);
+        pBinaryScript=new Binary_Script(pBinary);
+        _addClass(pBinaryScript,"Binary");
+    }
+    else if(stype==STYPE_PE)
+    {
+        XPE *pPE=new XPE(pDevice);
+        pBinaryScript=new PE_Script(pPE);
+        _addClass(pBinaryScript,"PE");
+        pBinary=pPE;
+    }
+    else if(stype==STYPE_ELF)
+    {
+        XELF *pELF=new XELF(pDevice);
+        pBinaryScript=new ELF_Script(pELF);
+        _addClass(pBinaryScript,"ELF");
+        pBinary=pELF;
+    }
+    else if(stype==STYPE_MACH)
+    {
+        XMACH *pMACH=new XMACH(pDevice);
+        pBinaryScript=new MACH_Script(pMACH);
+        _addClass(pBinaryScript,"MACH");
+        pBinary=pMACH;
+    }
+    else if(stype==STYPE_MSDOS)
+    {
+        XMSDOS *pXMSDOS=new XMSDOS(pDevice);
+        pBinaryScript=new MSDOS_Script(pXMSDOS);
+        _addClass(pBinaryScript,"MSDOS");
+        pBinary=pXMSDOS;
+    }
+    else if(stype==STYPE_TEXT)
+    {
+        XBinary *pText=new XBinary(pDevice);
+        pBinaryScript=new Text_Script(pText);
+        _addClass(pBinaryScript,"Text");
+        pBinary=pText;
+    }
 }
 
 DiE_ScriptEngine::~DiE_ScriptEngine()

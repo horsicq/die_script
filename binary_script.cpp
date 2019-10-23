@@ -20,14 +20,14 @@
 //
 #include "binary_script.h"
 
-Binary_Script::Binary_Script(QIODevice *pDevice)
+Binary_Script::Binary_Script(XBinary *pBinary)
 {
-    pBinary=new XBinary(pDevice);
+    this->pBinary=pBinary;
 }
 
 Binary_Script::~Binary_Script()
 {
-    delete pBinary;
+
 }
 
 qint64 Binary_Script::getSize()
@@ -38,6 +38,11 @@ qint64 Binary_Script::getSize()
 bool Binary_Script::compare(QString sSignature, qint64 nOffset)
 {
     return pBinary->compareSignature(sSignature,nOffset);
+}
+
+bool Binary_Script::compareEP(QString sSignature, qint64 nOffset)
+{
+    return pBinary->compareEntryPoint(sSignature,nOffset);
 }
 
 quint8 Binary_Script::readByte(qint64 nOffset)
@@ -68,4 +73,9 @@ QString Binary_Script::getString(qint64 nOffset, qint64 nMaxSize)
 qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, QString sSignature)
 {
     return pBinary->find_signature(nOffset,nSize,sSignature);
+}
+
+qint64 Binary_Script::getEntryPointOffset()
+{
+    return pBinary->getEntryPointOffset();
 }

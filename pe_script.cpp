@@ -20,12 +20,57 @@
 //
 #include "pe_script.h"
 
-PE_Script::PE_Script(QIODevice *pDevice) : MSDOS_Script(pDevice)
+PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 {
-
+    this->pPE=pPE;
 }
 
 PE_Script::~PE_Script()
 {
 
+}
+
+quint16 PE_Script::getNumberOfSections()
+{
+    return pPE->getFileHeader_NumberOfSections();
+}
+
+QString PE_Script::getSectionName(quint32 nNumber)
+{
+    return pPE->getSection_NameAsString(nNumber);
+}
+
+quint32 PE_Script::getSectionVirtualSize(quint32 nNumber)
+{
+    return pPE->getSection_VirtualSize(nNumber);
+}
+
+quint32 PE_Script::getSectionVirtualAddress(quint32 nNumber)
+{
+    return pPE->getSection_VirtualAddress(nNumber);
+}
+
+quint32 PE_Script::getSectionFileSize(quint32 nNumber)
+{
+    return pPE->getSection_SizeOfRawData(nNumber);
+}
+
+quint32 PE_Script::getSectionFileOffset(quint32 nNumber)
+{
+    return pPE->getSection_PointerToRawData(nNumber);
+}
+
+quint32 PE_Script::getSectionCharacteristics(quint32 nNumber)
+{
+    return pPE->getSection_Characteristics(nNumber);
+}
+
+quint32 PE_Script::getNumberOfResources()
+{
+    return pPE->getResources().count();
+}
+
+bool PE_Script::isSectionNamePresent(QString sSectionName)
+{
+    return pPE->isSectionNamePresent(sSectionName);
 }

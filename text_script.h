@@ -28,12 +28,13 @@ class Text_Script : public Binary_Script
     Q_OBJECT
 
 public:
-    explicit Text_Script(QIODevice *pDevice);
+    explicit Text_Script(XBinary *pText);
     ~Text_Script();
 
 signals:
 
-public slots:
+private:
+    XBinary *pText;
 };
 
 #endif // TEXT_SCRIPT_H

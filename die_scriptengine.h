@@ -25,6 +25,11 @@
 #include <QIODevice>
 #include "xbinary.h"
 #include "binary_script.h"
+#include "elf_script.h"
+#include "mach_script.h"
+#include "msdos_script.h"
+#include "pe_script.h"
+#include "text_script.h"
 
 class DiE_ScriptEngine : public QScriptEngine
 {
@@ -58,6 +63,7 @@ private:
 
 private:
     QList<SIGNATURE_RECORD> *pSignaturesList;
+    XBinary *pBinary;
     Binary_Script *pBinaryScript;
 };
 

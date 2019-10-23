@@ -20,9 +20,9 @@
 //
 #include "text_script.h"
 
-Text_Script::Text_Script(QIODevice *pDevice) : Binary_Script(pDevice)
+Text_Script::Text_Script(XBinary *pText) : Binary_Script(pText)
 {
-
+    this->pText=pText;
 }
 
 Text_Script::~Text_Script()

@@ -20,9 +20,9 @@
 //
 #include "elf_script.h"
 
-ELF_Script::ELF_Script(QIODevice *pDevice) : Binary_Script(pDevice)
+ELF_Script::ELF_Script(XELF *pELF) : Binary_Script(pELF)
 {
-
+    this->pELF=pELF;
 }
 
 ELF_Script::~ELF_Script()

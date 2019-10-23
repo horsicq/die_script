@@ -22,17 +22,21 @@
 #define ELF_SCRIPT_H
 
 #include "binary_script.h"
+#include "xelf.h"
 
 class ELF_Script : public Binary_Script
 {
     Q_OBJECT
 
 public:
-    explicit ELF_Script(QIODevice *pDevice);
+    explicit ELF_Script(XELF *pELF);
     ~ELF_Script();
 signals:
 
 public slots:
+
+private:
+    XELF *pELF;
 };
 
 #endif // ELF_SCRIPT_H

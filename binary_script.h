@@ -30,18 +30,20 @@ class Binary_Script : public QObject
     Q_OBJECT
 
 public:
-    explicit Binary_Script(QIODevice *pDevice);
+    explicit Binary_Script(XBinary *pBinary);
     ~Binary_Script();
 
 public slots:
     qint64 getSize();
     bool compare(QString sSignature,qint64 nOffset=0);
+    bool compareEP(QString sSignature,qint64 nOffset=0);
     quint8 readByte(qint64 nOffset);
     quint16 readWord(qint64 nOffset);
     quint32 readDword(qint64 nOffset);
     quint64 readQword(qint64 nOffset);
     QString getString(qint64 nOffset,qint64 nMaxSize=50);
     qint64 findSignature(qint64 nOffset,qint64 nSize,QString sSignature);
+    qint64 getEntryPointOffset();
 
 private:
     XBinary *pBinary;

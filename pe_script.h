@@ -22,18 +22,29 @@
 #define PE_SCRIPT_H
 
 #include "msdos_script.h"
+#include "xpe.h"
 
 class PE_Script : public MSDOS_Script
 {
     Q_OBJECT
 
 public:
-    explicit PE_Script(QIODevice *pDevice);
+    explicit PE_Script(XPE *pPE);
     ~PE_Script();
 
-signals:
-
 public slots:
+    quint16 getNumberOfSections();
+    QString getSectionName(quint32 nNumber);
+    quint32 getSectionVirtualSize(quint32 nNumber);
+    quint32 getSectionVirtualAddress(quint32 nNumber);
+    quint32 getSectionFileSize(quint32 nNumber);
+    quint32 getSectionFileOffset(quint32 nNumber);
+    quint32 getSectionCharacteristics(quint32 nNumber);
+    quint32 getNumberOfResources();
+    bool isSectionNamePresent(QString sSectionName);
+
+private:
+    XPE *pPE;
 };
 
 #endif // PE_SCRIPT_H

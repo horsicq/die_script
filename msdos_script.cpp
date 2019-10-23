@@ -20,9 +20,9 @@
 //
 #include "msdos_script.h"
 
-MSDOS_Script::MSDOS_Script(QIODevice *pDevice) : Binary_Script(pDevice)
+MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS) : Binary_Script(pMSDOS)
 {
-
+    this->pMSDOS=pMSDOS;
 }
 
 MSDOS_Script::~MSDOS_Script()

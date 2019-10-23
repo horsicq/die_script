@@ -20,9 +20,9 @@
 //
 #include "mach_script.h"
 
-MACH_Script::MACH_Script(QIODevice *pDevice) : Binary_Script(pDevice)
+MACH_Script::MACH_Script(XMACH *pMACH) : Binary_Script(pMACH)
 {
-
+    this->pMACH=pMACH;
 }
 
 MACH_Script::~MACH_Script()
