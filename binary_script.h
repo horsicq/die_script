@@ -43,7 +43,12 @@ public slots:
     quint64 readQword(qint64 nOffset);
     QString getString(qint64 nOffset,qint64 nMaxSize=50);
     qint64 findSignature(qint64 nOffset,qint64 nSize,QString sSignature);
+    qint64 findString(qint64 nOffset,qint64 nSize,QString sString);
     qint64 getEntryPointOffset();
+    qint64 getOverlayOffset();
+    qint64 getOverlaySize();
+    bool compareOverlay(QString sSignature, qint64 nOffset=0);
+    bool isSignaturePresent(qint64 nOffset,qint64 nSize,QString sSignature);
 
 private:
     XBinary *pBinary;

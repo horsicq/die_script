@@ -75,7 +75,32 @@ qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, QString sSigna
     return pBinary->find_signature(nOffset,nSize,sSignature);
 }
 
+qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, QString sString)
+{
+    return pBinary->find_ansiString(nOffset,nSize,sString);
+}
+
 qint64 Binary_Script::getEntryPointOffset()
 {
     return pBinary->getEntryPointOffset();
+}
+
+qint64 Binary_Script::getOverlayOffset()
+{
+    return pBinary->getOverlayOffset();
+}
+
+qint64 Binary_Script::getOverlaySize()
+{
+    return pBinary->getOverlaySize();
+}
+
+bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
+{
+    return pBinary->compareOverlay(sSignature,nOffset);
+}
+
+bool Binary_Script::isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSignature)
+{
+    return pBinary->isSignaturePresent(nOffset,nSize,sSignature);
 }

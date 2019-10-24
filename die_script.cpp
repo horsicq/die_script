@@ -115,7 +115,12 @@ void DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::STYPE stype)
 
                     if(scriptEngine.handleError(result,sInfo))
                     {
+                        QString sResult=result.toString();
 
+                        if(sResult!="")
+                        {
+                            qDebug(sResult.toLatin1().data());
+                        }
                     }
                 }
             }

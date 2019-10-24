@@ -32,9 +32,10 @@ public:
     explicit MSDOS_Script(XMSDOS *pMSDOS);
     ~MSDOS_Script();
 
-signals:
-
 public slots:
+    bool isLE();
+    bool isLX();
+    bool isNE();
 
 private:
     XMSDOS *pMSDOS;

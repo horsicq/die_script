@@ -29,3 +29,18 @@ MSDOS_Script::~MSDOS_Script()
 {
 
 }
+
+bool MSDOS_Script::isLE()
+{
+    return pMSDOS->isLE();
+}
+
+bool MSDOS_Script::isLX()
+{
+    return pMSDOS->isLX();
+}
+
+bool MSDOS_Script::isNE()
+{
+    return pMSDOS->isNE();
+}
