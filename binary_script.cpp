@@ -104,3 +104,8 @@ bool Binary_Script::isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSi
 {
     return pBinary->isSignaturePresent(nOffset,nSize,sSignature);
 }
+
+quint32 Binary_Script::swapBytes(quint32 nValue)
+{
+    return pBinary->swapBytes(nValue);
+}
