@@ -34,7 +34,7 @@ public:
 signals:
 
 public slots:
-
+    bool isSectionNamePresent(QString sSectionName);
 private:
     XELF *pELF;
 };

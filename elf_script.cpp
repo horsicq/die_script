@@ -29,3 +29,8 @@ ELF_Script::~ELF_Script()
 {
 
 }
+
+bool ELF_Script::isSectionNamePresent(QString sSectionName)
+{
+    return pELF->isSectionNamePresent(sSectionName);
+}
