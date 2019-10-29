@@ -32,6 +32,9 @@ public:
     MACH_Script(XMACH *pMACH);
     ~MACH_Script();
 
+public slots:
+    bool isLibraryPresent(QString sLibraryName);
+
 private:
     XMACH *pMACH;
 };

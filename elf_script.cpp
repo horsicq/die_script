@@ -34,3 +34,13 @@ bool ELF_Script::isSectionNamePresent(QString sSectionName)
 {
     return pELF->isSectionNamePresent(sSectionName);
 }
+
+quint32 ELF_Script::getNumberOfSections()
+{
+    return pELF->getHdr32_shnum();
+}
+
+quint32 ELF_Script::getNumberOfPrograms()
+{
+    return pELF->getHdr32_phnum();
+}
