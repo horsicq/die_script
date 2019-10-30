@@ -34,3 +34,8 @@ bool MACH_Script::isLibraryPresent(QString sLibraryName)
 {
     return pMACH->isLibraryRecordNamePresent(sLibraryName);
 }
+
+quint32 MACH_Script::getNumberOfSections()
+{
+    return pMACH->getNumberOfSections();
+}

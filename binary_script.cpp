@@ -95,6 +95,11 @@ qint64 Binary_Script::getOverlaySize()
     return pBinary->getOverlaySize();
 }
 
+bool Binary_Script::isOverlayPresent()
+{
+    return pBinary->isOverlayPresent();
+}
+
 bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
 {
     return pBinary->compareOverlay(sSignature,nOffset);

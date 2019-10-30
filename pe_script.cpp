@@ -74,3 +74,13 @@ bool PE_Script::isSectionNamePresent(QString sSectionName)
 {
     return pPE->isSectionNamePresent(sSectionName);
 }
+
+bool PE_Script::isNET()
+{
+    return pPE->isNETPresent();
+}
+
+bool PE_Script::isPEPlus()
+{
+    return pPE->is64();
+}

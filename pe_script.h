@@ -42,6 +42,8 @@ public slots:
     quint32 getSectionCharacteristics(quint32 nNumber);
     quint32 getNumberOfResources();
     bool isSectionNamePresent(QString sSectionName);
+    bool isNET();
+    bool isPEPlus();
 
 private:
     XPE *pPE;
