@@ -39,3 +39,15 @@ quint32 MACH_Script::getNumberOfSections()
 {
     return pMACH->getNumberOfSections();
 }
+
+qint32 MACH_Script::getSectionNumber(QString sSectionName)
+{
+    return pMACH->getSectionNumber(sSectionName);
+}
+
+QString MACH_Script::getGeneralOptions()
+{
+    qDebug("QString MACH_Script::getGeneralOptions() TODO");
+
+    return "";
+}

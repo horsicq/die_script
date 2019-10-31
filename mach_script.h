@@ -35,6 +35,8 @@ public:
 public slots:
     bool isLibraryPresent(QString sLibraryName);
     quint32 getNumberOfSections();
+    qint32 getSectionNumber(QString sSectionName);
+    virtual QString getGeneralOptions();
 
 private:
     XMACH *pMACH;

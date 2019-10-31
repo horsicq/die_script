@@ -84,3 +84,10 @@ bool PE_Script::isPEPlus()
 {
     return pPE->is64();
 }
+
+QString PE_Script::getGeneralOptions()
+{
+    qDebug("QString PE_Script::getGeneralOptions() TODO");
+
+    return "";
+}

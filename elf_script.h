@@ -37,6 +37,7 @@ public slots:
     bool isSectionNamePresent(QString sSectionName);
     quint32 getNumberOfSections();
     quint32 getNumberOfPrograms();
+    virtual QString getGeneralOptions();
 
 private:
     XELF *pELF;

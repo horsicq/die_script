@@ -51,6 +51,7 @@ public slots:
     bool compareOverlay(QString sSignature, qint64 nOffset=0);
     bool isSignaturePresent(qint64 nOffset,qint64 nSize,QString sSignature);
     quint32 swapBytes(quint32 nValue);
+    virtual QString getGeneralOptions();
 
 private:
     XBinary *pBinary;

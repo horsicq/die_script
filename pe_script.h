@@ -44,6 +44,7 @@ public slots:
     bool isSectionNamePresent(QString sSectionName);
     bool isNET();
     bool isPEPlus();
+    virtual QString getGeneralOptions();
 
 private:
     XPE *pPE;

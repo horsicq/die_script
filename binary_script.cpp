@@ -114,3 +114,8 @@ quint32 Binary_Script::swapBytes(quint32 nValue)
 {
     return pBinary->swapBytes(nValue);
 }
+
+QString Binary_Script::getGeneralOptions()
+{
+    return "";
+}

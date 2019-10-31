@@ -44,3 +44,10 @@ quint32 ELF_Script::getNumberOfPrograms()
 {
     return pELF->getHdr32_phnum();
 }
+
+QString ELF_Script::getGeneralOptions()
+{
+    qDebug("QString ELF_Script::getGeneralOptions() TODO");
+
+    return "";
+}
