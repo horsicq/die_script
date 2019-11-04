@@ -81,23 +81,26 @@ void DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::STYPE stype)
         }  
     }
 
+    DiE_ScriptEngine scriptEngine(&listSignatures,pDevice,stype);
+
+    if(nCount)
+    {
+        if(srGlobalInit.sText!="")
+        {
+            scriptEngine.handleError(scriptEngine.evaluate(srGlobalInit.sText),"_init");
+        }
+
+        if(srInit.sText!="")
+        {
+            scriptEngine.handleError(scriptEngine.evaluate(srInit.sText),"_init");
+        }
+    }
+
     for(int i=0;i<nCount;i++)
     {
         if((listSignatures.at(i).stype==stype)&&(listSignatures.at(i).sName!="_init"))
         {
             QString sInfo=listSignatures.at(i).sName;
-
-            DiE_ScriptEngine scriptEngine(&listSignatures,pDevice,stype);
-
-            if(srGlobalInit.sText!="")
-            {
-                scriptEngine.handleError(scriptEngine.evaluate(srGlobalInit.sText),"_init");
-            }
-
-            if(srInit.sText!="")
-            {
-                scriptEngine.handleError(scriptEngine.evaluate(srInit.sText),"_init");
-            }
 
             QScriptValue script=scriptEngine.evaluate(listSignatures.at(i).sText);
 

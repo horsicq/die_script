@@ -91,3 +91,28 @@ QString PE_Script::getGeneralOptions()
 
     return "";
 }
+
+quint32 PE_Script::getResourceIdByNumber(quint32 nNumber)
+{
+    return pPE->getResourceIdByNumber(nNumber);
+}
+
+QString PE_Script::getResourceNameByNumber(quint32 nNumber)
+{
+    return pPE->getResourceNameByNumber(nNumber);
+}
+
+qint64 PE_Script::getResourceOffsetByNumber(quint32 nNumber)
+{
+    return pPE->getResourceOffsetByNumber(nNumber);
+}
+
+qint64 PE_Script::getResourceSizeByNumber(quint32 nNumber)
+{
+    return pPE->getResourceSizeByNumber(nNumber);
+}
+
+quint32 PE_Script::getResourceTypeByNumber(quint32 nNumber)
+{
+    return pPE->getResourceTypeByNumber(nNumber);
+}

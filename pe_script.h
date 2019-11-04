@@ -45,6 +45,11 @@ public slots:
     bool isNET();
     bool isPEPlus();
     virtual QString getGeneralOptions();
+    quint32 getResourceIdByNumber(quint32 nNumber);
+    QString getResourceNameByNumber(quint32 nNumber);
+    qint64 getResourceOffsetByNumber(quint32 nNumber);
+    qint64 getResourceSizeByNumber(quint32 nNumber);
+    quint32 getResourceTypeByNumber(quint32 nNumber);
 
 private:
     XPE *pPE;
