@@ -50,6 +50,7 @@ public slots:
     qint64 getResourceOffsetByNumber(quint32 nNumber);
     qint64 getResourceSizeByNumber(quint32 nNumber);
     quint32 getResourceTypeByNumber(quint32 nNumber);
+    bool isNETStringPresent(QString sString);
 
 private:
     XPE *pPE;
