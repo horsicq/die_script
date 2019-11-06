@@ -51,6 +51,8 @@ public slots:
     qint64 getResourceSizeByNumber(quint32 nNumber);
     quint32 getResourceTypeByNumber(quint32 nNumber);
     bool isNETStringPresent(QString sString);
+    qint32 getNumberOfImports();
+    QString getImportLibraryName(quint32 nNumber);
 
 private:
     XPE *pPE;

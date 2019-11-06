@@ -121,3 +121,13 @@ bool PE_Script::isNETStringPresent(QString sString)
 {
     return pPE->isNETAnsiStringPresent(sString);
 }
+
+qint32 PE_Script::getNumberOfImports()
+{
+    return pPE->getNumberOfImports();
+}
+
+QString PE_Script::getImportLibraryName(quint32 nNumber)
+{
+    return pPE->getImportLibraryName(nNumber);
+}
