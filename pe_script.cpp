@@ -131,3 +131,23 @@ QString PE_Script::getImportLibraryName(quint32 nNumber)
 {
     return pPE->getImportLibraryName(nNumber);
 }
+
+bool PE_Script::isLibraryPresent(QString sLibraryName)
+{
+    return pPE->isImportLibraryPresentI(sLibraryName);
+}
+
+qint32 PE_Script::getImportSection()
+{
+    return pPE->getImportSection();
+}
+
+qint32 PE_Script::getResourceSection()
+{
+    return pPE->getResourcesSection();
+}
+
+qint32 PE_Script::getEntryPointSection()
+{
+    return pPE->getEntryPointSection();
+}

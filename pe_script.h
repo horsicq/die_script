@@ -53,6 +53,10 @@ public slots:
     bool isNETStringPresent(QString sString);
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
+    bool isLibraryPresent(QString sLibraryName);
+    qint32 getImportSection();
+    qint32 getResourceSection();
+    qint32 getEntryPointSection();
 
 private:
     XPE *pPE;
