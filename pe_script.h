@@ -57,6 +57,9 @@ public slots:
     qint32 getImportSection();
     qint32 getResourceSection();
     qint32 getEntryPointSection();
+    quint8 getMajorLinkerVersion();
+    quint8 getMinorLinkerVersion();
+    QString getManifest();
 
 private:
     XPE *pPE;

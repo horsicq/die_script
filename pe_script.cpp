@@ -151,3 +151,18 @@ qint32 PE_Script::getEntryPointSection()
 {
     return pPE->getEntryPointSection();
 }
+
+quint8 PE_Script::getMajorLinkerVersion()
+{
+    return pPE->getOptionalHeader_MajorLinkerVersion();
+}
+
+quint8 PE_Script::getMinorLinkerVersion()
+{
+    return pPE->getOptionalHeader_MinorLinkerVersion();
+}
+
+QString PE_Script::getManifest()
+{
+    return pPE->getResourceManifest();
+}
