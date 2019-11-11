@@ -60,6 +60,7 @@ public slots:
     quint8 getMajorLinkerVersion();
     quint8 getMinorLinkerVersion();
     QString getManifest();
+    QString getVersionStringInfo(QString sKey);
 
 private:
     XPE *pPE;

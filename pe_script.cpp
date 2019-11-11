@@ -166,3 +166,8 @@ QString PE_Script::getManifest()
 {
     return pPE->getResourceManifest();
 }
+
+QString PE_Script::getVersionStringInfo(QString sKey)
+{
+    return pPE->getResourceVersionValue(sKey);
+}
