@@ -61,6 +61,7 @@ public slots:
     quint8 getMinorLinkerVersion();
     QString getManifest();
     QString getVersionStringInfo(QString sKey);
+    qint32 getNumberOfImportThunks(quint32 nNumber);
 
 private:
     XPE *pPE;

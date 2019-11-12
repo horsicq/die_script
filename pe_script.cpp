@@ -171,3 +171,8 @@ QString PE_Script::getVersionStringInfo(QString sKey)
 {
     return pPE->getResourceVersionValue(sKey);
 }
+
+qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
+{
+    return pPE->getNumberOfImportThunks(nNumber);
+}
