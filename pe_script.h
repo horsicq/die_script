@@ -62,6 +62,7 @@ public slots:
     QString getManifest();
     QString getVersionStringInfo(QString sKey);
     qint32 getNumberOfImportThunks(quint32 nNumber);
+    qint32 getNumberOfRichIDs();
 
 private:
     XPE *pPE;

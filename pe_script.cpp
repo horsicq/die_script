@@ -176,3 +176,8 @@ qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
 {
     return pPE->getNumberOfImportThunks(nNumber);
 }
+
+qint32 PE_Script::getNumberOfRichIDs()
+{
+    return pPE->getNumberOfRichIDs();
+}
