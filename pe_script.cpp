@@ -181,3 +181,13 @@ qint32 PE_Script::getNumberOfRichIDs()
 {
     return pPE->getNumberOfRichIDs();
 }
+
+qint64 PE_Script::getResourceNameOffset(QString sName)
+{
+    return pPE->getResourceNameOffset(sName);
+}
+
+bool PE_Script::isResourceNamePresent(QString sName)
+{
+    return pPE->isResourceNamePresent(sName);
+}

@@ -63,6 +63,8 @@ public slots:
     QString getVersionStringInfo(QString sKey);
     qint32 getNumberOfImportThunks(quint32 nNumber);
     qint32 getNumberOfRichIDs();
+    qint64 getResourceNameOffset(QString sName);
+    bool isResourceNamePresent(QString sName);
 
 private:
     XPE *pPE;
