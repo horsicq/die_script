@@ -95,6 +95,11 @@ qint64 Binary_Script::getOverlaySize()
     return pBinary->getOverlaySize();
 }
 
+qint64 Binary_Script::getAddressOfEntryPoint()
+{
+    return pBinary->getEntryPointAddress();
+}
+
 bool Binary_Script::isOverlayPresent()
 {
     return pBinary->isOverlayPresent();

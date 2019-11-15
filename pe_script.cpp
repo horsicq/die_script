@@ -191,3 +191,13 @@ bool PE_Script::isResourceNamePresent(QString sName)
 {
     return pPE->isResourceNamePresent(sName);
 }
+
+qint64 PE_Script::getDosStubOffset()
+{
+    return pPE->getDosStubOffset();
+}
+
+qint64 PE_Script::getDosStubSize()
+{
+    return pPE->getDosStubSize();
+}

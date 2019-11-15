@@ -65,6 +65,8 @@ public slots:
     qint32 getNumberOfRichIDs();
     qint64 getResourceNameOffset(QString sName);
     bool isResourceNamePresent(QString sName);
+    qint64 getDosStubOffset();
+    qint64 getDosStubSize();
 
 private:
     XPE *pPE;
