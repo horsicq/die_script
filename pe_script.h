@@ -54,6 +54,7 @@ public slots:
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(QString sLibraryName);
+    bool isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName);
     qint32 getImportSection();
     qint32 getResourceSection();
     qint32 getEntryPointSection();
@@ -67,6 +68,12 @@ public slots:
     bool isResourceNamePresent(QString sName);
     qint64 getDosStubOffset();
     qint64 getDosStubSize();
+    QString getCompilerVersion();
+    bool isConsole();
+    bool isSignedFile();
+    bool isRichSignaturePresent();
+    bool isSignatureInSectionPresent(quint32 nNumber,QString sSignature);
+    QString getSectionNameCollision(QString sString1, QString sString2);
 
 private:
     XPE *pPE;

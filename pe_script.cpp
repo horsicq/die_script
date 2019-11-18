@@ -87,9 +87,32 @@ bool PE_Script::isPEPlus()
 
 QString PE_Script::getGeneralOptions()
 {
-    qDebug("QString PE_Script::getGeneralOptions() TODO");
+    QString sType;
+    QString sBits;
 
-    return "";
+    if(pPE->is64())
+    {
+        sBits="64";
+    }
+    else
+    {
+        sBits="32";
+    }
+
+    if(pPE->isDll())
+    {
+        sType="DLL";
+    }
+    else if(pPE->isDriver())
+    {
+        sType="Driver";
+    }
+    else
+    {
+        sType="EXE";
+    }
+
+    return QString("%1%2").arg(sType).arg(sBits);
 }
 
 quint32 PE_Script::getResourceIdByNumber(quint32 nNumber)
@@ -135,6 +158,11 @@ QString PE_Script::getImportLibraryName(quint32 nNumber)
 bool PE_Script::isLibraryPresent(QString sLibraryName)
 {
     return pPE->isImportLibraryPresentI(sLibraryName);
+}
+
+bool PE_Script::isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName)
+{
+    return pPE->isImportFunctionPresentI(sLibraryName,sFunctionName);
 }
 
 qint32 PE_Script::getImportSection()
@@ -200,4 +228,40 @@ qint64 PE_Script::getDosStubOffset()
 qint64 PE_Script::getDosStubSize()
 {
     return pPE->getDosStubSize();
+}
+
+QString PE_Script::getCompilerVersion()
+{
+    return QString("%1.%2")
+            .arg(pPE->getOptionalHeader_MajorLinkerVersion())
+            .arg(pPE->getOptionalHeader_MinorLinkerVersion());
+}
+
+bool PE_Script::isConsole()
+{
+    return pPE->isConsole();
+}
+
+bool PE_Script::isSignedFile()
+{
+    return pPE->isSignPresent();
+}
+
+bool PE_Script::isRichSignaturePresent()
+{
+    return pPE->isRichSignaturePresent();
+}
+
+bool PE_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
+{
+    return pPE->isSignatureInLoadSectionPresent(nNumber,sSignature);
+}
+
+QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
+{
+    QList<XPE_DEF::IMAGE_SECTION_HEADER> listSH=pPE->getSectionHeaders();
+    static QList<XPE::SECTIONFILE_RECORD> listSR=pPE->getSectionRecords(&listSH,pPE->isImage());
+    static QList<QString> listSN=pPE->getSectionNames(&listSR);
+
+    return pPE->getStringCollision(&listSN,sString1,sString2);
 }
