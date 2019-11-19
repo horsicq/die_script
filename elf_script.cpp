@@ -51,3 +51,8 @@ QString ELF_Script::getGeneralOptions()
 
     return "";
 }
+
+qint32 ELF_Script::getSectionNumber(QString sSectionName)
+{
+    return pELF->getSectionNumber(sSectionName);
+}

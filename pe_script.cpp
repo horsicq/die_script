@@ -265,3 +265,8 @@ QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
 
     return pPE->getStringCollision(&listSN,sString1,sString2);
 }
+
+qint32 PE_Script::getSectionNumber(QString sSectionName)
+{
+    return pPE->getSectionNumber(sSectionName);
+}
