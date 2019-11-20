@@ -47,7 +47,39 @@ qint32 MACH_Script::getSectionNumber(QString sSectionName)
 
 QString MACH_Script::getGeneralOptions()
 {
-    qDebug("QString MACH_Script::getGeneralOptions() TODO");
+    QString sResult;
 
-    return "";
+    unsigned int nFileType=pMACH->getHeader_filetype();
+
+    if(nFileType==XMACH_DEF::S_MH_OBJECT)
+    {
+        sResult+="OBJ";
+    }
+    else if(nFileType==XMACH_DEF::S_MH_EXECUTE)
+    {
+        sResult+="EXE";
+    }
+    else if(nFileType==XMACH_DEF::S_MH_CORE)
+    {
+        sResult+="CORE";
+    }
+    else if(nFileType==XMACH_DEF::S_MH_DYLIB)
+    {
+        sResult+="DYLIB";
+    }
+    else if(nFileType==XMACH_DEF::S_MH_BUNDLE)
+    {
+        sResult+="BUNDLE";
+    }
+
+    if(pMACH->is64())
+    {
+        sResult+="64";
+    }
+    else
+    {
+        sResult+="32";
+    }
+
+    return sResult;
 }

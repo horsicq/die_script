@@ -36,7 +36,7 @@ class DiE_Script : public QObject
 public:
     explicit DiE_Script(QObject *parent=nullptr);
     bool loadDatabase(QString sDatabasePath);
-    bool scanFile(QString sFileName);
+    bool scanFile(QString sFileName); // TODO Options
 
 private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;
