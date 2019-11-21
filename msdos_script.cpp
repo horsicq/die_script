@@ -23,6 +23,10 @@
 MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS) : Binary_Script(pMSDOS)
 {
     this->pMSDOS=pMSDOS;
+
+    bIsLE=pMSDOS->isLE();
+    bIsLX=pMSDOS->isLX();
+    bIsNE=pMSDOS->isNE();
 }
 
 MSDOS_Script::~MSDOS_Script()
@@ -32,15 +36,15 @@ MSDOS_Script::~MSDOS_Script()
 
 bool MSDOS_Script::isLE()
 {
-    return pMSDOS->isLE();
+    return bIsLE;
 }
 
 bool MSDOS_Script::isLX()
 {
-    return pMSDOS->isLX();
+    return bIsLX;
 }
 
 bool MSDOS_Script::isNE()
 {
-    return pMSDOS->isNE();
+    return bIsNE;
 }

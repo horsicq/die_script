@@ -39,6 +39,10 @@ public slots:
 
 private:
     XMSDOS *pMSDOS;
+
+    bool bIsLE;
+    bool bIsLX;
+    bool bIsNE;
 };
 
 #endif // MSDOS_SCRIPT_H

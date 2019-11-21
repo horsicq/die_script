@@ -30,13 +30,31 @@ class DiE_Script : public QObject
 {
     Q_OBJECT
 
+    struct SCAN_STRUCT
+    {
+        QString sFileType;
+        QString sType;
+        QString sName;
+        QString sVersion;
+        QString sInfo;
+    };
+
+    struct SCAN_RESULT
+    {
+        qint64 nScanTime;
+        QString sFileName;
+        qint64 nSize;
+        QList<SCAN_STRUCT> listRecords;
+    };
+
     void _loadDatabase(QString sDatabasePath,DiE_ScriptEngine::STYPE stype);
-    void _scan(QIODevice *pDevice,DiE_ScriptEngine::STYPE stype);
+    SCAN_RESULT _scan(QIODevice *pDevice,DiE_ScriptEngine::STYPE stype);
 
 public:
     explicit DiE_Script(QObject *parent=nullptr);
     bool loadDatabase(QString sDatabasePath);
-    bool scanFile(QString sFileName); // TODO Options
+    SCAN_RESULT scanFile(QString sFileName); // TODO Options
+    SCAN_RESULT scanDevice(QIODevice *pDevice);
 
 private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;

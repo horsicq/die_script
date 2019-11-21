@@ -51,6 +51,7 @@ public slots:
     qint64 getResourceSizeByNumber(quint32 nNumber);
     quint32 getResourceTypeByNumber(quint32 nNumber);
     bool isNETStringPresent(QString sString);
+    bool isNETUnicodeStringPresent(QString sString);
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(QString sLibraryName);
@@ -75,9 +76,20 @@ public slots:
     bool isSignatureInSectionPresent(quint32 nNumber,QString sSignature);
     QString getSectionNameCollision(QString sString1, QString sString2);
     qint32 getSectionNumber(QString sSectionName);
+    bool isDll();
+    QString getNETVersion();
+    bool compareEP_NET(QString sSignature,qint64 nOffset=0);
 
 private:
     XPE *pPE;
+
+    qint64 nBaseAddress;
+    qint32 nNumberOfSections;
+    XPE::CLI_INFO cliInfo;
+
+    QList<XPE_DEF::IMAGE_SECTION_HEADER> listSH;
+    QList<XPE::SECTION_RECORD> listSR;
+    QList<QString> listSN;
 };
 
 #endif // PE_SCRIPT_H

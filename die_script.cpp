@@ -50,9 +50,10 @@ void DiE_Script::_loadDatabase(QString sDatabasePath, DiE_ScriptEngine::STYPE st
     // TODO Sort
 }
 
-void DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::STYPE stype)
+DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::STYPE stype)
 {
-    // TODO Time
+    SCAN_RESULT scanResult={};
+
     int nCount=listSignatures.count();
 
     DiE_ScriptEngine::SIGNATURE_RECORD srGlobalInit;
@@ -133,6 +134,8 @@ void DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::STYPE stype)
             }
         }
     }
+
+    return scanResult;
 }
 
 bool DiE_Script::loadDatabase(QString sDatabasePath)
@@ -150,46 +153,66 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
     return listSignatures.count();
 }
 
-bool DiE_Script::scanFile(QString sFileName)
+DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName)
 {
+    SCAN_RESULT scanResult={};
+
     QFile file;
 
     file.setFileName(sFileName);
 
     if(file.open(QIODevice::ReadOnly))
     {
-        QSet<XBinary::FT> stFT=XBinary::getFileTypes(&file);
-
-        if(stFT.contains(XBinary::FT_PE32)||stFT.contains(XBinary::FT_PE64))
-        {
-            _scan(&file,DiE_ScriptEngine::STYPE_PE);
-        }
-        else if(stFT.contains(XBinary::FT_ELF32)||stFT.contains(XBinary::FT_ELF64))
-        {
-            _scan(&file,DiE_ScriptEngine::STYPE_ELF);
-        }
-        else if(stFT.contains(XBinary::FT_MACH32)||stFT.contains(XBinary::FT_MACH64))
-        {
-            _scan(&file,DiE_ScriptEngine::STYPE_MACH);
-        }
-        else if(stFT.contains(XBinary::FT_MSDOS))
-        {
-            _scan(&file,DiE_ScriptEngine::STYPE_MSDOS);
-        }
-        else
-        {
-            if(XBinary::isPlainTextType(&file))
-            {
-                _scan(&file,DiE_ScriptEngine::STYPE_TEXT);
-            }
-            else
-            {
-                _scan(&file,DiE_ScriptEngine::STYPE_BINARY);
-            }
-        }
+        scanResult=scanDevice(&file);
 
         file.close();
     }
 
-    return false;
+    return scanResult;
+}
+
+DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice)
+{
+    SCAN_RESULT scanResult={};
+
+    QElapsedTimer scanTimer;
+    scanTimer.start();
+
+    QSet<XBinary::FT> stFT=XBinary::getFileTypes(pDevice);
+
+    if(stFT.contains(XBinary::FT_PE32)||stFT.contains(XBinary::FT_PE64))
+    {
+        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_PE);
+    }
+    else if(stFT.contains(XBinary::FT_ELF32)||stFT.contains(XBinary::FT_ELF64))
+    {
+        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_ELF);
+    }
+    else if(stFT.contains(XBinary::FT_MACH32)||stFT.contains(XBinary::FT_MACH64))
+    {
+        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_MACH);
+    }
+    else if(stFT.contains(XBinary::FT_MSDOS))
+    {
+        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_MSDOS);
+    }
+    else
+    {
+        if(XBinary::isPlainTextType(pDevice))
+        {
+            scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_TEXT);
+        }
+        else
+        {
+            scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_BINARY);
+        }
+    }
+
+    scanResult.nScanTime=scanTimer.elapsed();
+
+#ifdef QT_DEBUG
+    qDebug("Elapsed time: %d msec",scanResult.nScanTime);
+#endif
+
+    return scanResult;
 }

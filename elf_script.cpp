@@ -23,6 +23,53 @@
 ELF_Script::ELF_Script(XELF *pELF) : Binary_Script(pELF)
 {
     this->pELF=pELF;
+
+    bIs64=pELF->is64();
+
+    elfHeader=pELF->getHdr();
+
+    nStringTableSection=pELF->getSectionStringTable(bIs64);
+    baStringTable=pELF->getSection(nStringTableSection);
+    listSH=pELF->getElf_ShdrList();
+    listPH=pELF->getElf_PhdrList();
+
+    listSR=pELF->getSectionRecords(&listSH,bIs64,&baStringTable);
+
+    QString sType;
+    QString sBits;
+    unsigned int nType=elfHeader.e_type;
+
+    if(nType==0)
+    {
+        sType="unknown";
+    }
+    else if(nType==1)
+    {
+        sType="relocatable";
+    }
+    else if(nType==2)
+    {
+        sType="executable";
+    }
+    else if(nType==3)
+    {
+        sType="shared object";
+    }
+    else if(nType==4)
+    {
+        sType="core file";
+    }
+
+    if(bIs64)
+    {
+        sBits="64";
+    }
+    else
+    {
+        sBits="32";
+    }
+
+    sGeneralOptions=QString("%1 %2-%3").arg(sType).arg(XELF::getMachinesS().value(elfHeader.e_machine)).arg(sBits);
 }
 
 ELF_Script::~ELF_Script()
@@ -32,27 +79,124 @@ ELF_Script::~ELF_Script()
 
 bool ELF_Script::isSectionNamePresent(QString sSectionName)
 {
-    return pELF->isSectionNamePresent(sSectionName);
+    return pELF->isSectionNamePresent(sSectionName,&listSR);
 }
 
 quint32 ELF_Script::getNumberOfSections()
 {
-    return pELF->getHdr32_shnum();
+    return elfHeader.e_shnum;
 }
 
 quint32 ELF_Script::getNumberOfPrograms()
 {
-    return pELF->getHdr32_phnum();
+    return elfHeader.e_phnum;
 }
 
 QString ELF_Script::getGeneralOptions()
 {
-    qDebug("QString ELF_Script::getGeneralOptions() TODO");
-
-    return "";
+    return sGeneralOptions;
 }
 
 qint32 ELF_Script::getSectionNumber(QString sSectionName)
 {
-    return pELF->getSectionNumber(sSectionName);
+    return pELF->getSectionNumber(sSectionName,&listSR);
+}
+
+quint16 ELF_Script::getElfHeader_type()
+{
+    return elfHeader.e_type;
+}
+
+quint16 ELF_Script::getElfHeader_machine()
+{
+    return elfHeader.e_machine;
+}
+
+quint32 ELF_Script::getElfHeader_version()
+{
+    return elfHeader.e_version;
+}
+
+quint64 ELF_Script::getElfHeader_entry()
+{
+    return elfHeader.e_entry;
+}
+
+quint64 ELF_Script::getElfHeader_phoff()
+{
+    return elfHeader.e_phoff;
+}
+
+quint64 ELF_Script::getElfHeader_shoff()
+{
+    return elfHeader.e_shoff;
+}
+
+quint32 ELF_Script::getElfHeader_flags()
+{
+    return elfHeader.e_flags;
+}
+
+quint16 ELF_Script::getElfHeader_ehsize()
+{
+    return elfHeader.e_ehsize;
+}
+
+quint16 ELF_Script::getElfHeader_phentsize()
+{
+    return elfHeader.e_phentsize;
+}
+
+quint16 ELF_Script::getElfHeader_phnum()
+{
+    return elfHeader.e_phnum;
+}
+
+quint16 ELF_Script::getElfHeader_shentsize()
+{
+    return elfHeader.e_shentsize;
+}
+
+quint16 ELF_Script::getElfHeader_shnum()
+{
+    return elfHeader.e_shnum;
+}
+
+quint16 ELF_Script::getElfHeader_shstrndx()
+{
+    return elfHeader.e_shstrndx;
+}
+
+quint64 ELF_Script::getProgramFileSize(quint32 nNumber)
+{
+    return pELF->getElf_Phdr_filesz(nNumber,&listPH);
+}
+
+quint64 ELF_Script::getProgramFileOffset(quint32 nNumber)
+{
+    return pELF->getElf_Phdr_offset(nNumber,&listPH);
+}
+
+quint64 ELF_Script::getSectionFileOffset(quint32 nNumber)
+{
+    return pELF->getElf_Shdr_offset(nNumber,&listSH);
+}
+
+quint64 ELF_Script::getSectionFileSize(quint32 nNumber)
+{
+    return pELF->getElf_Shdr_size(nNumber,&listSH);
+}
+
+bool ELF_Script::isStringInTablePresent(QString sSectionName, QString sString)
+{
+    bool bResult=false;
+
+    qint32 nSection=pELF->getSectionNumber(sSectionName,&listSR);
+
+    if(nSection!=-1)
+    {
+        bResult=(pELF->getStringsFromSection(nSection).key(sString,-1)!=-1);
+    }
+
+    return bResult;
 }

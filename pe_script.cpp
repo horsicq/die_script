@@ -23,6 +23,15 @@
 PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 {
     this->pPE=pPE;
+
+    nBaseAddress=pPE->getBaseAddress();
+    nNumberOfSections=pPE->getFileHeader_NumberOfSections();
+
+    listSH=pPE->getSectionHeaders();
+    listSR=pPE->getSectionRecords(&listSH,pPE->isImage());
+    listSN=pPE->getSectionNames(&listSR);
+
+    cliInfo=pPE->getCliInfo(true);
 }
 
 PE_Script::~PE_Script()
@@ -32,7 +41,7 @@ PE_Script::~PE_Script()
 
 quint16 PE_Script::getNumberOfSections()
 {
-    return pPE->getFileHeader_NumberOfSections();
+    return nNumberOfSections;
 }
 
 QString PE_Script::getSectionName(quint32 nNumber)
@@ -143,6 +152,11 @@ quint32 PE_Script::getResourceTypeByNumber(quint32 nNumber)
 bool PE_Script::isNETStringPresent(QString sString)
 {
     return pPE->isNETAnsiStringPresent(sString);
+}
+
+bool PE_Script::isNETUnicodeStringPresent(QString sString)
+{
+    return pPE->isNETUnicodeStringPresent(sString);
 }
 
 qint32 PE_Script::getNumberOfImports()
@@ -259,14 +273,25 @@ bool PE_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
 
 QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
 {
-    QList<XPE_DEF::IMAGE_SECTION_HEADER> listSH=pPE->getSectionHeaders();
-    static QList<XPE::SECTIONFILE_RECORD> listSR=pPE->getSectionRecords(&listSH,pPE->isImage());
-    static QList<QString> listSN=pPE->getSectionNames(&listSR);
-
     return pPE->getStringCollision(&listSN,sString1,sString2);
 }
 
 qint32 PE_Script::getSectionNumber(QString sSectionName)
 {
-    return pPE->getSectionNumber(sSectionName);
+    return pPE->getSectionNumber(sSectionName,&listSH);
+}
+
+bool PE_Script::isDll()
+{
+    return pPE->isDll();
+}
+
+QString PE_Script::getNETVersion()
+{
+    return cliInfo.sCLI_MetaData_Version;
+}
+
+bool PE_Script::compareEP_NET(QString sSignature, qint64 nOffset)
+{
+    return pPE->compareSignatureOnAddress(sSignature,nBaseAddress+cliInfo.nEntryPoint+nOffset);
 }
