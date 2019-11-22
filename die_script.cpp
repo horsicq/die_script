@@ -50,7 +50,7 @@ void DiE_Script::_loadDatabase(QString sDatabasePath, DiE_ScriptEngine::STYPE st
     // TODO Sort
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::STYPE stype)
+DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::STYPE stype,SCAN_OPTIONS *pOptions)
 {
     SCAN_RESULT scanResult={};
 
@@ -104,7 +104,13 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
     {
         if((listSignatures.at(i).stype==stype)&&(listSignatures.at(i).sName!="_init"))
         {
-            // TODO Time
+            QElapsedTimer scanTimer;
+
+            if(pOptions->bDebug)
+            {
+                scanTimer.start();
+            }
+
             QString sInfo=listSignatures.at(i).sName;
 
             QScriptValue script=scriptEngine.evaluate(listSignatures.at(i).sText);
@@ -132,6 +138,18 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
                     }
                 }
             }
+
+            if(pOptions->bDebug)
+            {
+            #ifdef QT_DEBUG
+                qint64 nElapsed=scanTimer.elapsed();
+                if(nElapsed>5)
+                {
+                    qDebug("Elapsed time(%s): %d msec",sInfo.toLatin1().data(),nElapsed);
+                }
+
+            #endif
+            }
         }
     }
 
@@ -153,7 +171,7 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
     return listSignatures.count();
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName)
+DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName, SCAN_OPTIONS *pOptions)
 {
     SCAN_RESULT scanResult={};
 
@@ -163,7 +181,7 @@ DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName)
 
     if(file.open(QIODevice::ReadOnly))
     {
-        scanResult=scanDevice(&file);
+        scanResult=scanDevice(&file,pOptions);
 
         file.close();
     }
@@ -171,7 +189,7 @@ DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName)
     return scanResult;
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice)
+DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions)
 {
     SCAN_RESULT scanResult={};
 
@@ -182,29 +200,29 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice)
 
     if(stFT.contains(XBinary::FT_PE32)||stFT.contains(XBinary::FT_PE64))
     {
-        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_PE);
+        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_PE,pOptions);
     }
     else if(stFT.contains(XBinary::FT_ELF32)||stFT.contains(XBinary::FT_ELF64))
     {
-        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_ELF);
+        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_ELF,pOptions);
     }
     else if(stFT.contains(XBinary::FT_MACH32)||stFT.contains(XBinary::FT_MACH64))
     {
-        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_MACH);
+        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_MACH,pOptions);
     }
     else if(stFT.contains(XBinary::FT_MSDOS))
     {
-        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_MSDOS);
+        scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_MSDOS,pOptions);
     }
     else
     {
         if(XBinary::isPlainTextType(pDevice))
         {
-            scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_TEXT);
+            scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_TEXT,pOptions);
         }
         else
         {
-            scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_BINARY);
+            scanResult=_scan(pDevice,DiE_ScriptEngine::STYPE_BINARY,pOptions);
         }
     }
 

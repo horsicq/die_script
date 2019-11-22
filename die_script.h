@@ -30,6 +30,7 @@ class DiE_Script : public QObject
 {
     Q_OBJECT
 
+public:
     struct SCAN_STRUCT
     {
         QString sFileType;
@@ -47,14 +48,19 @@ class DiE_Script : public QObject
         QList<SCAN_STRUCT> listRecords;
     };
 
-    void _loadDatabase(QString sDatabasePath,DiE_ScriptEngine::STYPE stype);
-    SCAN_RESULT _scan(QIODevice *pDevice,DiE_ScriptEngine::STYPE stype);
+    struct SCAN_OPTIONS
+    {
+        bool bDebug;
+    };
 
-public:
     explicit DiE_Script(QObject *parent=nullptr);
     bool loadDatabase(QString sDatabasePath);
-    SCAN_RESULT scanFile(QString sFileName); // TODO Options
-    SCAN_RESULT scanDevice(QIODevice *pDevice);
+    SCAN_RESULT scanFile(QString sFileName,SCAN_OPTIONS *pOptions);
+    SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions);
+
+private:
+    void _loadDatabase(QString sDatabasePath,DiE_ScriptEngine::STYPE stype);
+    SCAN_RESULT _scan(QIODevice *pDevice,DiE_ScriptEngine::STYPE stype,SCAN_OPTIONS *pOptions);
 
 private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;

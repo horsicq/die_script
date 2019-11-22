@@ -56,6 +56,13 @@ public slots:
 
 private:
     XBinary *pBinary;
+
+    QString sHeaderSignature;
+    qint32 nHeaderSignatureSize;
+    QString sEntryPointSignature;
+    qint32 nEntryPointSignatureSize;
+    QString sOverlaySignature;
+    qint32 nOverlaySignatureSize;
 };
 
 #endif // BINARY_SCRIPT_H

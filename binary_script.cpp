@@ -23,6 +23,25 @@
 Binary_Script::Binary_Script(XBinary *pBinary)
 {
     this->pBinary=pBinary;
+
+    sHeaderSignature=pBinary->getSignature(0,256);
+    nHeaderSignatureSize=sHeaderSignature.size();
+
+    qint64 nEntryPointOffset=this->getEntryPointOffset();
+
+    if(nEntryPointOffset>0)
+    {
+        sEntryPointSignature=pBinary->getSignature(nEntryPointOffset,256);
+        nEntryPointSignatureSize=sEntryPointSignature.size();
+    }
+
+    qint64 nOverlayOffset=this->getOverlayOffset();
+
+    if(nOverlayOffset>0)
+    {
+        sOverlaySignature=pBinary->getSignature(nOverlayOffset,256);
+        nOverlaySignatureSize=sOverlaySignature.size();
+    }
 }
 
 Binary_Script::~Binary_Script()
@@ -37,12 +56,30 @@ qint64 Binary_Script::getSize()
 
 bool Binary_Script::compare(QString sSignature, qint64 nOffset)
 {
-    return pBinary->compareSignature(sSignature,nOffset);
+    int nSignatureSize=sSignature.size();
+
+    if((nSignatureSize+nOffset<nHeaderSignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
+    {
+        return pBinary->compareSignatureStrings(sHeaderSignature.mid(nOffset*2,nSignatureSize*2),sSignature);
+    }
+    else
+    {
+        return pBinary->compareSignature(sSignature,nOffset);
+    }
 }
 
 bool Binary_Script::compareEP(QString sSignature, qint64 nOffset)
 {
-    return pBinary->compareEntryPoint(sSignature,nOffset);
+    int nSignatureSize=sSignature.size();
+
+    if((nSignatureSize+nOffset<nEntryPointSignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
+    {
+        return pBinary->compareSignatureStrings(sEntryPointSignature.mid(nOffset*2,nSignatureSize*2),sSignature);
+    }
+    else
+    {
+        return pBinary->compareEntryPoint(sSignature,nOffset);
+    }
 }
 
 quint8 Binary_Script::readByte(qint64 nOffset)
@@ -107,7 +144,16 @@ bool Binary_Script::isOverlayPresent()
 
 bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
 {
-    return pBinary->compareOverlay(sSignature,nOffset);
+    int nSignatureSize=sSignature.size();
+
+    if((nSignatureSize+nOffset<nOverlaySignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
+    {
+        return pBinary->compareSignatureStrings(sOverlaySignature.mid(nOffset*2,nSignatureSize*2),sSignature);
+    }
+    else
+    {
+        return pBinary->compareOverlay(sSignature,nOffset);
+    }
 }
 
 bool Binary_Script::isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSignature)

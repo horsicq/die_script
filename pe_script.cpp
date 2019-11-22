@@ -24,6 +24,8 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 {
     this->pPE=pPE;
 
+    QList<XBinary::MEMORY_MAP> listMM=pPE->getMemoryMapList();
+
     nBaseAddress=pPE->getBaseAddress();
     nNumberOfSections=pPE->getFileHeader_NumberOfSections();
 
@@ -31,7 +33,10 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     listSR=pPE->getSectionRecords(&listSH,pPE->isImage());
     listSN=pPE->getSectionNames(&listSR);
 
-    cliInfo=pPE->getCliInfo(true);
+    cliInfo=pPE->getCliInfo(true,&listMM);
+    listResources=pPE->getResources(&listMM);
+
+    nNumberOfResources=listResources.count();
 }
 
 PE_Script::~PE_Script()
@@ -76,7 +81,7 @@ quint32 PE_Script::getSectionCharacteristics(quint32 nNumber)
 
 quint32 PE_Script::getNumberOfResources()
 {
-    return pPE->getResources().count();
+    return nNumberOfResources;
 }
 
 bool PE_Script::isSectionNamePresent(QString sSectionName)
@@ -126,37 +131,37 @@ QString PE_Script::getGeneralOptions()
 
 quint32 PE_Script::getResourceIdByNumber(quint32 nNumber)
 {
-    return pPE->getResourceIdByNumber(nNumber);
+    return pPE->getResourceIdByNumber(nNumber,&listResources);
 }
 
 QString PE_Script::getResourceNameByNumber(quint32 nNumber)
 {
-    return pPE->getResourceNameByNumber(nNumber);
+    return pPE->getResourceNameByNumber(nNumber,&listResources);
 }
 
 qint64 PE_Script::getResourceOffsetByNumber(quint32 nNumber)
 {
-    return pPE->getResourceOffsetByNumber(nNumber);
+    return pPE->getResourceOffsetByNumber(nNumber,&listResources);
 }
 
 qint64 PE_Script::getResourceSizeByNumber(quint32 nNumber)
 {
-    return pPE->getResourceSizeByNumber(nNumber);
+    return pPE->getResourceSizeByNumber(nNumber,&listResources);
 }
 
 quint32 PE_Script::getResourceTypeByNumber(quint32 nNumber)
 {
-    return pPE->getResourceTypeByNumber(nNumber);
+    return pPE->getResourceTypeByNumber(nNumber,&listResources);
 }
 
 bool PE_Script::isNETStringPresent(QString sString)
 {
-    return pPE->isNETAnsiStringPresent(sString);
+    return pPE->isNETAnsiStringPresent(sString,&cliInfo);
 }
 
 bool PE_Script::isNETUnicodeStringPresent(QString sString)
 {
-    return pPE->isNETUnicodeStringPresent(sString);
+    return pPE->isNETUnicodeStringPresent(sString,&cliInfo);
 }
 
 qint32 PE_Script::getNumberOfImports()
@@ -206,7 +211,7 @@ quint8 PE_Script::getMinorLinkerVersion()
 
 QString PE_Script::getManifest()
 {
-    return pPE->getResourceManifest();
+    return pPE->getResourceManifest(&listResources);
 }
 
 QString PE_Script::getVersionStringInfo(QString sKey)
