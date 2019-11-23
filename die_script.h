@@ -40,12 +40,19 @@ public:
         QString sInfo;
     };
 
+    struct ERROR_RECORD
+    {
+        QString sScript;
+        QString sErrorString;
+    };
+
     struct SCAN_RESULT
     {
         qint64 nScanTime;
         QString sFileName;
         qint64 nSize;
         QList<SCAN_STRUCT> listRecords;
+        QList<ERROR_RECORD> listErrors;
     };
 
     struct SCAN_OPTIONS
@@ -61,6 +68,7 @@ public:
 private:
     void _loadDatabase(QString sDatabasePath,DiE_ScriptEngine::STYPE stype);
     SCAN_RESULT _scan(QIODevice *pDevice,DiE_ScriptEngine::STYPE stype,SCAN_OPTIONS *pOptions);
+    bool _handleError(DiE_ScriptEngine *pScriptEngine,QScriptValue scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
 private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;

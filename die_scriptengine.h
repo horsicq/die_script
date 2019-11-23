@@ -54,7 +54,7 @@ public:
 
     DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,STYPE stype);
     ~DiE_ScriptEngine();
-    bool handleError(QScriptValue value,QString sInfo);
+    bool handleError(QScriptValue value,QString *psErrorString);
 
 private:
     static QScriptValue _includeScript(QScriptContext *context, QScriptEngine *engine);

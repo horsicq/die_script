@@ -74,14 +74,13 @@ DiE_ScriptEngine::~DiE_ScriptEngine()
     delete pBinaryScript;
 }
 
-bool DiE_ScriptEngine::handleError(QScriptValue value, QString sInfo)
+bool DiE_ScriptEngine::handleError(QScriptValue value, QString *psErrorString)
 {
     bool bResult=true;
 
     if(value.isError())
     {
-        QString sDebugString=QString("%1(%2): %3").arg(sInfo).arg(value.property("lineNumber").toInt32()).arg(value.toString());
-        qDebug(sDebugString.toLatin1().data());
+        *psErrorString=QString("%1: %2").arg(value.property("lineNumber").toInt32()).arg(value.toString());
 
         bResult=false;
     }

@@ -89,14 +89,14 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
 
     if(nCount)
     {
-        if(srGlobalInit.sText!="")
+        if(bGlobalInit)
         {
-            scriptEngine.handleError(scriptEngine.evaluate(srGlobalInit.sText),"_init");
+            _handleError(&scriptEngine,scriptEngine.evaluate(srGlobalInit.sText),&srGlobalInit,&scanResult);
         }
 
-        if(srInit.sText!="")
+        if(bInit)
         {
-            scriptEngine.handleError(scriptEngine.evaluate(srInit.sText),"_init");
+            _handleError(&scriptEngine,scriptEngine.evaluate(srInit.sText),&srInit,&scanResult);
         }
     }
 
@@ -113,13 +113,15 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
 
             QString sInfo=listSignatures.at(i).sName;
 
-            QScriptValue script=scriptEngine.evaluate(listSignatures.at(i).sText);
+            DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord=listSignatures.at(i);
 
-            if(scriptEngine.handleError(script,sInfo))
+            QScriptValue script=scriptEngine.evaluate(signatureRecord.sText);
+
+            if(_handleError(&scriptEngine,script,&signatureRecord,&scanResult))
             {
                 QScriptValue detect=scriptEngine.globalObject().property("detect");
 
-                if(scriptEngine.handleError(detect,sInfo))
+                if(_handleError(&scriptEngine,detect,&signatureRecord,&scanResult))
                 {
                     QScriptValueList valuelist;
 
@@ -127,7 +129,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
 
                     QScriptValue result=detect.call(script,valuelist);
 
-                    if(scriptEngine.handleError(result,sInfo))
+                    if(_handleError(&scriptEngine,result,&signatureRecord,&scanResult))
                     {
                         QString sResult=result.toString();
 
@@ -154,6 +156,25 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
     }
 
     return scanResult;
+}
+
+bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, QScriptValue scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, DiE_Script::SCAN_RESULT *pScanResult)
+{
+    bool bResult=false;
+
+    QString sErrorString;
+    if(!pScriptEngine->handleError(scriptValue,&sErrorString))
+    {
+        ERROR_RECORD errorRecord={};
+        errorRecord.sScript=pSignatureRecord->sName;
+        errorRecord.sErrorString=sErrorString;
+
+        pScanResult->listErrors.append(errorRecord);
+
+        qDebug(errorRecord.sErrorString.toLatin1().data());
+    }
+
+    return bResult;
 }
 
 bool DiE_Script::loadDatabase(QString sDatabasePath)
