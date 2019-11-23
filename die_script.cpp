@@ -125,7 +125,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
                 {
                     QScriptValueList valuelist;
 
-                    valuelist << true << true << true; // TODO
+                    valuelist << true << (pOptions->bShowVersion) << (pOptions->bShowOptions);
 
                     QScriptValue result=detect.call(script,valuelist);
 
@@ -163,7 +163,11 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, QScriptValue scri
     bool bResult=false;
 
     QString sErrorString;
-    if(!pScriptEngine->handleError(scriptValue,&sErrorString))
+    if(pScriptEngine->handleError(scriptValue,&sErrorString))
+    {
+        bResult=true;
+    }
+    else
     {
         ERROR_RECORD errorRecord={};
         errorRecord.sScript=pSignatureRecord->sName;

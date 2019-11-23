@@ -58,6 +58,8 @@ public:
     struct SCAN_OPTIONS
     {
         bool bDebug;
+        bool bShowVersion;
+        bool bShowOptions;
     };
 
     explicit DiE_Script(QObject *parent=nullptr);
