@@ -1,3 +1,5 @@
+QT       += script
+
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
