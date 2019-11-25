@@ -54,6 +54,50 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
 {
     SCAN_RESULT scanResult={};
 
+    QString sFileType="Binary";
+
+    if(stype==DiE_ScriptEngine::STYPE_TEXT)
+    {
+        sFileType="Text";
+    }
+    else if(stype==DiE_ScriptEngine::STYPE_MSDOS)
+    {
+        sFileType="MSDOS";
+    }
+    else if(stype==DiE_ScriptEngine::STYPE_PE)
+    {
+        if(XPE::is64(pDevice))
+        {
+            sFileType="PE64";
+        }
+        else
+        {
+            sFileType="PE32";
+        }
+    }
+    else if(stype==DiE_ScriptEngine::STYPE_ELF)
+    {
+        if(XELF::is64(pDevice))
+        {
+            sFileType="ELF64";
+        }
+        else
+        {
+            sFileType="ELF32";
+        }
+    }
+    else if(stype==DiE_ScriptEngine::STYPE_MACH)
+    {
+        if(XMACH::is64(pDevice))
+        {
+            sFileType="MACH32";
+        }
+        else
+        {
+            sFileType="MACH64";
+        }
+    }
+
     int nCount=listSignatures.count();
 
     DiE_ScriptEngine::SIGNATURE_RECORD srGlobalInit;
@@ -111,8 +155,6 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
                 scanTimer.start();
             }
 
-            QString sInfo=listSignatures.at(i).sName;
-
             DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord=listSignatures.at(i);
 
             QScriptValue script=scriptEngine.evaluate(signatureRecord.sText);
@@ -125,7 +167,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
                 {
                     QScriptValueList valuelist;
 
-                    valuelist << true << (pOptions->bShowVersion) << (pOptions->bShowOptions);
+                    valuelist << true << true << true;
 
                     QScriptValue result=detect.call(script,valuelist);
 
@@ -135,6 +177,9 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
 
                         if(sResult!="")
                         {
+                            SCAN_STRUCT ss=getScanStructFromString(sFileType,sResult);
+
+                            scanResult.listRecords.append(ss);
                             qDebug(sResult.toLatin1().data());
                         }
                     }
@@ -143,16 +188,23 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
 
             if(pOptions->bDebug)
             {
-            #ifdef QT_DEBUG
-                qint64 nElapsed=scanTimer.elapsed();
-                if(nElapsed>5)
-                {
-                    qDebug("Elapsed time(%s): %d msec",sInfo.toLatin1().data(),nElapsed);
-                }
+                DEBUG_RECORD debugRecord={};
+                debugRecord.sScript=signatureRecord.sName;
+                debugRecord.nElapsedTime=scanTimer.elapsed();
 
-            #endif
+                scanResult.listDebugRecords.append(debugRecord);
             }
         }
+    }
+
+    if(scanResult.listRecords.count()==0)
+    {
+        SCAN_STRUCT ss={};
+
+        ss.sFileType=sFileType;
+        ss.sName="Unknown";
+
+        scanResult.listRecords.append(ss);
     }
 
     return scanResult;
@@ -174,11 +226,18 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, QScriptValue scri
         errorRecord.sErrorString=sErrorString;
 
         pScanResult->listErrors.append(errorRecord);
-
-        qDebug(errorRecord.sErrorString.toLatin1().data());
     }
 
     return bResult;
+}
+
+DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QString sFileType, QString sString)
+{
+    SCAN_STRUCT result={};
+
+    result.sFileType=sFileType;
+
+    return result;
 }
 
 bool DiE_Script::loadDatabase(QString sDatabasePath)
@@ -252,10 +311,6 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
     }
 
     scanResult.nScanTime=scanTimer.elapsed();
-
-#ifdef QT_DEBUG
-    qDebug("Elapsed time: %d msec",scanResult.nScanTime);
-#endif
 
     return scanResult;
 }
