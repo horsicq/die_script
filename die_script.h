@@ -33,11 +33,12 @@ class DiE_Script : public QObject
 public:
     struct SCAN_STRUCT
     {
-        QString sFileType;
+        DiE_ScriptEngine::FT fileType;
         QString sType;
-        QString sName;
-        QString sVersion;
-        QString sOptions;
+        QString sString;
+//        QString sName;
+//        QString sVersion;
+//        QString sOptions;
     };
 
     struct ERROR_RECORD
@@ -76,11 +77,11 @@ public:
     SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions);
 
 private:
-    void _loadDatabase(QString sDatabasePath,DiE_ScriptEngine::STYPE stype);
-    SCAN_RESULT _scan(QIODevice *pDevice,DiE_ScriptEngine::STYPE stype,SCAN_OPTIONS *pOptions);
+    void _loadDatabase(QString sDatabasePath, DiE_ScriptEngine::FT fileType);
+    SCAN_RESULT _scan(QIODevice *pDevice,DiE_ScriptEngine::FT fileType,SCAN_OPTIONS *pOptions);
     bool _handleError(DiE_ScriptEngine *pScriptEngine,QScriptValue scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
-    SCAN_STRUCT getScanStructFromString(QString sFileType,QString sString);
+    SCAN_STRUCT getScanStructFromString(QIODevice *pDevice,DiE_ScriptEngine::FT fileType, QString sString);
 
 private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;

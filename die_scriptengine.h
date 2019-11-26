@@ -34,27 +34,35 @@
 class DiE_ScriptEngine : public QScriptEngine
 {
 public:
-    enum STYPE
+    enum FT
     {
-        STYPE_GENERIC=0,
-        STYPE_BINARY,
-        STYPE_TEXT,
-        STYPE_MSDOS,
-        STYPE_PE,
-        STYPE_ELF,
-        STYPE_MACH
+        FT_GENERIC=0,
+        FT_BINARY,
+        FT_TEXT,
+        FT_MSDOS,
+        FT_PE,
+        FT_PE32,
+        FT_PE64,
+        FT_ELF,
+        FT_ELF32,
+        FT_ELF64,
+        FT_MACH,
+        FT_MACH32,
+        FT_MACH64
     };
 
     struct SIGNATURE_RECORD
     {
-        STYPE stype;
+        FT fileType;
         QString sName;
         QString sText;
     };
 
-    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,STYPE stype);
+    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,FT fileType);
     ~DiE_ScriptEngine();
     bool handleError(QScriptValue value,QString *psErrorString);
+
+    static QString fileTypeIdToString(FT fileType);
 
 private:
     static QScriptValue _includeScript(QScriptContext *context, QScriptEngine *engine);

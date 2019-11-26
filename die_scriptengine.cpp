@@ -20,47 +20,47 @@
 //
 #include "die_scriptengine.h"
 
-DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,STYPE stype)
+DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, FT fileType)
 {
     this->pSignaturesList=pSignaturesList;
 
     _addFunction(_includeScript,"includeScript");
 
-    if(stype==STYPE_BINARY)
+    if(fileType==FT_BINARY)
     {
         pBinary=new XBinary(pDevice);
         pBinaryScript=new Binary_Script(pBinary);
         _addClass(pBinaryScript,"Binary");
     }
-    else if(stype==STYPE_PE)
+    else if(fileType==FT_PE)
     {
         XPE *pPE=new XPE(pDevice);
         pBinaryScript=new PE_Script(pPE);
         _addClass(pBinaryScript,"PE");
         pBinary=pPE;
     }
-    else if(stype==STYPE_ELF)
+    else if(fileType==FT_ELF)
     {
         XELF *pELF=new XELF(pDevice);
         pBinaryScript=new ELF_Script(pELF);
         _addClass(pBinaryScript,"ELF");
         pBinary=pELF;
     }
-    else if(stype==STYPE_MACH)
+    else if(fileType==FT_MACH)
     {
         XMACH *pMACH=new XMACH(pDevice);
         pBinaryScript=new MACH_Script(pMACH);
         _addClass(pBinaryScript,"MACH");
         pBinary=pMACH;
     }
-    else if(stype==STYPE_MSDOS)
+    else if(fileType==FT_MSDOS)
     {
         XMSDOS *pXMSDOS=new XMSDOS(pDevice);
         pBinaryScript=new MSDOS_Script(pXMSDOS);
         _addClass(pBinaryScript,"MSDOS");
         pBinary=pXMSDOS;
     }
-    else if(stype==STYPE_TEXT)
+    else if(fileType==FT_TEXT)
     {
         XBinary *pText=new XBinary(pDevice);
         pBinaryScript=new Text_Script(pText);
@@ -88,6 +88,29 @@ bool DiE_ScriptEngine::handleError(QScriptValue value, QString *psErrorString)
     return bResult;
 }
 
+QString DiE_ScriptEngine::fileTypeIdToString(DiE_ScriptEngine::FT fileType)
+{
+    QString sResult="Unknown";
+
+    switch(fileType)
+    {
+        case FT_BINARY:             sResult=QString("Binary");      break;
+        case FT_TEXT:               sResult=QString("Text");        break;
+        case FT_MSDOS:              sResult=QString("MSDOS");       break;
+        case FT_PE:                 sResult=QString("PE");          break;
+        case FT_PE32:               sResult=QString("PE32");        break;
+        case FT_PE64:               sResult=QString("PE64");        break;
+        case FT_ELF:                sResult=QString("ELF");         break;
+        case FT_ELF32:              sResult=QString("ELF32");       break;
+        case FT_ELF64:              sResult=QString("ELF64");       break;
+        case FT_MACH:               sResult=QString("MACH");        break;
+        case FT_MACH32:             sResult=QString("MACH32");      break;
+        case FT_MACH64:             sResult=QString("MACH64");      break;
+    }
+
+    return sResult;
+}
+
 QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *context, QScriptEngine *engine)
 {
     QScriptValue result;
@@ -102,7 +125,7 @@ QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *context, QScriptEn
 
         for(int i=0;i<nCount;i++)
         {
-            if(pScriptEngine->pSignaturesList->at(i).stype==STYPE_GENERIC)
+            if(pScriptEngine->pSignaturesList->at(i).fileType==FT_GENERIC)
             {
                 if(pScriptEngine->pSignaturesList->at(i).sName==sName)
                 {
