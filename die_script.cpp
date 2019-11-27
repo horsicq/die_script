@@ -115,6 +115,17 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
 
             DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord=listSignatures.at(i);
 
+
+        #ifdef QT_DEBUG
+
+//            if(signatureRecord.sName=="MFC.3.sg")
+//            {
+//                qDebug("%s:",signatureRecord.sName.toLatin1().data());
+//            }
+//            qDebug("%s:",signatureRecord.sName.toLatin1().data());
+
+        #endif
+
             QScriptValue script=scriptEngine.evaluate(signatureRecord.sText);
 
             if(_handleError(&scriptEngine,script,&signatureRecord,&scanResult))
@@ -148,7 +159,9 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
                 DEBUG_RECORD debugRecord={};
                 debugRecord.sScript=signatureRecord.sName;
                 debugRecord.nElapsedTime=scanTimer.elapsed();
-
+//            #ifdef QT_DEBUG
+//                qDebug("%s: %d msec",debugRecord.sScript.toLatin1().data(),debugRecord.nElapsedTime);
+//            #endif
                 scanResult.listDebugRecords.append(debugRecord);
             }
         }

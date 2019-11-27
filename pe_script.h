@@ -94,6 +94,8 @@ private:
     QList<XPE_DEF::IMAGE_SECTION_HEADER> listSH;
     QList<XPE::SECTION_RECORD> listSR;
     QList<QString> listSN;
+
+    qint32 nNumberOfImports;
 };
 
 #endif // PE_SCRIPT_H

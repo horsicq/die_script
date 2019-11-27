@@ -37,6 +37,8 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     listResources=pPE->getResources(&listMM);
 
     nNumberOfResources=listResources.count();
+
+    nNumberOfImports=pPE->getNumberOfImports();
 }
 
 PE_Script::~PE_Script()
@@ -166,7 +168,7 @@ bool PE_Script::isNETUnicodeStringPresent(QString sString)
 
 qint32 PE_Script::getNumberOfImports()
 {
-    return pPE->getNumberOfImports();
+    return nNumberOfImports;
 }
 
 QString PE_Script::getImportLibraryName(quint32 nNumber)
