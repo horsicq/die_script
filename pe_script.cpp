@@ -24,9 +24,6 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 {
     this->pPE=pPE;
 
-    QList<XBinary::MEMORY_MAP> listMM=pPE->getMemoryMapList();
-
-    nBaseAddress=pPE->getBaseAddress();
     nNumberOfSections=pPE->getFileHeader_NumberOfSections();
 
     listSH=pPE->getSectionHeaders();
@@ -38,7 +35,9 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     nNumberOfResources=listResources.count();
 
-    nNumberOfImports=pPE->getNumberOfImports();
+    QList<XPE::IMPORT_HEADER> listImports=pPE->getImports(&listMM);
+
+    nNumberOfImports=listImports.count();
 }
 
 PE_Script::~PE_Script()
@@ -173,17 +172,22 @@ qint32 PE_Script::getNumberOfImports()
 
 QString PE_Script::getImportLibraryName(quint32 nNumber)
 {
-    return pPE->getImportLibraryName(nNumber);
+    return pPE->getImportLibraryName(nNumber); // TODO
 }
 
 bool PE_Script::isLibraryPresent(QString sLibraryName)
 {
-    return pPE->isImportLibraryPresentI(sLibraryName);
+    return pPE->isImportLibraryPresentI(sLibraryName,&listImports);
 }
 
 bool PE_Script::isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName)
 {
-    return pPE->isImportFunctionPresentI(sLibraryName,sFunctionName);
+    return pPE->isImportFunctionPresentI(sLibraryName,sFunctionName,&listImports);
+}
+
+QString PE_Script::getImportFunctionName(quint32 nImport, quint32 nFunctionNumber)
+{
+    return pPE->getImportFunctionName(nImport,nFunctionNumber,&listImports);
 }
 
 qint32 PE_Script::getImportSection()
@@ -199,6 +203,11 @@ qint32 PE_Script::getResourceSection()
 qint32 PE_Script::getEntryPointSection()
 {
     return pPE->getEntryPointSection();
+}
+
+qint32 PE_Script::getRelocsSection()
+{
+    return pPE->getRelocsSection();
 }
 
 quint8 PE_Script::getMajorLinkerVersion()
@@ -231,6 +240,11 @@ qint32 PE_Script::getNumberOfRichIDs()
     return pPE->getNumberOfRichIDs();
 }
 
+bool PE_Script::isRichVersionPresent(quint32 nVersion)
+{
+    return pPE->isRichVersionPresent(nVersion);
+}
+
 qint64 PE_Script::getResourceNameOffset(QString sName)
 {
     return pPE->getResourceNameOffset(sName);
@@ -249,6 +263,11 @@ qint64 PE_Script::getDosStubOffset()
 qint64 PE_Script::getDosStubSize()
 {
     return pPE->getDosStubSize();
+}
+
+bool PE_Script::isDosStubPresent()
+{
+    return pPE->isDosStubPresent();
 }
 
 QString PE_Script::getCompilerVersion()
@@ -301,4 +320,14 @@ QString PE_Script::getNETVersion()
 bool PE_Script::compareEP_NET(QString sSignature, qint64 nOffset)
 {
     return pPE->compareSignatureOnAddress(sSignature,nBaseAddress+cliInfo.nEntryPoint+nOffset);
+}
+
+quint32 PE_Script::getSizeOfCode()
+{
+    return pPE->getOptionalHeader_SizeOfCode();
+}
+
+quint32 PE_Script::getSizeOfUninitializedData()
+{
+    return pPE->getOptionalHeader_SizeOfUninitializedData();
 }

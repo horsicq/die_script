@@ -24,6 +24,9 @@ Binary_Script::Binary_Script(XBinary *pBinary)
 {
     this->pBinary=pBinary;
 
+    listMM=pBinary->getMemoryMapList();
+    nBaseAddress=pBinary->getBaseAddress();
+
     sHeaderSignature=pBinary->getSignature(0,256);
     nHeaderSignatureSize=sHeaderSignature.size();
 
@@ -117,6 +120,21 @@ qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, QString sString)
     return pBinary->find_ansiString(nOffset,nSize,sString);
 }
 
+qint64 Binary_Script::findByte(qint64 nOffset, qint64 nSize, quint8 value)
+{
+    return pBinary->find_uint8(nOffset,nSize,value);
+}
+
+qint64 Binary_Script::findWord(qint64 nOffset, qint64 nSize, quint16 value)
+{
+    return pBinary->find_uint16(nOffset,nSize,value);
+}
+
+qint64 Binary_Script::findDword(qint64 nOffset, qint64 nSize, quint32 value)
+{
+    return pBinary->find_uint32(nOffset,nSize,value);
+}
+
 qint64 Binary_Script::getEntryPointOffset()
 {
     return pBinary->getEntryPointOffset();
@@ -169,4 +187,31 @@ quint32 Binary_Script::swapBytes(quint32 nValue)
 QString Binary_Script::getGeneralOptions()
 {
     return "";
+}
+
+qint64 Binary_Script::RVAToOffset(qint64 nRVA)
+{
+    return pBinary->addressToOffset(&listMM,nRVA+nBaseAddress);
+}
+
+qint64 Binary_Script::VAToOffset(qint64 nVA)
+{
+    return pBinary->addressToOffset(&listMM,nBaseAddress);
+}
+
+qint64 Binary_Script::OffsetToVA(qint64 nOffset)
+{
+    return pBinary->offsetToAddress(&listMM,nOffset);
+}
+
+qint64 Binary_Script::OffsetToRVA(qint64 nOffset)
+{
+    qint64 nResult=pBinary->offsetToAddress(&listMM,nOffset);
+
+    if(nResult!=-1)
+    {
+        nResult-=nBaseAddress;
+    }
+
+    return nResult;
 }

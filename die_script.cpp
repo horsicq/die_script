@@ -104,7 +104,24 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
 
     for(int i=0;i<nCount;i++)
     {
+        bool bExec=false;
+
         if((listSignatures.at(i).fileType==fileType)&&(listSignatures.at(i).sName!="_init"))
+        {
+            bExec=true;
+        }
+
+        if(!pOptions->bDeepScan)
+        {
+            QString sPrefix=listSignatures.at(i).sName.section(".",0,0).toUpper();
+
+            if((sPrefix=="DS")||(sPrefix=="EP"))
+            {
+                bExec=false;
+            }
+        }
+
+        if(bExec)
         {
             QElapsedTimer scanTimer;
 
@@ -117,12 +134,14 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
 
 
         #ifdef QT_DEBUG
-
-//            if(signatureRecord.sName=="MFC.3.sg")
-//            {
-//                qDebug("%s:",signatureRecord.sName.toLatin1().data());
-//            }
-//            qDebug("%s:",signatureRecord.sName.toLatin1().data());
+            if(pOptions->bDebug)
+            {
+                if(signatureRecord.sName=="MFC.3.sg")
+                {
+                    qDebug("%s:",signatureRecord.sName.toLatin1().data());
+                }
+                qDebug("%s:",signatureRecord.sName.toLatin1().data());
+            }
 
         #endif
 

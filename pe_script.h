@@ -56,19 +56,23 @@ public slots:
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(QString sLibraryName);
     bool isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName);
+    QString getImportFunctionName(quint32 nImport, quint32 nFunctionNumber);
     qint32 getImportSection();
     qint32 getResourceSection();
     qint32 getEntryPointSection();
+    qint32 getRelocsSection();
     quint8 getMajorLinkerVersion();
     quint8 getMinorLinkerVersion();
     QString getManifest();
     QString getVersionStringInfo(QString sKey);
     qint32 getNumberOfImportThunks(quint32 nNumber);
     qint32 getNumberOfRichIDs();
+    bool isRichVersionPresent(quint32 nVersion);
     qint64 getResourceNameOffset(QString sName);
     bool isResourceNamePresent(QString sName);
     qint64 getDosStubOffset();
     qint64 getDosStubSize();
+    bool isDosStubPresent();
     QString getCompilerVersion();
     bool isConsole();
     bool isSignedFile();
@@ -79,6 +83,8 @@ public slots:
     bool isDll();
     QString getNETVersion();
     bool compareEP_NET(QString sSignature,qint64 nOffset=0);
+    quint32 getSizeOfCode();
+    quint32 getSizeOfUninitializedData();
 
 private:
     XPE *pPE;
@@ -95,6 +101,7 @@ private:
     QList<XPE::SECTION_RECORD> listSR;
     QList<QString> listSN;
 
+    QList<XPE::IMPORT_HEADER> listImports;
     qint32 nNumberOfImports;
 };
 
