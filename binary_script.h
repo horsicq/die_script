@@ -62,6 +62,7 @@ public slots:
     qint64 OffsetToRVA(qint64 nOffset);
     QString getFileDirectory();
     QString getSignature(qint64 nOffset,qint64 nSize);
+    double calculateEntropy(qint64 nOffset,qint64 nSize);
 
 protected:
     QList<XBinary::MEMORY_MAP> listMM;

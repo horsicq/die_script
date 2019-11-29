@@ -33,6 +33,8 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     cliInfo=pPE->getCliInfo(true,&listMM);
     listResources=pPE->getResources(&listMM);
 
+    resVersion=pPE->getResourceVersion(&listResources);
+
     nNumberOfResources=listResources.count();
 
     QList<XPE::IMPORT_HEADER> listImports=pPE->getImports(&listMM);
@@ -45,6 +47,34 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     bIsConsole=pPE->isConsole();
     bIsSignPresent=pPE->isSignPresent();
     bIisRichSignaturePresent=pPE->isRichSignaturePresent();
+
+    // TODO optimize
+    QString sType;
+    QString sBits;
+
+    if(pPE->is64())
+    {
+        sBits="64";
+    }
+    else
+    {
+        sBits="32";
+    }
+
+    if(pPE->isDll())
+    {
+        sType="DLL";
+    }
+    else if(pPE->isDriver())
+    {
+        sType="Driver";
+    }
+    else
+    {
+        sType="EXE";
+    }
+
+    sGeneralOptions=QString("%1%2").arg(sType).arg(sBits);
 }
 
 PE_Script::~PE_Script()
@@ -108,33 +138,8 @@ bool PE_Script::isPEPlus()
 }
 
 QString PE_Script::getGeneralOptions()
-{
-    QString sType;
-    QString sBits;
-
-    if(pPE->is64())
-    {
-        sBits="64";
-    }
-    else
-    {
-        sBits="32";
-    }
-
-    if(pPE->isDll())
-    {
-        sType="DLL";
-    }
-    else if(pPE->isDriver())
-    {
-        sType="Driver";
-    }
-    else
-    {
-        sType="EXE";
-    }
-
-    return QString("%1%2").arg(sType).arg(sBits);
+{   
+    return sGeneralOptions;
 }
 
 quint32 PE_Script::getResourceIdByNumber(quint32 nNumber)
@@ -179,7 +184,7 @@ qint32 PE_Script::getNumberOfImports()
 
 QString PE_Script::getImportLibraryName(quint32 nNumber)
 {
-    return pPE->getImportLibraryName(nNumber); // TODO
+    return pPE->getImportLibraryName(nNumber,&listImports); // TODO
 }
 
 bool PE_Script::isLibraryPresent(QString sLibraryName)
@@ -234,7 +239,7 @@ QString PE_Script::getManifest()
 
 QString PE_Script::getVersionStringInfo(QString sKey)
 {
-    return pPE->getResourceVersionValue(sKey);
+    return pPE->getResourceVersionValue(sKey,&resVersion);
 }
 
 qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
@@ -357,4 +362,9 @@ QString PE_Script::getPEFileVersion(QString sFileName)
     }
 
     return sResult;
+}
+
+QString PE_Script::getFileVersion()
+{
+    return pPE->getFileVersion(&resVersion);
 }

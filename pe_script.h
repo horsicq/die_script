@@ -86,6 +86,8 @@ public slots:
     quint32 getSizeOfCode();
     quint32 getSizeOfUninitializedData();
     QString getPEFileVersion(QString sFileName);
+    QString getFileVersion();
+
 
 private:
     XPE *pPE;
@@ -105,12 +107,16 @@ private:
     QList<XPE::IMPORT_HEADER> listImports;
     qint32 nNumberOfImports;
 
+    XPE::RESOURCE_VERSION resVersion;
+
     bool bIsNETPresent;
     bool bIs64;
     bool bIsDll;
     bool bIsConsole;
     bool bIsSignPresent;
     bool bIisRichSignaturePresent;
+
+    QString sGeneralOptions;
 };
 
 #endif // PE_SCRIPT_H
