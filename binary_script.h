@@ -60,10 +60,13 @@ public slots:
     qint64 VAToOffset(qint64 nVA);
     qint64 OffsetToVA(qint64 nOffset);
     qint64 OffsetToRVA(qint64 nOffset);
+    QString getFileDirectory();
+    QString getSignature(qint64 nOffset,qint64 nSize);
 
 protected:
     QList<XBinary::MEMORY_MAP> listMM;
     qint64 nBaseAddress;
+    QString sFileDirectory;
 
 private:
     XBinary *pBinary;

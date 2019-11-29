@@ -85,6 +85,7 @@ public slots:
     bool compareEP_NET(QString sSignature,qint64 nOffset=0);
     quint32 getSizeOfCode();
     quint32 getSizeOfUninitializedData();
+    QString getPEFileVersion(QString sFileName);
 
 private:
     XPE *pPE;
@@ -103,6 +104,13 @@ private:
 
     QList<XPE::IMPORT_HEADER> listImports;
     qint32 nNumberOfImports;
+
+    bool bIsNETPresent;
+    bool bIs64;
+    bool bIsDll;
+    bool bIsConsole;
+    bool bIsSignPresent;
+    bool bIisRichSignaturePresent;
 };
 
 #endif // PE_SCRIPT_H

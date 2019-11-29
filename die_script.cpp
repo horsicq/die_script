@@ -252,11 +252,11 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,D
     {
         if(XMACH::is64(pDevice))
         {
-            result.fileType=DiE_ScriptEngine::FT_ELF64;
+            result.fileType=DiE_ScriptEngine::FT_MACH64;
         }
         else
         {
-            result.fileType=DiE_ScriptEngine::FT_ELF32;
+            result.fileType=DiE_ScriptEngine::FT_MACH32;
         }
     }
 

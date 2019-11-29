@@ -38,6 +38,13 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     QList<XPE::IMPORT_HEADER> listImports=pPE->getImports(&listMM);
 
     nNumberOfImports=listImports.count();
+
+    bIsNETPresent=pPE->isNETPresent();
+    bIs64=pPE->is64();
+    bIsDll=pPE->isDll();
+    bIsConsole=pPE->isConsole();
+    bIsSignPresent=pPE->isSignPresent();
+    bIisRichSignaturePresent=pPE->isRichSignaturePresent();
 }
 
 PE_Script::~PE_Script()
@@ -92,12 +99,12 @@ bool PE_Script::isSectionNamePresent(QString sSectionName)
 
 bool PE_Script::isNET()
 {
-    return pPE->isNETPresent();
+    return bIsNETPresent;
 }
 
 bool PE_Script::isPEPlus()
 {
-    return pPE->is64();
+    return bIs64;
 }
 
 QString PE_Script::getGeneralOptions()
@@ -279,17 +286,17 @@ QString PE_Script::getCompilerVersion()
 
 bool PE_Script::isConsole()
 {
-    return pPE->isConsole();
+    return bIsConsole;
 }
 
 bool PE_Script::isSignedFile()
 {
-    return pPE->isSignPresent();
+    return bIsSignPresent;
 }
 
 bool PE_Script::isRichSignaturePresent()
 {
-    return pPE->isRichSignaturePresent();
+    return bIisRichSignaturePresent;
 }
 
 bool PE_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
@@ -309,7 +316,7 @@ qint32 PE_Script::getSectionNumber(QString sSectionName)
 
 bool PE_Script::isDll()
 {
-    return pPE->isDll();
+    return bIsDll;
 }
 
 QString PE_Script::getNETVersion()
@@ -330,4 +337,24 @@ quint32 PE_Script::getSizeOfCode()
 quint32 PE_Script::getSizeOfUninitializedData()
 {
     return pPE->getOptionalHeader_SizeOfUninitializedData();
+}
+
+QString PE_Script::getPEFileVersion(QString sFileName)
+{
+    QString sResult;
+
+    QFile file;
+
+    file.setFileName(sFileName);
+
+    if(file.open(QIODevice::ReadOnly))
+    {
+        XPE pe(&file);
+
+        sResult=pe.getFileVersion();
+
+        file.close();
+    }
+
+    return sResult;
 }

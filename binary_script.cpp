@@ -45,6 +45,8 @@ Binary_Script::Binary_Script(XBinary *pBinary)
         sOverlaySignature=pBinary->getSignature(nOverlayOffset,256);
         nOverlaySignatureSize=sOverlaySignature.size();
     }
+
+    sFileDirectory=XBinary::getDeviceDirectory(pBinary->getDevice());
 }
 
 Binary_Script::~Binary_Script()
@@ -196,7 +198,7 @@ qint64 Binary_Script::RVAToOffset(qint64 nRVA)
 
 qint64 Binary_Script::VAToOffset(qint64 nVA)
 {
-    return pBinary->addressToOffset(&listMM,nBaseAddress);
+    return pBinary->addressToOffset(&listMM,nVA);
 }
 
 qint64 Binary_Script::OffsetToVA(qint64 nOffset)
@@ -214,4 +216,14 @@ qint64 Binary_Script::OffsetToRVA(qint64 nOffset)
     }
 
     return nResult;
+}
+
+QString Binary_Script::getFileDirectory()
+{
+    return sFileDirectory;
+}
+
+QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize)
+{
+    return pBinary->getSignature(nOffset,nSize);
 }
