@@ -136,7 +136,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::
         #ifdef QT_DEBUG
             if(pOptions->bDebug)
             {
-                if(signatureRecord.sName=="MFC.3.sg")
+                if(signatureRecord.sName=="_NET Reactor.2.sg")
                 {
                     qDebug("%s:",signatureRecord.sName.toLatin1().data());
                 }
