@@ -259,12 +259,12 @@ bool PE_Script::isRichVersionPresent(quint32 nVersion)
 
 qint64 PE_Script::getResourceNameOffset(QString sName)
 {
-    return pPE->getResourceNameOffset(sName);
+    return pPE->getResourceNameOffset(sName,&listResources);
 }
 
 bool PE_Script::isResourceNamePresent(QString sName)
 {
-    return pPE->isResourceNamePresent(sName);
+    return pPE->isResourceNamePresent(sName,&listResources);
 }
 
 qint64 PE_Script::getDosStubOffset()
@@ -302,11 +302,6 @@ bool PE_Script::isSignedFile()
 bool PE_Script::isRichSignaturePresent()
 {
     return bIisRichSignaturePresent;
-}
-
-bool PE_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
-{
-    return pPE->isSignatureInLoadSectionPresent(nNumber,sSignature);
 }
 
 QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)

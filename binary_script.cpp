@@ -24,21 +24,25 @@ Binary_Script::Binary_Script(XBinary *pBinary)
 {
     this->pBinary=pBinary;
 
+    nSize=pBinary->getSize();
     listMM=pBinary->getMemoryMapList();
     nBaseAddress=pBinary->getBaseAddress();
 
+    nEntryPointOffset=pBinary->getEntryPointOffset();
+    nEntryPointAddress=pBinary->getEntryPointAddress(&listMM);
+    nEntryPointOffset=pBinary->getEntryPointOffset();
+    nOverlayOffset=pBinary->getOverlayOffset();
+    nOverlaySize=pBinary->getOverlaySize();
+    bIsOverlayPresent=pBinary->isOverlayPresent();
+
     sHeaderSignature=pBinary->getSignature(0,256);
     nHeaderSignatureSize=sHeaderSignature.size();
-
-    qint64 nEntryPointOffset=this->getEntryPointOffset();
 
     if(nEntryPointOffset>0)
     {
         sEntryPointSignature=pBinary->getSignature(nEntryPointOffset,256);
         nEntryPointSignatureSize=sEntryPointSignature.size();
     }
-
-    qint64 nOverlayOffset=this->getOverlayOffset();
 
     if(nOverlayOffset>0)
     {
@@ -56,7 +60,7 @@ Binary_Script::~Binary_Script()
 
 qint64 Binary_Script::getSize()
 {
-    return pBinary->getSize();
+    return nSize;
 }
 
 bool Binary_Script::compare(QString sSignature, qint64 nOffset)
@@ -139,27 +143,27 @@ qint64 Binary_Script::findDword(qint64 nOffset, qint64 nSize, quint32 value)
 
 qint64 Binary_Script::getEntryPointOffset()
 {
-    return pBinary->getEntryPointOffset();
+    return nEntryPointOffset;
 }
 
 qint64 Binary_Script::getOverlayOffset()
 {
-    return pBinary->getOverlayOffset();
+    return nOverlayOffset;
 }
 
 qint64 Binary_Script::getOverlaySize()
 {
-    return pBinary->getOverlaySize();
+    return nOverlaySize;
 }
 
 qint64 Binary_Script::getAddressOfEntryPoint()
 {
-    return pBinary->getEntryPointAddress();
+    return nEntryPointAddress;
 }
 
 bool Binary_Script::isOverlayPresent()
 {
-    return pBinary->isOverlayPresent();
+    return bIsOverlayPresent;
 }
 
 bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
@@ -231,4 +235,9 @@ QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize)
 double Binary_Script::calculateEntropy(qint64 nOffset, qint64 nSize)
 {
     return pBinary->getEntropy(nOffset,nSize);
+}
+
+bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
+{
+    return pBinary->isSignatureInLoadSectionPresent(&listMM,nNumber,sSignature);
 }

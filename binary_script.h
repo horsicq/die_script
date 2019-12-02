@@ -63,6 +63,7 @@ public slots:
     QString getFileDirectory();
     QString getSignature(qint64 nOffset,qint64 nSize);
     double calculateEntropy(qint64 nOffset,qint64 nSize);
+    bool isSignatureInSectionPresent(quint32 nNumber,QString sSignature);
 
 protected:
     QList<XBinary::MEMORY_MAP> listMM;
@@ -71,6 +72,13 @@ protected:
 
 private:
     XBinary *pBinary;
+
+    qint64 nSize;
+    qint64 nEntryPointOffset;
+    qint64 nEntryPointAddress;
+    qint64 nOverlayOffset;
+    qint64 nOverlaySize;
+    qint64 bIsOverlayPresent;
 
     QString sHeaderSignature;
     qint32 nHeaderSignatureSize;

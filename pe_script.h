@@ -77,7 +77,6 @@ public slots:
     bool isConsole();
     bool isSignedFile();
     bool isRichSignaturePresent();
-    bool isSignatureInSectionPresent(quint32 nNumber,QString sSignature);
     QString getSectionNameCollision(QString sString1, QString sString2);
     qint32 getSectionNumber(QString sSectionName);
     bool isDll();
