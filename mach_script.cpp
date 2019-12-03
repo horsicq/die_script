@@ -23,6 +23,44 @@
 MACH_Script::MACH_Script(XMACH *pMACH) : Binary_Script(pMACH)
 {
     this->pMACH=pMACH;
+
+    listLR=pMACH->getLibraryRecords();
+    listSR=pMACH->getSectionRecords();
+    listCR=pMACH->getCommandRecords();
+
+    nNumberOfSection=pMACH->getNumberOfSections(&listCR);
+
+    unsigned int nFileType=pMACH->getHeader_filetype();
+
+    if(nFileType==XMACH_DEF::S_MH_OBJECT)
+    {
+        sGeneralOptions+="OBJ";
+    }
+    else if(nFileType==XMACH_DEF::S_MH_EXECUTE)
+    {
+        sGeneralOptions+="EXE";
+    }
+    else if(nFileType==XMACH_DEF::S_MH_CORE)
+    {
+        sGeneralOptions+="CORE";
+    }
+    else if(nFileType==XMACH_DEF::S_MH_DYLIB)
+    {
+        sGeneralOptions+="DYLIB";
+    }
+    else if(nFileType==XMACH_DEF::S_MH_BUNDLE)
+    {
+        sGeneralOptions+="BUNDLE";
+    }
+
+    if(pMACH->is64())
+    {
+        sGeneralOptions+="64";
+    }
+    else
+    {
+        sGeneralOptions+="32";
+    }
 }
 
 MACH_Script::~MACH_Script()
@@ -32,54 +70,20 @@ MACH_Script::~MACH_Script()
 
 bool MACH_Script::isLibraryPresent(QString sLibraryName)
 {
-    return pMACH->isLibraryRecordNamePresent(sLibraryName);
+    return pMACH->isLibraryRecordNamePresent(sLibraryName,&listLR);
 }
 
 quint32 MACH_Script::getNumberOfSections()
 {
-    return pMACH->getNumberOfSections();
+    return nNumberOfSection;
 }
 
 qint32 MACH_Script::getSectionNumber(QString sSectionName)
 {
-    return pMACH->getSectionNumber(sSectionName);
+    return pMACH->getSectionNumber(sSectionName,&listSR);
 }
 
 QString MACH_Script::getGeneralOptions()
 {
-    QString sResult;
-
-    unsigned int nFileType=pMACH->getHeader_filetype();
-
-    if(nFileType==XMACH_DEF::S_MH_OBJECT)
-    {
-        sResult+="OBJ";
-    }
-    else if(nFileType==XMACH_DEF::S_MH_EXECUTE)
-    {
-        sResult+="EXE";
-    }
-    else if(nFileType==XMACH_DEF::S_MH_CORE)
-    {
-        sResult+="CORE";
-    }
-    else if(nFileType==XMACH_DEF::S_MH_DYLIB)
-    {
-        sResult+="DYLIB";
-    }
-    else if(nFileType==XMACH_DEF::S_MH_BUNDLE)
-    {
-        sResult+="BUNDLE";
-    }
-
-    if(pMACH->is64())
-    {
-        sResult+="64";
-    }
-    else
-    {
-        sResult+="32";
-    }
-
-    return sResult;
+    return sGeneralOptions;
 }

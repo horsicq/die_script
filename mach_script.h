@@ -40,6 +40,13 @@ public slots:
 
 private:
     XMACH *pMACH;
+
+    QString sGeneralOptions;
+    QList<XMACH::LIBRARY_RECORD> listLR;
+    QList<XMACH::SECTION_RECORD> listSR;
+    QList<XMACH::COMMAND_RECORD> listCR;
+
+    qint32 nNumberOfSection;
 };
 
 #endif // MACH_SCRIPT_H
