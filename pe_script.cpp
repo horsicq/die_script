@@ -124,7 +124,7 @@ quint32 PE_Script::getNumberOfResources()
 
 bool PE_Script::isSectionNamePresent(QString sSectionName)
 {
-    return pPE->isSectionNamePresent(sSectionName);
+    return pPE->isSectionNamePresent(sSectionName,&listSH); // TODO !!! listNames!
 }
 
 bool PE_Script::isNET()
@@ -184,7 +184,7 @@ qint32 PE_Script::getNumberOfImports()
 
 QString PE_Script::getImportLibraryName(quint32 nNumber)
 {
-    return pPE->getImportLibraryName(nNumber,&listImports); // TODO
+    return pPE->getImportLibraryName(nNumber,&listImports);
 }
 
 bool PE_Script::isLibraryPresent(QString sLibraryName)
@@ -244,7 +244,7 @@ QString PE_Script::getVersionStringInfo(QString sKey)
 
 qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
 {
-    return pPE->getNumberOfImportThunks(nNumber);
+    return pPE->getNumberOfImportThunks(nNumber,&listImports);
 }
 
 qint32 PE_Script::getNumberOfRichIDs()
