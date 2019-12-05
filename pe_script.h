@@ -87,7 +87,6 @@ public slots:
     QString getPEFileVersion(QString sFileName);
     QString getFileVersion();
 
-
 private:
     XPE *pPE;
 
@@ -107,6 +106,9 @@ private:
     qint32 nNumberOfImports;
 
     XPE::RESOURCE_VERSION resVersion;
+
+    QList<XPE::RICH_RECORD> listRich;
+    qint32 nNumberOfRich;
 
     bool bIsNETPresent;
     bool bIs64;

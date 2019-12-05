@@ -20,13 +20,48 @@
 //
 #include "die_script.h"
 
+bool sort_signature(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2)
+{
+    if(sr1.sName=="_init")
+    {
+        return true;
+    }
+    else if(sr2.sName=="_init")
+    {
+        return false;
+    }
+
+    QString sPrio1=sr1.sName.section(".",1,1);
+    QString sPrio2=sr2.sName.section(".",1,1);
+
+    if((sPrio1!="")&&(sPrio2!=""))
+    {
+        if(sPrio1>sPrio2)
+        {
+            return false;
+        }
+        else if(sPrio1<sPrio2)
+        {
+            return true;
+        }
+        else if(sPrio1==sPrio2)
+        {
+            return (sr1.sName.section(".",0,0)<sr2.sName.section(".",0,0));
+        }
+    }
+
+    return (sr1.sName<sr2.sName);
+}
+
 DiE_Script::DiE_Script(QObject *parent) : QObject(parent)
 {
 
 }
 
-void DiE_Script::_loadDatabase(QString sDatabasePath, DiE_ScriptEngine::FT fileType)
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabase(QString sDatabasePath, DiE_ScriptEngine::FT fileType)
 {
+    QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
+
     QDir dir(sDatabasePath);
 
     QFileInfoList eil=dir.entryInfoList();
@@ -43,11 +78,13 @@ void DiE_Script::_loadDatabase(QString sDatabasePath, DiE_ScriptEngine::FT fileT
             record.sName=eil.at(i).fileName();
             record.sText=XBinary::readFile(eil.at(i).absoluteFilePath());
 
-            listSignatures.append(record);
+            listResult.append(record);
         }
     }
 
-    // TODO Sort
+    std::sort(listResult.begin(),listResult.end(),sort_signature);
+
+    return listResult;
 }
 
 DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, DiE_ScriptEngine::FT fileType, SCAN_OPTIONS *pOptions)
@@ -272,13 +309,13 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
 {
     listSignatures.clear();
 
-    _loadDatabase(sDatabasePath,DiE_ScriptEngine::FT_GENERIC);
-    _loadDatabase(sDatabasePath+QDir::separator()+"Binary",DiE_ScriptEngine::FT_BINARY);
-    _loadDatabase(sDatabasePath+QDir::separator()+"Text",DiE_ScriptEngine::FT_TEXT);
-    _loadDatabase(sDatabasePath+QDir::separator()+"MSDOS",DiE_ScriptEngine::FT_MSDOS);
-    _loadDatabase(sDatabasePath+QDir::separator()+"PE",DiE_ScriptEngine::FT_PE);
-    _loadDatabase(sDatabasePath+QDir::separator()+"ELF",DiE_ScriptEngine::FT_ELF);
-    _loadDatabase(sDatabasePath+QDir::separator()+"MACH",DiE_ScriptEngine::FT_MACH);
+    listSignatures.append(_loadDatabase(sDatabasePath,DiE_ScriptEngine::FT_GENERIC));
+    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"Binary",DiE_ScriptEngine::FT_BINARY));
+    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"Text",DiE_ScriptEngine::FT_TEXT));
+    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"MSDOS",DiE_ScriptEngine::FT_MSDOS));
+    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"PE",DiE_ScriptEngine::FT_PE));
+    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"ELF",DiE_ScriptEngine::FT_ELF));
+    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"MACH",DiE_ScriptEngine::FT_MACH));
 
     return listSignatures.count();
 }

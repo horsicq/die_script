@@ -37,9 +37,13 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     nNumberOfResources=listResources.count();
 
-    QList<XPE::IMPORT_HEADER> listImports=pPE->getImports(&listMM);
+    listImports=pPE->getImports(&listMM);
 
     nNumberOfImports=listImports.count();
+
+    listRich=pPE->getRichSignatureRecords();
+
+    nNumberOfRich=listRich.count();
 
     bIsNETPresent=pPE->isNETPresent();
     bIs64=pPE->is64();
@@ -249,12 +253,12 @@ qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
 
 qint32 PE_Script::getNumberOfRichIDs()
 {
-    return pPE->getNumberOfRichIDs();
+    return nNumberOfRich;
 }
 
 bool PE_Script::isRichVersionPresent(quint32 nVersion)
 {
-    return pPE->isRichVersionPresent(nVersion);
+    return pPE->isRichVersionPresent(nVersion,&listRich);
 }
 
 qint64 PE_Script::getResourceNameOffset(QString sName)

@@ -77,7 +77,7 @@ public:
     SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions);
 
 private:
-    void _loadDatabase(QString sDatabasePath, DiE_ScriptEngine::FT fileType);
+    static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabase(QString sDatabasePath, DiE_ScriptEngine::FT fileType);
     SCAN_RESULT _scan(QIODevice *pDevice,DiE_ScriptEngine::FT fileType,SCAN_OPTIONS *pOptions);
     bool _handleError(DiE_ScriptEngine *pScriptEngine,QScriptValue scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
