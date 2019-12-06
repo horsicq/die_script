@@ -118,6 +118,10 @@ private:
     bool bIisRichSignaturePresent;
 
     QString sGeneralOptions;
+
+    qint64 nDosStubOffset;
+    qint64 nDosStubSize;
+    bool bIsDosStubPresent;
 };
 
 #endif // PE_SCRIPT_H

@@ -52,6 +52,10 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     bIsSignPresent=pPE->isSignPresent();
     bIisRichSignaturePresent=pPE->isRichSignaturePresent();
 
+    nDosStubOffset=pPE->getDosStubOffset();
+    nDosStubSize=pPE->getDosStubSize();
+    bIsDosStubPresent=pPE->isDosStubPresent();
+
     // TODO optimize
     QString sType;
     QString sBits;
@@ -273,17 +277,17 @@ bool PE_Script::isResourceNamePresent(QString sName)
 
 qint64 PE_Script::getDosStubOffset()
 {
-    return pPE->getDosStubOffset();
+    return nDosStubOffset;
 }
 
 qint64 PE_Script::getDosStubSize()
 {
-    return pPE->getDosStubSize();
+    return nDosStubSize;
 }
 
 bool PE_Script::isDosStubPresent()
 {
-    return pPE->isDosStubPresent();
+    return bIsDosStubPresent;
 }
 
 QString PE_Script::getCompilerVersion()
