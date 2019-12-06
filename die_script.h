@@ -33,7 +33,7 @@ class DiE_Script : public QObject
 public:
     struct SCAN_STRUCT
     {
-        DiE_ScriptEngine::FT fileType;
+        XBinary::FT fileType;
         QString sType;
         QString sString;
 //        QString sName;
@@ -77,11 +77,11 @@ public:
     SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions);
 
 private:
-    static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabase(QString sDatabasePath, DiE_ScriptEngine::FT fileType);
-    SCAN_RESULT _scan(QIODevice *pDevice,DiE_ScriptEngine::FT fileType,SCAN_OPTIONS *pOptions);
+    static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabase(QString sDatabasePath, XBinary::FT fileType);
+    SCAN_RESULT _scan(QIODevice *pDevice,XBinary::FT fileType,SCAN_OPTIONS *pOptions);
     bool _handleError(DiE_ScriptEngine *pScriptEngine,QScriptValue scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
-    SCAN_STRUCT getScanStructFromString(QIODevice *pDevice,DiE_ScriptEngine::FT fileType, QString sString);
+    SCAN_STRUCT getScanStructFromString(QIODevice *pDevice,XBinary::FT fileType, QString sString);
 
 private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;
