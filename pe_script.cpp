@@ -56,6 +56,11 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     nDosStubSize=pPE->getDosStubSize();
     bIsDosStubPresent=pPE->isDosStubPresent();
 
+    nImportSection=pPE->getImportSection();
+    nResourcesSection=pPE->getResourcesSection();
+    nEntryPointSection=pPE->getEntryPointSection();
+    nRelocsSection=pPE->getRelocsSection();
+
     // TODO optimize
     QString sType;
     QString sBits;
@@ -212,22 +217,22 @@ QString PE_Script::getImportFunctionName(quint32 nImport, quint32 nFunctionNumbe
 
 qint32 PE_Script::getImportSection()
 {
-    return pPE->getImportSection();
+    return nImportSection;
 }
 
 qint32 PE_Script::getResourceSection()
 {
-    return pPE->getResourcesSection();
+    return nResourcesSection;
 }
 
 qint32 PE_Script::getEntryPointSection()
 {
-    return pPE->getEntryPointSection();
+    return nEntryPointSection;
 }
 
 qint32 PE_Script::getRelocsSection()
 {
-    return pPE->getRelocsSection();
+    return nRelocsSection;
 }
 
 quint8 PE_Script::getMajorLinkerVersion()

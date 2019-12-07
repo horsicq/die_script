@@ -122,6 +122,11 @@ private:
     qint64 nDosStubOffset;
     qint64 nDosStubSize;
     bool bIsDosStubPresent;
+
+    qint32 nImportSection;
+    qint32 nResourcesSection;
+    qint32 nEntryPointSection;
+    qint32 nRelocsSection;
 };
 
 #endif // PE_SCRIPT_H
