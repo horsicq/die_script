@@ -56,11 +56,15 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     nDosStubSize=pPE->getDosStubSize();
     bIsDosStubPresent=pPE->isDosStubPresent();
 
-    nImportSection=pPE->getImportSection();
-    nResourcesSection=pPE->getResourcesSection();
-    nEntryPointSection=pPE->getEntryPointSection();
-    nRelocsSection=pPE->getRelocsSection();
+    nImportSection=pPE->getImportSection(&listMM);
+    nResourcesSection=pPE->getResourcesSection(&listMM);
+    nEntryPointSection=pPE->getEntryPointSection(&listMM);
+    nRelocsSection=pPE->getRelocsSection(&listMM);
 
+    nMajorLinkerVersion=pPE->getOptionalHeader_MajorLinkerVersion();
+    nMinorLinkerVersion=pPE->getOptionalHeader_MinorLinkerVersion();
+
+    sCompilerVersion=QString("%1.%2").arg(nMajorLinkerVersion).arg(nMinorLinkerVersion);
     // TODO optimize
     QString sType;
     QString sBits;
@@ -237,12 +241,12 @@ qint32 PE_Script::getRelocsSection()
 
 quint8 PE_Script::getMajorLinkerVersion()
 {
-    return pPE->getOptionalHeader_MajorLinkerVersion();
+    return nMajorLinkerVersion;
 }
 
 quint8 PE_Script::getMinorLinkerVersion()
 {
-    return pPE->getOptionalHeader_MinorLinkerVersion();
+    return nMinorLinkerVersion;
 }
 
 QString PE_Script::getManifest()
@@ -297,9 +301,7 @@ bool PE_Script::isDosStubPresent()
 
 QString PE_Script::getCompilerVersion()
 {
-    return QString("%1.%2")
-            .arg(pPE->getOptionalHeader_MajorLinkerVersion())
-            .arg(pPE->getOptionalHeader_MinorLinkerVersion());
+    return sCompilerVersion;
 }
 
 bool PE_Script::isConsole()

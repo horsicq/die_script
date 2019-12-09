@@ -127,6 +127,11 @@ private:
     qint32 nResourcesSection;
     qint32 nEntryPointSection;
     qint32 nRelocsSection;
+
+    quint8 nMajorLinkerVersion;
+    quint8 nMinorLinkerVersion;
+
+    QString sCompilerVersion;
 };
 
 #endif // PE_SCRIPT_H
