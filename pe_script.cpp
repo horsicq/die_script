@@ -326,7 +326,7 @@ QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
 
 qint32 PE_Script::getSectionNumber(QString sSectionName)
 {
-    return pPE->getSectionNumber(sSectionName,&listSH);
+    return pPE->getSectionNumber(sSectionName,&listSH); // TODO listNames !!!
 }
 
 bool PE_Script::isDll()
@@ -346,12 +346,12 @@ bool PE_Script::compareEP_NET(QString sSignature, qint64 nOffset)
 
 quint32 PE_Script::getSizeOfCode()
 {
-    return pPE->getOptionalHeader_SizeOfCode();
+    return pPE->getOptionalHeader_SizeOfCode(); // TODO
 }
 
 quint32 PE_Script::getSizeOfUninitializedData()
 {
-    return pPE->getOptionalHeader_SizeOfUninitializedData();
+    return pPE->getOptionalHeader_SizeOfUninitializedData(); // TODO
 }
 
 QString PE_Script::getPEFileVersion(QString sFileName)

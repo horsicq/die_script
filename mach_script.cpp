@@ -30,37 +30,9 @@ MACH_Script::MACH_Script(XMACH *pMACH) : Binary_Script(pMACH)
 
     nNumberOfSection=pMACH->getNumberOfSections(&listCR);
 
-    unsigned int nFileType=pMACH->getHeader_filetype();
+    bIs64=pMACH->is64();
 
-    if(nFileType==XMACH_DEF::S_MH_OBJECT)
-    {
-        sGeneralOptions+="OBJ";
-    }
-    else if(nFileType==XMACH_DEF::S_MH_EXECUTE)
-    {
-        sGeneralOptions+="EXE";
-    }
-    else if(nFileType==XMACH_DEF::S_MH_CORE)
-    {
-        sGeneralOptions+="CORE";
-    }
-    else if(nFileType==XMACH_DEF::S_MH_DYLIB)
-    {
-        sGeneralOptions+="DYLIB";
-    }
-    else if(nFileType==XMACH_DEF::S_MH_BUNDLE)
-    {
-        sGeneralOptions+="BUNDLE";
-    }
-
-    if(pMACH->is64())
-    {
-        sGeneralOptions+="64";
-    }
-    else
-    {
-        sGeneralOptions+="32";
-    }
+    sGeneralOptions=QString("%1%2").arg(XMACH::getHeaderFileTypesS().value(pMACH->getHeader_filetype())).arg(bIs64?("64"):("32"));
 }
 
 MACH_Script::~MACH_Script()

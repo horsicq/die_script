@@ -47,6 +47,7 @@ private:
     QList<XMACH::COMMAND_RECORD> listCR;
 
     qint32 nNumberOfSection;
+    bool bIs64;
 };
 
 #endif // MACH_SCRIPT_H

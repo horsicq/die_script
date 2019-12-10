@@ -35,41 +35,7 @@ ELF_Script::ELF_Script(XELF *pELF) : Binary_Script(pELF)
 
     listSR=pELF->getSectionRecords(&listSH,bIs64,&baStringTable);
 
-    QString sType;
-    QString sBits;
-    unsigned int nType=elfHeader.e_type;
-
-    if(nType==0)
-    {
-        sType="unknown";
-    }
-    else if(nType==1)
-    {
-        sType="relocatable";
-    }
-    else if(nType==2)
-    {
-        sType="executable";
-    }
-    else if(nType==3)
-    {
-        sType="shared object";
-    }
-    else if(nType==4)
-    {
-        sType="core file";
-    }
-
-    if(bIs64)
-    {
-        sBits="64";
-    }
-    else
-    {
-        sBits="32";
-    }
-
-    sGeneralOptions=QString("%1 %2-%3").arg(sType).arg(XELF::getMachinesS().value(elfHeader.e_machine)).arg(sBits);
+    sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(elfHeader.e_type)).arg(XELF::getMachinesS().value(elfHeader.e_machine)).arg(bIs64?("64"):("32"));
 }
 
 ELF_Script::~ELF_Script()
