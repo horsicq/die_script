@@ -63,35 +63,12 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     nMajorLinkerVersion=pPE->getOptionalHeader_MajorLinkerVersion();
     nMinorLinkerVersion=pPE->getOptionalHeader_MinorLinkerVersion();
+    nSizeOfCode=pPE->getOptionalHeader_SizeOfCode();
+    nSizeOfUninitializedData=pPE->getOptionalHeader_SizeOfUninitializedData();
 
     sCompilerVersion=QString("%1.%2").arg(nMajorLinkerVersion).arg(nMinorLinkerVersion);
-    // TODO optimize
-    QString sType;
-    QString sBits;
 
-    if(pPE->is64())
-    {
-        sBits="64";
-    }
-    else
-    {
-        sBits="32";
-    }
-
-    if(pPE->isDll())
-    {
-        sType="DLL";
-    }
-    else if(pPE->isDriver())
-    {
-        sType="Driver";
-    }
-    else
-    {
-        sType="EXE";
-    }
-
-    sGeneralOptions=QString("%1%2").arg(sType).arg(sBits);
+    sGeneralOptions=QString("%1%2").arg(XPE::getTypesS().value(pPE->getType())).arg(bIs64?("64"):("32"));
 }
 
 PE_Script::~PE_Script()
@@ -346,12 +323,12 @@ bool PE_Script::compareEP_NET(QString sSignature, qint64 nOffset)
 
 quint32 PE_Script::getSizeOfCode()
 {
-    return pPE->getOptionalHeader_SizeOfCode(); // TODO
+    return nSizeOfCode;
 }
 
 quint32 PE_Script::getSizeOfUninitializedData()
 {
-    return pPE->getOptionalHeader_SizeOfUninitializedData(); // TODO
+    return nSizeOfUninitializedData; // TODO
 }
 
 QString PE_Script::getPEFileVersion(QString sFileName)
