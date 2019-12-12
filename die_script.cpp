@@ -173,10 +173,10 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
         #ifdef QT_DEBUG
             if(pOptions->bDebug)
             {
-                if(signatureRecord.sName=="_NET Reactor.2.sg")
-                {
-                    qDebug("%s:",signatureRecord.sName.toLatin1().data());
-                }
+//                if(signatureRecord.sName=="_NET Reactor.2.sg")
+//                {
+//                    qDebug("%s:",signatureRecord.sName.toLatin1().data());
+//                }
                 qDebug("%s:",signatureRecord.sName.toLatin1().data());
             }
 
@@ -215,9 +215,9 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                 DEBUG_RECORD debugRecord={};
                 debugRecord.sScript=signatureRecord.sName;
                 debugRecord.nElapsedTime=scanTimer.elapsed();
-//            #ifdef QT_DEBUG
-//                qDebug("%s: %d msec",debugRecord.sScript.toLatin1().data(),debugRecord.nElapsedTime);
-//            #endif
+            #ifdef QT_DEBUG
+                qDebug("%s: %d msec",debugRecord.sScript.toLatin1().data(),debugRecord.nElapsedTime);
+            #endif
                 scanResult.listDebugRecords.append(debugRecord);
             }
         }

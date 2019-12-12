@@ -118,7 +118,7 @@ quint32 PE_Script::getNumberOfResources()
 
 bool PE_Script::isSectionNamePresent(QString sSectionName)
 {
-    return pPE->isSectionNamePresent(sSectionName,&listSH); // TODO !!! listNames!
+    return listSN.contains(sSectionName);
 }
 
 bool PE_Script::isNET()
@@ -303,7 +303,7 @@ QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
 
 qint32 PE_Script::getSectionNumber(QString sSectionName)
 {
-    return pPE->getSectionNumber(sSectionName,&listSH); // TODO listNames !!!
+    return listSN.indexOf(sSectionName);
 }
 
 bool PE_Script::isDll()
@@ -328,7 +328,7 @@ quint32 PE_Script::getSizeOfCode()
 
 quint32 PE_Script::getSizeOfUninitializedData()
 {
-    return nSizeOfUninitializedData; // TODO
+    return nSizeOfUninitializedData;
 }
 
 QString PE_Script::getPEFileVersion(QString sFileName)
