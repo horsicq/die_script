@@ -29,7 +29,6 @@
 #include "mach_script.h"
 #include "msdos_script.h"
 #include "pe_script.h"
-#include "text_script.h"
 
 class DiE_ScriptEngine : public QScriptEngine
 {
@@ -44,6 +43,7 @@ public:
     DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType);
     ~DiE_ScriptEngine();
     bool handleError(QScriptValue value,QString *psErrorString);
+    static bool isSignatureTypeValid(XBinary::FT ftSignature, XBinary::FT ftTarget);
 
 private:
     static QScriptValue _includeScript(QScriptContext *context, QScriptEngine *engine);

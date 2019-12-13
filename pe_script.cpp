@@ -83,32 +83,32 @@ quint16 PE_Script::getNumberOfSections()
 
 QString PE_Script::getSectionName(quint32 nNumber)
 {
-    return pPE->getSection_NameAsString(nNumber);
+    return pPE->getSection_NameAsString(nNumber,&listSN);
 }
 
 quint32 PE_Script::getSectionVirtualSize(quint32 nNumber)
 {
-    return pPE->getSection_VirtualSize(nNumber);
+    return pPE->getSection_VirtualSize(nNumber,&listSH);
 }
 
 quint32 PE_Script::getSectionVirtualAddress(quint32 nNumber)
 {
-    return pPE->getSection_VirtualAddress(nNumber);
+    return pPE->getSection_VirtualAddress(nNumber,&listSH);
 }
 
 quint32 PE_Script::getSectionFileSize(quint32 nNumber)
 {
-    return pPE->getSection_SizeOfRawData(nNumber);
+    return pPE->getSection_SizeOfRawData(nNumber,&listSH);
 }
 
 quint32 PE_Script::getSectionFileOffset(quint32 nNumber)
 {
-    return pPE->getSection_PointerToRawData(nNumber);
+    return pPE->getSection_PointerToRawData(nNumber,&listSH);
 }
 
 quint32 PE_Script::getSectionCharacteristics(quint32 nNumber)
 {
-    return pPE->getSection_Characteristics(nNumber);
+    return pPE->getSection_Characteristics(nNumber,&listSH);
 }
 
 quint32 PE_Script::getNumberOfResources()
