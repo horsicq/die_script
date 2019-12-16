@@ -36,13 +36,31 @@ public slots:
     bool isLE();
     bool isLX();
     bool isNE();
+    bool isPE();
+
+    qint64 getDosStubOffset();
+    qint64 getDosStubSize();
+    bool isDosStubPresent();
+
+    bool isRichSignaturePresent();
+    qint32 getNumberOfRichIDs();
+    bool isRichVersionPresent(quint32 nVersion);
 
 private:
     XMSDOS *pMSDOS;
 
+    QList<XMSDOS::MS_RICH_RECORD> listRich;
+    qint32 nNumberOfRich;
+
+    qint64 nDosStubOffset;
+    qint64 nDosStubSize;
+    bool bIsDosStubPresent;
+    bool bIisRichSignaturePresent;
+
     bool bIsLE;
     bool bIsLX;
     bool bIsNE;
+    bool bIsPE;
 };
 
 #endif // MSDOS_SCRIPT_H

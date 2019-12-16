@@ -41,20 +41,11 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     nNumberOfImports=listImports.count();
 
-    listRich=pPE->getRichSignatureRecords();
-
-    nNumberOfRich=listRich.count();
-
     bIsNETPresent=pPE->isNETPresent();
     bIs64=pPE->is64();
     bIsDll=pPE->isDll();
     bIsConsole=pPE->isConsole();
     bIsSignPresent=pPE->isSignPresent();
-    bIisRichSignaturePresent=pPE->isRichSignaturePresent();
-
-    nDosStubOffset=pPE->getDosStubOffset();
-    nDosStubSize=pPE->getDosStubSize();
-    bIsDosStubPresent=pPE->isDosStubPresent();
 
     nImportSection=pPE->getImportSection(&listMM);
     nResourcesSection=pPE->getResourcesSection(&listMM);
@@ -241,16 +232,6 @@ qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
     return pPE->getNumberOfImportThunks(nNumber,&listImports);
 }
 
-qint32 PE_Script::getNumberOfRichIDs()
-{
-    return nNumberOfRich;
-}
-
-bool PE_Script::isRichVersionPresent(quint32 nVersion)
-{
-    return pPE->isRichVersionPresent(nVersion,&listRich);
-}
-
 qint64 PE_Script::getResourceNameOffset(QString sName)
 {
     return pPE->getResourceNameOffset(sName,&listResources);
@@ -259,21 +240,6 @@ qint64 PE_Script::getResourceNameOffset(QString sName)
 bool PE_Script::isResourceNamePresent(QString sName)
 {
     return pPE->isResourceNamePresent(sName,&listResources);
-}
-
-qint64 PE_Script::getDosStubOffset()
-{
-    return nDosStubOffset;
-}
-
-qint64 PE_Script::getDosStubSize()
-{
-    return nDosStubSize;
-}
-
-bool PE_Script::isDosStubPresent()
-{
-    return bIsDosStubPresent;
 }
 
 QString PE_Script::getCompilerVersion()
@@ -289,11 +255,6 @@ bool PE_Script::isConsole()
 bool PE_Script::isSignedFile()
 {
     return bIsSignPresent;
-}
-
-bool PE_Script::isRichSignaturePresent()
-{
-    return bIisRichSignaturePresent;
 }
 
 QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)

@@ -73,8 +73,11 @@ public:
 
     explicit DiE_Script(QObject *parent=nullptr);
     bool loadDatabase(QString sDatabasePath);
+    QString getDatabasePath();
     SCAN_RESULT scanFile(QString sFileName,SCAN_OPTIONS *pOptions);
     SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions);
+
+    void stop();
 
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabase(QString sDatabasePath, XBinary::FT fileType);
@@ -83,8 +86,14 @@ private:
 
     SCAN_STRUCT getScanStructFromString(QIODevice *pDevice,XBinary::FT fileType, QString sString);
 
+signals:
+    void progressMaximumChanged(qint32 nMaximum);
+    void progressValueChanged(qint32 nValue);
+
 private:
+    QString sDatabasePath;
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;
+    bool bIsStop;
 };
 
 #endif // DIE_SCRIPT_H

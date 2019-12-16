@@ -55,7 +55,7 @@ bool sort_signature(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_Scr
 
 DiE_Script::DiE_Script(QObject *parent) : QObject(parent)
 {
-
+    bIsStop=false;
 }
 
 QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabase(QString sDatabasePath, XBinary::FT fileType)
@@ -91,6 +91,11 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 {
     SCAN_RESULT scanResult={};
 
+    qint32 nCurrent=0;
+
+    emit progressMaximumChanged(100);
+    emit progressValueChanged(nCurrent);
+
     scanResult.sFileName=XBinary::getDeviceFileName(pDevice);
 
     int nCount=listSignatures.count();
@@ -101,7 +106,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     bool bGlobalInit=false;
     bool bInit=false;
 
-    for(int i=0; i<nCount; i++)
+    for(int i=0; (i<nCount)&&(!bIsStop); i++)
     {
         if(listSignatures.at(i).sName=="_init")
         {
@@ -139,7 +144,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
         }
     }
 
-    for(int i=0;i<nCount;i++)
+    for(int i=0;(i<nCount)&&(!bIsStop);i++)
     {
         bool bExec=false;
 
@@ -237,6 +242,12 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                 scanResult.listDebugRecords.append(debugRecord);
             }
         }
+
+        if((i*100)/nCount>nCurrent)
+        {
+            emit progressValueChanged(nCurrent);
+            nCurrent++;
+        }
     }
 
     if(scanResult.listRecords.count()==0)
@@ -248,6 +259,10 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
         scanResult.listRecords.append(ss);
     }
+
+    bIsStop=false;
+
+    emit progressValueChanged(100);
 
     return scanResult;
 }
@@ -289,16 +304,25 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,X
 
 bool DiE_Script::loadDatabase(QString sDatabasePath)
 {
+    this->sDatabasePath=sDatabasePath;
+
     listSignatures.clear();
 
-    listSignatures.append(_loadDatabase(sDatabasePath,XBinary::FT_UNKNOWN));
-    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"Binary",XBinary::FT_BINARY));
-    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"MSDOS",XBinary::FT_MSDOS));
-    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
-    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
-    listSignatures.append(_loadDatabase(sDatabasePath+QDir::separator()+"MACH",XBinary::FT_MACH));
+    QString _sDatabasePath=XBinary::convertPathName(sDatabasePath);
+
+    listSignatures.append(_loadDatabase(_sDatabasePath,XBinary::FT_UNKNOWN));
+    listSignatures.append(_loadDatabase(_sDatabasePath+QDir::separator()+"Binary",XBinary::FT_BINARY));
+    listSignatures.append(_loadDatabase(_sDatabasePath+QDir::separator()+"MSDOS",XBinary::FT_MSDOS));
+    listSignatures.append(_loadDatabase(_sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
+    listSignatures.append(_loadDatabase(_sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
+    listSignatures.append(_loadDatabase(_sDatabasePath+QDir::separator()+"MACH",XBinary::FT_MACH));
 
     return listSignatures.count();
+}
+
+QString DiE_Script::getDatabasePath()
+{
+    return sDatabasePath;
 }
 
 DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName, SCAN_OPTIONS *pOptions)
@@ -364,4 +388,9 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
     scanResult.nScanTime=scanTimer.elapsed();
 
     return scanResult;
+}
+
+void DiE_Script::stop()
+{
+    bIsStop=true;
 }

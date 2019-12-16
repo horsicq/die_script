@@ -66,17 +66,11 @@ public slots:
     QString getManifest();
     QString getVersionStringInfo(QString sKey);
     qint32 getNumberOfImportThunks(quint32 nNumber);
-    qint32 getNumberOfRichIDs();
-    bool isRichVersionPresent(quint32 nVersion);
     qint64 getResourceNameOffset(QString sName);
     bool isResourceNamePresent(QString sName);
-    qint64 getDosStubOffset();
-    qint64 getDosStubSize();
-    bool isDosStubPresent();
     QString getCompilerVersion();
     bool isConsole();
     bool isSignedFile();
-    bool isRichSignaturePresent();
     QString getSectionNameCollision(QString sString1, QString sString2);
     qint32 getSectionNumber(QString sSectionName);
     bool isDll();
@@ -107,21 +101,13 @@ private:
 
     XPE::RESOURCE_VERSION resVersion;
 
-    QList<XPE::RICH_RECORD> listRich;
-    qint32 nNumberOfRich;
-
     bool bIsNETPresent;
     bool bIs64;
     bool bIsDll;
     bool bIsConsole;
     bool bIsSignPresent;
-    bool bIisRichSignaturePresent;
 
     QString sGeneralOptions;
-
-    qint64 nDosStubOffset;
-    qint64 nDosStubSize;
-    bool bIsDosStubPresent;
 
     qint32 nImportSection;
     qint32 nResourcesSection;
