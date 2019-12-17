@@ -129,7 +129,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
         }  
     }
 
-    DiE_ScriptEngine scriptEngine(&listSignatures,pDevice,fileType);
+    DiE_ScriptEngine scriptEngine(&listSignatures,pDevice,fileType); // mb TODO stop function
 
     if(nCount)
     {
@@ -245,8 +245,8 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
         if((i*100)/nCount>nCurrent)
         {
-            emit progressValueChanged(nCurrent);
             nCurrent++;
+            emit progressValueChanged(nCurrent);
         }
     }
 
