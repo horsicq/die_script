@@ -37,6 +37,7 @@ public:
     {
         XBinary::FT fileType;
         QString sName;
+        QString sFilePath;
         QString sText;
     };
 

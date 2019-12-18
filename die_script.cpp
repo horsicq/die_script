@@ -77,6 +77,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabase(QString sDat
             record.fileType=fileType;
             record.sName=eil.at(i).fileName();
             record.sText=XBinary::readFile(eil.at(i).absoluteFilePath());
+            record.sFilePath=eil.at(i).absoluteFilePath();
 
             listResult.append(record);
         }
@@ -87,7 +88,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabase(QString sDat
     return listResult;
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileType, SCAN_OPTIONS *pOptions)
+DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileType, SCAN_OPTIONS *pOptions,QString sSignatureFilePath)
 {
     SCAN_RESULT scanResult={};
 
@@ -163,29 +164,21 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
             }
         }
 
+        if(sSignatureFilePath!="")
+        {
+            bExec=(sSignatureFilePath==listSignatures.at(i).sFilePath);
+        }
+
         if(bExec)
         {
+            DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord=listSignatures.at(i);
+
             QElapsedTimer scanTimer;
 
             if(pOptions->bDebug)
             {
                 scanTimer.start();
             }
-
-            DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord=listSignatures.at(i);
-
-
-        #ifdef QT_DEBUG
-            if(pOptions->bDebug)
-            {
-//                if(signatureRecord.sName=="_NET Reactor.2.sg")
-//                {
-//                    qDebug("%s:",signatureRecord.sName.toLatin1().data());
-//                }
-                qDebug("%s:",signatureRecord.sName.toLatin1().data());
-            }
-
-        #endif
 
             QScriptValue script=scriptEngine.evaluate(signatureRecord.sText);
 
@@ -325,6 +318,11 @@ QString DiE_Script::getDatabasePath()
     return sDatabasePath;
 }
 
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> *DiE_Script::getSignatures()
+{
+    return &listSignatures;
+}
+
 DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName, SCAN_OPTIONS *pOptions)
 {
     SCAN_RESULT scanResult={};
@@ -388,6 +386,25 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
     scanResult.nScanTime=scanTimer.elapsed();
 
     return scanResult;
+}
+
+DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::getSignatureByFilePath(QString sSignatureFilePath)
+{
+    DiE_ScriptEngine::SIGNATURE_RECORD result={};
+
+    int nCount=listSignatures.count();
+
+    for(int i=0;i<nCount;i++)
+    {
+        if(listSignatures.at(i).sFilePath==sSignatureFilePath)
+        {
+            result=listSignatures.at(i);
+
+            break;
+        }
+    }
+
+    return result;
 }
 
 void DiE_Script::stop()

@@ -85,7 +85,11 @@ bool DiE_ScriptEngine::isSignatureTypeValid(XBinary::FT ftSignature, XBinary::FT
 {
     bool bResult=false;
 
-    if(ftSignature==XBinary::FT_BINARY)
+    if(ftSignature==XBinary::FT_UNKNOWN)
+    {
+        bResult=(ftSignature==ftTarget);
+    }
+    else if(ftSignature==XBinary::FT_BINARY)
     {
         bResult=(ftSignature==ftTarget);
     }

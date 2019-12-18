@@ -25,11 +25,11 @@ Binary_Script::Binary_Script(XBinary *pBinary)
     this->pBinary=pBinary;
 
     nSize=pBinary->getSize();
-    listMM=pBinary->getMemoryMapList();
+    memoryMap=pBinary->getMemoryMap();
     nBaseAddress=pBinary->getBaseAddress();
 
     nEntryPointOffset=pBinary->getEntryPointOffset();
-    nEntryPointAddress=pBinary->getEntryPointAddress(&listMM);
+    nEntryPointAddress=pBinary->getEntryPointAddress(&memoryMap);
     nEntryPointOffset=pBinary->getEntryPointOffset();
     nOverlayOffset=pBinary->getOverlayOffset();
     nOverlaySize=pBinary->getOverlaySize();
@@ -73,7 +73,7 @@ bool Binary_Script::compare(QString sSignature, qint64 nOffset)
     }
     else
     {
-        return pBinary->compareSignature(sSignature,nOffset);
+        return pBinary->compareSignature(&memoryMap,sSignature,nOffset);
     }
 }
 
@@ -87,7 +87,7 @@ bool Binary_Script::compareEP(QString sSignature, qint64 nOffset)
     }
     else
     {
-        return pBinary->compareEntryPoint(sSignature,nOffset);
+        return pBinary->compareEntryPoint(&memoryMap,sSignature,nOffset); // TODO listMM
     }
 }
 
@@ -118,7 +118,7 @@ QString Binary_Script::getString(qint64 nOffset, qint64 nMaxSize)
 
 qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, QString sSignature)
 {
-    return pBinary->find_signature(nOffset,nSize,sSignature);
+    return pBinary->find_signature(&memoryMap,nOffset,nSize,sSignature);
 }
 
 qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, QString sString)
@@ -176,13 +176,13 @@ bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
     }
     else
     {
-        return pBinary->compareOverlay(sSignature,nOffset);
+        return pBinary->compareOverlay(&memoryMap,sSignature,nOffset);
     }
 }
 
 bool Binary_Script::isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSignature)
 {
-    return pBinary->isSignaturePresent(nOffset,nSize,sSignature);
+    return pBinary->isSignaturePresent(&memoryMap,nOffset,nSize,sSignature);
 }
 
 quint32 Binary_Script::swapBytes(quint32 nValue)
@@ -197,22 +197,22 @@ QString Binary_Script::getGeneralOptions()
 
 qint64 Binary_Script::RVAToOffset(qint64 nRVA)
 {
-    return pBinary->addressToOffset(&listMM,nRVA+nBaseAddress);
+    return pBinary->addressToOffset(&memoryMap,nRVA+nBaseAddress);
 }
 
 qint64 Binary_Script::VAToOffset(qint64 nVA)
 {
-    return pBinary->addressToOffset(&listMM,nVA);
+    return pBinary->addressToOffset(&memoryMap,nVA);
 }
 
 qint64 Binary_Script::OffsetToVA(qint64 nOffset)
 {
-    return pBinary->offsetToAddress(&listMM,nOffset);
+    return pBinary->offsetToAddress(&memoryMap,nOffset);
 }
 
 qint64 Binary_Script::OffsetToRVA(qint64 nOffset)
 {
-    qint64 nResult=pBinary->offsetToAddress(&listMM,nOffset);
+    qint64 nResult=pBinary->offsetToAddress(&memoryMap,nOffset);
 
     if(nResult!=-1)
     {
@@ -239,5 +239,5 @@ double Binary_Script::calculateEntropy(qint64 nOffset, qint64 nSize)
 
 bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
 {
-    return pBinary->isSignatureInLoadSectionPresent(&listMM,nNumber,sSignature);
+    return pBinary->isSignatureInLoadSectionPresent(&memoryMap,nNumber,sSignature);
 }

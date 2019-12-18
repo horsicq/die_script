@@ -66,7 +66,7 @@ public slots:
     bool isSignatureInSectionPresent(quint32 nNumber,QString sSignature);
 
 protected:
-    QList<XBinary::MEMORY_MAP> listMM;
+    XBinary::_MEMORY_MAP memoryMap;
     qint64 nBaseAddress;
     QString sFileDirectory;
 

@@ -30,14 +30,14 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     listSR=pPE->getSectionRecords(&listSH,pPE->isImage());
     listSN=pPE->getSectionNames(&listSR);
 
-    cliInfo=pPE->getCliInfo(true,&listMM);
-    listResources=pPE->getResources(&listMM);
+    cliInfo=pPE->getCliInfo(true,&memoryMap);
+    listResources=pPE->getResources(&memoryMap);
 
     resVersion=pPE->getResourceVersion(&listResources);
 
     nNumberOfResources=listResources.count();
 
-    listImports=pPE->getImports(&listMM);
+    listImports=pPE->getImports(&memoryMap);
 
     nNumberOfImports=listImports.count();
 
@@ -47,10 +47,10 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     bIsConsole=pPE->isConsole();
     bIsSignPresent=pPE->isSignPresent();
 
-    nImportSection=pPE->getImportSection(&listMM);
-    nResourcesSection=pPE->getResourcesSection(&listMM);
-    nEntryPointSection=pPE->getEntryPointSection(&listMM);
-    nRelocsSection=pPE->getRelocsSection(&listMM);
+    nImportSection=pPE->getImportSection(&memoryMap);
+    nResourcesSection=pPE->getResourcesSection(&memoryMap);
+    nEntryPointSection=pPE->getEntryPointSection(&memoryMap);
+    nRelocsSection=pPE->getRelocsSection(&memoryMap);
 
     nMajorLinkerVersion=pPE->getOptionalHeader_MajorLinkerVersion();
     nMinorLinkerVersion=pPE->getOptionalHeader_MinorLinkerVersion();
@@ -279,7 +279,7 @@ QString PE_Script::getNETVersion()
 
 bool PE_Script::compareEP_NET(QString sSignature, qint64 nOffset)
 {
-    return pPE->compareSignatureOnAddress(sSignature,nBaseAddress+cliInfo.nEntryPoint+nOffset);
+    return pPE->compareSignatureOnAddress(&memoryMap,sSignature,nBaseAddress+cliInfo.nEntryPoint+nOffset);
 }
 
 quint32 PE_Script::getSizeOfCode()
