@@ -28,9 +28,8 @@ Binary_Script::Binary_Script(XBinary *pBinary)
     memoryMap=pBinary->getMemoryMap();
     nBaseAddress=pBinary->getBaseAddress();
 
-    nEntryPointOffset=pBinary->getEntryPointOffset();
+    nEntryPointOffset=pBinary->getEntryPointOffset(&memoryMap);
     nEntryPointAddress=pBinary->getEntryPointAddress(&memoryMap);
-    nEntryPointOffset=pBinary->getEntryPointOffset();
     nOverlayOffset=pBinary->getOverlayOffset();
     nOverlaySize=pBinary->getOverlaySize();
     bIsOverlayPresent=pBinary->isOverlayPresent();
@@ -65,6 +64,8 @@ qint64 Binary_Script::getSize()
 
 bool Binary_Script::compare(QString sSignature, qint64 nOffset)
 {
+    bool bResult=false;
+
     int nSignatureSize=sSignature.size();
 
     if((nSignatureSize+nOffset<nHeaderSignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
@@ -75,20 +76,26 @@ bool Binary_Script::compare(QString sSignature, qint64 nOffset)
     {
         return pBinary->compareSignature(&memoryMap,sSignature,nOffset);
     }
+
+    return bResult;
 }
 
 bool Binary_Script::compareEP(QString sSignature, qint64 nOffset)
 {
+    bool bResult=false;
+
     int nSignatureSize=sSignature.size();
 
     if((nSignatureSize+nOffset<nEntryPointSignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
     {
-        return pBinary->compareSignatureStrings(sEntryPointSignature.mid(nOffset*2,nSignatureSize*2),sSignature);
+        bResult=pBinary->compareSignatureStrings(sEntryPointSignature.mid(nOffset*2,nSignatureSize*2),sSignature);
     }
     else
     {
-        return pBinary->compareEntryPoint(&memoryMap,sSignature,nOffset); // TODO listMM
+        bResult=pBinary->compareEntryPoint(&memoryMap,sSignature,nOffset); // TODO listMM
     }
+
+    return bResult;
 }
 
 quint8 Binary_Script::readByte(qint64 nOffset)
@@ -168,16 +175,20 @@ bool Binary_Script::isOverlayPresent()
 
 bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
 {
+    bool bResult=false;
+
     int nSignatureSize=sSignature.size();
 
     if((nSignatureSize+nOffset<nOverlaySignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
     {
-        return pBinary->compareSignatureStrings(sOverlaySignature.mid(nOffset*2,nSignatureSize*2),sSignature);
+        bResult=pBinary->compareSignatureStrings(sOverlaySignature.mid(nOffset*2,nSignatureSize*2),sSignature);
     }
     else
     {
-        return pBinary->compareOverlay(&memoryMap,sSignature,nOffset);
+        bResult=pBinary->compareOverlay(&memoryMap,sSignature,nOffset);
     }
+
+    return bResult;
 }
 
 bool Binary_Script::isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSignature)
