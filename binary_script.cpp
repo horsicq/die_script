@@ -30,9 +30,9 @@ Binary_Script::Binary_Script(XBinary *pBinary)
 
     nEntryPointOffset=pBinary->getEntryPointOffset(&memoryMap);
     nEntryPointAddress=pBinary->getEntryPointAddress(&memoryMap);
-    nOverlayOffset=pBinary->getOverlayOffset();
-    nOverlaySize=pBinary->getOverlaySize();
-    bIsOverlayPresent=pBinary->isOverlayPresent();
+    nOverlayOffset=pBinary->getOverlayOffset(&memoryMap);
+    nOverlaySize=pBinary->getOverlaySize(&memoryMap);
+    bIsOverlayPresent=pBinary->isOverlayPresent(&memoryMap);
 
     sHeaderSignature=pBinary->getSignature(0,256);
     nHeaderSignatureSize=sHeaderSignature.size();
