@@ -50,6 +50,7 @@ Binary_Script::Binary_Script(XBinary *pBinary)
     }
 
     sFileDirectory=XBinary::getDeviceDirectory(pBinary->getDevice());
+    sFileBaseName=XBinary::getDeviceFileBaseName(pBinary->getDevice());
 }
 
 Binary_Script::~Binary_Script()
@@ -238,6 +239,11 @@ QString Binary_Script::getFileDirectory()
     return sFileDirectory;
 }
 
+QString Binary_Script::getFileBaseName()
+{
+    return sFileBaseName;
+}
+
 QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize)
 {
     return pBinary->getSignature(nOffset,nSize);
@@ -246,6 +252,11 @@ QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize)
 double Binary_Script::calculateEntropy(qint64 nOffset, qint64 nSize)
 {
     return pBinary->getEntropy(nOffset,nSize);
+}
+
+QString Binary_Script::calculateMD5(qint64 nOffset, qint64 nSize)
+{
+    return pBinary->getHash(XBinary::HASH_MD5,nOffset,nSize);
 }
 
 bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
