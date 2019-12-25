@@ -62,16 +62,21 @@ public slots:
     qint64 OffsetToRVA(qint64 nOffset);
     QString getFileDirectory();
     QString getFileBaseName();
+    QString getFileCompleteSuffix();
+    QString getFileSuffix();
     QString getSignature(qint64 nOffset,qint64 nSize);
     double calculateEntropy(qint64 nOffset,qint64 nSize);
     QString calculateMD5(qint64 nOffset,qint64 nSize);
     bool isSignatureInSectionPresent(quint32 nNumber,QString sSignature);
+    qint64 getImageBase();
 
 protected:
     XBinary::_MEMORY_MAP memoryMap;
     qint64 nBaseAddress;
     QString sFileDirectory;
     QString sFileBaseName;
+    QString sFileCompleteSuffix;
+    QString sFileSuffix;
 
 private:
     XBinary *pBinary;

@@ -48,6 +48,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     bIsSignPresent=pPE->isSignPresent();
 
     nImportSection=pPE->getImportSection(&memoryMap);
+    nExportSection=pPE->getExportSection(&memoryMap);
     nResourcesSection=pPE->getResourcesSection(&memoryMap);
     nEntryPointSection=pPE->getEntryPointSection(&memoryMap);
     nRelocsSection=pPE->getRelocsSection(&memoryMap);
@@ -192,6 +193,11 @@ qint32 PE_Script::getImportSection()
     return nImportSection;
 }
 
+qint32 PE_Script::getExportSection()
+{
+    return nExportSection;
+}
+
 qint32 PE_Script::getResourceSection()
 {
     return nResourcesSection;
@@ -315,4 +321,9 @@ QString PE_Script::getPEFileVersion(QString sFileName)
 QString PE_Script::getFileVersion()
 {
     return pPE->getFileVersion(&resVersion);
+}
+
+qint64 PE_Script::calculateSizeOfHeaders()
+{
+    return 0; // TODO
 }

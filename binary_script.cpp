@@ -51,6 +51,8 @@ Binary_Script::Binary_Script(XBinary *pBinary)
 
     sFileDirectory=XBinary::getDeviceDirectory(pBinary->getDevice());
     sFileBaseName=XBinary::getDeviceFileBaseName(pBinary->getDevice());
+    sFileCompleteSuffix=XBinary::getDeviceFileCompleteSuffix(pBinary->getDevice());
+    sFileSuffix=XBinary::getDeviceFileSuffix(pBinary->getDevice());
 }
 
 Binary_Script::~Binary_Script()
@@ -244,6 +246,16 @@ QString Binary_Script::getFileBaseName()
     return sFileBaseName;
 }
 
+QString Binary_Script::getFileCompleteSuffix()
+{
+    return sFileCompleteSuffix;
+}
+
+QString Binary_Script::getFileSuffix()
+{
+    return sFileSuffix;
+}
+
 QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize)
 {
     return pBinary->getSignature(nOffset,nSize);
@@ -262,4 +274,9 @@ QString Binary_Script::calculateMD5(qint64 nOffset, qint64 nSize)
 bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
 {
     return pBinary->isSignatureInLoadSectionPresent(&memoryMap,nNumber,sSignature);
+}
+
+qint64 Binary_Script::getImageBase()
+{
+    return memoryMap.nBaseAddress;
 }

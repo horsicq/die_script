@@ -58,6 +58,7 @@ public slots:
     bool isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName);
     QString getImportFunctionName(quint32 nImport, quint32 nFunctionNumber);
     qint32 getImportSection();
+    qint32 getExportSection();
     qint32 getResourceSection();
     qint32 getEntryPointSection();
     qint32 getRelocsSection();
@@ -80,6 +81,7 @@ public slots:
     quint32 getSizeOfUninitializedData();
     QString getPEFileVersion(QString sFileName);
     QString getFileVersion();
+    qint64 calculateSizeOfHeaders();
 
 private:
     XPE *pPE;
@@ -110,6 +112,7 @@ private:
     QString sGeneralOptions;
 
     qint32 nImportSection;
+    qint32 nExportSection;
     qint32 nResourcesSection;
     qint32 nEntryPointSection;
     qint32 nRelocsSection;
