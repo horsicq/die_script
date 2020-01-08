@@ -123,6 +123,7 @@ private:
     quint32 nSizeOfUninitializedData;
 
     QString sCompilerVersion;
+    QString sFileVersion;
 };
 
 #endif // PE_SCRIPT_H
