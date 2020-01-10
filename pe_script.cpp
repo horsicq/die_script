@@ -44,6 +44,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     bIsNETPresent=pPE->isNETPresent();
     bIs64=pPE->is64();
     bIsDll=pPE->isDll();
+    bIsDriver=pPE->isDriver();
     bIsConsole=pPE->isConsole();
     bIsSignPresent=pPE->isSignPresent();
 
@@ -65,6 +66,10 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     sFileVersion=pPE->getFileVersion(&resVersion);
 
     nCalculateSizeOfHeaders=pPE->calculateHeadersSize();
+
+    exportHeader=pPE->getExport();
+
+    listExportFunctionNames=pPE->getExportFunctionsList(&exportHeader);
 }
 
 PE_Script::~PE_Script()
@@ -114,7 +119,12 @@ quint32 PE_Script::getNumberOfResources()
 
 bool PE_Script::isSectionNamePresent(QString sSectionName)
 {
-    return listSN.contains(sSectionName);
+    return XBinary::isStringInListPresent(&listSN,sSectionName);
+}
+
+bool PE_Script::isSectionNamePresentExp(QString sSectionName)
+{
+    return XBinary::isStringInListPresentExp(&listSN,sSectionName);
 }
 
 bool PE_Script::isNET()
@@ -273,13 +283,23 @@ QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
 }
 
 qint32 PE_Script::getSectionNumber(QString sSectionName)
+{  
+    return XBinary::getStringNumberFromList(&listSN,sSectionName);
+}
+
+qint32 PE_Script::getSectionNumberExp(QString sSectionName)
 {
-    return listSN.indexOf(sSectionName);
+    return XBinary::getStringNumberFromListExp(&listSN,sSectionName);
 }
 
 bool PE_Script::isDll()
 {
     return bIsDll;
+}
+
+bool PE_Script::isDriver()
+{
+    return bIsDriver;
 }
 
 QString PE_Script::getNETVersion()
@@ -330,4 +350,14 @@ QString PE_Script::getFileVersion()
 qint64 PE_Script::calculateSizeOfHeaders()
 {
     return nCalculateSizeOfHeaders;
+}
+
+bool PE_Script::isExportFunctionPresent(QString sFunctionName)
+{
+    return XBinary::isStringInListPresent(&listExportFunctionNames,sFunctionName);
+}
+
+bool PE_Script::isExportFunctionPresentExp(QString sFunctionName)
+{
+return XBinary::isStringInListPresentExp(&listExportFunctionNames,sFunctionName);
 }

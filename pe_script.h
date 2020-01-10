@@ -42,6 +42,7 @@ public slots:
     quint32 getSectionCharacteristics(quint32 nNumber);
     quint32 getNumberOfResources();
     bool isSectionNamePresent(QString sSectionName);
+    bool isSectionNamePresentExp(QString sSectionName);
     bool isNET();
     bool isPEPlus();
     virtual QString getGeneralOptions();
@@ -74,7 +75,9 @@ public slots:
     bool isSignedFile();
     QString getSectionNameCollision(QString sString1, QString sString2);
     qint32 getSectionNumber(QString sSectionName);
+    qint32 getSectionNumberExp(QString sSectionName);
     bool isDll();
+    bool isDriver();
     QString getNETVersion();
     bool compareEP_NET(QString sSignature,qint64 nOffset=0);
     quint32 getSizeOfCode();
@@ -82,6 +85,8 @@ public slots:
     QString getPEFileVersion(QString sFileName);
     QString getFileVersion();
     qint64 calculateSizeOfHeaders();
+    bool isExportFunctionPresent(QString sFunctionName);
+    bool isExportFunctionPresentExp(QString sFunctionName);
 
 private:
     XPE *pPE;
@@ -106,6 +111,7 @@ private:
     bool bIsNETPresent;
     bool bIs64;
     bool bIsDll;
+    bool bIsDriver;
     bool bIsConsole;
     bool bIsSignPresent;
 
@@ -126,6 +132,9 @@ private:
     QString sFileVersion;
 
     qint32 nCalculateSizeOfHeaders;
+
+    XPE::EXPORT_HEADER exportHeader;
+    QList<QString> listExportFunctionNames;
 };
 
 #endif // PE_SCRIPT_H
