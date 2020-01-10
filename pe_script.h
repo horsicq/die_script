@@ -124,6 +124,8 @@ private:
 
     QString sCompilerVersion;
     QString sFileVersion;
+
+    qint32 nCalculateSizeOfHeaders;
 };
 
 #endif // PE_SCRIPT_H
