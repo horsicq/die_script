@@ -71,6 +71,11 @@ public:
         bool bShowOptions;
     };
 
+    struct STATS
+    {
+        QMap<QString,qint32> mapTypes;
+    };
+
     explicit DiE_Script(QObject *parent=nullptr);
     bool loadDatabase(QString sDatabasePath);
     QString getDatabasePath();
@@ -81,6 +86,8 @@ public:
     DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(QString sSignatureFilePath);
 
     void stop();
+
+    STATS getStats();
 
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabase(QString sDatabasePath, XBinary::FT fileType);

@@ -416,3 +416,24 @@ void DiE_Script::stop()
 {
     bIsStop=true;
 }
+
+DiE_Script::STATS DiE_Script::getStats()
+{
+    STATS result={};
+
+    int nCount=listSignatures.count();
+
+    for(int i=0;i<nCount;i++)
+    {
+        QString sText=listSignatures.at(i).sText;
+
+        QString sType=XBinary::regExp("init\\(\"(.*?)\",",sText,1);
+
+        if(sType!="")
+        {
+            result.mapTypes.insert(sType,result.mapTypes.value(sType,0)+1);
+        }
+    }
+
+    return result;
+}
