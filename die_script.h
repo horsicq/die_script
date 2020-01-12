@@ -31,9 +31,15 @@ class DiE_Script : public QObject
     Q_OBJECT
 
 public:
-    struct SCAN_STRUCT
+    struct SCAN_HEADER
     {
         XBinary::FT fileType;
+        QString sArch;
+    };
+
+    struct SCAN_STRUCT
+    {
+        SCAN_HEADER scanHeader;
         QString sType;
         QString sString;
 //        QString sName;
@@ -58,6 +64,7 @@ public:
         qint64 nScanTime;
         QString sFileName;
         qint64 nSize;
+        SCAN_HEADER scanHeader; // TODO set
         QList<SCAN_STRUCT> listRecords;
         QList<ERROR_RECORD> listErrors;
         QList<DEBUG_RECORD> listDebugRecords;
@@ -94,7 +101,7 @@ private:
     SCAN_RESULT _scan(QIODevice *pDevice,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="");
     bool _handleError(DiE_ScriptEngine *pScriptEngine,QScriptValue scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
-    SCAN_STRUCT getScanStructFromString(QIODevice *pDevice,XBinary::FT fileType, QString sString);
+    SCAN_STRUCT getScanStructFromString(QIODevice *pDevice, SCAN_HEADER scanHeader, QString sString);
 
 signals:
     void progressMaximumChanged(qint32 nMaximum);

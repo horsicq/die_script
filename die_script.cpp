@@ -98,6 +98,38 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     emit progressValueChanged(nCurrent);
 
     scanResult.sFileName=XBinary::getDeviceFileName(pDevice);
+    scanResult.scanHeader.fileType=fileType;
+
+    if((fileType==XBinary::FT_PE32)||(fileType==XBinary::FT_PE64))
+    {
+        XPE pe(pDevice);
+
+        scanResult.scanHeader.sArch=pe.getArch();
+    }
+    else if((fileType==XBinary::FT_ELF32)||(fileType==XBinary::FT_ELF64))
+    {
+        XELF elf(pDevice);
+
+        scanResult.scanHeader.sArch=elf.getArch();
+    }
+    else if((fileType==XBinary::FT_MACH32)||(fileType==XBinary::FT_MACH64))
+    {
+        XMACH mach(pDevice);
+
+        scanResult.scanHeader.sArch=mach.getArch();
+    }
+    else if(fileType==XBinary::FT_MSDOS)
+    {
+        XMSDOS msdos(pDevice);
+
+        scanResult.scanHeader.sArch=msdos.getArch();
+    }
+    else
+    {
+        XBinary binary(pDevice);
+
+        scanResult.scanHeader.sArch=binary.getArch();
+    }
 
     int nCount=listSignatures.count();
 
@@ -205,23 +237,24 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
                         if(sResult!="")
                         {
-                            XBinary::FT _fileType=fileType;
+                            SCAN_HEADER _scanHeader=scanResult.scanHeader;
 
-                            if(_fileType==XBinary::FT_BINARY)
+                            if(_scanHeader.fileType==XBinary::FT_BINARY)
                             {
                                 QString sPrefix=signatureRecord.sName.section(".",0,0).toUpper();
 
                                 if(sPrefix=="COM")
                                 {
-                                    _fileType=XBinary::FT_COM;
+                                    _scanHeader.fileType=XBinary::FT_COM;
+                                    _scanHeader.sArch="8086";
                                 }
                                 else if(sPrefix=="TEXT")
                                 {
-                                    _fileType=XBinary::FT_TEXT;
+                                    _scanHeader.fileType=XBinary::FT_TEXT;
                                 }
                             }
 
-                            SCAN_STRUCT ss=getScanStructFromString(pDevice,_fileType,sResult);
+                            SCAN_STRUCT ss=getScanStructFromString(pDevice,scanResult.scanHeader,sResult);
 
                             scanResult.listRecords.append(ss);
                         }
@@ -248,15 +281,15 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
         }
     }
 
-    if(scanResult.listRecords.count()==0)
-    {
-        SCAN_STRUCT ss={};
+//    if(scanResult.listRecords.count()==0)
+//    {
+//        SCAN_STRUCT ss={};
 
-        ss.fileType=fileType;
-        ss.sString="Unknown";
+//        ss.fileType=fileType;
+//        ss.sString="Unknown";
 
-        scanResult.listRecords.append(ss);
-    }
+//        scanResult.listRecords.append(ss);
+//    }
 
     bIsStop=false;
 
@@ -286,11 +319,11 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, QScriptValue scri
     return bResult;
 }
 
-DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,XBinary::FT fileType, QString sString)
+DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,SCAN_HEADER scanHeader, QString sString)
 {
     SCAN_STRUCT result={};
 
-    result.fileType=fileType;
+    result.scanHeader=scanHeader;
 
     result.sType=sString.section(": ",0,0);
     result.sString=sString.section(": ",1,-1);
