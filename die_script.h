@@ -1,4 +1,4 @@
-// copyright (c) 2019 hors<horsicq@gmail.com>
+// copyright (c) 2019-2020 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -91,10 +91,12 @@ public:
     SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions);
 
     DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(QString sSignatureFilePath);
-
-    void stop();
+    bool updateSignature(QString sSignatureFilePath,QString sText);
 
     STATS getStats();
+
+public slots:
+    void stop();
 
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabase(QString sDatabasePath, XBinary::FT fileType);
@@ -106,6 +108,7 @@ private:
 signals:
     void progressMaximumChanged(qint32 nMaximum);
     void progressValueChanged(qint32 nValue);
+    void stopEngine();
 
 private:
     QString sDatabasePath;

@@ -1,4 +1,4 @@
-// copyright (c) 2019 hors<horsicq@gmail.com>
+// copyright (c) 2019-2020 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,8 @@
 
 class DiE_ScriptEngine : public QScriptEngine
 {
+    Q_OBJECT
+
 public:
     struct SIGNATURE_RECORD
     {
@@ -45,6 +47,9 @@ public:
     ~DiE_ScriptEngine();
     bool handleError(QScriptValue value,QString *psErrorString);
     static bool isSignatureTypeValid(XBinary::FT ftSignature, XBinary::FT ftTarget);
+
+public slots:
+    void stop();
 
 private:
     static QScriptValue _includeScript(QScriptContext *context, QScriptEngine *engine);

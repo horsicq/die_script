@@ -1,4 +1,4 @@
-// copyright (c) 2019 hors<horsicq@gmail.com>
+// copyright (c) 2019-2020 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,22 +31,28 @@ bool sort_signature(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_Scr
         return false;
     }
 
-    QString sPrio1=sr1.sName.section(".",1,1);
-    QString sPrio2=sr2.sName.section(".",1,1);
+    int nPos1=sr1.sName.count(".");
+    int nPos2=sr2.sName.count(".");
 
-    if((sPrio1!="")&&(sPrio2!=""))
+    if((nPos1>1)&&(nPos2>1))
     {
-        if(sPrio1>sPrio2)
+        QString sPrio1=sr1.sName.section(".",nPos1-1,nPos1-1);
+        QString sPrio2=sr2.sName.section(".",nPos2-1,nPos2-1);
+
+        if((sPrio1!="")&&(sPrio2!=""))
         {
-            return false;
-        }
-        else if(sPrio1<sPrio2)
-        {
-            return true;
-        }
-        else if(sPrio1==sPrio2)
-        {
-            return (sr1.sName.section(".",0,0)<sr2.sName.section(".",0,0));
+            if(sPrio1>sPrio2)
+            {
+                return false;
+            }
+            else if(sPrio1<sPrio2)
+            {
+                return true;
+            }
+            else if(sPrio1==sPrio2)
+            {
+                return (sr1.sName.section(".",nPos1-2,nPos1-2)<sr2.sName.section(".",nPos2-2,nPos2-2));
+            }
         }
     }
 
@@ -162,7 +168,9 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
         }  
     }
 
-    DiE_ScriptEngine scriptEngine(&listSignatures,pDevice,fileType); // mb TODO stop function
+    DiE_ScriptEngine scriptEngine(&listSignatures,pDevice,fileType);
+
+    connect(this,SIGNAL(stopEngine()),&scriptEngine,SLOT(stop()),Qt::DirectConnection);
 
     if(nCount)
     {
@@ -445,9 +453,33 @@ DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::getSignatureByFilePath(QString sS
     return result;
 }
 
+bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText)
+{
+    bool bResult=false;
+
+    int nCount=listSignatures.count();
+
+    for(int i=0;i<nCount;i++)
+    {
+        if(listSignatures.at(i).sFilePath==sSignatureFilePath)
+        {
+            if(XBinary::writeToFile(sSignatureFilePath,QByteArray().append(sText)))
+            {
+                listSignatures[i].sText=sText;
+                bResult=true;
+            }
+
+            break;
+        }
+    }
+
+    return bResult;
+}
+
 void DiE_Script::stop()
 {
     bIsStop=true;
+    emit stopEngine();
 }
 
 DiE_Script::STATS DiE_Script::getStats()

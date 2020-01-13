@@ -1,4 +1,4 @@
-// copyright (c) 2019 hors<horsicq@gmail.com>
+// copyright (c) 2019-2020 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,9 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     this->pSignaturesList=pSignaturesList;
 
     _addFunction(_includeScript,"includeScript");
+
+    pBinary=0;
+    pBinaryScript=0;
 
     if(isSignatureTypeValid(XBinary::FT_BINARY,fileType))
     {
@@ -111,6 +114,14 @@ bool DiE_ScriptEngine::isSignatureTypeValid(XBinary::FT ftSignature, XBinary::FT
     }
 
     return bResult;
+}
+
+void DiE_ScriptEngine::stop()
+{
+    if(pBinary)
+    {
+        pBinary->setFindProcessEnable(false);
+    }
 }
 
 QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *context, QScriptEngine *engine)
