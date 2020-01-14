@@ -95,7 +95,7 @@ bool Binary_Script::compareEP(QString sSignature, qint64 nOffset)
     }
     else
     {
-        bResult=pBinary->compareEntryPoint(&memoryMap,sSignature,nOffset); // TODO listMM
+        bResult=pBinary->compareEntryPoint(&memoryMap,sSignature,nOffset);
     }
 
     return bResult;

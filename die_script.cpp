@@ -220,11 +220,6 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                 scanTimer.start();
             }
 
-//            if(signatureRecord.sName=="EXEPACK.2.sg")
-//            {
-//                qDebug("Test");
-//            }
-
             QScriptValue script=scriptEngine.evaluate(signatureRecord.sText);
 
             if(_handleError(&scriptEngine,script,&signatureRecord,&scanResult))
