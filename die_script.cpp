@@ -64,7 +64,7 @@ DiE_Script::DiE_Script(QObject *parent) : QObject(parent)
     bIsStop=false;
 }
 
-QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabase(QString sDatabasePath, XBinary::FT fileType)
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString sDatabasePath, XBinary::FT fileType)
 {
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
 
@@ -344,12 +344,17 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
 
     QString _sDatabasePath=XBinary::convertPathName(sDatabasePath);
 
-    listSignatures.append(_loadDatabase(_sDatabasePath,XBinary::FT_UNKNOWN));
-    listSignatures.append(_loadDatabase(_sDatabasePath+QDir::separator()+"Binary",XBinary::FT_BINARY));
-    listSignatures.append(_loadDatabase(_sDatabasePath+QDir::separator()+"MSDOS",XBinary::FT_MSDOS));
-    listSignatures.append(_loadDatabase(_sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
-    listSignatures.append(_loadDatabase(_sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
-    listSignatures.append(_loadDatabase(_sDatabasePath+QDir::separator()+"MACH",XBinary::FT_MACH));
+    if(XBinary::isDirectoryExists(_sDatabasePath))
+    {
+        listSignatures.append(_loadDatabasePath(_sDatabasePath,XBinary::FT_UNKNOWN));
+        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"Binary",XBinary::FT_BINARY));
+        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MSDOS",XBinary::FT_MSDOS));
+        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
+        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
+        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MACH",XBinary::FT_MACH));
+    }
+
+    // TODO Database as zip file
 
     return listSignatures.count();
 }

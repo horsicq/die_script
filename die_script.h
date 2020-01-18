@@ -99,7 +99,7 @@ public slots:
     void stop();
 
 private:
-    static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabase(QString sDatabasePath, XBinary::FT fileType);
+    static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath, XBinary::FT fileType);
     SCAN_RESULT _scan(QIODevice *pDevice,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="");
     bool _handleError(DiE_ScriptEngine *pScriptEngine,QScriptValue scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
