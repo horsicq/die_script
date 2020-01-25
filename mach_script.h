@@ -37,6 +37,10 @@ public slots:
     quint32 getNumberOfSections();
     qint32 getSectionNumber(QString sSectionName);
     virtual QString getGeneralOptions();
+    // TODO
+    // getLibraryCurrentVersion
+    // getNumberOfSections
+    // getNumberOfSegments
 
 private:
     XMACH *pMACH;
