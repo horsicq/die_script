@@ -35,22 +35,22 @@ public:
 public slots:
     bool isLibraryPresent(QString sLibraryName);
     quint32 getNumberOfSections();
+    quint32 getNumberOfSegments();
     qint32 getSectionNumber(QString sSectionName);
     virtual QString getGeneralOptions();
-    // TODO
-    // getLibraryCurrentVersion
-    // getNumberOfSections
-    // getNumberOfSegments
+    quint32 getLibraryCurrentVersion(QString sLibraryName);
 
 private:
     XMACH *pMACH;
 
     QString sGeneralOptions;
-    QList<XMACH::LIBRARY_RECORD> listLR;
-    QList<XMACH::SECTION_RECORD> listSR;
-    QList<XMACH::COMMAND_RECORD> listCR;
+    QList<XMACH::LIBRARY_RECORD> listLibraryRecords;
+    QList<XMACH::SECTION_RECORD> listSectionRecords;
+    QList<XMACH::COMMAND_RECORD> listCommandRecords;
+    QList<XMACH::SEGMENT_RECORD> listSegmentRecords;
 
     qint32 nNumberOfSection;
+    qint32 nNumberOfSegments;
     bool bIs64;
 };
 

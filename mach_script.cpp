@@ -24,11 +24,12 @@ MACH_Script::MACH_Script(XMACH *pMACH) : Binary_Script(pMACH)
 {
     this->pMACH=pMACH;
 
-    listLR=pMACH->getLibraryRecords();
-    listSR=pMACH->getSectionRecords();
-    listCR=pMACH->getCommandRecords();
+    listLibraryRecords=pMACH->getLibraryRecords();
+    listSectionRecords=pMACH->getSectionRecords();
+    listCommandRecords=pMACH->getCommandRecords();
 
-    nNumberOfSection=pMACH->getNumberOfSections(&listCR);
+    nNumberOfSection=listSectionRecords.count();
+    nNumberOfSegments=listSegmentRecords.count();
 
     bIs64=pMACH->is64();
 
@@ -42,7 +43,7 @@ MACH_Script::~MACH_Script()
 
 bool MACH_Script::isLibraryPresent(QString sLibraryName)
 {
-    return pMACH->isLibraryRecordNamePresent(sLibraryName,&listLR);
+    return pMACH->isLibraryRecordNamePresent(sLibraryName,&listLibraryRecords);
 }
 
 quint32 MACH_Script::getNumberOfSections()
@@ -50,12 +51,22 @@ quint32 MACH_Script::getNumberOfSections()
     return nNumberOfSection;
 }
 
+quint32 MACH_Script::getNumberOfSegments()
+{
+    return nNumberOfSegments;
+}
+
 qint32 MACH_Script::getSectionNumber(QString sSectionName)
 {
-    return pMACH->getSectionNumber(sSectionName,&listSR);
+    return pMACH->getSectionNumber(sSectionName,&listSectionRecords);
 }
 
 QString MACH_Script::getGeneralOptions()
 {
     return sGeneralOptions;
+}
+
+quint32 MACH_Script::getLibraryCurrentVersion(QString sLibraryName)
+{
+    return pMACH->getLibraryCurrentVersion(sLibraryName,&listLibraryRecords);
 }
