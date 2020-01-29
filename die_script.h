@@ -25,6 +25,7 @@
 #include <QDir>
 #include "die_scriptengine.h"
 #include "xbinary.h"
+#include "xzip.h"
 
 class DiE_Script : public QObject
 {
@@ -83,6 +84,13 @@ public:
         QMap<QString,qint32> mapTypes;
     };
 
+    enum DBT
+    {
+        DBT_UNKNOWN=0,
+        DBT_FOLDER,
+        DBT_COMPRESSED
+    };
+
     explicit DiE_Script(QObject *parent=nullptr);
     bool loadDatabase(QString sDatabasePath);
     QString getDatabasePath();
@@ -95,11 +103,15 @@ public:
 
     STATS getStats();
 
+    DBT getDatabaseType();
+
 public slots:
     void stop();
 
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath, XBinary::FT fileType);
+    static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix, XBinary::FT fileType);
+
     SCAN_RESULT _scan(QIODevice *pDevice,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="");
     bool _handleError(DiE_ScriptEngine *pScriptEngine,QScriptValue scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
@@ -114,6 +126,7 @@ private:
     QString sDatabasePath;
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;
     bool bIsStop;
+    DBT databaseType;
 };
 
 #endif // DIE_SCRIPT_H

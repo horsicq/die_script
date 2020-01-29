@@ -41,3 +41,7 @@ SOURCES += \
     include(../Formats/xmach.pri)
 }
 
+!contains(XCONFIG, xarchive) {
+    XCONFIG += xarchive
+    include(../XArchive/xarchive.pri)
+}

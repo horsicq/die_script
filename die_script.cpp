@@ -62,6 +62,7 @@ bool sort_signature(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_Scr
 DiE_Script::DiE_Script(QObject *parent) : QObject(parent)
 {
     bIsStop=false;
+    databaseType=DBT_UNKNOWN;
 }
 
 QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString sDatabasePath, XBinary::FT fileType)
@@ -90,6 +91,35 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString 
     }
 
     std::sort(listResult.begin(),listResult.end(),sort_signature);
+
+    return listResult;
+}
+
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix,XBinary::FT fileType)
+{
+    QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
+
+    int nCount=pListRecords->count();
+
+    for(int i=0;i<nCount; i++)
+    {
+        XArchive::RECORD zipRecord=pListRecords->at(i);
+
+        if(((sPrefix=="")&&(!zipRecord.sFileName.contains("/")))||((zipRecord.sFileName.contains("/"))&&(zipRecord.sFileName.section("/",0,0)==sPrefix)&&(zipRecord.sFileName.section("/",1,1)!="")))
+        {
+            QFileInfo fi(zipRecord.sFileName);
+
+            DiE_ScriptEngine::SIGNATURE_RECORD record={};
+
+            record.fileType=fileType;
+            record.sName=fi.fileName();
+            record.sText=pZip->decompress(&zipRecord);
+            record.sFilePath=zipRecord.sFileName;
+            record.bReadOnly=true;
+
+            listResult.append(record);
+        }
+    }
 
     return listResult;
 }
@@ -340,11 +370,39 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
 {
     this->sDatabasePath=sDatabasePath;
 
+    databaseType=DBT_UNKNOWN;
+
     listSignatures.clear();
 
     QString _sDatabasePath=XBinary::convertPathName(sDatabasePath);
 
-    if(XBinary::isDirectoryExists(_sDatabasePath))
+    if(XBinary::isFileExists(_sDatabasePath)) // Load from zip
+    {
+        QFile file;
+        file.setFileName(_sDatabasePath);
+
+        if(file.open(QIODevice::ReadOnly))
+        {
+            XZip zip(&file);
+
+            if(zip.isValid())
+            {
+                QList<XArchive::RECORD> listRecords=zip.getRecords();
+
+                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"",XBinary::FT_UNKNOWN));
+                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"Binary",XBinary::FT_BINARY));
+                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MSDOS",XBinary::FT_MSDOS));
+                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"PE",XBinary::FT_PE));
+                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"ELF",XBinary::FT_ELF));
+                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MACH",XBinary::FT_MACH));
+
+                databaseType=DBT_COMPRESSED;
+            }
+
+            file.close();
+        }
+    }
+    else if(XBinary::isDirectoryExists(_sDatabasePath))
     {
         listSignatures.append(_loadDatabasePath(_sDatabasePath,XBinary::FT_UNKNOWN));
         listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"Binary",XBinary::FT_BINARY));
@@ -352,9 +410,9 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
         listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
         listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
         listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MACH",XBinary::FT_MACH));
-    }
 
-    // TODO Database as zip file
+        databaseType=DBT_FOLDER;
+    }
 
     return listSignatures.count();
 }
@@ -501,4 +559,9 @@ DiE_Script::STATS DiE_Script::getStats()
     }
 
     return result;
+}
+
+DiE_Script::DBT DiE_Script::getDatabaseType()
+{
+    return databaseType;
 }

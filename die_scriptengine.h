@@ -41,6 +41,7 @@ public:
         QString sName;
         QString sFilePath;
         QString sText;
+        bool bReadOnly;
     };
 
     DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType);
