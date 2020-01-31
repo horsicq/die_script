@@ -75,6 +75,7 @@ public:
     {
         bool bDeepScan;
         bool bDebug;
+        bool bShowType;
         bool bShowVersion;
         bool bShowOptions;
     };

@@ -260,7 +260,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                 {
                     QScriptValueList valuelist;
 
-                    valuelist << true << pOptions->bShowVersion << pOptions->bShowOptions;
+                    valuelist << pOptions->bShowType << pOptions->bShowVersion << pOptions->bShowOptions;
 
                     QScriptValue result=detect.call(script,valuelist);
 
