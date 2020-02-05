@@ -24,6 +24,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 {
     this->pSignaturesList=pSignaturesList;
 
+    // TODO _log function
     _addFunction(_includeScript,"includeScript");
 
     pBinary=0;
@@ -35,7 +36,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         pBinaryScript=new Binary_Script(pBinary);
         _addClass(pBinaryScript,"Binary");
     }
-    else if(isSignatureTypeValid(XBinary::FT_PE,fileType))
+
+    if(isSignatureTypeValid(XBinary::FT_PE,fileType))
     {
         XPE *pPE=new XPE(pDevice);
         pBinaryScript=new PE_Script(pPE);

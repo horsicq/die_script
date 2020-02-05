@@ -280,3 +280,13 @@ qint64 Binary_Script::getImageBase()
 {
     return memoryMap.nBaseAddress;
 }
+
+QString Binary_Script::upperCase(QString sString)
+{
+    return sString.toUpper();
+}
+
+QString Binary_Script::lowerCase(QString sString)
+{
+    return sString.toLower();
+}

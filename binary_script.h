@@ -69,6 +69,8 @@ public slots:
     QString calculateMD5(qint64 nOffset,qint64 nSize);
     bool isSignatureInSectionPresent(quint32 nNumber,QString sSignature);
     qint64 getImageBase();
+    QString upperCase(QString sString);
+    QString lowerCase(QString sString);
 
 protected:
     XBinary::_MEMORY_MAP memoryMap;
