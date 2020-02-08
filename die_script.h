@@ -106,6 +106,8 @@ public:
 
     DBT getDatabaseType();
 
+    bool isSignaturesPresent(XBinary::FT fileType);
+
 public slots:
     void stop();
 

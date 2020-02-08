@@ -281,7 +281,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                                     _scanHeader.fileType=XBinary::FT_COM;
                                     _scanHeader.sArch="8086";
                                 }
-                                else if(sPrefix=="TEXT")
+                                else if(sPrefix=="TEXT") // mb TODO not set if COM
                                 {
                                     _scanHeader.fileType=XBinary::FT_TEXT;
                                 }
@@ -564,4 +564,23 @@ DiE_Script::STATS DiE_Script::getStats()
 DiE_Script::DBT DiE_Script::getDatabaseType()
 {
     return databaseType;
+}
+
+bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
+{
+    bool bResult=false;
+
+    int nCount=listSignatures.count();
+
+    for(int i=0;i<nCount;i++)
+    {
+        if(listSignatures.at(i).fileType==fileType)
+        {
+            bResult=true;
+
+            break;
+        }
+    }
+
+    return bResult;
 }
