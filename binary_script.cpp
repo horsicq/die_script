@@ -73,11 +73,11 @@ bool Binary_Script::compare(QString sSignature, qint64 nOffset)
 
     if((nSignatureSize+nOffset<nHeaderSignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
     {
-        return pBinary->compareSignatureStrings(sHeaderSignature.mid(nOffset*2,nSignatureSize*2),sSignature);
+        bResult=pBinary->compareSignatureStrings(sHeaderSignature.mid(nOffset*2,nSignatureSize*2),sSignature);
     }
     else
     {
-        return pBinary->compareSignature(&memoryMap,sSignature,nOffset);
+        bResult=pBinary->compareSignature(&memoryMap,sSignature,nOffset);
     }
 
     return bResult;
