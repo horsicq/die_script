@@ -287,6 +287,8 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                                 }
                             }
 
+                            // TODO set FileType from _scanHeader
+
                             SCAN_STRUCT ss=getScanStructFromString(pDevice,scanResult.scanHeader,sResult);
 
                             scanResult.listRecords.append(ss);
