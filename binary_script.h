@@ -71,6 +71,7 @@ public slots:
     qint64 getImageBase();
     QString upperCase(QString sString);
     QString lowerCase(QString sString);
+    bool isPlainText();
 
 protected:
     XBinary::_MEMORY_MAP memoryMap;
@@ -96,6 +97,7 @@ private:
     qint32 nEntryPointSignatureSize;
     QString sOverlaySignature;
     qint32 nOverlaySignatureSize;
+    bool bIsPlainText;
 };
 
 #endif // BINARY_SCRIPT_H

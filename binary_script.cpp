@@ -53,6 +53,8 @@ Binary_Script::Binary_Script(XBinary *pBinary)
     sFileBaseName=XBinary::getDeviceFileBaseName(pBinary->getDevice());
     sFileCompleteSuffix=XBinary::getDeviceFileCompleteSuffix(pBinary->getDevice());
     sFileSuffix=XBinary::getDeviceFileSuffix(pBinary->getDevice());
+
+    bIsPlainText=pBinary->isPlainTextType();
 }
 
 Binary_Script::~Binary_Script()
@@ -289,4 +291,9 @@ QString Binary_Script::upperCase(QString sString)
 QString Binary_Script::lowerCase(QString sString)
 {
     return sString.toLower();
+}
+
+bool Binary_Script::isPlainText()
+{
+    return bIsPlainText;
 }
