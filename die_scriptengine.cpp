@@ -69,6 +69,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
 DiE_ScriptEngine::~DiE_ScriptEngine()
 {
+    delete pBinary;
     delete pBinaryScript;
 }
 
