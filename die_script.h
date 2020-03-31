@@ -78,6 +78,8 @@ public:
         bool bShowType;
         bool bShowVersion;
         bool bShowOptions;
+        QString sSignature;
+        // TODO types
     };
 
     struct STATS
