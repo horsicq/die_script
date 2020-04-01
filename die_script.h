@@ -78,8 +78,8 @@ public:
         bool bShowType;
         bool bShowVersion;
         bool bShowOptions;
-        QString sSignature;
-        // TODO types
+        XBinary::FT fileType; // Optional
+        QString sSignatureName; // Optional
     };
 
     struct STATS
