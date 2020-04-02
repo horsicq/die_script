@@ -456,6 +456,11 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
 
     QSet<XBinary::FT> stFT=XBinary::getFileTypes(pDevice);
 
+    if(pOptions->fileType!=XBinary::FT_UNKNOWN)
+    {
+        XFormats::filterFileTypes(&stFT,pOptions->fileType);
+    }
+
     if(stFT.contains(XBinary::FT_PE32))
     {
         scanResult=_scan(pDevice,XBinary::FT_PE32,pOptions);
@@ -484,9 +489,13 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
     {
         scanResult=_scan(pDevice,XBinary::FT_MSDOS,pOptions);
     }
-    else
+    else if(stFT.contains(XBinary::FT_BINARY))
     {
         scanResult=_scan(pDevice,XBinary::FT_BINARY,pOptions);
+    }
+    else
+    {
+        // TODO
     }
 
     scanResult.nScanTime=scanTimer.elapsed();

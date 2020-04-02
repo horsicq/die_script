@@ -21,24 +21,9 @@ SOURCES += \
     $$PWD/mach_script.cpp \
     $$PWD/elf_script.cpp
 
-!contains(XCONFIG, xpe) {
-    XCONFIG += xpe
-    include(../Formats/xpe.pri)
-}
-
-!contains(XCONFIG, xmsdos) {
-    XCONFIG += xmsdos
-    include(../Formats/xmsdos.pri)
-}
-
-!contains(XCONFIG, xelf) {
-    XCONFIG += xelf
-    include(../Formats/xelf.pri)
-}
-
-!contains(XCONFIG, xmach) {
-    XCONFIG += xmach
-    include(../Formats/xmach.pri)
+!contains(XCONFIG, xformats) {
+    XCONFIG += xformats
+    include(../Formats/xformats.pri)
 }
 
 !contains(XCONFIG, xarchive) {

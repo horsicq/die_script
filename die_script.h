@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QDir>
 #include "die_scriptengine.h"
-#include "xbinary.h"
+#include "xformats.h"
 #include "xzip.h"
 
 class DiE_Script : public QObject
