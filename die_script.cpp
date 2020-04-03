@@ -461,6 +461,8 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
         XFormats::filterFileTypes(&stFT,pOptions->fileType);
     }
 
+    scanResult.bIsValidType=true;
+
     if(stFT.contains(XBinary::FT_PE32))
     {
         scanResult=_scan(pDevice,XBinary::FT_PE32,pOptions);
@@ -495,7 +497,7 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
     }
     else
     {
-        // TODO
+        scanResult.bIsValidType=false;
     }
 
     scanResult.nScanTime=scanTimer.elapsed();

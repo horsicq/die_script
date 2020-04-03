@@ -69,6 +69,7 @@ public:
         QList<SCAN_STRUCT> listRecords;
         QList<ERROR_RECORD> listErrors;
         QList<DEBUG_RECORD> listDebugRecords;
+        bool bIsValidType;
     };
 
     struct SCAN_OPTIONS
