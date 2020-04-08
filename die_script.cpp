@@ -224,6 +224,14 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
             bExec=true;
         }
 
+        if(pOptions->sSignatureName!="")
+        {
+            if(pOptions->sSignatureName!=listSignatures.at(i).sName)
+            {
+                bExec=false;
+            }
+        }
+
         if(!pOptions->bDeepScan)
         {
             QString sPrefix=listSignatures.at(i).sName.section(".",0,0).toUpper();
@@ -234,7 +242,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
             }
         }
 
-        if(sSignatureFilePath!="")
+        if(sSignatureFilePath!="") // TODO Check!
         {
             bExec=(sSignatureFilePath==listSignatures.at(i).sFilePath);
         }
