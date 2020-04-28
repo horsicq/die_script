@@ -605,3 +605,12 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
 
     return bResult;
 }
+
+QString DiE_Script::scanResultToString(DiE_Script::SCAN_RESULT *pScanResult)
+{
+    QString sResult;
+
+    // TODO
+
+    return sResult;
+}

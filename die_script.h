@@ -111,6 +111,8 @@ public:
 
     bool isSignaturesPresent(XBinary::FT fileType);
 
+    static QString scanResultToString(SCAN_RESULT *pScanResult);
+
 public slots:
     void stop();
 
