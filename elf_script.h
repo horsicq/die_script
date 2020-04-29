@@ -39,7 +39,6 @@ public slots:
     quint32 getNumberOfPrograms();
     virtual QString getGeneralOptions();
     qint32 getSectionNumber(QString sSectionName);
-
     quint16 getElfHeader_type();
     quint16 getElfHeader_machine();
     quint32 getElfHeader_version();
@@ -53,17 +52,14 @@ public slots:
     quint16 getElfHeader_shentsize();
     quint16 getElfHeader_shnum();
     quint16 getElfHeader_shstrndx();
-
     quint64 getProgramFileSize(quint32 nNumber);
     quint64 getProgramFileOffset(quint32 nNumber);
     quint64 getSectionFileOffset(quint32 nNumber);
     quint64 getSectionFileSize(quint32 nNumber);
-
     bool isStringInTablePresent(QString sSectionName, QString sString);
 
 private:
     XELF *pELF;
-
     bool bIs64;
     XELF_DEF::Elf_Ehdr elfHeader;
     quint16 nStringTableSection;
@@ -71,7 +67,6 @@ private:
     QList<XELF_DEF::Elf_Shdr> listSH;
     QList<XELF_DEF::Elf_Phdr> listPH;
     QList<XELF::SECTION_RECORD> listSR;
-
     QString sGeneralOptions;
 };
 

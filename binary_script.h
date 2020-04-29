@@ -83,14 +83,12 @@ protected:
 
 private:
     XBinary *pBinary;
-
     qint64 nSize;
     qint64 nEntryPointOffset;
     qint64 nEntryPointAddress;
     qint64 nOverlayOffset;
     qint64 nOverlaySize;
     qint64 bIsOverlayPresent;
-
     QString sHeaderSignature;
     qint32 nHeaderSignatureSize;
     QString sEntryPointSignature;

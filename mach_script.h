@@ -42,13 +42,11 @@ public slots:
 
 private:
     XMACH *pMACH;
-
     QString sGeneralOptions;
     QList<XMACH::LIBRARY_RECORD> listLibraryRecords;
     QList<XMACH::SECTION_RECORD> listSectionRecords;
     QList<XMACH::COMMAND_RECORD> listCommandRecords;
     QList<XMACH::SEGMENT_RECORD> listSegmentRecords;
-
     qint32 nNumberOfSection;
     qint32 nNumberOfSegments;
     bool bIs64;

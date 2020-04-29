@@ -101,16 +101,11 @@ public:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> *getSignatures();
     SCAN_RESULT scanFile(QString sFileName,SCAN_OPTIONS *pOptions);
     SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions);
-
     DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(QString sSignatureFilePath);
     bool updateSignature(QString sSignatureFilePath,QString sText);
-
     STATS getStats();
-
     DBT getDatabaseType();
-
     bool isSignaturesPresent(XBinary::FT fileType);
-
     static QString scanResultToString(SCAN_RESULT *pScanResult);
 
 public slots:
@@ -119,10 +114,8 @@ public slots:
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath, XBinary::FT fileType);
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix, XBinary::FT fileType);
-
     SCAN_RESULT _scan(QIODevice *pDevice,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="");
     bool _handleError(DiE_ScriptEngine *pScriptEngine,QScriptValue scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
-
     SCAN_STRUCT getScanStructFromString(QIODevice *pDevice, SCAN_HEADER scanHeader, QString sString);
 
 signals:

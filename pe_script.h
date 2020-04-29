@@ -90,49 +90,36 @@ public slots:
 
 private:
     XPE *pPE;
-
     qint64 nBaseAddress;
     qint32 nNumberOfSections;
     XPE::CLI_INFO cliInfo;
-
     QList<XPE::RESOURCE_RECORD> listResources;
-
     qint32 nNumberOfResources;
-
     QList<XPE_DEF::IMAGE_SECTION_HEADER> listSH;
     QList<XPE::SECTION_RECORD> listSR;
     QList<QString> listSN;
-
     QList<XPE::IMPORT_HEADER> listImports;
     qint32 nNumberOfImports;
-
     XPE::RESOURCE_VERSION resVersion;
-
     bool bIsNETPresent;
     bool bIs64;
     bool bIsDll;
     bool bIsDriver;
     bool bIsConsole;
     bool bIsSignPresent;
-
     QString sGeneralOptions;
-
     qint32 nImportSection;
     qint32 nExportSection;
     qint32 nResourcesSection;
     qint32 nEntryPointSection;
     qint32 nRelocsSection;
-
     quint8 nMajorLinkerVersion;
     quint8 nMinorLinkerVersion;
     quint32 nSizeOfCode;
     quint32 nSizeOfUninitializedData;
-
     QString sCompilerVersion;
     QString sFileVersion;
-
     qint32 nCalculateSizeOfHeaders;
-
     XPE::EXPORT_HEADER exportHeader;
     QList<QString> listExportFunctionNames;
 };
