@@ -614,3 +614,12 @@ QString DiE_Script::scanResultToString(DiE_Script::SCAN_RESULT *pScanResult)
 
     return sResult;
 }
+
+QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
+{
+    QString sResult;
+
+    // TODO
+
+    return sResult;
+}

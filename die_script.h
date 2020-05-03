@@ -107,6 +107,7 @@ public:
     DBT getDatabaseType();
     bool isSignaturesPresent(XBinary::FT fileType);
     static QString scanResultToString(SCAN_RESULT *pScanResult);
+    static QString getErrorsString(SCAN_RESULT *pScanResult);
 
 public slots:
     void stop();
