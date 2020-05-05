@@ -378,6 +378,7 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,S
 
 bool DiE_Script::loadDatabase(QString sDatabasePath)
 {
+    // TODO Check if empty file
     this->sDatabasePath=sDatabasePath;
 
     databaseType=DBT_UNKNOWN;
