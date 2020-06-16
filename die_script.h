@@ -43,9 +43,9 @@ public:
         SCAN_HEADER scanHeader;
         QString sType;
         QString sString;
-//        QString sName;
-//        QString sVersion;
-//        QString sOptions;
+// TODO QString sName;
+// TODO QString sVersion;
+// TODO QString sOptions;
     };
 
     struct ERROR_RECORD
