@@ -371,7 +371,21 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,S
     result.sType=sString.section(": ",0,0);
     result.sString=sString.section(": ",1,-1);
 
-    // TODO
+    QString _sString=result.sString;
+
+    if(_sString.count("[")==1)
+    {
+        result.sOptions=_sString.section("[",1,-1).section("]",0,0);
+        _sString=_sString.section("[",0,0);
+    }
+
+    if(_sString.count("(")==1)
+    {
+        result.sVersion=_sString.section("(",1,-1).section(")",0,0);
+        result.sName=_sString.section("(",0,0);
+    }
+
+    // TODO !
 
     return result;
 }
