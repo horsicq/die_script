@@ -26,6 +26,10 @@
 #include "die_scriptengine.h"
 #include "xformats.h"
 #include "xzip.h"
+#ifdef QT_SCRIPTTOOLS_LIB
+#include <QScriptEngineDebugger>
+#include <QAction>
+#endif
 
 class DiE_Script : public QObject
 {
@@ -106,8 +110,14 @@ public:
     STATS getStats();
     DBT getDatabaseType();
     bool isSignaturesPresent(XBinary::FT fileType);
-    static QString scanResultToString(SCAN_RESULT *pScanResult);
+    static QString scanResultToPlainString(SCAN_RESULT *pScanResult);
+    static QString scanResultToJsonString(SCAN_RESULT *pScanResult);
+    static QString scanResultToXmlString(SCAN_RESULT *pScanResult);
     static QString getErrorsString(SCAN_RESULT *pScanResult);
+
+#ifdef QT_SCRIPTTOOLS_LIB
+    void setDebugger(QScriptEngineDebugger *pDebugger);
+#endif
 
 public slots:
     void stop();
@@ -129,6 +139,9 @@ private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;
     bool bIsStop;
     DBT databaseType;
+#ifdef QT_SCRIPTTOOLS_LIB
+    QScriptEngineDebugger *pDebugger;
+#endif
 };
 
 #endif // DIE_SCRIPT_H

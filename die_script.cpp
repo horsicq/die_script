@@ -63,6 +63,9 @@ DiE_Script::DiE_Script(QObject *parent) : QObject(parent)
 {
     bIsStop=false;
     databaseType=DBT_UNKNOWN;
+#ifdef QT_SCRIPTTOOLS_LIB
+    pDebugger=0;
+#endif
 }
 
 QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString sDatabasePath, XBinary::FT fileType)
@@ -199,8 +202,15 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     }
 
     DiE_ScriptEngine scriptEngine(&listSignatures,pDevice,fileType);
-
     connect(this,SIGNAL(stopEngine()),&scriptEngine,SLOT(stop()),Qt::DirectConnection);
+
+#ifdef QT_SCRIPTTOOLS_LIB
+    if(pDebugger)
+    {
+        pDebugger->attachTo(&scriptEngine);
+        pDebugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
+    }
+#endif
 
     if(nCount)
     {
@@ -621,7 +631,25 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
     return bResult;
 }
 
-QString DiE_Script::scanResultToString(DiE_Script::SCAN_RESULT *pScanResult)
+QString DiE_Script::scanResultToPlainString(DiE_Script::SCAN_RESULT *pScanResult)
+{
+    QString sResult;
+
+    // TODO
+
+    return sResult;
+}
+
+QString DiE_Script::scanResultToJsonString(DiE_Script::SCAN_RESULT *pScanResult)
+{
+    QString sResult;
+
+    // TODO
+
+    return sResult;
+}
+
+QString DiE_Script::scanResultToXmlString(DiE_Script::SCAN_RESULT *pScanResult)
 {
     QString sResult;
 
@@ -638,3 +666,10 @@ QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
 
     return sResult;
 }
+
+#ifdef QT_SCRIPTTOOLS_LIB
+void DiE_Script::setDebugger(QScriptEngineDebugger *pDebugger)
+{
+    this->pDebugger=pDebugger;
+}
+#endif
