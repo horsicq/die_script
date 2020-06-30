@@ -23,6 +23,10 @@
 
 #include <QObject>
 #include <QDir>
+#include <QXmlStreamWriter>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "die_scriptengine.h"
 #include "xformats.h"
 #include "xzip.h"
