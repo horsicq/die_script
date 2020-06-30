@@ -89,6 +89,8 @@ public:
         bool bShowOptions;
         XBinary::FT fileType; // Optional
         QString sSignatureName; // Optional
+        bool bResultAsXML;
+        bool bResultAsJSON;
     };
 
     struct STATS
