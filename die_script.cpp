@@ -378,17 +378,19 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,S
 
     result.scanHeader=scanHeader;
 
+    result.sFullString=sString;
+
     if(pOptions->bShowType)
     {
         result.sType=sString.section(": ",0,0);
-        result.sString=sString.section(": ",1,-1);
+        result.sResult=sString.section(": ",1,-1);
     }
     else
     {
-        result.sString=sString;
+        result.sResult=sString;
     }
 
-    QString _sString=result.sString;
+    QString _sString=result.sResult;
 
     if(pOptions->bShowOptions)
     {
@@ -647,7 +649,14 @@ QString DiE_Script::scanResultToPlainString(DiE_Script::SCAN_RESULT *pScanResult
 {
     QString sResult;
 
-    // TODO
+    sResult+=QString("%1\n").arg(XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
+
+    int nCount=pScanResult->listRecords.count();
+
+    for(int i=0;i<nCount;i++)
+    {
+        sResult+=QString("  %1\n").arg(pScanResult->listRecords.at(i).sFullString);
+    }
 
     return sResult;
 }

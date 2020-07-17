@@ -49,8 +49,9 @@ public:
     struct SCAN_STRUCT
     {
         SCAN_HEADER scanHeader;
+        QString sFullString;
         QString sType;
-        QString sString;
+        QString sResult;
         QString sName;
         QString sVersion;
         QString sOptions;
