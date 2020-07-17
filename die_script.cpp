@@ -665,7 +665,32 @@ QString DiE_Script::scanResultToJsonString(DiE_Script::SCAN_RESULT *pScanResult)
 {
     QString sResult;
 
-    // TODO
+    QJsonObject jsonResult;
+
+    jsonResult.insert("filetype",XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
+
+    QJsonArray jsArray;
+
+    int nCount=pScanResult->listRecords.count();
+
+    for(int i=0; i<nCount; i++)
+    {
+        QJsonObject jsRecord;
+
+        jsRecord.insert("type",pScanResult->listRecords.at(i).sType);
+        jsRecord.insert("name",pScanResult->listRecords.at(i).sName);
+        jsRecord.insert("version",pScanResult->listRecords.at(i).sVersion);
+        jsRecord.insert("options",pScanResult->listRecords.at(i).sOptions);
+        jsRecord.insert("string",pScanResult->listRecords.at(i).sFullString);
+
+        jsArray.append(jsRecord);
+    }
+
+    jsonResult.insert("detects",jsArray);
+
+    QJsonDocument saveFormat(jsonResult);
+
+    sResult=saveFormat.toJson(QJsonDocument::Indented).data();
 
     return sResult;
 }
