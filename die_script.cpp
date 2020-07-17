@@ -307,7 +307,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
                             // TODO set FileType from _scanHeader
 
-                            SCAN_STRUCT ss=getScanStructFromString(pDevice,scanResult.scanHeader,sResult);
+                            SCAN_STRUCT ss=getScanStructFromString(pDevice,scanResult.scanHeader,sResult,pOptions);
 
                             scanResult.listRecords.append(ss);
                         }
@@ -372,30 +372,42 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, QScriptValue scri
     return bResult;
 }
 
-DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,SCAN_HEADER scanHeader, QString sString)
+DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,SCAN_HEADER scanHeader, QString sString, SCAN_OPTIONS *pOptions)
 {
     SCAN_STRUCT result={};
 
     result.scanHeader=scanHeader;
 
-    result.sType=sString.section(": ",0,0);
-    result.sString=sString.section(": ",1,-1);
+    if(pOptions->bShowType)
+    {
+        result.sType=sString.section(": ",0,0);
+        result.sString=sString.section(": ",1,-1);
+    }
+    else
+    {
+        result.sString=sString;
+    }
 
     QString _sString=result.sString;
 
-    if(_sString.count("[")==1)
+    if(pOptions->bShowOptions)
     {
-        result.sOptions=_sString.section("[",1,-1).section("]",0,0);
-        _sString=_sString.section("[",0,0);
+        if(_sString.count("[")==1)
+        {
+            result.sName=_sString.section("[",0,0);
+            result.sOptions=_sString.section("[",1,-1).section("]",0,0);
+            _sString=_sString.section("[",0,0);
+        }
     }
-
-    if(_sString.count("(")==1)
+    // TODO
+    if(pOptions->bShowVersion)
     {
-        result.sVersion=_sString.section("(",1,-1).section(")",0,0);
-        result.sName=_sString.section("(",0,0);
+        if(_sString.count("(")==1)
+        {
+            result.sVersion=_sString.section("(",1,-1).section(")",0,0);
+            result.sName=_sString.section("(",0,0);
+        }
     }
-
-    // TODO !
 
     return result;
 }
