@@ -674,7 +674,26 @@ QString DiE_Script::scanResultToXmlString(DiE_Script::SCAN_RESULT *pScanResult)
 {
     QString sResult;
 
-    // TODO
+    QXmlStreamWriter xml(&sResult);
+
+    xml.setAutoFormatting(true);
+
+    xml.writeStartElement(XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
+
+    int nCount=pScanResult->listRecords.count();
+
+    for(int i=0; i<nCount; i++)
+    {
+        xml.writeStartElement("detect");
+        xml.writeAttribute("type",pScanResult->listRecords.at(i).sType);
+        xml.writeAttribute("name",pScanResult->listRecords.at(i).sName);
+        xml.writeAttribute("version",pScanResult->listRecords.at(i).sVersion);
+        xml.writeAttribute("options",pScanResult->listRecords.at(i).sOptions);
+        xml.writeCharacters(pScanResult->listRecords.at(i).sFullString);
+        xml.writeEndElement();
+    }
+
+    xml.writeEndElement();
 
     return sResult;
 }
