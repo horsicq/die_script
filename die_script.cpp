@@ -402,6 +402,7 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,S
         }
     }
     // TODO
+    // Check
     if(pOptions->bShowVersion)
     {
         if(_sString.count("(")==1)
