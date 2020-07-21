@@ -121,7 +121,6 @@ public:
     static QString scanResultToJsonString(SCAN_RESULT *pScanResult);
     static QString scanResultToXmlString(SCAN_RESULT *pScanResult);
     static QString getErrorsString(SCAN_RESULT *pScanResult);
-
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
 #endif
