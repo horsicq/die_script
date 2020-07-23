@@ -307,7 +307,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
                             // TODO set FileType from _scanHeader
 
-                            SCAN_STRUCT ss=getScanStructFromString(pDevice,scanResult.scanHeader,sResult,pOptions);
+                            SCAN_STRUCT ss=getScanStructFromString(scanResult.scanHeader,sResult,pOptions);
 
                             scanResult.listRecords.append(ss);
                         }
@@ -372,7 +372,7 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, QScriptValue scri
     return bResult;
 }
 
-DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(QIODevice *pDevice,SCAN_HEADER scanHeader, QString sString, SCAN_OPTIONS *pOptions)
+DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHeader, QString sString, SCAN_OPTIONS *pOptions)
 {
     SCAN_STRUCT result={};
 
