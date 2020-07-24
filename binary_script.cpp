@@ -138,19 +138,19 @@ qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, QString sString)
     return pBinary->find_ansiString(nOffset,nSize,sString);
 }
 
-qint64 Binary_Script::findByte(qint64 nOffset, qint64 nSize, quint8 value)
+qint64 Binary_Script::findByte(qint64 nOffset, qint64 nSize, quint8 nValue)
 {
-    return pBinary->find_uint8(nOffset,nSize,value);
+    return pBinary->find_uint8(nOffset,nSize,nValue);
 }
 
-qint64 Binary_Script::findWord(qint64 nOffset, qint64 nSize, quint16 value)
+qint64 Binary_Script::findWord(qint64 nOffset, qint64 nSize, quint16 nValue)
 {
-    return pBinary->find_uint16(nOffset,nSize,value);
+    return pBinary->find_uint16(nOffset,nSize,nValue);
 }
 
-qint64 Binary_Script::findDword(qint64 nOffset, qint64 nSize, quint32 value)
+qint64 Binary_Script::findDword(qint64 nOffset, qint64 nSize, quint32 nValue)
 {
-    return pBinary->find_uint32(nOffset,nSize,value);
+    return pBinary->find_uint32(nOffset,nSize,nValue);
 }
 
 qint64 Binary_Script::getEntryPointOffset()

@@ -44,9 +44,9 @@ public slots:
     QString getString(qint64 nOffset,qint64 nMaxSize=50);
     qint64 findSignature(qint64 nOffset,qint64 nSize,QString sSignature);
     qint64 findString(qint64 nOffset,qint64 nSize,QString sString);
-    qint64 findByte(qint64 nOffset,qint64 nSize,quint8 value);
-    qint64 findWord(qint64 nOffset,qint64 nSize,quint16 value);
-    qint64 findDword(qint64 nOffset,qint64 nSize,quint32 value);
+    qint64 findByte(qint64 nOffset,qint64 nSize,quint8 nValue);
+    qint64 findWord(qint64 nOffset,qint64 nSize,quint16 nValue);
+    qint64 findDword(qint64 nOffset,qint64 nSize,quint32 nValue);
     qint64 getEntryPointOffset();
     qint64 getOverlayOffset();
     qint64 getOverlaySize();
