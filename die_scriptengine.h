@@ -47,7 +47,6 @@ public:
     DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType);
     ~DiE_ScriptEngine();
     bool handleError(QScriptValue value,QString *psErrorString);
-    static bool isSignatureTypeValid(XBinary::FT ftSignature, XBinary::FT ftTarget);
 
 public slots:
     void stop();

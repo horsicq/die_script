@@ -35,6 +35,9 @@
 #include <QAction>
 #endif
 
+bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2);
+bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2);
+
 class DiE_Script : public QObject
 {
     Q_OBJECT

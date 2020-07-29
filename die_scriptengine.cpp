@@ -30,35 +30,35 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     pBinary=0;
     pBinaryScript=0;
 
-    if(isSignatureTypeValid(XBinary::FT_BINARY,fileType))
+    if(XBinary::checkFileType(XBinary::FT_BINARY,fileType))
     {
         pBinary=new XBinary(pDevice);
         pBinaryScript=new Binary_Script(pBinary);
         _addClass(pBinaryScript,"Binary");
     }
 
-    if(isSignatureTypeValid(XBinary::FT_PE,fileType))
+    if(XBinary::checkFileType(XBinary::FT_PE,fileType))
     {
         XPE *pPE=new XPE(pDevice);
         pBinaryScript=new PE_Script(pPE);
         _addClass(pBinaryScript,"PE");
         pBinary=pPE;
     }
-    else if(isSignatureTypeValid(XBinary::FT_ELF,fileType))
+    else if(XBinary::checkFileType(XBinary::FT_ELF,fileType))
     {
         XELF *pELF=new XELF(pDevice);
         pBinaryScript=new ELF_Script(pELF);
         _addClass(pBinaryScript,"ELF");
         pBinary=pELF;
     }
-    else if(isSignatureTypeValid(XBinary::FT_MACH,fileType))
+    else if(XBinary::checkFileType(XBinary::FT_MACH,fileType))
     {
         XMACH *pMACH=new XMACH(pDevice);
         pBinaryScript=new MACH_Script(pMACH);
         _addClass(pBinaryScript,"MACH");
         pBinary=pMACH;
     }
-    else if(isSignatureTypeValid(XBinary::FT_MSDOS,fileType))
+    else if(XBinary::checkFileType(XBinary::FT_MSDOS,fileType))
     {
         XMSDOS *pXMSDOS=new XMSDOS(pDevice);
         pBinaryScript=new MSDOS_Script(pXMSDOS);
@@ -83,38 +83,6 @@ bool DiE_ScriptEngine::handleError(QScriptValue value, QString *psErrorString)
         *psErrorString=QString("%1: %2").arg(value.property("lineNumber").toInt32()).arg(value.toString());
 
         bResult=false;
-    }
-
-    return bResult;
-}
-
-bool DiE_ScriptEngine::isSignatureTypeValid(XBinary::FT ftSignature, XBinary::FT ftTarget)
-{
-    bool bResult=false;
-
-    if(ftSignature==XBinary::FT_UNKNOWN)
-    {
-        bResult=(ftSignature==ftTarget);
-    }
-    else if(ftSignature==XBinary::FT_BINARY)
-    {
-        bResult=(ftSignature==ftTarget);
-    }
-    else if(ftSignature==XBinary::FT_MSDOS)
-    {
-        bResult=(ftSignature==ftTarget);
-    }
-    else if(ftSignature==XBinary::FT_PE)
-    {
-        bResult=((ftTarget==XBinary::FT_PE32)||(ftTarget==XBinary::FT_PE64));
-    }
-    else if(ftSignature==XBinary::FT_ELF)
-    {
-        bResult=((ftTarget==XBinary::FT_ELF32)||(ftTarget==XBinary::FT_ELF64));
-    }
-    else if(ftSignature==XBinary::FT_MACH)
-    {
-        bResult=((ftTarget==XBinary::FT_MACH32)||(ftTarget==XBinary::FT_MACH64));
     }
 
     return bResult;

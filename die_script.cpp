@@ -20,8 +20,13 @@
 //
 #include "die_script.h"
 
-bool sort_signature(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2)
+bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2)
 {
+    if((sr1.sName=="_init")&&(sr2.sName=="_init"))
+    {
+        return false;
+    }
+
     if(sr1.sName=="_init")
     {
         return true;
@@ -54,6 +59,25 @@ bool sort_signature(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_Scr
                 return (sr1.sName.section(".",nPos1-2,nPos1-2)<sr2.sName.section(".",nPos2-2,nPos2-2));
             }
         }
+    }
+
+    return (sr1.sName<sr2.sName);
+}
+
+bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2)
+{
+    if((sr1.sName=="_init")&&(sr2.sName=="_init"))
+    {
+        return false;
+    }
+
+    if(sr1.sName=="_init")
+    {
+        return true;
+    }
+    else if(sr2.sName=="_init")
+    {
+        return false;
     }
 
     return (sr1.sName<sr2.sName);
@@ -93,7 +117,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString 
         }
     }
 
-    std::sort(listResult.begin(),listResult.end(),sort_signature);
+    std::sort(listResult.begin(),listResult.end(),sort_signature_prio);
 
     return listResult;
 }
@@ -188,7 +212,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                 bGlobalInit=true;
             }
 
-            if(DiE_ScriptEngine::isSignatureTypeValid(listSignatures.at(i).fileType,fileType))
+            if(XBinary::checkFileType(listSignatures.at(i).fileType,fileType))
             {
                 srInit=listSignatures.at(i);
                 bInit=true;
@@ -229,7 +253,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     {
         bool bExec=false;
 
-        if((listSignatures.at(i).sName!="_init")&&(DiE_ScriptEngine::isSignatureTypeValid(listSignatures.at(i).fileType,fileType)))
+        if((listSignatures.at(i).sName!="_init")&&(XBinary::checkFileType(listSignatures.at(i).fileType,fileType)))
         {
             bExec=true;
         }
