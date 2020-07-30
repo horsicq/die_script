@@ -312,26 +312,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
                         if(sResult!="")
                         {
-                            SCAN_HEADER _scanHeader=scanResult.scanHeader;
-
-                            if(_scanHeader.fileType==XBinary::FT_BINARY)
-                            {
-                                QString sPrefix=signatureRecord.sName.section(".",0,0).toUpper();
-
-                                if(sPrefix=="COM")
-                                {
-                                    _scanHeader.fileType=XBinary::FT_COM;
-                                    _scanHeader.sArch="8086";
-                                }
-                                else if(sPrefix=="TEXT") // mb TODO not set if COM
-                                {
-                                    _scanHeader.fileType=XBinary::FT_TEXT;
-                                }
-                            }
-
-                            // TODO set FileType from _scanHeader
-
-                            SCAN_STRUCT ss=getScanStructFromString(scanResult.scanHeader,sResult,pOptions);
+                            SCAN_STRUCT ss=getScanStructFromString(scanResult.scanHeader,&signatureRecord,sResult,pOptions);
 
                             scanResult.listRecords.append(ss);
                         }
@@ -396,11 +377,26 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, QScriptValue scri
     return bResult;
 }
 
-DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHeader, QString sString, SCAN_OPTIONS *pOptions)
+DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHeader, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, QString sString, SCAN_OPTIONS *pOptions)
 {
     SCAN_STRUCT result={};
 
+    if(scanHeader.fileType==XBinary::FT_BINARY)
+    {
+        QString sPrefix=pSignatureRecord->sName.section(".",0,0).toUpper();
+
+        if(sPrefix=="COM")
+        {
+            result.fileType=XBinary::FT_COM;
+        }
+        else if(sPrefix=="TEXT") // mb TODO not set if COM
+        {
+            result.fileType=XBinary::FT_TEXT;
+        }
+    }
+
     result.scanHeader=scanHeader;
+    result.sSignature=pSignatureRecord->sName;
 
     result.sFullString=sString;
 

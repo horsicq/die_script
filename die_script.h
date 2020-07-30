@@ -52,12 +52,14 @@ public:
     struct SCAN_STRUCT
     {
         SCAN_HEADER scanHeader;
+        XBinary::FT fileType;
         QString sFullString;
         QString sType;
         QString sResult;
         QString sName;
         QString sVersion;
         QString sOptions;
+        QString sSignature;
     };
 
     struct ERROR_RECORD
@@ -136,7 +138,7 @@ private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix, XBinary::FT fileType);
     SCAN_RESULT _scan(QIODevice *pDevice,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="");
     bool _handleError(DiE_ScriptEngine *pScriptEngine,QScriptValue scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
-    SCAN_STRUCT getScanStructFromString(SCAN_HEADER scanHeader, QString sString, SCAN_OPTIONS *pOptions);
+    SCAN_STRUCT getScanStructFromString(SCAN_HEADER scanHeader, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, QString sString, SCAN_OPTIONS *pOptions);
 
 signals:
     void progressMaximumChanged(qint32 nMaximum);
