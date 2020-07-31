@@ -31,7 +31,6 @@ class ELF_Script : public Binary_Script
 public:
     explicit ELF_Script(XELF *pELF);
     ~ELF_Script();
-signals:
 
 public slots:
     bool isSectionNamePresent(QString sSectionName);
