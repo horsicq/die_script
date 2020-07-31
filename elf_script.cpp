@@ -161,7 +161,7 @@ bool ELF_Script::isStringInTablePresent(QString sSectionName, QString sString)
 
     if(nSection!=-1)
     {
-        bResult=(pELF->getStringsFromSection(nSection).key(sString,-1)!=-1);
+        bResult=(pELF->getStringsFromSection(nSection).key(sString,-1)!=(quint32)-1);
     }
 
     return bResult;
