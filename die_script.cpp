@@ -163,9 +163,36 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     scanResult.sFileName=XBinary::getDeviceFileName(pDevice);
     scanResult.scanHeader.fileType=fileType;
 
-    XBinary::_MEMORY_MAP memoryMap=XFormats::getMemoryMap(fileType,pDevice);
+    if((fileType==XBinary::FT_PE32)||(fileType==XBinary::FT_PE64))
+    {
+        XPE pe(pDevice);
 
-    scanResult.scanHeader.sArch=memoryMap.sArch;
+        scanResult.scanHeader.sArch=pe.getArch();
+    }
+    else if((fileType==XBinary::FT_ELF32)||(fileType==XBinary::FT_ELF64))
+    {
+        XELF elf(pDevice);
+
+        scanResult.scanHeader.sArch=elf.getArch();
+    }
+    else if((fileType==XBinary::FT_MACH32)||(fileType==XBinary::FT_MACH64))
+    {
+        XMACH mach(pDevice);
+
+        scanResult.scanHeader.sArch=mach.getArch();
+    }
+    else if(fileType==XBinary::FT_MSDOS)
+    {
+        XMSDOS msdos(pDevice);
+
+        scanResult.scanHeader.sArch=msdos.getArch();
+    }
+    else
+    {
+        XBinary binary(pDevice);
+
+        scanResult.scanHeader.sArch=binary.getArch();
+    }
 
     int nCount=listSignatures.count();
 
