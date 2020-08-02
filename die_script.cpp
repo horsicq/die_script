@@ -83,7 +83,7 @@ bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const Di
     return (sr1.sName<sr2.sName);
 }
 
-DiE_Script::DiE_Script(QObject *parent) : QObject(parent)
+DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
 {
     bIsStop=false;
     databaseType=DBT_UNKNOWN;

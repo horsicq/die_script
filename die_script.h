@@ -111,7 +111,7 @@ public:
         DBT_COMPRESSED
     };
 
-    explicit DiE_Script(QObject *parent=nullptr);
+    explicit DiE_Script(QObject *pParent=nullptr);
     bool loadDatabase(QString sDatabasePath);
     QString getDatabasePath();
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> *getSignatures();
