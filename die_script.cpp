@@ -505,7 +505,7 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
 
     if(pOptions->fileType!=XBinary::FT_UNKNOWN)
     {
-        XFormats::filterFileTypes(&stFT,pOptions->fileType);
+        XBinary::filterFileTypes(&stFT,pOptions->fileType);
     }
 
     scanResult.bIsValidType=true;
