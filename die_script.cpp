@@ -213,12 +213,12 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     {
         if(bGlobalInit)
         {
-            _handleError(&scriptEngine,scriptEngine.evaluate(srGlobalInit.sText),&srGlobalInit,&scanResult);
+            _handleError(&scriptEngine,scriptEngine.evaluate(srGlobalInit.sText,srGlobalInit.sFilePath),&srGlobalInit,&scanResult);
         }
 
         if(bInit)
         {
-            _handleError(&scriptEngine,scriptEngine.evaluate(srInit.sText),&srInit,&scanResult);
+            _handleError(&scriptEngine,scriptEngine.evaluate(srInit.sText,srInit.sFilePath),&srInit,&scanResult);
         }
     }
 
@@ -265,7 +265,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                 scanTimer.start();
             }
 
-            QScriptValue script=scriptEngine.evaluate(signatureRecord.sText);
+            QScriptValue script=scriptEngine.evaluate(signatureRecord.sText,signatureRecord.sFilePath);
 
             if(_handleError(&scriptEngine,script,&signatureRecord,&scanResult))
             {
