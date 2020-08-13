@@ -34,18 +34,18 @@ Binary_Script::Binary_Script(XBinary *pBinary)
     nOverlaySize=pBinary->getOverlaySize(&memoryMap);
     bIsOverlayPresent=pBinary->isOverlayPresent(&memoryMap);
 
-    sHeaderSignature=pBinary->getSignature(0,256);
+    sHeaderSignature=pBinary->getSignature(0,256); // TODO const
     nHeaderSignatureSize=sHeaderSignature.size();
 
     if(nEntryPointOffset>0)
     {
-        sEntryPointSignature=pBinary->getSignature(nEntryPointOffset,256);
+        sEntryPointSignature=pBinary->getSignature(nEntryPointOffset,256); // TODO const
         nEntryPointSignatureSize=sEntryPointSignature.size();
     }
 
     if(nOverlayOffset>0)
     {
-        sOverlaySignature=pBinary->getSignature(nOverlayOffset,256);
+        sOverlaySignature=pBinary->getSignature(nOverlayOffset,256); // TODO const
         nOverlaySignatureSize=sOverlaySignature.size();
     }
 
