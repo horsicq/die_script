@@ -61,7 +61,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     sCompilerVersion=QString("%1.%2").arg(nMajorLinkerVersion).arg(nMinorLinkerVersion);
 
-    sGeneralOptions=QString("%1%2").arg(XPE::getTypesS().value(pPE->getType())).arg(bIs64?("64"):("32"));
+    sGeneralOptions=QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64?("64"):("32"));
 
     sFileVersion=pPE->getFileVersion(&resVersion);
 
