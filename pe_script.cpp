@@ -41,7 +41,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     nNumberOfImports=listImports.count();
 
-    bIsNETPresent=pPE->isNETPresent();
+    bIsNETPresent=(pPE->isNETPresent())&&(cliInfo.bValid);
     bIs64=pPE->is64();
     bIsDll=pPE->isDll();
     bIsDriver=pPE->isDriver();
