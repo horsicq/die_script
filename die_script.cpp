@@ -556,9 +556,9 @@ DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::getSignatureByFilePath(QString sS
 {
     DiE_ScriptEngine::SIGNATURE_RECORD result={};
 
-    int nCount=listSignatures.count();
+    int nNumberOfSignatures=listSignatures.count();
 
-    for(int i=0;i<nCount;i++)
+    for(int i=0;i<nNumberOfSignatures;i++)
     {
         if(listSignatures.at(i).sFilePath==sSignatureFilePath)
         {
@@ -575,9 +575,9 @@ bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText)
 {
     bool bResult=false;
 
-    int nCount=listSignatures.count();
+    int nNumberOfSignatures=listSignatures.count();
 
-    for(int i=0;i<nCount;i++)
+    for(int i=0;i<nNumberOfSignatures;i++)
     {
         if(listSignatures.at(i).sFilePath==sSignatureFilePath)
         {
