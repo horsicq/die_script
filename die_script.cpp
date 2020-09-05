@@ -167,7 +167,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
     scanResult.scanHeader.sArch=memoryMap.sArch;
 
-    int nCount=listSignatures.count();
+    int nNUmberOfSignatures=listSignatures.count();
 
     DiE_ScriptEngine::SIGNATURE_RECORD srGlobalInit;
     DiE_ScriptEngine::SIGNATURE_RECORD srInit;
@@ -175,7 +175,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     bool bGlobalInit=false;
     bool bInit=false;
 
-    for(int i=0; (i<nCount)&&(!bIsStop); i++)
+    for(int i=0; (i<nNUmberOfSignatures)&&(!bIsStop); i++)
     {
         if(listSignatures.at(i).sName=="_init")
         {
@@ -208,7 +208,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     }
 #endif
 
-    if(nCount)
+    if(nNUmberOfSignatures)
     {
         if(bGlobalInit)
         {
@@ -221,7 +221,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
         }
     }
 
-    for(int i=0;(i<nCount)&&(!bIsStop);i++)
+    for(int i=0;(i<nNUmberOfSignatures)&&(!bIsStop);i++)
     {
         bool bExec=false;
 
@@ -311,7 +311,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
             }
         }
 
-        if((i*100)/nCount>nCurrent)
+        if((i*100)/nNUmberOfSignatures>nCurrent)
         {
             nCurrent++;
             emit progressValueChanged(nCurrent);
