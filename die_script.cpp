@@ -630,9 +630,9 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
 {
     bool bResult=false;
 
-    int nCount=listSignatures.count();
+    int nNumberOfSignatures=listSignatures.count();
 
-    for(int i=0;i<nCount;i++)
+    for(int i=0;i<nNumberOfSignatures;i++)
     {
         if(listSignatures.at(i).fileType==fileType)
         {
