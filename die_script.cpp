@@ -671,9 +671,9 @@ QString DiE_Script::scanResultToJsonString(DiE_Script::SCAN_RESULT *pScanResult)
 
     QJsonArray jsArray;
 
-    int nCount=pScanResult->listRecords.count();
+    int nNumberOfRecords=pScanResult->listRecords.count();
 
-    for(int i=0; i<nCount; i++)
+    for(int i=0; i<nNumberOfRecords; i++)
     {
         QJsonObject jsRecord;
 
