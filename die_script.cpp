@@ -651,9 +651,9 @@ QString DiE_Script::scanResultToPlainString(DiE_Script::SCAN_RESULT *pScanResult
 
     sResult+=QString("%1\n").arg(XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
 
-    int nCount=pScanResult->listRecords.count();
+    int nNumberOfRecords=pScanResult->listRecords.count();
 
-    for(int i=0;i<nCount;i++)
+    for(int i=0;i<nNumberOfRecords;i++)
     {
         sResult+=QString("  %1\n").arg(pScanResult->listRecords.at(i).sFullString);
     }
