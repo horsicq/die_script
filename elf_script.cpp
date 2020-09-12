@@ -35,7 +35,7 @@ ELF_Script::ELF_Script(XELF *pELF) : Binary_Script(pELF)
 
     listSR=pELF->getSectionRecords(&listSH,bIs64,&baStringTable);
 
-    sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(elfHeader.e_type)).arg(XELF::getMachinesS().value(elfHeader.e_machine)).arg(bIs64?("64"):("32"));
+    sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(elfHeader.e_type)).arg(XELF::getMachinesS().value(elfHeader.e_machine)).arg(bIs64?("64"):("32")); // TODO Check
 }
 
 ELF_Script::~ELF_Script()
