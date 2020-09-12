@@ -157,7 +157,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
     qint32 nCurrent=0;
 
-    emit progressMaximumChanged(100);
+    emit progressMaximumChanged(100); // TODO const
     emit progressValueChanged(nCurrent);
 
     scanResult.sFileName=XBinary::getDeviceFileName(pDevice);
