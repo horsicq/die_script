@@ -356,7 +356,7 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, QScriptValue scri
     return bResult;
 }
 
-DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHeader, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, QString sString, SCAN_OPTIONS *pOptions)
+DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHeader, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, QString sString, SCAN_OPTIONS *pScanOptions)
 {
     SCAN_STRUCT result={};
 
@@ -379,7 +379,7 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHead
 
     result.sFullString=sString;
 
-    if(pOptions->bShowType)
+    if(pScanOptions->bShowType)
     {
         result.sType=sString.section(": ",0,0);
         result.sResult=sString.section(": ",1,-1);
@@ -391,7 +391,7 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHead
 
     QString _sString=result.sResult;
 
-    if(pOptions->bShowOptions)
+    if(pScanOptions->bShowOptions)
     {
         if(_sString.count("[")==1)
         {
@@ -402,7 +402,7 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHead
     }
     // TODO
     // Check
-    if(pOptions->bShowVersion)
+    if(pScanOptions->bShowVersion)
     {
         if(_sString.count("(")==1)
         {
