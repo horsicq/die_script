@@ -304,12 +304,12 @@ bool PE_Script::isDriver()
 
 QString PE_Script::getNETVersion()
 {
-    return cliInfo.cliMetadata.header.sVersion;
+    return cliInfo.metaData.header.sVersion;
 }
 
 bool PE_Script::compareEP_NET(QString sSignature, qint64 nOffset)
 {
-    return pPE->compareSignatureOnAddress(&memoryMap,sSignature,nBaseAddress+cliInfo.cliMetadata.nEntryPoint+nOffset);
+    return pPE->compareSignatureOnAddress(&memoryMap,sSignature,nBaseAddress+cliInfo.metaData.nEntryPoint+nOffset);
 }
 
 quint32 PE_Script::getSizeOfCode()
