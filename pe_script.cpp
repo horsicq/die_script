@@ -26,9 +26,9 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     nNumberOfSections=pPE->getFileHeader_NumberOfSections();
 
-    listSH=pPE->getSectionHeaders();
-    listSR=pPE->getSectionRecords(&listSH,pPE->isImage());
-    listSN=pPE->getSectionNames(&listSR);
+    listSectionHeaders=pPE->getSectionHeaders();
+    listSectionRecords=pPE->getSectionRecords(&listSectionHeaders,pPE->isImage());
+    listSN=pPE->getSectionNames(&listSectionRecords);
 
     cliInfo=pPE->getCliInfo(true,&memoryMap);
     listResources=pPE->getResources(&memoryMap);
@@ -89,27 +89,27 @@ QString PE_Script::getSectionName(quint32 nNumber)
 
 quint32 PE_Script::getSectionVirtualSize(quint32 nNumber)
 {
-    return pPE->getSection_VirtualSize(nNumber,&listSH);
+    return pPE->getSection_VirtualSize(nNumber,&listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionVirtualAddress(quint32 nNumber)
 {
-    return pPE->getSection_VirtualAddress(nNumber,&listSH);
+    return pPE->getSection_VirtualAddress(nNumber,&listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionFileSize(quint32 nNumber)
 {
-    return pPE->getSection_SizeOfRawData(nNumber,&listSH);
+    return pPE->getSection_SizeOfRawData(nNumber,&listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionFileOffset(quint32 nNumber)
 {
-    return pPE->getSection_PointerToRawData(nNumber,&listSH);
+    return pPE->getSection_PointerToRawData(nNumber,&listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionCharacteristics(quint32 nNumber)
 {
-    return pPE->getSection_Characteristics(nNumber,&listSH);
+    return pPE->getSection_Characteristics(nNumber,&listSectionHeaders);
 }
 
 quint32 PE_Script::getNumberOfResources()

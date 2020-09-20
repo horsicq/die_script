@@ -95,8 +95,8 @@ private:
     XPE::CLI_INFO cliInfo;
     QList<XPE::RESOURCE_RECORD> listResources;
     qint32 nNumberOfResources;
-    QList<XPE_DEF::IMAGE_SECTION_HEADER> listSH;
-    QList<XPE::SECTION_RECORD> listSR;
+    QList<XPE_DEF::IMAGE_SECTION_HEADER> listSectionHeaders;
+    QList<XPE::SECTION_RECORD> listSectionRecords;
     QList<QString> listSN;
     QList<XPE::IMPORT_HEADER> listImports;
     qint32 nNumberOfImports;
