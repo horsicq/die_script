@@ -37,9 +37,9 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     nNumberOfResources=listResources.count();
 
-    listImports=pPE->getImports(&memoryMap);
+    listImportHeaders=pPE->getImports(&memoryMap);
 
-    nNumberOfImports=listImports.count();
+    nNumberOfImports=listImportHeaders.count();
 
     bIsNETPresent=(pPE->isNETPresent())&&(cliInfo.bValid);
     bIs64=pPE->is64();
@@ -184,22 +184,22 @@ qint32 PE_Script::getNumberOfImports()
 
 QString PE_Script::getImportLibraryName(quint32 nNumber)
 {
-    return pPE->getImportLibraryName(nNumber,&listImports);
+    return pPE->getImportLibraryName(nNumber,&listImportHeaders);
 }
 
 bool PE_Script::isLibraryPresent(QString sLibraryName)
 {
-    return pPE->isImportLibraryPresentI(sLibraryName,&listImports);
+    return pPE->isImportLibraryPresentI(sLibraryName,&listImportHeaders);
 }
 
 bool PE_Script::isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName)
 {
-    return pPE->isImportFunctionPresentI(sLibraryName,sFunctionName,&listImports);
+    return pPE->isImportFunctionPresentI(sLibraryName,sFunctionName,&listImportHeaders);
 }
 
 QString PE_Script::getImportFunctionName(quint32 nImport, quint32 nFunctionNumber)
 {
-    return pPE->getImportFunctionName(nImport,nFunctionNumber,&listImports);
+    return pPE->getImportFunctionName(nImport,nFunctionNumber,&listImportHeaders);
 }
 
 qint32 PE_Script::getImportSection()
@@ -249,7 +249,7 @@ QString PE_Script::getVersionStringInfo(QString sKey)
 
 qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
 {
-    return pPE->getNumberOfImportThunks(nNumber,&listImports);
+    return pPE->getNumberOfImportThunks(nNumber,&listImportHeaders);
 }
 
 qint64 PE_Script::getResourceNameOffset(QString sName)
