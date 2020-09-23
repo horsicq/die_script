@@ -31,11 +31,11 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     listSectionNameStrings=pPE->getSectionNames(&listSectionRecords);
 
     cliInfo=pPE->getCliInfo(true,&memoryMap);
-    listResources=pPE->getResources(&memoryMap);
+    listResourceRecords=pPE->getResources(&memoryMap);
 
-    resourceVersion=pPE->getResourceVersion(&listResources);
+    resourceVersion=pPE->getResourceVersion(&listResourceRecords);
 
-    nNumberOfResources=listResources.count();
+    nNumberOfResources=listResourceRecords.count();
 
     listImportHeaders=pPE->getImports(&memoryMap);
 
@@ -144,27 +144,27 @@ QString PE_Script::getGeneralOptions()
 
 quint32 PE_Script::getResourceIdByNumber(quint32 nNumber)
 {
-    return pPE->getResourceIdByNumber(nNumber,&listResources);
+    return pPE->getResourceIdByNumber(nNumber,&listResourceRecords);
 }
 
 QString PE_Script::getResourceNameByNumber(quint32 nNumber)
 {
-    return pPE->getResourceNameByNumber(nNumber,&listResources);
+    return pPE->getResourceNameByNumber(nNumber,&listResourceRecords);
 }
 
 qint64 PE_Script::getResourceOffsetByNumber(quint32 nNumber)
 {
-    return pPE->getResourceOffsetByNumber(nNumber,&listResources);
+    return pPE->getResourceOffsetByNumber(nNumber,&listResourceRecords);
 }
 
 qint64 PE_Script::getResourceSizeByNumber(quint32 nNumber)
 {
-    return pPE->getResourceSizeByNumber(nNumber,&listResources);
+    return pPE->getResourceSizeByNumber(nNumber,&listResourceRecords);
 }
 
 quint32 PE_Script::getResourceTypeByNumber(quint32 nNumber)
 {
-    return pPE->getResourceTypeByNumber(nNumber,&listResources);
+    return pPE->getResourceTypeByNumber(nNumber,&listResourceRecords);
 }
 
 bool PE_Script::isNETStringPresent(QString sString)
@@ -239,7 +239,7 @@ quint8 PE_Script::getMinorLinkerVersion()
 
 QString PE_Script::getManifest()
 {
-    return pPE->getResourceManifest(&listResources);
+    return pPE->getResourceManifest(&listResourceRecords);
 }
 
 QString PE_Script::getVersionStringInfo(QString sKey)
@@ -254,12 +254,12 @@ qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
 
 qint64 PE_Script::getResourceNameOffset(QString sName)
 {
-    return pPE->getResourceNameOffset(sName,&listResources);
+    return pPE->getResourceNameOffset(sName,&listResourceRecords);
 }
 
 bool PE_Script::isResourceNamePresent(QString sName)
 {
-    return pPE->isResourceNamePresent(sName,&listResources);
+    return pPE->isResourceNamePresent(sName,&listResourceRecords);
 }
 
 QString PE_Script::getCompilerVersion()

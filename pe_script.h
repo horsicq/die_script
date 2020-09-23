@@ -93,7 +93,7 @@ private:
     qint64 nBaseAddress;
     qint32 nNumberOfSections;
     XPE::CLI_INFO cliInfo;
-    QList<XPE::RESOURCE_RECORD> listResources;
+    QList<XPE::RESOURCE_RECORD> listResourceRecords;
     qint32 nNumberOfResources;
     QList<XPE_DEF::IMAGE_SECTION_HEADER> listSectionHeaders;
     QList<XPE::SECTION_RECORD> listSectionRecords;
