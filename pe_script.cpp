@@ -28,7 +28,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     listSectionHeaders=pPE->getSectionHeaders();
     listSectionRecords=pPE->getSectionRecords(&listSectionHeaders,pPE->isImage());
-    listSN=pPE->getSectionNames(&listSectionRecords);
+    listSectionNameStrings=pPE->getSectionNames(&listSectionRecords);
 
     cliInfo=pPE->getCliInfo(true,&memoryMap);
     listResources=pPE->getResources(&memoryMap);
@@ -84,7 +84,7 @@ quint16 PE_Script::getNumberOfSections()
 
 QString PE_Script::getSectionName(quint32 nNumber)
 {
-    return pPE->getSection_NameAsString(nNumber,&listSN);
+    return pPE->getSection_NameAsString(nNumber,&listSectionNameStrings);
 }
 
 quint32 PE_Script::getSectionVirtualSize(quint32 nNumber)
@@ -119,12 +119,12 @@ quint32 PE_Script::getNumberOfResources()
 
 bool PE_Script::isSectionNamePresent(QString sSectionName)
 {
-    return XBinary::isStringInListPresent(&listSN,sSectionName);
+    return XBinary::isStringInListPresent(&listSectionNameStrings,sSectionName);
 }
 
 bool PE_Script::isSectionNamePresentExp(QString sSectionName)
 {
-    return XBinary::isStringInListPresentExp(&listSN,sSectionName);
+    return XBinary::isStringInListPresentExp(&listSectionNameStrings,sSectionName);
 }
 
 bool PE_Script::isNET()
@@ -279,17 +279,17 @@ bool PE_Script::isSignedFile()
 
 QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
 {
-    return pPE->getStringCollision(&listSN,sString1,sString2);
+    return pPE->getStringCollision(&listSectionNameStrings,sString1,sString2);
 }
 
 qint32 PE_Script::getSectionNumber(QString sSectionName)
 {  
-    return XBinary::getStringNumberFromList(&listSN,sSectionName);
+    return XBinary::getStringNumberFromList(&listSectionNameStrings,sSectionName);
 }
 
 qint32 PE_Script::getSectionNumberExp(QString sSectionName)
 {
-    return XBinary::getStringNumberFromListExp(&listSN,sSectionName);
+    return XBinary::getStringNumberFromListExp(&listSectionNameStrings,sSectionName);
 }
 
 bool PE_Script::isDll()
