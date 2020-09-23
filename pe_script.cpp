@@ -60,7 +60,6 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     nSizeOfUninitializedData=pPE->getOptionalHeader_SizeOfUninitializedData();
 
     sCompilerVersion=QString("%1.%2").arg(nMajorLinkerVersion).arg(nMinorLinkerVersion);
-
     sGeneralOptions=QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64?("64"):("32"));
 
     sFileVersion=pPE->getFileVersion(&resourceVersion);
