@@ -63,9 +63,9 @@ private:
     XELF_DEF::Elf_Ehdr elfHeader;
     quint16 nStringTableSection;
     QByteArray baStringTable;
-    QList<XELF_DEF::Elf_Shdr> listSH;
-    QList<XELF_DEF::Elf_Phdr> listPH;
-    QList<XELF::SECTION_RECORD> listSR;
+    QList<XELF_DEF::Elf_Shdr> listSectionHeaders;
+    QList<XELF_DEF::Elf_Phdr> listProgramHeaders;
+    QList<XELF::SECTION_RECORD> listSectionRecords;
     QString sGeneralOptions;
 };
 
