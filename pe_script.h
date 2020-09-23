@@ -100,7 +100,7 @@ private:
     QList<QString> listSectionNameStrings;
     QList<XPE::IMPORT_HEADER> listImports;
     qint32 nNumberOfImports;
-    XPE::RESOURCE_VERSION resVersion;
+    XPE::RESOURCE_VERSION resourceVersion;
     bool bIsNETPresent;
     bool bIs64;
     bool bIsDll;
@@ -121,7 +121,7 @@ private:
     QString sFileVersion;
     qint32 nCalculateSizeOfHeaders;
     XPE::EXPORT_HEADER exportHeader;
-    QList<QString> listExportFunctionNames;
+    QList<QString> listExportFunctionNameStrings;
 };
 
 #endif // PE_SCRIPT_H

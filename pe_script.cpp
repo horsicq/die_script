@@ -33,7 +33,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     cliInfo=pPE->getCliInfo(true,&memoryMap);
     listResources=pPE->getResources(&memoryMap);
 
-    resVersion=pPE->getResourceVersion(&listResources);
+    resourceVersion=pPE->getResourceVersion(&listResources);
 
     nNumberOfResources=listResources.count();
 
@@ -63,13 +63,13 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     sGeneralOptions=QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64?("64"):("32"));
 
-    sFileVersion=pPE->getFileVersion(&resVersion);
+    sFileVersion=pPE->getFileVersion(&resourceVersion);
 
     nCalculateSizeOfHeaders=pPE->calculateHeadersSize();
 
     exportHeader=pPE->getExport();
 
-    listExportFunctionNames=pPE->getExportFunctionsList(&exportHeader);
+    listExportFunctionNameStrings=pPE->getExportFunctionsList(&exportHeader);
 }
 
 PE_Script::~PE_Script()
@@ -244,7 +244,7 @@ QString PE_Script::getManifest()
 
 QString PE_Script::getVersionStringInfo(QString sKey)
 {
-    return pPE->getResourceVersionValue(sKey,&resVersion);
+    return pPE->getResourceVersionValue(sKey,&resourceVersion);
 }
 
 qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
@@ -354,10 +354,10 @@ qint64 PE_Script::calculateSizeOfHeaders()
 
 bool PE_Script::isExportFunctionPresent(QString sFunctionName)
 {
-    return XBinary::isStringInListPresent(&listExportFunctionNames,sFunctionName);
+    return XBinary::isStringInListPresent(&listExportFunctionNameStrings,sFunctionName);
 }
 
 bool PE_Script::isExportFunctionPresentExp(QString sFunctionName)
 {
-return XBinary::isStringInListPresentExp(&listExportFunctionNames,sFunctionName);
+return XBinary::isStringInListPresentExp(&listExportFunctionNameStrings,sFunctionName);
 }
