@@ -443,7 +443,7 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
                 listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MSDOS",XBinary::FT_MSDOS));
                 listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"PE",XBinary::FT_PE));
                 listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"ELF",XBinary::FT_ELF));
-                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MACH",XBinary::FT_MACH));
+                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MACH",XBinary::FT_MACHO));
 
                 databaseType=DBT_COMPRESSED;
             }
@@ -458,7 +458,7 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
         listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MSDOS",XBinary::FT_MSDOS));
         listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
         listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
-        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MACH",XBinary::FT_MACH));
+        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MACH",XBinary::FT_MACHO));
 
         databaseType=DBT_FOLDER;
     }
@@ -526,13 +526,13 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
     {
         scanResult=_scan(pDevice,XBinary::FT_ELF64,pOptions);
     }
-    else if(stFT.contains(XBinary::FT_MACH32))
+    else if(stFT.contains(XBinary::FT_MACHO32))
     {
-        scanResult=_scan(pDevice,XBinary::FT_MACH32,pOptions);
+        scanResult=_scan(pDevice,XBinary::FT_MACHO32,pOptions);
     }
-    else if(stFT.contains(XBinary::FT_MACH64))
+    else if(stFT.contains(XBinary::FT_MACHO64))
     {
-        scanResult=_scan(pDevice,XBinary::FT_MACH64,pOptions);
+        scanResult=_scan(pDevice,XBinary::FT_MACHO64,pOptions);
     }
     else if(stFT.contains(XBinary::FT_MSDOS))
     {

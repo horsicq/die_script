@@ -51,7 +51,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         _addClass(pBinaryScript,"ELF");
         pBinary=pELF;
     }
-    else if(XBinary::checkFileType(XBinary::FT_MACH,fileType))
+    else if(XBinary::checkFileType(XBinary::FT_MACHO,fileType))
     {
         XMACH *pMACH=new XMACH(pDevice);
         pBinaryScript=new MACH_Script(pMACH);
