@@ -22,55 +22,55 @@
 
 DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, XBinary::FT fileType)
 {
-    this->pSignaturesList=pSignaturesList;
+    this->g_pSignaturesList=pSignaturesList;
 
     // TODO _log function
     _addFunction(_includeScript,"includeScript");
 
-    pBinary=0;
-    pBinaryScript=0;
+    g_pBinary=0;
+    g_pBinaryScript=0;
 
     if(XBinary::checkFileType(XBinary::FT_BINARY,fileType))
     {
-        pBinary=new XBinary(pDevice);
-        pBinaryScript=new Binary_Script(pBinary);
-        _addClass(pBinaryScript,"Binary");
+        g_pBinary=new XBinary(pDevice);
+        g_pBinaryScript=new Binary_Script(g_pBinary);
+        _addClass(g_pBinaryScript,"Binary");
     }
 
     if(XBinary::checkFileType(XBinary::FT_PE,fileType))
     {
         XPE *pPE=new XPE(pDevice);
-        pBinaryScript=new PE_Script(pPE);
-        _addClass(pBinaryScript,"PE");
-        pBinary=pPE;
+        g_pBinaryScript=new PE_Script(pPE);
+        _addClass(g_pBinaryScript,"PE");
+        g_pBinary=pPE;
     }
     else if(XBinary::checkFileType(XBinary::FT_ELF,fileType))
     {
         XELF *pELF=new XELF(pDevice);
-        pBinaryScript=new ELF_Script(pELF);
-        _addClass(pBinaryScript,"ELF");
-        pBinary=pELF;
+        g_pBinaryScript=new ELF_Script(pELF);
+        _addClass(g_pBinaryScript,"ELF");
+        g_pBinary=pELF;
     }
     else if(XBinary::checkFileType(XBinary::FT_MACHO,fileType))
     {
         XMACH *pMACH=new XMACH(pDevice);
-        pBinaryScript=new MACH_Script(pMACH);
-        _addClass(pBinaryScript,"MACH");
-        pBinary=pMACH;
+        g_pBinaryScript=new MACH_Script(pMACH);
+        _addClass(g_pBinaryScript,"MACH");
+        g_pBinary=pMACH;
     }
     else if(XBinary::checkFileType(XBinary::FT_MSDOS,fileType))
     {
         XMSDOS *pXMSDOS=new XMSDOS(pDevice);
-        pBinaryScript=new MSDOS_Script(pXMSDOS);
-        _addClass(pBinaryScript,"MSDOS");
-        pBinary=pXMSDOS;
+        g_pBinaryScript=new MSDOS_Script(pXMSDOS);
+        _addClass(g_pBinaryScript,"MSDOS");
+        g_pBinary=pXMSDOS;
     }
 }
 
 DiE_ScriptEngine::~DiE_ScriptEngine()
 {
-    delete pBinary;
-    delete pBinaryScript;
+    delete g_pBinary;
+    delete g_pBinaryScript;
 }
 
 bool DiE_ScriptEngine::handleError(QScriptValue value, QString *psErrorString)
@@ -90,9 +90,9 @@ bool DiE_ScriptEngine::handleError(QScriptValue value, QString *psErrorString)
 
 void DiE_ScriptEngine::stop()
 {
-    if(pBinary)
+    if(g_pBinary)
     {
-        pBinary->setFindProcessEnable(false);
+        g_pBinary->setFindProcessEnable(false);
     }
 }
 
@@ -106,16 +106,16 @@ QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *context, QScriptEn
     {
         QString sName=context->argument(0).toString();
 
-        int nNumberOfSignatures=pScriptEngine->pSignaturesList->count();
+        int nNumberOfSignatures=pScriptEngine->g_pSignaturesList->count();
 
         for(int i=0;i<nNumberOfSignatures;i++)
         {
-            if(pScriptEngine->pSignaturesList->at(i).fileType==XBinary::FT_UNKNOWN)
+            if(pScriptEngine->g_pSignaturesList->at(i).fileType==XBinary::FT_UNKNOWN)
             {
-                if(pScriptEngine->pSignaturesList->at(i).sName==sName)
+                if(pScriptEngine->g_pSignaturesList->at(i).sName==sName)
                 {
                     engine->currentContext()->setActivationObject(engine->currentContext()->parentContext()->activationObject());
-                    result=engine->evaluate(pScriptEngine->pSignaturesList->at(i).sText);
+                    result=engine->evaluate(pScriptEngine->g_pSignaturesList->at(i).sText);
 
                     break;
                 }

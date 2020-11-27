@@ -57,9 +57,9 @@ private:
     void _addClass(QObject *pClass,QString sClassName);
 
 private:
-    QList<SIGNATURE_RECORD> *pSignaturesList;
-    XBinary *pBinary;
-    Binary_Script *pBinaryScript;
+    QList<SIGNATURE_RECORD> *g_pSignaturesList;
+    XBinary *g_pBinary;
+    Binary_Script *g_pBinaryScript;
 };
 
 #endif // DIE_SCRIPTENGINE_H
