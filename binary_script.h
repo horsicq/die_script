@@ -82,10 +82,10 @@ protected:
     QString sFileSuffix;
 
 private:
-    XBinary *pBinary;
-    qint64 nSize;
-    qint64 nEntryPointOffset;
-    qint64 nEntryPointAddress;
+    XBinary *g_pBinary;
+    qint64 g_nSize;
+    qint64 g_nEntryPointOffset;
+    qint64 g_nEntryPointAddress;
     qint64 nOverlayOffset;
     qint64 nOverlaySize;
     qint64 bIsOverlayPresent;
