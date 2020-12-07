@@ -166,6 +166,9 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     XBinary::_MEMORY_MAP memoryMap=XFormats::getMemoryMap(fileType,pDevice);
 
     scanResult.scanHeader.sArch=memoryMap.sArch;
+    scanResult.scanHeader.mode=memoryMap.mode;
+    scanResult.scanHeader.bIsBigEndian=memoryMap.bIsBigEndian;
+    scanResult.scanHeader.sType=memoryMap.sType;
 
     int nNumberOfSignatures=listSignatures.count();
 
@@ -649,7 +652,11 @@ QString DiE_Script::scanResultToPlainString(DiE_Script::SCAN_RESULT *pScanResult
 {
     QString sResult;
 
-    sResult+=QString("%1\n").arg(XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
+    sResult+=QString("filetype: %1\n").arg(XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
+    sResult+=QString("arch: %1\n").arg(pScanResult->scanHeader.sArch);
+    sResult+=QString("mode: %1\n").arg(XBinary::modeIdToString(pScanResult->scanHeader.mode));
+    sResult+=QString("endianess: %1\n").arg(XBinary::endiannessToString(pScanResult->scanHeader.bIsBigEndian));
+    sResult+=QString("type: %1\n").arg(pScanResult->scanHeader.sType);
 
     int nNumberOfRecords=pScanResult->listRecords.count();
 
@@ -668,6 +675,10 @@ QString DiE_Script::scanResultToJsonString(DiE_Script::SCAN_RESULT *pScanResult)
     QJsonObject jsonResult;
 
     jsonResult.insert("filetype",XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
+    jsonResult.insert("arch",pScanResult->scanHeader.sArch);
+    jsonResult.insert("mode",XBinary::modeIdToString(pScanResult->scanHeader.mode));
+    jsonResult.insert("endianess",XBinary::endiannessToString(pScanResult->scanHeader.bIsBigEndian));
+    jsonResult.insert("type",pScanResult->scanHeader.sType);
 
     QJsonArray jsArray;
 
@@ -703,7 +714,13 @@ QString DiE_Script::scanResultToXmlString(DiE_Script::SCAN_RESULT *pScanResult)
 
     xml.setAutoFormatting(true);
 
-    xml.writeStartElement(XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
+    xml.writeStartElement("filescan");
+
+    xml.writeAttribute("filetype",XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
+    xml.writeAttribute("arch",pScanResult->scanHeader.sArch);
+    xml.writeAttribute("mode",XBinary::modeIdToString(pScanResult->scanHeader.mode));
+    xml.writeAttribute("endianess",XBinary::endiannessToString(pScanResult->scanHeader.bIsBigEndian));
+    xml.writeAttribute("type",pScanResult->scanHeader.sType);
 
     int nNumberOfRecords=pScanResult->listRecords.count();
 

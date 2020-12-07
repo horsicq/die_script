@@ -47,6 +47,9 @@ public:
     {
         XBinary::FT fileType;
         QString sArch;
+        XBinary::MODE mode;
+        bool bIsBigEndian;
+        QString sType;
     };
 
     struct SCAN_STRUCT
@@ -93,6 +96,7 @@ public:
         bool bShowType;
         bool bShowVersion;
         bool bShowOptions;
+        bool bShowEntropy;
         XBinary::FT fileType; // Optional
         QString sSignatureName; // Optional
         bool bResultAsXML;
