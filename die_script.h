@@ -21,7 +21,6 @@
 #ifndef DIE_SCRIPT_H
 #define DIE_SCRIPT_H
 
-#include <QObject>
 #include <QDir>
 #include <QXmlStreamWriter>
 #include <QJsonDocument>
