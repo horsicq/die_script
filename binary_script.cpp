@@ -25,14 +25,14 @@ Binary_Script::Binary_Script(XBinary *pBinary)
     this->g_pBinary=pBinary;
 
     g_nSize=pBinary->getSize();
-    memoryMap=pBinary->getMemoryMap();
-    nBaseAddress=pBinary->getBaseAddress();
+    g_memoryMap=pBinary->getMemoryMap();
+    g_nBaseAddress=pBinary->getBaseAddress();
 
-    g_nEntryPointOffset=pBinary->getEntryPointOffset(&memoryMap);
-    g_nEntryPointAddress=pBinary->getEntryPointAddress(&memoryMap);
-    nOverlayOffset=pBinary->getOverlayOffset(&memoryMap);
-    nOverlaySize=pBinary->getOverlaySize(&memoryMap);
-    bIsOverlayPresent=pBinary->isOverlayPresent(&memoryMap);
+    g_nEntryPointOffset=pBinary->getEntryPointOffset(&g_memoryMap);
+    g_nEntryPointAddress=pBinary->getEntryPointAddress(&g_memoryMap);
+    nOverlayOffset=pBinary->getOverlayOffset(&g_memoryMap);
+    nOverlaySize=pBinary->getOverlaySize(&g_memoryMap);
+    bIsOverlayPresent=pBinary->isOverlayPresent(&g_memoryMap);
 
     sHeaderSignature=pBinary->getSignature(0,256); // TODO const
     nHeaderSignatureSize=sHeaderSignature.size();
@@ -79,7 +79,7 @@ bool Binary_Script::compare(QString sSignature, qint64 nOffset)
     }
     else
     {
-        bResult=g_pBinary->compareSignature(&memoryMap,sSignature,nOffset);
+        bResult=g_pBinary->compareSignature(&g_memoryMap,sSignature,nOffset);
     }
 
     return bResult;
@@ -97,7 +97,7 @@ bool Binary_Script::compareEP(QString sSignature, qint64 nOffset)
     }
     else
     {
-        bResult=g_pBinary->compareEntryPoint(&memoryMap,sSignature,nOffset);
+        bResult=g_pBinary->compareEntryPoint(&g_memoryMap,sSignature,nOffset);
     }
 
     return bResult;
@@ -130,7 +130,7 @@ QString Binary_Script::getString(qint64 nOffset, qint64 nMaxSize)
 
 qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, QString sSignature)
 {
-    return g_pBinary->find_signature(&memoryMap,nOffset,nSize,sSignature);
+    return g_pBinary->find_signature(&g_memoryMap,nOffset,nSize,sSignature);
 }
 
 qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, QString sString)
@@ -190,7 +190,7 @@ bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
     }
     else
     {
-        bResult=g_pBinary->compareOverlay(&memoryMap,sSignature,nOffset);
+        bResult=g_pBinary->compareOverlay(&g_memoryMap,sSignature,nOffset);
     }
 
     return bResult;
@@ -198,7 +198,7 @@ bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
 
 bool Binary_Script::isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSignature)
 {
-    return g_pBinary->isSignaturePresent(&memoryMap,nOffset,nSize,sSignature);
+    return g_pBinary->isSignaturePresent(&g_memoryMap,nOffset,nSize,sSignature);
 }
 
 quint32 Binary_Script::swapBytes(quint32 nValue)
@@ -213,26 +213,26 @@ QString Binary_Script::getGeneralOptions()
 
 qint64 Binary_Script::RVAToOffset(qint64 nRVA)
 {
-    return g_pBinary->addressToOffset(&memoryMap,nRVA+nBaseAddress);
+    return g_pBinary->addressToOffset(&g_memoryMap,nRVA+g_nBaseAddress);
 }
 
 qint64 Binary_Script::VAToOffset(qint64 nVA)
 {
-    return g_pBinary->addressToOffset(&memoryMap,nVA);
+    return g_pBinary->addressToOffset(&g_memoryMap,nVA);
 }
 
 qint64 Binary_Script::OffsetToVA(qint64 nOffset)
 {
-    return g_pBinary->offsetToAddress(&memoryMap,nOffset);
+    return g_pBinary->offsetToAddress(&g_memoryMap,nOffset);
 }
 
 qint64 Binary_Script::OffsetToRVA(qint64 nOffset)
 {
-    qint64 nResult=g_pBinary->offsetToAddress(&memoryMap,nOffset);
+    qint64 nResult=g_pBinary->offsetToAddress(&g_memoryMap,nOffset);
 
     if(nResult!=-1)
     {
-        nResult-=nBaseAddress;
+        nResult-=g_nBaseAddress;
     }
 
     return nResult;
@@ -275,12 +275,12 @@ QString Binary_Script::calculateMD5(qint64 nOffset, qint64 nSize)
 
 bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
 {
-    return g_pBinary->isSignatureInLoadSectionPresent(&memoryMap,nNumber,sSignature);
+    return g_pBinary->isSignatureInLoadSectionPresent(&g_memoryMap,nNumber,sSignature);
 }
 
 qint64 Binary_Script::getImageBase()
 {
-    return memoryMap.nBaseAddress;
+    return g_memoryMap.nBaseAddress;
 }
 
 QString Binary_Script::upperCase(QString sString)

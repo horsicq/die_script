@@ -72,8 +72,8 @@ public slots:
     bool isPlainText();
 
 protected:
-    XBinary::_MEMORY_MAP memoryMap;
-    qint64 nBaseAddress;
+    XBinary::_MEMORY_MAP g_memoryMap;
+    qint64 g_nBaseAddress;
     QString sFileDirectory;
     QString sFileBaseName;
     QString sFileCompleteSuffix;

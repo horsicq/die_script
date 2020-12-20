@@ -30,14 +30,14 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     listSectionRecords=pPE->getSectionRecords(&listSectionHeaders,pPE->isImage());
     listSectionNameStrings=pPE->getSectionNames(&listSectionRecords);
 
-    cliInfo=pPE->getCliInfo(true,&memoryMap);
-    listResourceRecords=pPE->getResources(&memoryMap);
+    cliInfo=pPE->getCliInfo(true,&g_memoryMap);
+    listResourceRecords=pPE->getResources(&g_memoryMap);
 
     resourceVersion=pPE->getResourceVersion(&listResourceRecords);
 
     nNumberOfResources=listResourceRecords.count();
 
-    listImportHeaders=pPE->getImports(&memoryMap);
+    listImportHeaders=pPE->getImports(&g_memoryMap);
 
     nNumberOfImports=listImportHeaders.count();
 
@@ -48,11 +48,11 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     bIsConsole=pPE->isConsole();
     bIsSignPresent=pPE->isSignPresent();
 
-    nImportSection=pPE->getImportSection(&memoryMap);
-    nExportSection=pPE->getExportSection(&memoryMap);
-    nResourcesSection=pPE->getResourcesSection(&memoryMap);
-    nEntryPointSection=pPE->getEntryPointSection(&memoryMap);
-    nRelocsSection=pPE->getRelocsSection(&memoryMap);
+    nImportSection=pPE->getImportSection(&g_memoryMap);
+    nExportSection=pPE->getExportSection(&g_memoryMap);
+    nResourcesSection=pPE->getResourcesSection(&g_memoryMap);
+    nEntryPointSection=pPE->getEntryPointSection(&g_memoryMap);
+    nRelocsSection=pPE->getRelocsSection(&g_memoryMap);
 
     nMajorLinkerVersion=pPE->getOptionalHeader_MajorLinkerVersion();
     nMinorLinkerVersion=pPE->getOptionalHeader_MinorLinkerVersion();
@@ -308,7 +308,7 @@ QString PE_Script::getNETVersion()
 
 bool PE_Script::compareEP_NET(QString sSignature, qint64 nOffset)
 {
-    return pPE->compareSignatureOnAddress(&memoryMap,sSignature,nBaseAddress+cliInfo.metaData.nEntryPoint+nOffset);
+    return pPE->compareSignatureOnAddress(&g_memoryMap,sSignature,g_nBaseAddress+cliInfo.metaData.nEntryPoint+nOffset);
 }
 
 quint32 PE_Script::getSizeOfCode()
