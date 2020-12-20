@@ -21,8 +21,6 @@
 #ifndef BINARY_SCRIPT_H
 #define BINARY_SCRIPT_H
 
-#include <QObject>
-#include <QIODevice>
 #include "xbinary.h"
 
 class Binary_Script : public QObject
