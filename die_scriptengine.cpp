@@ -92,7 +92,7 @@ void DiE_ScriptEngine::stop()
 {
     if(g_pBinary)
     {
-        g_pBinary->setFindProcessEnable(false);
+        g_pBinary->setSearchProcessEnable(false);
     }
 }
 
