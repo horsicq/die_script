@@ -56,8 +56,8 @@ public slots:
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(QString sLibraryName);
-    bool isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName);
-    QString getImportFunctionName(quint32 nImport, quint32 nFunctionNumber);
+    bool isLibraryFunctionPresent(QString sLibraryName,QString sFunctionName);
+    QString getImportFunctionName(quint32 nImport,quint32 nFunctionNumber);
     qint32 getImportSection();
     qint32 getExportSection();
     qint32 getResourceSection();
@@ -73,7 +73,7 @@ public slots:
     QString getCompilerVersion();
     bool isConsole();
     bool isSignedFile();
-    QString getSectionNameCollision(QString sString1, QString sString2);
+    QString getSectionNameCollision(QString sString1,QString sString2);
     qint32 getSectionNumber(QString sSectionName);
     qint32 getSectionNumberExp(QString sSectionName);
     bool isDll();
