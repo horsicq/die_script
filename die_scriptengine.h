@@ -52,7 +52,7 @@ public slots:
     void stop();
 
 private:
-    static QScriptValue _includeScript(QScriptContext *context, QScriptEngine *engine);
+    static QScriptValue _includeScript(QScriptContext *context,QScriptEngine *engine);
     void _addFunction(FunctionSignature function,QString sFunctionName);
     void _addClass(QObject *pClass,QString sClassName);
 
