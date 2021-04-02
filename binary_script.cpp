@@ -275,7 +275,7 @@ QString Binary_Script::calculateMD5(qint64 nOffset, qint64 nSize)
 
 bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
 {
-    return g_pBinary->isSignatureInLoadSectionPresent(&g_memoryMap,nNumber,sSignature);
+    return g_pBinary->isSignatureInLoadSegmentPresent(&g_memoryMap,nNumber,sSignature);
 }
 
 qint64 Binary_Script::getImageBase()
