@@ -96,15 +96,15 @@ void DiE_ScriptEngine::stop()
     }
 }
 
-QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *context, QScriptEngine *engine)
+QScriptValue DiE_ScriptEngine::_includeScriptQScriptContext *pContext, QScriptEngine *pEngine);
 {
     QScriptValue result;
 
-    DiE_ScriptEngine *pScriptEngine=static_cast<DiE_ScriptEngine *>(engine);
+    DiE_ScriptEngine *pScriptEngine=static_cast<DiE_ScriptEngine *>(pEngine);
 
     if(pScriptEngine)
     {
-        QString sName=context->argument(0).toString();
+        QString sName=pContext->argument(0).toString();
 
         int nNumberOfSignatures=pScriptEngine->g_pSignaturesList->count();
 
@@ -114,8 +114,8 @@ QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *context, QScriptEn
             {
                 if(pScriptEngine->g_pSignaturesList->at(i).sName==sName)
                 {
-                    engine->currentContext()->setActivationObject(engine->currentContext()->parentContext()->activationObject());
-                    result=engine->evaluate(pScriptEngine->g_pSignaturesList->at(i).sText);
+                    pEngine->currentContext()->setActivationObject(pEngine->currentContext()->parentContext()->activationObject());
+                    result=pEngine->evaluate(pScriptEngine->g_pSignaturesList->at(i).sText);
 
                     break;
                 }

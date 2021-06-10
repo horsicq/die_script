@@ -308,7 +308,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                 debugRecord.sScript=signatureRecord.sName;
                 debugRecord.nElapsedTime=scanTimer.elapsed();
             #ifdef QT_DEBUG
-                qDebug("%s: %d msec",debugRecord.sScript.toLatin1().data(),debugRecord.nElapsedTime);
+                qDebug("%s: %lld msec",debugRecord.sScript.toLatin1().data(),debugRecord.nElapsedTime);
             #endif
                 scanResult.listDebugRecords.append(debugRecord);
             }
