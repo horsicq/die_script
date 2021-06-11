@@ -96,7 +96,7 @@ void DiE_ScriptEngine::stop()
     }
 }
 
-QScriptValue DiE_ScriptEngine::_includeScriptQScriptContext *pContext, QScriptEngine *pEngine);
+QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *pContext, QScriptEngine *pEngine)
 {
     QScriptValue result;
 
