@@ -584,7 +584,7 @@ bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText)
     {
         if(listSignatures.at(i).sFilePath==sSignatureFilePath)
         {
-            if(XBinary::writeToFile(sSignatureFilePath,QByteArray().append(sText)))
+            if(XBinary::writeToFile(sSignatureFilePath,QByteArray().append(sText.toLatin1())))
             {
                 listSignatures[i].sText=sText;
                 bResult=true;
