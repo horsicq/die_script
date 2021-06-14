@@ -280,7 +280,7 @@ bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignat
 
 qint64 Binary_Script::getImageBase()
 {
-    return g_memoryMap.nBaseAddress;
+    return g_memoryMap.nModuleAddress;
 }
 
 QString Binary_Script::upperCase(QString sString)
