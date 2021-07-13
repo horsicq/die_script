@@ -47,6 +47,10 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     bIsDriver=pPE->isDriver();
     bIsConsole=pPE->isConsole();
     bIsSignPresent=pPE->isSignPresent();
+    bIsExportPresent=pPE->isExportPresent();
+    bIsTLSPresent=pPE->isTLSPresent();
+    bIsImportPresent=pPE->isImportPresent();
+    bIsResourcesPresent=pPE->isResourcesPresent();
 
     nImportSection=pPE->getImportSection(&g_memoryMap);
     nExportSection=pPE->getExportSection(&g_memoryMap);
@@ -358,5 +362,25 @@ bool PE_Script::isExportFunctionPresent(QString sFunctionName)
 
 bool PE_Script::isExportFunctionPresentExp(QString sFunctionName)
 {
-return XBinary::isStringInListPresentExp(&listExportFunctionNameStrings,sFunctionName);
+    return XBinary::isStringInListPresentExp(&listExportFunctionNameStrings,sFunctionName);
+}
+
+bool PE_Script::isExportPresent()
+{
+    return bIsExportPresent;
+}
+
+bool PE_Script::isTLSPresent()
+{
+    return bIsTLSPresent;
+}
+
+bool PE_Script::isImportPresent()
+{
+    return bIsImportPresent;
+}
+
+bool PE_Script::isResourcesPresent()
+{
+    return bIsResourcesPresent;
 }

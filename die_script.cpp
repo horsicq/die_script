@@ -740,6 +740,46 @@ QString DiE_Script::scanResultToXmlString(DiE_Script::SCAN_RESULT *pScanResult)
     return sResult;
 }
 
+QString DiE_Script::scanResultToCsvString(SCAN_RESULT *pScanResult)
+{
+    QString sResult;
+
+    int nNumberOfRecords=pScanResult->listRecords.count();
+
+    for(int i=0;i<nNumberOfRecords;i++)
+    {
+        QString sRecord=QString("%1;%2;%3;%4;%5\n").arg(pScanResult->listRecords.at(i).sType,
+                                                        pScanResult->listRecords.at(i).sName,
+                                                        pScanResult->listRecords.at(i).sVersion,
+                                                        pScanResult->listRecords.at(i).sOptions,
+                                                        pScanResult->listRecords.at(i).sFullString);
+
+        sResult+=sRecord;
+    }
+
+    return sResult;
+}
+
+QString DiE_Script::scanResultToTsvString(SCAN_RESULT *pScanResult)
+{
+    QString sResult;
+
+    int nNumberOfRecords=pScanResult->listRecords.count();
+
+    for(int i=0;i<nNumberOfRecords;i++)
+    {
+        QString sRecord=QString("%1\t%2\t%3\t%4\t%5\n").arg(pScanResult->listRecords.at(i).sType,
+                                                            pScanResult->listRecords.at(i).sName,
+                                                            pScanResult->listRecords.at(i).sVersion,
+                                                            pScanResult->listRecords.at(i).sOptions,
+                                                            pScanResult->listRecords.at(i).sFullString);
+
+        sResult+=sRecord;
+    }
+
+    return sResult;
+}
+
 QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
 {
     QString sResult;

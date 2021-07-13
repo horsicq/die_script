@@ -100,6 +100,8 @@ public:
         QString sSignatureName; // Optional
         bool bResultAsXML;
         bool bResultAsJSON;
+        bool bResultAsCSV;
+        bool bResultAsTSV;
     };
 
     struct STATS
@@ -128,6 +130,8 @@ public:
     static QString scanResultToPlainString(SCAN_RESULT *pScanResult);
     static QString scanResultToJsonString(SCAN_RESULT *pScanResult);
     static QString scanResultToXmlString(SCAN_RESULT *pScanResult);
+    static QString scanResultToCsvString(SCAN_RESULT *pScanResult);
+    static QString scanResultToTsvString(SCAN_RESULT *pScanResult);
     static QString getErrorsString(SCAN_RESULT *pScanResult);
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);

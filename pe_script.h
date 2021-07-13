@@ -88,6 +88,11 @@ public slots:
     bool isExportFunctionPresent(QString sFunctionName);
     bool isExportFunctionPresentExp(QString sFunctionName);
 
+    bool isExportPresent();
+    bool isTLSPresent();
+    bool isImportPresent();
+    bool isResourcesPresent();
+
 private:
     XPE *pPE;
     qint64 g_nBaseAddress;
@@ -107,6 +112,10 @@ private:
     bool bIsDriver;
     bool bIsConsole;
     bool bIsSignPresent;
+    bool bIsExportPresent;
+    bool bIsTLSPresent;
+    bool bIsImportPresent;
+    bool bIsResourcesPresent;
     QString sGeneralOptions;
     qint32 nImportSection;
     qint32 nExportSection;
