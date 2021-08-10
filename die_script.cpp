@@ -788,7 +788,7 @@ QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
 
     for(int i=0;i<nNumberOfErrors;i++)
     {
-        sResult+=QString("%1: %2\n").arg(pScanResult->listErrors.at(i).sScript).arg(pScanResult->listErrors.at(i).sErrorString);
+        sResult+=QString("%1: %2\n").arg(pScanResult->listErrors.at(i).sScript,pScanResult->listErrors.at(i).sErrorString);
     }
 
     return sResult;
