@@ -74,10 +74,6 @@ public slots:
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
     qint64 g_nBaseAddress;
-    QString sFileDirectory;
-    QString sFileBaseName;
-    QString sFileCompleteSuffix;
-    QString sFileSuffix;
 
 private:
     XBinary *g_pBinary;
@@ -94,6 +90,10 @@ private:
     QString sOverlaySignature;
     qint32 nOverlaySignatureSize;
     bool bIsPlainText;
+    QString g_sFileDirectory;
+    QString g_sFileBaseName;
+    QString g_sFileCompleteSuffix;
+    QString g_sFileSuffix;
 };
 
 #endif // BINARY_SCRIPT_H

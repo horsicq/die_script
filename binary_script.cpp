@@ -49,10 +49,10 @@ Binary_Script::Binary_Script(XBinary *pBinary)
         nOverlaySignatureSize=sOverlaySignature.size();
     }
 
-    sFileDirectory=XBinary::getDeviceDirectory(pBinary->getDevice());
-    sFileBaseName=XBinary::getDeviceFileBaseName(pBinary->getDevice());
-    sFileCompleteSuffix=XBinary::getDeviceFileCompleteSuffix(pBinary->getDevice());
-    sFileSuffix=XBinary::getDeviceFileSuffix(pBinary->getDevice());
+    g_sFileDirectory=XBinary::getDeviceDirectory(pBinary->getDevice());
+    g_sFileBaseName=XBinary::getDeviceFileBaseName(pBinary->getDevice());
+    g_sFileCompleteSuffix=XBinary::getDeviceFileCompleteSuffix(pBinary->getDevice());
+    g_sFileSuffix=XBinary::getDeviceFileSuffix(pBinary->getDevice());
 
     bIsPlainText=pBinary->isPlainTextType();
 }
@@ -240,22 +240,22 @@ qint64 Binary_Script::OffsetToRVA(qint64 nOffset)
 
 QString Binary_Script::getFileDirectory()
 {
-    return sFileDirectory;
+    return g_sFileDirectory;
 }
 
 QString Binary_Script::getFileBaseName()
 {
-    return sFileBaseName;
+    return g_sFileBaseName;
 }
 
 QString Binary_Script::getFileCompleteSuffix()
 {
-    return sFileCompleteSuffix;
+    return g_sFileCompleteSuffix;
 }
 
 QString Binary_Script::getFileSuffix()
 {
-    return sFileSuffix;
+    return g_sFileSuffix;
 }
 
 QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize)
