@@ -265,6 +265,11 @@ bool PE_Script::isResourceNamePresent(QString sName)
     return pPE->isResourceNamePresent(sName,&listResourceRecords);
 }
 
+bool PE_Script::isResourceGroupNamePresent(QString sName)
+{
+    return pPE->isResourceGroupNamePresent(sName,&listResourceRecords);
+}
+
 QString PE_Script::getCompilerVersion()
 {
     return sCompilerVersion;

@@ -70,6 +70,7 @@ public slots:
     qint32 getNumberOfImportThunks(quint32 nNumber);
     qint64 getResourceNameOffset(QString sName);
     bool isResourceNamePresent(QString sName);
+    bool isResourceGroupNamePresent(QString sName);
     QString getCompilerVersion();
     bool isConsole();
     bool isSignedFile();
