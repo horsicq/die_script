@@ -71,6 +71,7 @@ public slots:
     qint64 getResourceNameOffset(QString sName);
     bool isResourceNamePresent(QString sName);
     bool isResourceGroupNamePresent(QString sName);
+    bool isResourceGroupIdPresent(quint32 nID);
     QString getCompilerVersion();
     bool isConsole();
     bool isSignedFile();
