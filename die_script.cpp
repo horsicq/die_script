@@ -277,7 +277,6 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                     pDebugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
                 }
 #endif
-
                 QScriptValue detect=scriptEngine.globalObject().property("detect");
 
                 if(_handleError(&scriptEngine,detect,&signatureRecord,&scanResult))
