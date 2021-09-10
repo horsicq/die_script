@@ -23,10 +23,10 @@ SOURCES += \
 
 !contains(XCONFIG, xformats) {
     XCONFIG += xformats
-    include(../Formats/xformats.pri)
+    include($$PWD/../Formats/xformats.pri)
 }
 
 !contains(XCONFIG, xarchive) {
     XCONFIG += xarchive
-    include(../XArchive/xarchive.pri)
+    include($$PWD/../XArchive/xarchive.pri)
 }
