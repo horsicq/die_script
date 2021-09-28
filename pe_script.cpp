@@ -33,7 +33,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     cliInfo=pPE->getCliInfo(true,&g_memoryMap);
     listResourceRecords=pPE->getResources(&g_memoryMap);
 
-    resourceVersion=pPE->getResourceVersion(&listResourceRecords);
+    resourcesVersion=pPE->getResourcesVersion(&listResourceRecords);
 
     nNumberOfResources=listResourceRecords.count();
 
@@ -66,7 +66,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     sCompilerVersion=QString("%1.%2").arg(nMajorLinkerVersion).arg(nMinorLinkerVersion);
     sGeneralOptions=QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64?("64"):("32"));
 
-    sFileVersion=pPE->getFileVersion(&resourceVersion);
+    sFileVersion=pPE->getFileVersion(&resourcesVersion);
 
     nCalculateSizeOfHeaders=pPE->calculateHeadersSize();
 
@@ -247,7 +247,7 @@ QString PE_Script::getManifest()
 
 QString PE_Script::getVersionStringInfo(QString sKey)
 {
-    return pPE->getResourceVersionValue(sKey,&resourceVersion);
+    return pPE->getResourcesVersionValue(sKey,&resourcesVersion);
 }
 
 qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
