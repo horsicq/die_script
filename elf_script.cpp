@@ -166,3 +166,8 @@ bool ELF_Script::isStringInTablePresent(QString sSectionName, QString sString)
 
     return bResult;
 }
+
+bool ELF_Script::is64()
+{
+    return bIs64;
+}

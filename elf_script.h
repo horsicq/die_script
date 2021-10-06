@@ -56,6 +56,7 @@ public slots:
     quint64 getSectionFileOffset(quint32 nNumber);
     quint64 getSectionFileSize(quint32 nNumber);
     bool isStringInTablePresent(QString sSectionName,QString sString);
+    bool is64();
 
 private:
     XELF *pELF;

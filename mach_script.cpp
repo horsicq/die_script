@@ -70,3 +70,8 @@ quint32 MACH_Script::getLibraryCurrentVersion(QString sLibraryName)
 {
     return pMACH->getLibraryCurrentVersion(sLibraryName,&listLibraryRecords);
 }
+
+bool MACH_Script::is64()
+{
+    return bIs64;
+}

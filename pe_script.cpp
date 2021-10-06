@@ -140,6 +140,11 @@ bool PE_Script::isPEPlus()
     return bIs64;
 }
 
+bool PE_Script::is64()
+{
+    return bIs64;
+}
+
 QString PE_Script::getGeneralOptions()
 {   
     return sGeneralOptions;

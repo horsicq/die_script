@@ -45,6 +45,7 @@ public slots:
     bool isSectionNamePresentExp(QString sSectionName);
     bool isNET();
     bool isPEPlus();
+    bool is64();
     virtual QString getGeneralOptions();
     quint32 getResourceIdByNumber(quint32 nNumber);
     QString getResourceNameByNumber(quint32 nNumber);

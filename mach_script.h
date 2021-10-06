@@ -39,6 +39,7 @@ public slots:
     qint32 getSectionNumber(QString sSectionName);
     virtual QString getGeneralOptions();
     quint32 getLibraryCurrentVersion(QString sLibraryName);
+    bool is64();
 
 private:
     XMACH *pMACH;
