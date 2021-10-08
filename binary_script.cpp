@@ -30,8 +30,8 @@ Binary_Script::Binary_Script(XBinary *pBinary)
 
     g_nEntryPointOffset=pBinary->getEntryPointOffset(&g_memoryMap);
     g_nEntryPointAddress=pBinary->getEntryPointAddress(&g_memoryMap);
-    nOverlayOffset=pBinary->getOverlayOffset(&g_memoryMap);
-    nOverlaySize=pBinary->getOverlaySize(&g_memoryMap);
+    g_nOverlayOffset=pBinary->getOverlayOffset(&g_memoryMap);
+    g_nOverlaySize=pBinary->getOverlaySize(&g_memoryMap);
     bIsOverlayPresent=pBinary->isOverlayPresent(&g_memoryMap);
 
     sHeaderSignature=pBinary->getSignature(0,256); // TODO const
@@ -43,9 +43,9 @@ Binary_Script::Binary_Script(XBinary *pBinary)
         nEntryPointSignatureSize=sEntryPointSignature.size();
     }
 
-    if(nOverlayOffset>0)
+    if(g_nOverlayOffset>0)
     {
-        sOverlaySignature=pBinary->getSignature(nOverlayOffset,256); // TODO const
+        sOverlaySignature=pBinary->getSignature(g_nOverlayOffset,256); // TODO const
         nOverlaySignatureSize=sOverlaySignature.size();
     }
 
@@ -160,12 +160,12 @@ qint64 Binary_Script::getEntryPointOffset()
 
 qint64 Binary_Script::getOverlayOffset()
 {
-    return nOverlayOffset;
+    return g_nOverlayOffset;
 }
 
 qint64 Binary_Script::getOverlaySize()
 {
-    return nOverlaySize;
+    return g_nOverlaySize;
 }
 
 qint64 Binary_Script::getAddressOfEntryPoint()
