@@ -82,9 +82,9 @@ private:
     qint64 g_nEntryPointAddress;
     qint64 g_nOverlayOffset;
     qint64 g_nOverlaySize;
-    qint64 bIsOverlayPresent;
-    QString sHeaderSignature;
-    qint32 nHeaderSignatureSize;
+    qint64 g_bIsOverlayPresent;
+    QString g_sHeaderSignature;
+    qint32 g_nHeaderSignatureSize;
     QString sEntryPointSignature;
     qint32 nEntryPointSignatureSize;
     QString sOverlaySignature;

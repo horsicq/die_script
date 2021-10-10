@@ -32,10 +32,10 @@ Binary_Script::Binary_Script(XBinary *pBinary)
     g_nEntryPointAddress=pBinary->getEntryPointAddress(&g_memoryMap);
     g_nOverlayOffset=pBinary->getOverlayOffset(&g_memoryMap);
     g_nOverlaySize=pBinary->getOverlaySize(&g_memoryMap);
-    bIsOverlayPresent=pBinary->isOverlayPresent(&g_memoryMap);
+    g_bIsOverlayPresent=pBinary->isOverlayPresent(&g_memoryMap);
 
-    sHeaderSignature=pBinary->getSignature(0,256); // TODO const
-    nHeaderSignatureSize=sHeaderSignature.size();
+    g_sHeaderSignature=pBinary->getSignature(0,256); // TODO const
+    g_nHeaderSignatureSize=g_sHeaderSignature.size();
 
     if(g_nEntryPointOffset>0)
     {
@@ -73,9 +73,9 @@ bool Binary_Script::compare(QString sSignature, qint64 nOffset)
 
     int nSignatureSize=sSignature.size();
 
-    if((nSignatureSize+nOffset<nHeaderSignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
+    if((nSignatureSize+nOffset<g_nHeaderSignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
     {
-        bResult=g_pBinary->compareSignatureStrings(sHeaderSignature.mid(nOffset*2,nSignatureSize*2),sSignature);
+        bResult=g_pBinary->compareSignatureStrings(g_sHeaderSignature.mid(nOffset*2,nSignatureSize*2),sSignature);
     }
     else
     {
@@ -175,7 +175,7 @@ qint64 Binary_Script::getAddressOfEntryPoint()
 
 bool Binary_Script::isOverlayPresent()
 {
-    return bIsOverlayPresent;
+    return g_bIsOverlayPresent;
 }
 
 bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
