@@ -39,8 +39,8 @@ Binary_Script::Binary_Script(XBinary *pBinary)
 
     if(g_nEntryPointOffset>0)
     {
-        sEntryPointSignature=pBinary->getSignature(g_nEntryPointOffset,256); // TODO const
-        nEntryPointSignatureSize=sEntryPointSignature.size();
+        g_sEntryPointSignature=pBinary->getSignature(g_nEntryPointOffset,256); // TODO const
+        g_nEntryPointSignatureSize=g_sEntryPointSignature.size();
     }
 
     if(g_nOverlayOffset>0)
@@ -91,9 +91,9 @@ bool Binary_Script::compareEP(QString sSignature, qint64 nOffset)
 
     int nSignatureSize=sSignature.size();
 
-    if((nSignatureSize+nOffset<nEntryPointSignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
+    if((nSignatureSize+nOffset<g_nEntryPointSignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
     {
-        bResult=g_pBinary->compareSignatureStrings(sEntryPointSignature.mid(nOffset*2,nSignatureSize*2),sSignature);
+        bResult=g_pBinary->compareSignatureStrings(g_sEntryPointSignature.mid(nOffset*2,nSignatureSize*2),sSignature);
     }
     else
     {

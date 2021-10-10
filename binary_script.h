@@ -85,8 +85,8 @@ private:
     qint64 g_bIsOverlayPresent;
     QString g_sHeaderSignature;
     qint32 g_nHeaderSignatureSize;
-    QString sEntryPointSignature;
-    qint32 nEntryPointSignatureSize;
+    QString g_sEntryPointSignature;
+    qint32 g_nEntryPointSignatureSize;
     QString sOverlaySignature;
     qint32 nOverlaySignatureSize;
     bool bIsPlainText;
