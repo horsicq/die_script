@@ -153,7 +153,7 @@ signals:
     void stopEngine();
 
 private:
-    QString sDatabasePath;
+    QString g_sDatabasePath;
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;
     bool bIsStop;
     DBT databaseType;

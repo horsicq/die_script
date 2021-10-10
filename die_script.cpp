@@ -102,7 +102,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString 
 
     int nNumberOfFiles=eil.count();
 
-    for(int i=0;i<nNumberOfFiles; i++)
+    for(int i=0;i<nNumberOfFiles;i++)
     {
         if(eil.at(i).isFile())
         {
@@ -446,7 +446,7 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHead
 bool DiE_Script::loadDatabase(QString sDatabasePath)
 {
     // TODO Check if empty file
-    this->sDatabasePath=sDatabasePath;
+    this->g_sDatabasePath=sDatabasePath;
 
     databaseType=DBT_UNKNOWN;
 
@@ -497,7 +497,7 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
 
 QString DiE_Script::getDatabasePath()
 {
-    return sDatabasePath;
+    return g_sDatabasePath;
 }
 
 QList<DiE_ScriptEngine::SIGNATURE_RECORD> *DiE_Script::getSignatures()
