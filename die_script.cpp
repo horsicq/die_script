@@ -128,7 +128,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
 
     int nNumberOfRecords=pListRecords->count();
 
-    for(int i=0;i<nNumberOfRecords; i++)
+    for(int i=0;i<nNumberOfRecords;i++)
     {
         XArchive::RECORD zipRecord=pListRecords->at(i);
 
@@ -178,7 +178,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     bool bGlobalInit=false;
     bool bInit=false;
 
-    for(int i=0; (i<nNumberOfSignatures)&&(!bIsStop); i++)
+    for(int i=0;(i<nNumberOfSignatures)&&(!bIsStop);i++)
     {
         if(listSignatures.at(i).sName=="_init")
         {
