@@ -750,7 +750,7 @@ QString DiE_Script::scanResultToXmlString(DiE_Script::SCAN_RESULT *pScanResult)
 
     int nNumberOfRecords=pScanResult->listRecords.count();
 
-    for(int i=0; i<nNumberOfRecords; i++)
+    for(int i=0;i<nNumberOfRecords;i++)
     {
         xml.writeStartElement("detect");
         xml.writeAttribute("type",pScanResult->listRecords.at(i).sType);
