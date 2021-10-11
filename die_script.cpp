@@ -710,7 +710,7 @@ QString DiE_Script::scanResultToJsonString(DiE_Script::SCAN_RESULT *pScanResult)
 
     int nNumberOfRecords=pScanResult->listRecords.count();
 
-    for(int i=0; i<nNumberOfRecords; i++)
+    for(int i=0;i<nNumberOfRecords;i++)
     {
         QJsonObject jsRecord;
 
@@ -727,7 +727,7 @@ QString DiE_Script::scanResultToJsonString(DiE_Script::SCAN_RESULT *pScanResult)
 
     QJsonDocument saveFormat(jsonResult);
 
-    sResult=saveFormat.toJson(QJsonDocument::Indented).data();
+    sResult=saveFormat.toJson(QJsonDocument::Indented).constData();
 
     return sResult;
 }
