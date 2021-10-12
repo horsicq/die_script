@@ -26,16 +26,16 @@ ELF_Script::ELF_Script(XELF *pELF) : Binary_Script(pELF)
 
     g_bIs64=pELF->is64();
 
-    elfHeader=pELF->getHdr();
+    g_elfHeader=pELF->getHdr();
 
-    nStringTableSection=pELF->getSectionStringTable(g_bIs64);
-    baStringTable=pELF->getSection(nStringTableSection);
+    g_nStringTableSection=pELF->getSectionStringTable(g_bIs64);
+    baStringTable=pELF->getSection(g_nStringTableSection);
     listSectionHeaders=pELF->getElf_ShdrList();
     listProgramHeaders=pELF->getElf_PhdrList();
 
     listSectionRecords=pELF->getSectionRecords(&listSectionHeaders,g_bIs64,&baStringTable);
 
-    sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(elfHeader.e_type)).arg(XELF::getMachinesS().value(elfHeader.e_machine)).arg(g_bIs64?("64"):("32")); // TODO Check
+    sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(g_elfHeader.e_type)).arg(XELF::getMachinesS().value(g_elfHeader.e_machine)).arg(g_bIs64?("64"):("32")); // TODO Check
 }
 
 ELF_Script::~ELF_Script()
@@ -50,12 +50,12 @@ bool ELF_Script::isSectionNamePresent(QString sSectionName)
 
 quint32 ELF_Script::getNumberOfSections()
 {
-    return elfHeader.e_shnum;
+    return g_elfHeader.e_shnum;
 }
 
 quint32 ELF_Script::getNumberOfPrograms()
 {
-    return elfHeader.e_phnum;
+    return g_elfHeader.e_phnum;
 }
 
 QString ELF_Script::getGeneralOptions()
@@ -70,67 +70,67 @@ qint32 ELF_Script::getSectionNumber(QString sSectionName)
 
 quint16 ELF_Script::getElfHeader_type()
 {
-    return elfHeader.e_type;
+    return g_elfHeader.e_type;
 }
 
 quint16 ELF_Script::getElfHeader_machine()
 {
-    return elfHeader.e_machine;
+    return g_elfHeader.e_machine;
 }
 
 quint32 ELF_Script::getElfHeader_version()
 {
-    return elfHeader.e_version;
+    return g_elfHeader.e_version;
 }
 
 quint64 ELF_Script::getElfHeader_entry()
 {
-    return elfHeader.e_entry;
+    return g_elfHeader.e_entry;
 }
 
 quint64 ELF_Script::getElfHeader_phoff()
 {
-    return elfHeader.e_phoff;
+    return g_elfHeader.e_phoff;
 }
 
 quint64 ELF_Script::getElfHeader_shoff()
 {
-    return elfHeader.e_shoff;
+    return g_elfHeader.e_shoff;
 }
 
 quint32 ELF_Script::getElfHeader_flags()
 {
-    return elfHeader.e_flags;
+    return g_elfHeader.e_flags;
 }
 
 quint16 ELF_Script::getElfHeader_ehsize()
 {
-    return elfHeader.e_ehsize;
+    return g_elfHeader.e_ehsize;
 }
 
 quint16 ELF_Script::getElfHeader_phentsize()
 {
-    return elfHeader.e_phentsize;
+    return g_elfHeader.e_phentsize;
 }
 
 quint16 ELF_Script::getElfHeader_phnum()
 {
-    return elfHeader.e_phnum;
+    return g_elfHeader.e_phnum;
 }
 
 quint16 ELF_Script::getElfHeader_shentsize()
 {
-    return elfHeader.e_shentsize;
+    return g_elfHeader.e_shentsize;
 }
 
 quint16 ELF_Script::getElfHeader_shnum()
 {
-    return elfHeader.e_shnum;
+    return g_elfHeader.e_shnum;
 }
 
 quint16 ELF_Script::getElfHeader_shstrndx()
 {
-    return elfHeader.e_shstrndx;
+    return g_elfHeader.e_shstrndx;
 }
 
 quint64 ELF_Script::getProgramFileSize(quint32 nNumber)
