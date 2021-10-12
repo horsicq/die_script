@@ -59,8 +59,8 @@ public slots:
     bool is64();
 
 private:
-    XELF *pELF;
-    bool bIs64;
+    XELF *g_pELF;
+    bool g_bIs64;
     XELF_DEF::Elf_Ehdr elfHeader;
     quint16 nStringTableSection;
     QByteArray baStringTable;

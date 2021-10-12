@@ -22,20 +22,20 @@
 
 ELF_Script::ELF_Script(XELF *pELF) : Binary_Script(pELF)
 {
-    this->pELF=pELF;
+    this->g_pELF=pELF;
 
-    bIs64=pELF->is64();
+    g_bIs64=pELF->is64();
 
     elfHeader=pELF->getHdr();
 
-    nStringTableSection=pELF->getSectionStringTable(bIs64);
+    nStringTableSection=pELF->getSectionStringTable(g_bIs64);
     baStringTable=pELF->getSection(nStringTableSection);
     listSectionHeaders=pELF->getElf_ShdrList();
     listProgramHeaders=pELF->getElf_PhdrList();
 
-    listSectionRecords=pELF->getSectionRecords(&listSectionHeaders,bIs64,&baStringTable);
+    listSectionRecords=pELF->getSectionRecords(&listSectionHeaders,g_bIs64,&baStringTable);
 
-    sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(elfHeader.e_type)).arg(XELF::getMachinesS().value(elfHeader.e_machine)).arg(bIs64?("64"):("32")); // TODO Check
+    sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(elfHeader.e_type)).arg(XELF::getMachinesS().value(elfHeader.e_machine)).arg(g_bIs64?("64"):("32")); // TODO Check
 }
 
 ELF_Script::~ELF_Script()
@@ -45,7 +45,7 @@ ELF_Script::~ELF_Script()
 
 bool ELF_Script::isSectionNamePresent(QString sSectionName)
 {
-    return pELF->isSectionNamePresent(sSectionName,&listSectionRecords);
+    return g_pELF->isSectionNamePresent(sSectionName,&listSectionRecords);
 }
 
 quint32 ELF_Script::getNumberOfSections()
@@ -65,7 +65,7 @@ QString ELF_Script::getGeneralOptions()
 
 qint32 ELF_Script::getSectionNumber(QString sSectionName)
 {
-    return pELF->getSectionNumber(sSectionName,&listSectionRecords);
+    return g_pELF->getSectionNumber(sSectionName,&listSectionRecords);
 }
 
 quint16 ELF_Script::getElfHeader_type()
@@ -135,33 +135,33 @@ quint16 ELF_Script::getElfHeader_shstrndx()
 
 quint64 ELF_Script::getProgramFileSize(quint32 nNumber)
 {
-    return pELF->getElf_Phdr_filesz(nNumber,&listProgramHeaders);
+    return g_pELF->getElf_Phdr_filesz(nNumber,&listProgramHeaders);
 }
 
 quint64 ELF_Script::getProgramFileOffset(quint32 nNumber)
 {
-    return pELF->getElf_Phdr_offset(nNumber,&listProgramHeaders);
+    return g_pELF->getElf_Phdr_offset(nNumber,&listProgramHeaders);
 }
 
 quint64 ELF_Script::getSectionFileOffset(quint32 nNumber)
 {
-    return pELF->getElf_Shdr_offset(nNumber,&listSectionHeaders);
+    return g_pELF->getElf_Shdr_offset(nNumber,&listSectionHeaders);
 }
 
 quint64 ELF_Script::getSectionFileSize(quint32 nNumber)
 {
-    return pELF->getElf_Shdr_size(nNumber,&listSectionHeaders);
+    return g_pELF->getElf_Shdr_size(nNumber,&listSectionHeaders);
 }
 
 bool ELF_Script::isStringInTablePresent(QString sSectionName, QString sString)
 {
     bool bResult=false;
 
-    qint32 nSection=pELF->getSectionNumber(sSectionName,&listSectionRecords);
+    qint32 nSection=g_pELF->getSectionNumber(sSectionName,&listSectionRecords);
 
     if(nSection!=-1)
     {
-        bResult=(pELF->getStringsFromSection(nSection).key(sString,-1)!=(quint32)-1);
+        bResult=(g_pELF->getStringsFromSection(nSection).key(sString,-1)!=(quint32)-1);
     }
 
     return bResult;
@@ -169,5 +169,5 @@ bool ELF_Script::isStringInTablePresent(QString sSectionName, QString sString)
 
 bool ELF_Script::is64()
 {
-    return bIs64;
+    return g_bIs64;
 }
