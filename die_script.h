@@ -154,9 +154,9 @@ signals:
 
 private:
     QString g_sDatabasePath;
-    QList<DiE_ScriptEngine::SIGNATURE_RECORD> listSignatures;
-    bool bIsStop;
-    DBT databaseType;
+    QList<DiE_ScriptEngine::SIGNATURE_RECORD> g_listSignatures;
+    bool g_bIsStop;
+    DBT g_databaseType;
 #ifdef QT_SCRIPTTOOLS_LIB
     QScriptEngineDebugger *pDebugger;
 #endif

@@ -85,8 +85,8 @@ bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const Di
 
 DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
 {
-    bIsStop=false;
-    databaseType=DBT_UNKNOWN;
+    g_bIsStop=false;
+    g_databaseType=DBT_UNKNOWN;
 #ifdef QT_SCRIPTTOOLS_LIB
     pDebugger=0;
 #endif
@@ -170,7 +170,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     scanResult.scanHeader.bIsBigEndian=memoryMap.bIsBigEndian;
     scanResult.scanHeader.sType=memoryMap.sType;
 
-    int nNumberOfSignatures=listSignatures.count();
+    int nNumberOfSignatures=g_listSignatures.count();
 
     DiE_ScriptEngine::SIGNATURE_RECORD srGlobalInit;
     DiE_ScriptEngine::SIGNATURE_RECORD srInit;
@@ -178,19 +178,19 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     bool bGlobalInit=false;
     bool bInit=false;
 
-    for(int i=0;(i<nNumberOfSignatures)&&(!bIsStop);i++)
+    for(int i=0;(i<nNumberOfSignatures)&&(!g_bIsStop);i++)
     {
-        if(listSignatures.at(i).sName=="_init")
+        if(g_listSignatures.at(i).sName=="_init")
         {
-            if(listSignatures.at(i).fileType==XBinary::FT_UNKNOWN)
+            if(g_listSignatures.at(i).fileType==XBinary::FT_UNKNOWN)
             {
-                srGlobalInit=listSignatures.at(i);
+                srGlobalInit=g_listSignatures.at(i);
                 bGlobalInit=true;
             }
 
-            if(XBinary::checkFileType(listSignatures.at(i).fileType,fileType))
+            if(XBinary::checkFileType(g_listSignatures.at(i).fileType,fileType))
             {
-                srInit=listSignatures.at(i);
+                srInit=g_listSignatures.at(i);
                 bInit=true;
             }
 
@@ -201,7 +201,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
         }  
     }
 
-    DiE_ScriptEngine scriptEngine(&listSignatures,pDevice,fileType);
+    DiE_ScriptEngine scriptEngine(&g_listSignatures,pDevice,fileType);
     connect(this,SIGNAL(stopEngine()),&scriptEngine,SLOT(stop()),Qt::DirectConnection);
 
 #ifdef QT_SCRIPTTOOLS_LIB
@@ -224,18 +224,18 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
         }
     }
 
-    for(int i=0;(i<nNumberOfSignatures)&&(!bIsStop);i++)
+    for(int i=0;(i<nNumberOfSignatures)&&(!g_bIsStop);i++)
     {
         bool bExec=false;
 
-        if((listSignatures.at(i).sName!="_init")&&(XBinary::checkFileType(listSignatures.at(i).fileType,fileType)))
+        if((g_listSignatures.at(i).sName!="_init")&&(XBinary::checkFileType(g_listSignatures.at(i).fileType,fileType)))
         {
             bExec=true;
         }
 
         if(pOptions->sSignatureName!="")
         {
-            if(pOptions->sSignatureName!=listSignatures.at(i).sName)
+            if(pOptions->sSignatureName!=g_listSignatures.at(i).sName)
             {
                 bExec=false;
             }
@@ -243,7 +243,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
         if(!pOptions->bDeepScan)
         {
-            QString sPrefix=listSignatures.at(i).sName.section(".",0,0).toUpper();
+            QString sPrefix=g_listSignatures.at(i).sName.section(".",0,0).toUpper();
 
             if((sPrefix=="DS")||(sPrefix=="EP"))
             {
@@ -253,12 +253,12 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
         if(sSignatureFilePath!="") // TODO Check!
         {
-            bExec=(sSignatureFilePath==listSignatures.at(i).sFilePath);
+            bExec=(sSignatureFilePath==g_listSignatures.at(i).sFilePath);
         }
 
         if(bExec)
         {
-            DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord=listSignatures.at(i);
+            DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord=g_listSignatures.at(i);
 
             QElapsedTimer scanTimer;
 
@@ -330,7 +330,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 //        scanResult.listRecords.append(ss);
 //    }
 
-    bIsStop=false;
+    g_bIsStop=false;
 
     emit progressValueChanged(100);
 
@@ -448,9 +448,9 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
     // TODO Check if empty file
     this->g_sDatabasePath=sDatabasePath;
 
-    databaseType=DBT_UNKNOWN;
+    g_databaseType=DBT_UNKNOWN;
 
-    listSignatures.clear();
+    g_listSignatures.clear();
 
     QString _sDatabasePath=XBinary::convertPathName(sDatabasePath);
 
@@ -467,14 +467,14 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
             {
                 QList<XArchive::RECORD> listRecords=zip.getRecords();
 
-                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"",XBinary::FT_UNKNOWN));
-                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"Binary",XBinary::FT_BINARY));
-                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MSDOS",XBinary::FT_MSDOS));
-                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"PE",XBinary::FT_PE));
-                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"ELF",XBinary::FT_ELF));
-                listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MACH",XBinary::FT_MACHO));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"",XBinary::FT_UNKNOWN));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"Binary",XBinary::FT_BINARY));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MSDOS",XBinary::FT_MSDOS));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"PE",XBinary::FT_PE));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"ELF",XBinary::FT_ELF));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MACH",XBinary::FT_MACHO));
 
-                databaseType=DBT_COMPRESSED;
+                g_databaseType=DBT_COMPRESSED;
             }
 
             file.close();
@@ -482,17 +482,17 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
     }
     else if(XBinary::isDirectoryExists(_sDatabasePath))
     {
-        listSignatures.append(_loadDatabasePath(_sDatabasePath,XBinary::FT_UNKNOWN));
-        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"Binary",XBinary::FT_BINARY));
-        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MSDOS",XBinary::FT_MSDOS));
-        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
-        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
-        listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MACH",XBinary::FT_MACHO));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath,XBinary::FT_UNKNOWN));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"Binary",XBinary::FT_BINARY));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MSDOS",XBinary::FT_MSDOS));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MACH",XBinary::FT_MACHO));
 
-        databaseType=DBT_FOLDER;
+        g_databaseType=DBT_FOLDER;
     }
 
-    return listSignatures.count();
+    return g_listSignatures.count();
 }
 
 QString DiE_Script::getDatabasePath()
@@ -502,7 +502,7 @@ QString DiE_Script::getDatabasePath()
 
 QList<DiE_ScriptEngine::SIGNATURE_RECORD> *DiE_Script::getSignatures()
 {
-    return &listSignatures;
+    return &g_listSignatures;
 }
 
 DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName, SCAN_OPTIONS *pOptions)
@@ -585,13 +585,13 @@ DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::getSignatureByFilePath(QString sS
 {
     DiE_ScriptEngine::SIGNATURE_RECORD result={};
 
-    int nNumberOfSignatures=listSignatures.count();
+    int nNumberOfSignatures=g_listSignatures.count();
 
     for(int i=0;i<nNumberOfSignatures;i++)
     {
-        if(listSignatures.at(i).sFilePath==sSignatureFilePath)
+        if(g_listSignatures.at(i).sFilePath==sSignatureFilePath)
         {
-            result=listSignatures.at(i);
+            result=g_listSignatures.at(i);
 
             break;
         }
@@ -604,15 +604,15 @@ bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText)
 {
     bool bResult=false;
 
-    int nNumberOfSignatures=listSignatures.count();
+    int nNumberOfSignatures=g_listSignatures.count();
 
     for(int i=0;i<nNumberOfSignatures;i++)
     {
-        if(listSignatures.at(i).sFilePath==sSignatureFilePath)
+        if(g_listSignatures.at(i).sFilePath==sSignatureFilePath)
         {
             if(XBinary::writeToFile(sSignatureFilePath,QByteArray().append(sText.toLatin1())))
             {
-                listSignatures[i].sText=sText;
+                g_listSignatures[i].sText=sText;
                 bResult=true;
             }
 
@@ -625,7 +625,7 @@ bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText)
 
 void DiE_Script::stop()
 {
-    bIsStop=true;
+    g_bIsStop=true;
     emit stopEngine();
 }
 
@@ -633,11 +633,11 @@ DiE_Script::STATS DiE_Script::getStats()
 {
     STATS result={};
 
-    int nNumberOfSignatures=listSignatures.count();
+    int nNumberOfSignatures=g_listSignatures.count();
 
     for(int i=0;i<nNumberOfSignatures;i++)
     {
-        QString sText=listSignatures.at(i).sText;
+        QString sText=g_listSignatures.at(i).sText;
 
         QString sType=XBinary::regExp("init\\(\"(.*?)\",",sText,1);
 
@@ -652,18 +652,18 @@ DiE_Script::STATS DiE_Script::getStats()
 
 DiE_Script::DBT DiE_Script::getDatabaseType()
 {
-    return databaseType;
+    return g_databaseType;
 }
 
 bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
 {
     bool bResult=false;
 
-    int nNumberOfSignatures=listSignatures.count();
+    int nNumberOfSignatures=g_listSignatures.count();
 
     for(int i=0;i<nNumberOfSignatures;i++)
     {
-        if(listSignatures.at(i).fileType==fileType)
+        if(g_listSignatures.at(i).fileType==fileType)
         {
             bResult=true;
 
