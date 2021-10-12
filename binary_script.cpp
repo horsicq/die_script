@@ -45,8 +45,8 @@ Binary_Script::Binary_Script(XBinary *pBinary)
 
     if(g_nOverlayOffset>0)
     {
-        sOverlaySignature=pBinary->getSignature(g_nOverlayOffset,256); // TODO const
-        nOverlaySignatureSize=sOverlaySignature.size();
+        g_sOverlaySignature=pBinary->getSignature(g_nOverlayOffset,256); // TODO const
+        g_nOverlaySignatureSize=g_sOverlaySignature.size();
     }
 
     g_sFileDirectory=XBinary::getDeviceDirectory(pBinary->getDevice());
@@ -54,7 +54,7 @@ Binary_Script::Binary_Script(XBinary *pBinary)
     g_sFileCompleteSuffix=XBinary::getDeviceFileCompleteSuffix(pBinary->getDevice());
     g_sFileSuffix=XBinary::getDeviceFileSuffix(pBinary->getDevice());
 
-    bIsPlainText=pBinary->isPlainTextType();
+    g_bIsPlainText=pBinary->isPlainTextType();
 }
 
 Binary_Script::~Binary_Script()
@@ -184,9 +184,9 @@ bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
 
     int nSignatureSize=sSignature.size();
 
-    if((nSignatureSize+nOffset<nOverlaySignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
+    if((nSignatureSize+nOffset<g_nOverlaySignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
     {
-        bResult=g_pBinary->compareSignatureStrings(sOverlaySignature.mid(nOffset*2,nSignatureSize*2),sSignature);
+        bResult=g_pBinary->compareSignatureStrings(g_sOverlaySignature.mid(nOffset*2,nSignatureSize*2),sSignature);
     }
     else
     {
@@ -295,5 +295,5 @@ QString Binary_Script::lowerCase(QString sString)
 
 bool Binary_Script::isPlainText()
 {
-    return bIsPlainText;
+    return g_bIsPlainText;
 }

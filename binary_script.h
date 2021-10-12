@@ -87,9 +87,9 @@ private:
     qint32 g_nHeaderSignatureSize;
     QString g_sEntryPointSignature;
     qint32 g_nEntryPointSignatureSize;
-    QString sOverlaySignature;
-    qint32 nOverlaySignatureSize;
-    bool bIsPlainText;
+    QString g_sOverlaySignature;
+    qint32 g_nOverlaySignatureSize;
+    bool g_bIsPlainText;
     QString g_sFileDirectory;
     QString g_sFileBaseName;
     QString g_sFileCompleteSuffix;
