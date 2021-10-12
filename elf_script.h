@@ -63,9 +63,9 @@ private:
     bool g_bIs64;
     XELF_DEF::Elf_Ehdr g_elfHeader;
     quint16 g_nStringTableSection;
-    QByteArray baStringTable;
-    QList<XELF_DEF::Elf_Shdr> listSectionHeaders;
-    QList<XELF_DEF::Elf_Phdr> listProgramHeaders;
+    QByteArray g_baStringTable;
+    QList<XELF_DEF::Elf_Shdr> g_listSectionHeaders;
+    QList<XELF_DEF::Elf_Phdr> g_listProgramHeaders;
     QList<XELF::SECTION_RECORD> listSectionRecords;
     QString sGeneralOptions;
 };
