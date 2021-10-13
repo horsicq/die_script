@@ -87,6 +87,7 @@ public slots:
     quint32 getSizeOfUninitializedData();
     QString getPEFileVersion(QString sFileName);
     QString getFileVersion();
+    QString getFileVersionMS();
     qint64 calculateSizeOfHeaders();
     bool isExportFunctionPresent(QString sFunctionName);
     bool isExportFunctionPresentExp(QString sFunctionName);
@@ -131,6 +132,7 @@ private:
     quint32 nSizeOfUninitializedData;
     QString sCompilerVersion;
     QString sFileVersion;
+    QString sFileVersionMS;
     qint32 nCalculateSizeOfHeaders;
     XPE::EXPORT_HEADER exportHeader;
     QList<QString> listExportFunctionNameStrings;

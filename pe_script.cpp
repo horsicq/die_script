@@ -67,6 +67,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     sGeneralOptions=QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64?("64"):("32"));
 
     sFileVersion=pPE->getFileVersion(&resourcesVersion);
+    sFileVersionMS=pPE->getFileVersionMS(&resourcesVersion);
 
     nCalculateSizeOfHeaders=pPE->calculateHeadersSize();
 
@@ -363,6 +364,11 @@ QString PE_Script::getPEFileVersion(QString sFileName)
 QString PE_Script::getFileVersion()
 {
     return sFileVersion;
+}
+
+QString PE_Script::getFileVersionMS()
+{
+    return sFileVersionMS;
 }
 
 qint64 PE_Script::calculateSizeOfHeaders()
