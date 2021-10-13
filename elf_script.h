@@ -66,8 +66,8 @@ private:
     QByteArray g_baStringTable;
     QList<XELF_DEF::Elf_Shdr> g_listSectionHeaders;
     QList<XELF_DEF::Elf_Phdr> g_listProgramHeaders;
-    QList<XELF::SECTION_RECORD> listSectionRecords;
-    QString sGeneralOptions;
+    QList<XELF::SECTION_RECORD> g_listSectionRecords;
+    QString g_sGeneralOptions;
 };
 
 #endif // ELF_SCRIPT_H

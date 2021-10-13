@@ -33,9 +33,9 @@ ELF_Script::ELF_Script(XELF *pELF) : Binary_Script(pELF)
     g_listSectionHeaders=pELF->getElf_ShdrList();
     g_listProgramHeaders=pELF->getElf_PhdrList();
 
-    listSectionRecords=pELF->getSectionRecords(&g_listSectionHeaders,g_bIs64,&g_baStringTable);
+    g_listSectionRecords=pELF->getSectionRecords(&g_listSectionHeaders,g_bIs64,&g_baStringTable);
 
-    sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(g_elfHeader.e_type)).arg(XELF::getMachinesS().value(g_elfHeader.e_machine)).arg(g_bIs64?("64"):("32")); // TODO Check
+    g_sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(g_elfHeader.e_type)).arg(XELF::getMachinesS().value(g_elfHeader.e_machine)).arg(g_bIs64?("64"):("32")); // TODO Check
 }
 
 ELF_Script::~ELF_Script()
@@ -45,7 +45,7 @@ ELF_Script::~ELF_Script()
 
 bool ELF_Script::isSectionNamePresent(QString sSectionName)
 {
-    return g_pELF->isSectionNamePresent(sSectionName,&listSectionRecords);
+    return g_pELF->isSectionNamePresent(sSectionName,&g_listSectionRecords);
 }
 
 quint32 ELF_Script::getNumberOfSections()
@@ -60,12 +60,12 @@ quint32 ELF_Script::getNumberOfPrograms()
 
 QString ELF_Script::getGeneralOptions()
 {
-    return sGeneralOptions;
+    return g_sGeneralOptions;
 }
 
 qint32 ELF_Script::getSectionNumber(QString sSectionName)
 {
-    return g_pELF->getSectionNumber(sSectionName,&listSectionRecords);
+    return g_pELF->getSectionNumber(sSectionName,&g_listSectionRecords);
 }
 
 quint16 ELF_Script::getElfHeader_type()
@@ -157,7 +157,7 @@ bool ELF_Script::isStringInTablePresent(QString sSectionName, QString sString)
 {
     bool bResult=false;
 
-    qint32 nSection=g_pELF->getSectionNumber(sSectionName,&listSectionRecords);
+    qint32 nSection=g_pELF->getSectionNumber(sSectionName,&g_listSectionRecords);
 
     if(nSection!=-1)
     {
