@@ -42,9 +42,9 @@ public slots:
     bool is64();
 
 private:
-    XMACH *pMACH;
+    XMACH *g_pMACH;
     QString sGeneralOptions;
-    QList<XMACH::LIBRARY_RECORD> listLibraryRecords;
+    QList<XMACH::LIBRARY_RECORD> g_listLibraryRecords;
     QList<XMACH::SECTION_RECORD> listSectionRecords;
     QList<XMACH::COMMAND_RECORD> listCommandRecords;
     QList<XMACH::SEGMENT_RECORD> listSegmentRecords;
