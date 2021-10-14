@@ -24,13 +24,13 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 {
     this->pPE=pPE;
 
-    nNumberOfSections=pPE->getFileHeader_NumberOfSections();
+    g_nNumberOfSections=pPE->getFileHeader_NumberOfSections();
 
     listSectionHeaders=pPE->getSectionHeaders();
     listSectionRecords=pPE->getSectionRecords(&listSectionHeaders,pPE->isImage());
     listSectionNameStrings=pPE->getSectionNames(&listSectionRecords);
 
-    cliInfo=pPE->getCliInfo(true,&g_memoryMap);
+    g_cliInfo=pPE->getCliInfo(true,&g_memoryMap);
     listResourceRecords=pPE->getResources(&g_memoryMap);
 
     resourcesVersion=pPE->getResourcesVersion(&listResourceRecords);
@@ -41,7 +41,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     nNumberOfImports=listImportHeaders.count();
 
-    bIsNETPresent=(pPE->isNETPresent())&&(cliInfo.bValid);
+    bIsNETPresent=(pPE->isNETPresent())&&(g_cliInfo.bValid);
     bIs64=pPE->is64();
     bIsDll=pPE->isDll();
     bIsDriver=pPE->isDriver();
@@ -83,7 +83,7 @@ PE_Script::~PE_Script()
 
 quint16 PE_Script::getNumberOfSections()
 {
-    return nNumberOfSections;
+    return g_nNumberOfSections;
 }
 
 QString PE_Script::getSectionName(quint32 nNumber)
@@ -178,12 +178,12 @@ quint32 PE_Script::getResourceTypeByNumber(quint32 nNumber)
 
 bool PE_Script::isNETStringPresent(QString sString)
 {
-    return pPE->isNETAnsiStringPresent(sString,&cliInfo);
+    return pPE->isNETAnsiStringPresent(sString,&g_cliInfo);
 }
 
 bool PE_Script::isNETUnicodeStringPresent(QString sString)
 {
-    return pPE->isNETUnicodeStringPresent(sString,&cliInfo);
+    return pPE->isNETUnicodeStringPresent(sString,&g_cliInfo);
 }
 
 qint32 PE_Script::getNumberOfImports()
@@ -323,12 +323,12 @@ bool PE_Script::isDriver()
 
 QString PE_Script::getNETVersion()
 {
-    return cliInfo.metaData.header.sVersion;
+    return g_cliInfo.metaData.header.sVersion;
 }
 
 bool PE_Script::compareEP_NET(QString sSignature, qint64 nOffset)
 {
-    return pPE->compareSignatureOnAddress(&g_memoryMap,sSignature,g_nBaseAddress+cliInfo.metaData.nEntryPoint+nOffset);
+    return pPE->compareSignatureOnAddress(&g_memoryMap,sSignature,g_nBaseAddress+g_cliInfo.metaData.nEntryPoint+nOffset);
 }
 
 quint32 PE_Script::getSizeOfCode()
