@@ -170,7 +170,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     scanResult.scanHeader.bIsBigEndian=memoryMap.bIsBigEndian;
     scanResult.scanHeader.sType=memoryMap.sType;
 
-    int nNumberOfSignatures=g_listSignatures.count();
+    qint32 nNumberOfSignatures=g_listSignatures.count();
 
     DiE_ScriptEngine::SIGNATURE_RECORD srGlobalInit;
     DiE_ScriptEngine::SIGNATURE_RECORD srInit;
@@ -178,7 +178,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     bool bGlobalInit=false;
     bool bInit=false;
 
-    for(int i=0;(i<nNumberOfSignatures)&&(!g_bIsStop);i++)
+    for(qint32 i=0;(i<nNumberOfSignatures)&&(!g_bIsStop);i++)
     {
         if(g_listSignatures.at(i).sName=="_init")
         {
