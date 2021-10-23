@@ -126,9 +126,9 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
 {
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
 
-    int nNumberOfRecords=pListRecords->count();
+    qint32 nNumberOfRecords=pListRecords->count();
 
-    for(int i=0;i<nNumberOfRecords;i++)
+    for(qint32 i=0;i<nNumberOfRecords;i++)
     {
         XArchive::RECORD zipRecord=pListRecords->at(i);
 
