@@ -100,9 +100,9 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString 
 
     QFileInfoList eil=dir.entryInfoList();
 
-    int nNumberOfFiles=eil.count();
+    qint32 nNumberOfFiles=eil.count();
 
-    for(int i=0;i<nNumberOfFiles;i++)
+    for(qint32 i=0;i<nNumberOfFiles;i++)
     {
         if(eil.at(i).isFile())
         {
