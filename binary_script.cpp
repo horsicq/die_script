@@ -71,7 +71,7 @@ bool Binary_Script::compare(QString sSignature, qint64 nOffset)
 {
     bool bResult=false;
 
-    int nSignatureSize=sSignature.size();
+    qint32 nSignatureSize=sSignature.size();
 
     if((nSignatureSize+nOffset<g_nHeaderSignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
     {
