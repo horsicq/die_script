@@ -224,7 +224,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
         }
     }
 
-    for(int i=0;(i<nNumberOfSignatures)&&(!g_bIsStop);i++)
+    for(qint32 i=0;(i<nNumberOfSignatures)&&(!g_bIsStop);i++)
     {
         bool bExec=false;
 
