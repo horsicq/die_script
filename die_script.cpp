@@ -604,9 +604,9 @@ bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText)
 {
     bool bResult=false;
 
-    int nNumberOfSignatures=g_listSignatures.count();
+    qint32 nNumberOfSignatures=g_listSignatures.count();
 
-    for(int i=0;i<nNumberOfSignatures;i++)
+    for(qint32 i=0;i<nNumberOfSignatures;i++)
     {
         if(g_listSignatures.at(i).sFilePath==sSignatureFilePath)
         {
