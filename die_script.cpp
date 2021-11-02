@@ -633,9 +633,9 @@ DiE_Script::STATS DiE_Script::getStats()
 {
     STATS result={};
 
-    int nNumberOfSignatures=g_listSignatures.count();
+    qint32 nNumberOfSignatures=g_listSignatures.count();
 
-    for(int i=0;i<nNumberOfSignatures;i++)
+    for(qint32 i=0;i<nNumberOfSignatures;i++)
     {
         QString sText=g_listSignatures.at(i).sText;
 
