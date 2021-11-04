@@ -102,11 +102,20 @@ public:
         bool bResultAsJSON;
         bool bResultAsCSV;
         bool bResultAsTSV;
+        bool bSubdirectories; // For directory scan
     };
 
     struct STATS
     {
         QMap<QString,qint32> mapTypes;
+    };
+
+    struct DIRECTORYSTATS
+    {
+        qint32 nTotal;
+        qint32 nCurrent;
+        qint64 nElapsed;
+        QString sStatus;
     };
 
     enum DBT
@@ -136,9 +145,12 @@ public:
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
 #endif
+    void setProcessDirectory(QString sDirectory,SCAN_OPTIONS scanOptions);
+    DIRECTORYSTATS getCurrentDirectoryStats();
 
 public slots:
     void stop();
+    void processDirectory();
 
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath,XBinary::FT fileType);
@@ -151,7 +163,9 @@ signals:
     void progressMaximumChanged(qint32 nMaximum);
     void progressValueChanged(qint32 nValue);
     void stopEngine();
-
+    void directoryScanCompleted(qint64 nTime);
+    void directoryScanFileStarted(QString sFileName);
+    void directoryScanResult(DiE_Script::SCAN_RESULT scanResult);
 private:
     QString g_sDatabasePath;
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> g_listSignatures;
@@ -160,6 +174,11 @@ private:
 #ifdef QT_SCRIPTTOOLS_LIB
     QScriptEngineDebugger *pDebugger;
 #endif
+    QString g_sDirectoryProcess;
+    SCAN_OPTIONS g_scanOptionsProcess;
+    DIRECTORYSTATS g_directoryStats;
+    QElapsedTimer *g_pDirectoryElapsedTimer;
+    QMutex g_mutex;
 };
 
 #endif // DIE_SCRIPT_H

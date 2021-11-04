@@ -87,6 +87,8 @@ DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
 {
     g_bIsStop=false;
     g_databaseType=DBT_UNKNOWN;
+    g_pDirectoryElapsedTimer=nullptr;
+    g_directoryStats={};
 #ifdef QT_SCRIPTTOOLS_LIB
     pDebugger=0;
 #endif
@@ -625,8 +627,54 @@ bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText)
 
 void DiE_Script::stop()
 {
+    g_mutex.lock();
     g_bIsStop=true;
+    g_mutex.unlock();
+
     emit stopEngine();
+}
+
+void DiE_Script::processDirectory()
+{
+    g_pDirectoryElapsedTimer=new QElapsedTimer;
+    g_pDirectoryElapsedTimer->start();
+
+    if(g_sDirectoryProcess!="")
+    {
+        QList<QString> listFileNames;
+
+        XBinary::FFOPTIONS ffoptions={};
+        ffoptions.bSubdirectories=g_scanOptionsProcess.bSubdirectories;
+        ffoptions.pbIsStop=&g_bIsStop;
+        ffoptions.pnNumberOfFiles=&(g_directoryStats.nTotal);
+        ffoptions.pListFileNames=&listFileNames;
+
+        XBinary::findFiles(g_sDirectoryProcess,&ffoptions);
+
+        g_directoryStats.nTotal=listFileNames.count();
+
+        for(qint32 i=0;(i<g_directoryStats.nTotal)&&(!g_bIsStop);i++)
+        {
+            g_mutex.lock();
+
+            g_directoryStats.nCurrent=i+1;
+            g_directoryStats.sStatus=listFileNames.at(i);
+
+            emit directoryScanFileStarted(g_directoryStats.sStatus);
+
+            SCAN_RESULT _scanResult=scanFile(g_directoryStats.sStatus,&g_scanOptionsProcess);
+
+            emit directoryScanResult(_scanResult);
+
+            g_mutex.unlock();
+        }
+    }
+
+    emit directoryScanCompleted(g_pDirectoryElapsedTimer->elapsed());
+    delete g_pDirectoryElapsedTimer;
+    g_pDirectoryElapsedTimer=nullptr;
+
+    g_bIsStop=false;
 }
 
 DiE_Script::STATS DiE_Script::getStats()
@@ -659,9 +707,9 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
 {
     bool bResult=false;
 
-    int nNumberOfSignatures=g_listSignatures.count();
+    qint32 nNumberOfSignatures=g_listSignatures.count();
 
-    for(int i=0;i<nNumberOfSignatures;i++)
+    for(qint32 i=0;i<nNumberOfSignatures;i++)
     {
         if(g_listSignatures.at(i).fileType==fileType)
         {
@@ -818,6 +866,29 @@ QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
     }
 
     return sResult;
+}
+
+void DiE_Script::setProcessDirectory(QString sDirectory, SCAN_OPTIONS scanOptions)
+{
+    g_sDirectoryProcess=sDirectory;
+    g_scanOptionsProcess=scanOptions;
+}
+
+DiE_Script::DIRECTORYSTATS DiE_Script::getCurrentDirectoryStats()
+{
+    if(g_pDirectoryElapsedTimer)
+    {
+        if(g_pDirectoryElapsedTimer->isValid())
+        {
+            g_directoryStats.nElapsed=g_pDirectoryElapsedTimer->elapsed();
+        }
+        else
+        {
+            g_directoryStats.nElapsed=0;
+        }
+    }
+
+    return g_directoryStats;
 }
 
 #ifdef QT_SCRIPTTOOLS_LIB
