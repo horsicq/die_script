@@ -26,6 +26,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QSemaphore>
+#include <QTimer>
 #include "die_scriptengine.h"
 #include "xformats.h"
 #include "xzip.h"
@@ -178,7 +180,8 @@ private:
     SCAN_OPTIONS g_scanOptionsProcess;
     DIRECTORYSTATS g_directoryStats;
     QElapsedTimer *g_pDirectoryElapsedTimer;
-    QMutex g_mutex;
+//    QMutex g_mutex;
+//    QSemaphore g_semaphore;
 };
 
 #endif // DIE_SCRIPT_H

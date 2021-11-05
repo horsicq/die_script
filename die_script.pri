@@ -30,3 +30,6 @@ SOURCES += \
     XCONFIG += xarchive
     include($$PWD/../XArchive/xarchive.pri)
 }
+
+DISTFILES += \
+    $$PWD/die_script.cmake

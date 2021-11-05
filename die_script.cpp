@@ -627,9 +627,9 @@ bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText)
 
 void DiE_Script::stop()
 {
-    g_mutex.lock();
+//    g_mutex.lock(); // TODO
     g_bIsStop=true;
-    g_mutex.unlock();
+//    g_mutex.unlock();
 
     emit stopEngine();
 }
@@ -655,7 +655,7 @@ void DiE_Script::processDirectory()
 
         for(qint32 i=0;(i<g_directoryStats.nTotal)&&(!g_bIsStop);i++)
         {
-            g_mutex.lock();
+//            g_mutex.lock();
 
             g_directoryStats.nCurrent=i+1;
             g_directoryStats.sStatus=listFileNames.at(i);
@@ -666,7 +666,14 @@ void DiE_Script::processDirectory()
 
             emit directoryScanResult(_scanResult);
 
-            g_mutex.unlock();
+//            g_mutex.unlock();
+
+            // TODO a function
+            QEventLoop loop;
+            QTimer t;
+            t.connect(&t,&QTimer::timeout,&loop,&QEventLoop::quit);
+            t.start(1);
+            loop.exec();
         }
     }
 
