@@ -803,9 +803,9 @@ QString DiE_Script::scanResultToXmlString(DiE_Script::SCAN_RESULT *pScanResult)
     xml.writeAttribute("endianess",XBinary::endiannessToString(pScanResult->scanHeader.bIsBigEndian));
     xml.writeAttribute("type",pScanResult->scanHeader.sType);
 
-    int nNumberOfRecords=pScanResult->listRecords.count();
+    qint32 nNumberOfRecords=pScanResult->listRecords.count();
 
-    for(int i=0;i<nNumberOfRecords;i++)
+    for(qint32 i=0;i<nNumberOfRecords;i++)
     {
         xml.writeStartElement("detect");
         xml.writeAttribute("type",pScanResult->listRecords.at(i).sType);
