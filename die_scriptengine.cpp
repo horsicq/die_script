@@ -106,9 +106,9 @@ QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *pContext, QScriptE
     {
         QString sName=pContext->argument(0).toString();
 
-        int nNumberOfSignatures=pScriptEngine->g_pSignaturesList->count();
+        qint32 nNumberOfSignatures=pScriptEngine->g_pSignaturesList->count();
 
-        for(int i=0;i<nNumberOfSignatures;i++)
+        for(qint32 i=0;i<nNumberOfSignatures;i++)
         {
             if(pScriptEngine->g_pSignaturesList->at(i).fileType==XBinary::FT_UNKNOWN)
             {
