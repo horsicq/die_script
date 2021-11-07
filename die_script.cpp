@@ -36,8 +36,8 @@ bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const Di
         return false;
     }
 
-    int nPos1=sr1.sName.count(".");
-    int nPos2=sr2.sName.count(".");
+    qint32 nPos1=sr1.sName.count(".");
+    qint32 nPos2=sr2.sName.count(".");
 
     if((nPos1>1)&&(nPos2>1))
     {
