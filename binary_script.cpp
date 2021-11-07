@@ -182,7 +182,7 @@ bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
 {
     bool bResult=false;
 
-    int nSignatureSize=sSignature.size();
+    qint32 nSignatureSize=sSignature.size();
 
     if((nSignatureSize+nOffset<g_nOverlaySignatureSize)&&(!sSignature.contains('$'))&&(!sSignature.contains('#')))
     {
