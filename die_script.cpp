@@ -904,3 +904,10 @@ void DiE_Script::setDebugger(QScriptEngineDebugger *pDebugger)
     this->pDebugger=pDebugger;
 }
 #endif
+
+#ifdef QT_SCRIPTTOOLS_LIB
+void DiE_Script::removeDebugger()
+{
+    this->pDebugger=nullptr;
+}
+#endif

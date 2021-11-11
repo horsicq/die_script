@@ -146,6 +146,7 @@ public:
     static QString getErrorsString(SCAN_RESULT *pScanResult);
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
+    void removeDebugger();
 #endif
     void setProcessDirectory(QString sDirectory,SCAN_OPTIONS scanOptions);
     DIRECTORYSTATS getCurrentDirectoryStats();
