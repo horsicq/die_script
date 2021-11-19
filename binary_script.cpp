@@ -108,9 +108,19 @@ quint8 Binary_Script::readByte(qint64 nOffset)
     return g_pBinary->read_uint8(nOffset);
 }
 
+qint8 Binary_Script::readSByte(qint64 nOffset)
+{
+    return g_pBinary->read_int8(nOffset);
+}
+
 quint16 Binary_Script::readWord(qint64 nOffset)
 {
     return g_pBinary->read_uint16(nOffset);
+}
+
+qint16 Binary_Script::readSWord(qint64 nOffset)
+{
+    return g_pBinary->read_int16(nOffset);
 }
 
 quint32 Binary_Script::readDword(qint64 nOffset)
@@ -118,9 +128,19 @@ quint32 Binary_Script::readDword(qint64 nOffset)
     return g_pBinary->read_uint32(nOffset);
 }
 
+qint32 Binary_Script::readSDword(qint64 nOffset)
+{
+    return g_pBinary->read_int32(nOffset);
+}
+
 quint64 Binary_Script::readQword(qint64 nOffset)
 {
     return g_pBinary->read_uint64(nOffset);
+}
+
+qint64 Binary_Script::readSQword(qint64 nOffset)
+{
+    return g_pBinary->read_int64(nOffset);
 }
 
 QString Binary_Script::getString(qint64 nOffset, qint64 nMaxSize)

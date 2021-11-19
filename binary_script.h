@@ -36,9 +36,13 @@ public slots:
     bool compare(QString sSignature,qint64 nOffset=0);
     bool compareEP(QString sSignature,qint64 nOffset=0);
     quint8 readByte(qint64 nOffset);
+    qint8 readSByte(qint64 nOffset);
     quint16 readWord(qint64 nOffset);
+    qint16 readSWord(qint64 nOffset);
     quint32 readDword(qint64 nOffset);
+    qint32 readSDword(qint64 nOffset);
     quint64 readQword(qint64 nOffset);
+    qint64 readSQword(qint64 nOffset);
     QString getString(qint64 nOffset,qint64 nMaxSize=50);
     qint64 findSignature(qint64 nOffset,qint64 nSize,QString sSignature);
     qint64 findString(qint64 nOffset,qint64 nSize,QString sString);
