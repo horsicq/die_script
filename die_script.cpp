@@ -532,7 +532,7 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
     QElapsedTimer scanTimer;
     scanTimer.start();
 
-    QSet<XBinary::FT> stFT=XBinary::getFileTypes(pDevice);
+    QSet<XBinary::FT> stFT=XFormats::getFileTypes(pDevice,true);
 
     if(pOptions->fileType!=XBinary::FT_UNKNOWN)
     {
