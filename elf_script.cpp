@@ -24,18 +24,18 @@ ELF_Script::ELF_Script(XELF *pELF) : Binary_Script(pELF)
 {
     this->g_pELF=pELF;
 
-    g_bIs64=pELF->is64();
+    bool bIs64=pELF->is64(&g_memoryMap);
 
     g_elfHeader=pELF->getHdr();
 
-    g_nStringTableSection=pELF->getSectionStringTable(g_bIs64);
+    g_nStringTableSection=pELF->getSectionStringTable(bIs64);
     g_baStringTable=pELF->getSection(g_nStringTableSection);
     g_listSectionHeaders=pELF->getElf_ShdrList();
     g_listProgramHeaders=pELF->getElf_PhdrList();
 
-    g_listSectionRecords=pELF->getSectionRecords(&g_listSectionHeaders,g_bIs64,&g_baStringTable);
+    g_listSectionRecords=pELF->getSectionRecords(&g_listSectionHeaders,bIs64,&g_baStringTable);
 
-    g_sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(g_elfHeader.e_type)).arg(XELF::getMachinesS().value(g_elfHeader.e_machine)).arg(g_bIs64?("64"):("32")); // TODO Check
+    g_sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(g_elfHeader.e_type)).arg(XELF::getMachinesS().value(g_elfHeader.e_machine)).arg(bIs64?("64"):("32")); // TODO Check
 }
 
 ELF_Script::~ELF_Script()
@@ -165,9 +165,4 @@ bool ELF_Script::isStringInTablePresent(QString sSectionName, QString sString)
     }
 
     return bResult;
-}
-
-bool ELF_Script::is64()
-{
-    return g_bIs64;
 }

@@ -58,6 +58,20 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         _addClass(g_pBinaryScript,"MACH");
         g_pBinary=pMACH;
     }
+    else if(XBinary::checkFileType(XBinary::FT_NE,fileType))
+    {
+        XNE *pNE=new XNE(pDevice);
+        g_pBinaryScript=new NE_Script(pNE);
+        _addClass(g_pBinaryScript,"NE");
+        g_pBinary=pNE;
+    }
+    else if(XBinary::checkFileType(XBinary::FT_LE,fileType))
+    {
+        XLE *pLE=new XLE(pDevice);
+        g_pBinaryScript=new LE_Script(pLE);
+        _addClass(g_pBinaryScript,"LE");
+        g_pBinary=pLE;
+    }
     else if(XBinary::checkFileType(XBinary::FT_MSDOS,fileType))
     {
         XMSDOS *pXMSDOS=new XMSDOS(pDevice);
@@ -65,6 +79,34 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         _addClass(g_pBinaryScript,"MSDOS");
         g_pBinary=pXMSDOS;
     }
+//    else if(XBinary::checkFileType(XBinary::FT_JAR,fileType))
+//    {
+//        XZip *pZIP=new XZip(pDevice);
+//        g_pBinaryScript=new JAR_Script(pZIP);
+//        _addClass(g_pBinaryScript,"JAR");
+//        g_pBinary=pZIP;
+//    }
+//    else if(XBinary::checkFileType(XBinary::FT_APK,fileType))
+//    {
+//        XZip *pZIP=new XZip(pDevice);
+//        g_pBinaryScript=new APK_Script(pZIP);
+//        _addClass(g_pBinaryScript,"APK");
+//        g_pBinary=pZIP;
+//    }
+//    else if(XBinary::checkFileType(XBinary::FT_IPA,fileType))
+//    {
+//        XZip *pZIP=new XZip(pDevice);
+//        g_pBinaryScript=new IPA_Script(pZIP);
+//        _addClass(g_pBinaryScript,"IPA");
+//        g_pBinary=pZIP;
+//    }
+//    if(XBinary::checkFileType(XBinary::FT_DEX,fileType))
+//    {
+//        XDEX *pDEX=new XDEX(pDevice);
+//        g_pBinaryScript=new DEX_Script(pDEX);
+//        _addClass(g_pBinaryScript,"DEX");
+//        g_pBinary=pDEX;
+//    }
 }
 
 DiE_ScriptEngine::~DiE_ScriptEngine()

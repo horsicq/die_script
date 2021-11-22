@@ -42,7 +42,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     nNumberOfImports=listImportHeaders.count();
 
     bIsNETPresent=(pPE->isNETPresent())&&(g_cliInfo.bValid);
-    bIs64=pPE->is64();
+    bool bIs64=pPE->is64(&g_memoryMap);
     bIsDll=pPE->isDll();
     bIsDriver=pPE->isDriver();
     bIsConsole=pPE->isConsole();
@@ -138,12 +138,7 @@ bool PE_Script::isNET()
 
 bool PE_Script::isPEPlus()
 {
-    return bIs64;
-}
-
-bool PE_Script::is64()
-{
-    return bIs64;
+    return is64();
 }
 
 QString PE_Script::getGeneralOptions()

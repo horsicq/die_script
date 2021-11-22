@@ -39,7 +39,6 @@ public slots:
     qint32 getSectionNumber(QString sSectionName);
     virtual QString getGeneralOptions();
     quint32 getLibraryCurrentVersion(QString sLibraryName);
-    bool is64();
 
 private:
     XMACH *g_pMACH;
@@ -50,7 +49,6 @@ private:
     QList<XMACH::SEGMENT_RECORD> listSegmentRecords;
     qint32 nNumberOfSection;
     qint32 nNumberOfSegments;
-    bool bIs64;
 };
 
 #endif // MACH_SCRIPT_H

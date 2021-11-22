@@ -9,6 +9,8 @@ HEADERS += \
     $$PWD/die_scriptengine.h \
     $$PWD/msdos_script.h \
     $$PWD/pe_script.h \
+    $$PWD/ne_script.h \
+    $$PWD/le_script.h \
     $$PWD/mach_script.h \
     $$PWD/elf_script.h
 
@@ -18,6 +20,8 @@ SOURCES += \
     $$PWD/die_scriptengine.cpp \
     $$PWD/msdos_script.cpp \
     $$PWD/pe_script.cpp \
+    $$PWD/ne_script.cpp \
+    $$PWD/le_script.cpp \
     $$PWD/mach_script.cpp \
     $$PWD/elf_script.cpp
 
@@ -29,6 +33,11 @@ SOURCES += \
 !contains(XCONFIG, xarchive) {
     XCONFIG += xarchive
     include($$PWD/../XArchive/xarchive.pri)
+}
+
+!contains(XCONFIG, xcapstone) {
+    XCONFIG += xcapstone
+    include($$PWD/../XCapstone/xcapstone.pri)
 }
 
 DISTFILES += \

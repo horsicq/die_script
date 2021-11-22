@@ -55,11 +55,13 @@ Binary_Script::Binary_Script(XBinary *pBinary)
     g_sFileSuffix=XBinary::getDeviceFileSuffix(pBinary->getDevice());
 
     g_bIsPlainText=pBinary->isPlainTextType();
+
+    XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap),&g_disasmHandle,true);
 }
 
 Binary_Script::~Binary_Script()
 {
-
+    XCapstone::closeHandle(&g_disasmHandle);
 }
 
 qint64 Binary_Script::getSize()
@@ -316,4 +318,34 @@ QString Binary_Script::lowerCase(QString sString)
 bool Binary_Script::isPlainText()
 {
     return g_bIsPlainText;
+}
+
+qint32 Binary_Script::getDisasmLength(qint64 nAddress)
+{
+    return XCapstone::getDisasmLength(g_disasmHandle,g_pBinary->getDevice(),XBinary::addressToOffset(&g_memoryMap,nAddress),nAddress);
+}
+
+QString Binary_Script::getDisasmString(qint64 nAddress)
+{
+    return XCapstone::disasm(g_disasmHandle,g_pBinary->getDevice(),XBinary::addressToOffset(&g_memoryMap,nAddress),nAddress).sString.toUpper();
+}
+
+qint64 Binary_Script::getDisasmNextAddress(qint64 nAddress)
+{
+    return XCapstone::getNextAddress(g_disasmHandle,g_pBinary->getDevice(),XBinary::addressToOffset(&g_memoryMap,nAddress),nAddress);
+}
+
+bool Binary_Script::is16()
+{
+    return XBinary::is16(&g_memoryMap);
+}
+
+bool Binary_Script::is32()
+{
+    return XBinary::is32(&g_memoryMap);
+}
+
+bool Binary_Script::is64()
+{
+    return XBinary::is64(&g_memoryMap);
 }

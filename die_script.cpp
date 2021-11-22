@@ -171,6 +171,9 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     scanResult.scanHeader.mode=memoryMap.mode;
     scanResult.scanHeader.bIsBigEndian=memoryMap.bIsBigEndian;
     scanResult.scanHeader.sType=memoryMap.sType;
+    scanResult.scanHeader.nOffset=0;
+    scanResult.scanHeader.nSize=pDevice->size();
+    scanResult.scanHeader.filePart=XBinary::FILEPART_HEADER;
 
     qint32 nNumberOfSignatures=g_listSignatures.count();
 
@@ -471,7 +474,13 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
 
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"",XBinary::FT_UNKNOWN));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"Binary",XBinary::FT_BINARY));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"JAR",XBinary::FT_JAR));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"APK",XBinary::FT_APK));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"IPA",XBinary::FT_IPA));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"DEX",XBinary::FT_DEX));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MSDOS",XBinary::FT_MSDOS));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"LE",XBinary::FT_LE));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"NE",XBinary::FT_NE));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"PE",XBinary::FT_PE));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"ELF",XBinary::FT_ELF));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MACH",XBinary::FT_MACHO));
@@ -486,7 +495,13 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
     {
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath,XBinary::FT_UNKNOWN));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"Binary",XBinary::FT_BINARY));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"JAR",XBinary::FT_JAR));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"APK",XBinary::FT_APK));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"IPA",XBinary::FT_IPA));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"DEX",XBinary::FT_IPA));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MSDOS",XBinary::FT_MSDOS));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"LE",XBinary::FT_LE));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"NE",XBinary::FT_NE));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MACH",XBinary::FT_MACHO));
@@ -565,9 +580,33 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
     {
         scanResult=_scan(pDevice,XBinary::FT_MACHO64,pOptions);
     }
+    else if(stFT.contains(XBinary::FT_LX))
+    {
+        scanResult=_scan(pDevice,XBinary::FT_LX,pOptions);
+    }
+    else if(stFT.contains(XBinary::FT_LE))
+    {
+        scanResult=_scan(pDevice,XBinary::FT_LE,pOptions);
+    }
+    else if(stFT.contains(XBinary::FT_NE))
+    {
+        scanResult=_scan(pDevice,XBinary::FT_NE,pOptions);
+    }
     else if(stFT.contains(XBinary::FT_MSDOS))
     {
         scanResult=_scan(pDevice,XBinary::FT_MSDOS,pOptions);
+    }
+    else if(stFT.contains(XBinary::FT_JAR))
+    {
+        scanResult=_scan(pDevice,XBinary::FT_JAR,pOptions);
+    }
+    else if(stFT.contains(XBinary::FT_APK))
+    {
+        scanResult=_scan(pDevice,XBinary::FT_APK,pOptions);
+    }
+    else if(stFT.contains(XBinary::FT_IPA))
+    {
+        scanResult=_scan(pDevice,XBinary::FT_IPA,pOptions);
     }
     else if(stFT.contains(XBinary::FT_BINARY))
     {

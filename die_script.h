@@ -51,6 +51,9 @@ public:
         XBinary::MODE mode;
         bool bIsBigEndian;
         QString sType;
+        qint64 nSize;
+        qint64 nOffset;
+        XBinary::FILEPART filePart;
     };
 
     struct SCAN_STRUCT

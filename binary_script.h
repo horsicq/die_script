@@ -22,6 +22,7 @@
 #define BINARY_SCRIPT_H
 
 #include "xbinary.h"
+#include "xcapstone.h"
 
 class Binary_Script : public QObject
 {
@@ -74,6 +75,12 @@ public slots:
     QString upperCase(QString sString);
     QString lowerCase(QString sString);
     bool isPlainText();
+    qint32 getDisasmLength(qint64 nAddress);
+    QString getDisasmString(qint64 nAddress);
+    qint64 getDisasmNextAddress(qint64 nAddress);
+    bool is16();
+    bool is32();
+    bool is64();
 
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
@@ -81,6 +88,7 @@ protected:
 
 private:
     XBinary *g_pBinary;
+    csh g_disasmHandle;
     qint64 g_nSize;
     qint64 g_nEntryPointOffset;
     qint64 g_nEntryPointAddress;

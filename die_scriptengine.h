@@ -29,6 +29,12 @@
 #include "mach_script.h"
 #include "msdos_script.h"
 #include "pe_script.h"
+#include "ne_script.h"
+#include "le_script.h"
+//#include "jar_script.h"
+//#include "apk_script.h"
+//#include "ipa_script.h"
+//#include "dex_script.h"
 
 class DiE_ScriptEngine : public QScriptEngine
 {

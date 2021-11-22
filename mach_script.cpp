@@ -31,7 +31,7 @@ MACH_Script::MACH_Script(XMACH *pMACH) : Binary_Script(pMACH)
     nNumberOfSection=listSectionRecords.count();
     nNumberOfSegments=listSegmentRecords.count();
 
-    bIs64=pMACH->is64();
+    bool bIs64=pMACH->is64(&g_memoryMap);
 
     sGeneralOptions=QString("%1%2").arg(XMACH::getHeaderFileTypesS().value(pMACH->getHeader_filetype())).arg(bIs64?("64"):("32"));
 }
@@ -69,9 +69,4 @@ QString MACH_Script::getGeneralOptions()
 quint32 MACH_Script::getLibraryCurrentVersion(QString sLibraryName)
 {
     return g_pMACH->getLibraryCurrentVersion(sLibraryName,&g_listLibraryRecords);
-}
-
-bool MACH_Script::is64()
-{
-    return bIs64;
 }
