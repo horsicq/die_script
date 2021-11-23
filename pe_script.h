@@ -90,7 +90,6 @@ public slots:
     qint64 calculateSizeOfHeaders();
     bool isExportFunctionPresent(QString sFunctionName);
     bool isExportFunctionPresentExp(QString sFunctionName);
-
     bool isExportPresent();
     bool isTLSPresent();
     bool isImportPresent();
