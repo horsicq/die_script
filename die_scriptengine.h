@@ -36,6 +36,22 @@
 //#include "ipa_script.h"
 //#include "dex_script.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#include <QScriptEngine>
+#else
+#include <QJSEngine>
+#endif
+
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#define XSCRIPTENGINE QScriptEngine
+#define XSCRIPTVALUE QScriptValue
+#define XSCRIPTVALUELIST QScriptValueList
+#else
+#define XSCRIPTENGINE QJSEngine
+#define XSCRIPTVALUE QJSValue
+#define XSCRIPTVALUELIST QJSValueList
+#endif
+
 class DiE_ScriptEngine : public QScriptEngine
 {
     Q_OBJECT

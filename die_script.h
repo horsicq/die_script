@@ -162,7 +162,7 @@ private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath,XBinary::FT fileType);
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip,QList<XArchive::RECORD> *pListRecords,QString sPrefix,XBinary::FT fileType);
     SCAN_RESULT _scan(QIODevice *pDevice,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="");
-    bool _handleError(DiE_ScriptEngine *pScriptEngine,QScriptValue scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
+    bool _handleError(DiE_ScriptEngine *pScriptEngine,XSCRIPTVALUE scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
     SCAN_STRUCT getScanStructFromString(SCAN_HEADER scanHeader,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,QString sString,SCAN_OPTIONS *pScanOptions);
 
 signals:

@@ -272,7 +272,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                 scanTimer.start();
             }
 
-            QScriptValue script=scriptEngine.evaluate(signatureRecord.sText,signatureRecord.sFilePath);
+            XSCRIPTVALUE script=scriptEngine.evaluate(signatureRecord.sText,signatureRecord.sFilePath);
 
             if(_handleError(&scriptEngine,script,&signatureRecord,&scanResult))
             {
@@ -282,15 +282,19 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
                     pDebugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
                 }
 #endif
-                QScriptValue detect=scriptEngine.globalObject().property("detect");
+                XSCRIPTVALUE detect=scriptEngine.globalObject().property("detect");
 
                 if(_handleError(&scriptEngine,detect,&signatureRecord,&scanResult))
                 {
-                    QScriptValueList valuelist;
+                    XSCRIPTVALUELIST valuelist;
 
                     valuelist << pOptions->bShowType << pOptions->bShowVersion << pOptions->bShowOptions;
 
-                    QScriptValue result=detect.call(script,valuelist);
+                #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+                    XSCRIPTVALUE result=detect.call(script,valuelist);
+                #else
+                    XSCRIPTVALUE result=detect.callWithInstance(script,valuelist);
+                #endif
 
                     if(_handleError(&scriptEngine,result,&signatureRecord,&scanResult))
                     {
@@ -342,7 +346,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     return scanResult;
 }
 
-bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, QScriptValue scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, DiE_Script::SCAN_RESULT *pScanResult)
+bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, DiE_Script::SCAN_RESULT *pScanResult)
 {
     bool bResult=false;
 

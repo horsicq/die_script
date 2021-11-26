@@ -1,4 +1,5 @@
-QT       += script
+lessThan(QT_MAJOR_VERSION, 6): QT += script
+greaterThan(QT_MAJOR_VERSION, 5): QT += qml
 
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
@@ -35,9 +36,18 @@ SOURCES += \
     include($$PWD/../XArchive/xarchive.pri)
 }
 
-!contains(XCONFIG, xcapstone) {
-    XCONFIG += xcapstone
-    include($$PWD/../XCapstone/xcapstone.pri)
+contains(XCONFIG, use_capstone_x86) {
+    !contains(XCONFIG, xcapstone_x86) {
+        XCONFIG += xcapstone_x86
+        include($$PWD/../XCapstone/xcapstone_x86.pri)
+    }
+}
+
+!contains(XCONFIG, use_capstone_x86) {
+    !contains(XCONFIG, xcapstone) {
+        XCONFIG += xcapstone
+        include($$PWD/../XCapstone/xcapstone.pri)
+    }
 }
 
 DISTFILES += \
