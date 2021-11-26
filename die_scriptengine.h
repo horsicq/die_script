@@ -21,9 +21,9 @@
 #ifndef DIE_SCRIPTENGINE_H
 #define DIE_SCRIPTENGINE_H
 
-#include <QScriptEngine>
 #include <QIODevice>
 #include "xbinary.h"
+#include "global_script.h"
 #include "binary_script.h"
 #include "elf_script.h"
 #include "mach_script.h"
@@ -52,7 +52,7 @@
 #define XSCRIPTVALUELIST QJSValueList
 #endif
 
-class DiE_ScriptEngine : public QScriptEngine
+class DiE_ScriptEngine : public XSCRIPTENGINE
 {
     Q_OBJECT
 
@@ -68,13 +68,14 @@ public:
 
     DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType);
     ~DiE_ScriptEngine();
-    bool handleError(QScriptValue value,QString *psErrorString);
+    bool handleError(XSCRIPTVALUE value,QString *psErrorString);
 
 public slots:
     void stop();
 
 private:
     static QScriptValue _includeScript(QScriptContext *pContext,QScriptEngine *pEngine);
+    static QScriptValue _log(QScriptContext *pContext,QScriptEngine *pEngine);
     void _addFunction(FunctionSignature function,QString sFunctionName);
     void _addClass(QObject *pClass,QString sClassName);
 

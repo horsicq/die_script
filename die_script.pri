@@ -8,6 +8,7 @@ HEADERS += \
     $$PWD/binary_script.h \
     $$PWD/die_script.h \
     $$PWD/die_scriptengine.h \
+    $$PWD/global_script.h \
     $$PWD/msdos_script.h \
     $$PWD/pe_script.h \
     $$PWD/ne_script.h \
@@ -19,6 +20,7 @@ SOURCES += \
     $$PWD/binary_script.cpp \
     $$PWD/die_script.cpp \
     $$PWD/die_scriptengine.cpp \
+    $$PWD/global_script.cpp \
     $$PWD/msdos_script.cpp \
     $$PWD/pe_script.cpp \
     $$PWD/ne_script.cpp \

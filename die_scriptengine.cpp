@@ -26,6 +26,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
     // TODO _log function
     _addFunction(_includeScript,"includeScript");
+    _addFunction(_log,"_log");
 
     g_pBinary=0;
     g_pBinaryScript=0;
@@ -115,7 +116,7 @@ DiE_ScriptEngine::~DiE_ScriptEngine()
     delete g_pBinaryScript;
 }
 
-bool DiE_ScriptEngine::handleError(QScriptValue value, QString *psErrorString)
+bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
 {
     bool bResult=true;
 
@@ -144,6 +145,8 @@ QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *pContext, QScriptE
 
     DiE_ScriptEngine *pScriptEngine=static_cast<DiE_ScriptEngine *>(pEngine);
 
+    // TODO error, cannot find signature
+
     if(pScriptEngine)
     {
         QString sName=pContext->argument(0).toString();
@@ -168,14 +171,30 @@ QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *pContext, QScriptE
     return result;
 }
 
+QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine=static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if(pScriptEngine)
+    {
+        QString sText=pContext->argument(0).toString();
+
+        // TODO
+    }
+
+    return result;
+}
+
 void DiE_ScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, QString sFunctionName)
 {
-    QScriptValue func=this->newFunction(function);
+    XSCRIPTVALUE func=this->newFunction(function);
     this->globalObject().setProperty(sFunctionName,func);
 }
 
 void DiE_ScriptEngine::_addClass(QObject *pClass, QString sClassName)
 {
-    QScriptValue objectWnd=this->newQObject(pClass);
+    XSCRIPTVALUE objectWnd=this->newQObject(pClass);
     this->globalObject().setProperty(sClassName, objectWnd);
 }
