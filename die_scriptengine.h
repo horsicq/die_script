@@ -78,6 +78,12 @@ private:
     static QScriptValue _log(QScriptContext *pContext,QScriptEngine *pEngine);
     void _addFunction(FunctionSignature function,QString sFunctionName);
     void _addClass(QObject *pClass,QString sClassName);
+    void emitErrorMessage(QString sErrorMessage);
+    void emitInfoMessage(QString sInfoMessage);
+
+signals:
+    void errorMessage(QString sErrorMessage);
+    void infoMessage(QString sInfoMessage);
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;

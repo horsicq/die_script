@@ -181,7 +181,7 @@ QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEn
     {
         QString sText=pContext->argument(0).toString();
 
-        // TODO
+        pScriptEngine->emitInfoMessage(sText);
     }
 
     return result;
@@ -197,4 +197,14 @@ void DiE_ScriptEngine::_addClass(QObject *pClass, QString sClassName)
 {
     XSCRIPTVALUE objectWnd=this->newQObject(pClass);
     this->globalObject().setProperty(sClassName, objectWnd);
+}
+
+void DiE_ScriptEngine::emitErrorMessage(QString sErrorMessage)
+{
+    emit errorMessage(sErrorMessage);
+}
+
+void DiE_ScriptEngine::emitInfoMessage(QString sInfoMessage)
+{
+    emit infoMessage(sInfoMessage);
 }

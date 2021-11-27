@@ -172,6 +172,9 @@ signals:
     void directoryScanCompleted(qint64 nTime);
     void directoryScanFileStarted(QString sFileName);
     void directoryScanResult(DiE_Script::SCAN_RESULT scanResult);
+    void errorMessage(QString sErrorMessage);
+    void infoMessage(QString sInfoMessage);
+
 private:
     QString g_sDatabasePath;
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> g_listSignatures;

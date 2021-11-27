@@ -208,6 +208,8 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
     DiE_ScriptEngine scriptEngine(&g_listSignatures,pDevice,fileType);
     connect(this,SIGNAL(stopEngine()),&scriptEngine,SLOT(stop()),Qt::DirectConnection);
+    connect(&scriptEngine,SIGNAL(errorMessage(QString)),this,SIGNAL(errorMessage(QString)));
+    connect(&scriptEngine,SIGNAL(infoMessage(QString)),this,SIGNAL(infoMessage(QString)));
 
 #ifdef QT_SCRIPTTOOLS_LIB
     if(pDebugger)
