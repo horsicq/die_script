@@ -70,3 +70,13 @@ quint32 MACH_Script::getLibraryCurrentVersion(QString sLibraryName)
 {
     return g_pMACH->getLibraryCurrentVersion(sLibraryName,&g_listLibraryRecords);
 }
+
+quint64 MACH_Script::getSectionFileOffset(quint32 nNumber)
+{
+    return g_pMACH->getSectionFileOffset(nNumber,&listSectionRecords);
+}
+
+quint64 MACH_Script::getSectionFileSize(quint32 nNumber)
+{
+    return g_pMACH->getSectionFileSize(nNumber,&listSectionRecords);
+}

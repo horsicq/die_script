@@ -39,6 +39,8 @@ public slots:
     qint32 getSectionNumber(QString sSectionName);
     virtual QString getGeneralOptions();
     quint32 getLibraryCurrentVersion(QString sLibraryName);
+    quint64 getSectionFileOffset(quint32 nNumber);
+    quint64 getSectionFileSize(quint32 nNumber);
 
 private:
     XMACH *g_pMACH;
