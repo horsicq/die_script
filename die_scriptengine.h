@@ -74,9 +74,11 @@ public slots:
     void stop();
 
 private:
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
     static QScriptValue _includeScript(QScriptContext *pContext,QScriptEngine *pEngine);
     static QScriptValue _log(QScriptContext *pContext,QScriptEngine *pEngine);
     void _addFunction(FunctionSignature function,QString sFunctionName);
+#endif
     void _addClass(QObject *pClass,QString sClassName);
     void emitErrorMessage(QString sErrorMessage);
     void emitInfoMessage(QString sInfoMessage);

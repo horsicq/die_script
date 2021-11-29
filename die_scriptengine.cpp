@@ -24,9 +24,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 {
     this->g_pSignaturesList=pSignaturesList;
 
-    // TODO _log function
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
     _addFunction(_includeScript,"includeScript");
     _addFunction(_log,"_log");
+#endif
 
     g_pBinary=0;
     g_pBinaryScript=0;
@@ -138,7 +139,7 @@ void DiE_ScriptEngine::stop()
         g_pBinary->setSearchProcessEnable(false);
     }
 }
-
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
 QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *pContext, QScriptEngine *pEngine)
 {
     QScriptValue result;
@@ -170,7 +171,8 @@ QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *pContext, QScriptE
 
     return result;
 }
-
+#endif
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
 QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEngine)
 {
     QScriptValue result;
@@ -186,12 +188,14 @@ QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEn
 
     return result;
 }
-
+#endif
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
 void DiE_ScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, QString sFunctionName)
 {
     XSCRIPTVALUE func=this->newFunction(function);
     this->globalObject().setProperty(sFunctionName,func);
 }
+#endif
 
 void DiE_ScriptEngine::_addClass(QObject *pClass, QString sClassName)
 {

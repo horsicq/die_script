@@ -398,7 +398,8 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHead
 
         QString _sType=result.sType.toLower();
 
-        if      (_sType=="compiler")        result.sType=tr("Compiler");
+        if      (_sType=="archive")         result.sType=tr("Archive");
+        else if (_sType=="compiler")        result.sType=tr("Compiler");
         else if (_sType=="cryptor")         result.sType=tr("Cryptor");
         else if (_sType=="certificate")     result.sType=tr("Certificate");
         else if (_sType=="converter")       result.sType=tr("Converter");
@@ -412,9 +413,13 @@ DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHead
         else if (_sType=="language")        result.sType=tr("Language");
         else if (_sType=="library")         result.sType=tr("Library");
         else if (_sType=="linker")          result.sType=tr("Linker");
+        else if (_sType=="overlay")         result.sType=tr("Overlay");
         else if (_sType=="packer")          result.sType=tr("Packer");
+        else if (_sType=="player")          result.sType=tr("Player");
+        else if (_sType=="protection")      result.sType=tr("Protection");
         else if (_sType=="protector")       result.sType=tr("Protector");
         else if (_sType=="protector data")  result.sType=tr("Protector data");
+        else if (_sType=="sfx")             result.sType=QString("SFX");
         else if (_sType=="source code")     result.sType=tr("Source code");
         else if (_sType=="stub")            result.sType=tr("Stub");
         else if (_sType=="tool")            result.sType=tr("Tool");
