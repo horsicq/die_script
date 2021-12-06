@@ -66,9 +66,20 @@ public:
         bool bReadOnly;
     };
 
+    struct RESULT
+    {
+        QString sType;
+        QString sName;
+        QString sVersion;
+        QString sOptions;
+    };
+
     DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType);
     ~DiE_ScriptEngine();
     bool handleError(XSCRIPTVALUE value,QString *psErrorString);
+    QList<RESULT> getListResult();
+    void clearListResult();
+    static RESULT stringToResult(QString sString,bool bShowType,bool bShowVersion,bool bShowOptions);
 
 public slots:
     void stop();
@@ -77,11 +88,13 @@ private:
 #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
     static QScriptValue _includeScript(QScriptContext *pContext,QScriptEngine *pEngine);
     static QScriptValue _log(QScriptContext *pContext,QScriptEngine *pEngine);
+    static QScriptValue _setResult(QScriptContext *pContext,QScriptEngine *pEngine);
     void _addFunction(FunctionSignature function,QString sFunctionName);
 #endif
     void _addClass(QObject *pClass,QString sClassName);
     void emitErrorMessage(QString sErrorMessage);
     void emitInfoMessage(QString sInfoMessage);
+    void addResult(QString sType,QString sName,QString sVersion,QString sOptions);
 
 signals:
     void errorMessage(QString sErrorMessage);
@@ -91,6 +104,7 @@ private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;
     XBinary *g_pBinary;
     Binary_Script *g_pBinaryScript;
+    QList<RESULT> g_listResult;
 };
 
 #endif // DIE_SCRIPTENGINE_H

@@ -33,6 +33,11 @@ SOURCES += \
     include($$PWD/../Formats/xformats.pri)
 }
 
+!contains(XCONFIG, scanitem) {
+    XCONFIG += scanitem
+    include($$PWD/../Formats/scanitem.pri)
+}
+
 !contains(XCONFIG, xarchive) {
     XCONFIG += xarchive
     include($$PWD/../XArchive/xarchive.pri)
@@ -53,4 +58,6 @@ contains(XCONFIG, use_capstone_x86) {
 }
 
 DISTFILES += \
+    $$PWD/LICENSE \
+    $$PWD/README.md \
     $$PWD/die_script.cmake

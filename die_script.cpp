@@ -162,18 +162,18 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
     emit progressMaximumChanged(100); // TODO const
     emit progressValueChanged(nCurrent);
 
-    scanResult.sFileName=XBinary::getDeviceFileName(pDevice);
-    scanResult.scanHeader.fileType=fileType;
-
     XBinary::_MEMORY_MAP memoryMap=XFormats::getMemoryMap(fileType,pDevice);
 
-    scanResult.scanHeader.sArch=memoryMap.sArch;
-    scanResult.scanHeader.mode=memoryMap.mode;
-    scanResult.scanHeader.bIsBigEndian=memoryMap.bIsBigEndian;
-    scanResult.scanHeader.sType=memoryMap.sType;
-    scanResult.scanHeader.nOffset=0;
-    scanResult.scanHeader.nSize=pDevice->size();
-    scanResult.scanHeader.filePart=XBinary::FILEPART_HEADER;
+    scanResult.sFileName=XBinary::getDeviceFileName(pDevice);
+    scanResult.id.fileType=fileType;
+    scanResult.id.sUuid=XBinary::generateUUID();
+    scanResult.id.sArch=memoryMap.sArch;
+    scanResult.id.mode=memoryMap.mode;
+    scanResult.id.bIsBigEndian=memoryMap.bIsBigEndian;
+    scanResult.id.sType=memoryMap.sType;
+    scanResult.id.nOffset=0;
+    scanResult.id.nSize=pDevice->size();
+    scanResult.id.filePart=XBinary::FILEPART_HEADER;
 
     qint32 nNumberOfSignatures=g_listSignatures.count();
 
@@ -265,6 +265,8 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
         if(bExec)
         {
+            scriptEngine.clearListResult();
+
             DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord=g_listSignatures.at(i);
 
             QElapsedTimer scanTimer;
@@ -300,13 +302,53 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
                     if(_handleError(&scriptEngine,result,&signatureRecord,&scanResult))
                     {
+                        // TODO getResult
                         QString sResult=result.toString();
 
-                        if(sResult!="")
-                        {
-                            SCAN_STRUCT ss=getScanStructFromString(scanResult.scanHeader,&signatureRecord,sResult,pOptions);
+                        QList<DiE_ScriptEngine::RESULT> listDetects=scriptEngine.getListResult();
 
-                            scanResult.listRecords.append(ss);
+                        if((listDetects.count()==0)&&(sResult!=""))
+                        {
+                            listDetects.append(DiE_ScriptEngine::stringToResult(sResult,pOptions->bShowType,pOptions->bShowVersion,pOptions->bShowOptions));
+//                            SCAN_STRUCT ss=getScanStructFromString(scanResult.scanHeader,&signatureRecord,sResult,pOptions);
+
+//                            scanResult.listRecords.append(ss);
+                        }
+
+                        qint32 nNumberOfDetects=listDetects.count();
+
+                        for(int j=0;j<nNumberOfDetects;j++)
+                        {
+                            SCAN_STRUCT ssRecord={};
+
+                            if(scanResult.id.fileType==XBinary::FT_BINARY)
+                            {
+                                QString sPrefix=signatureRecord.sName.section(".",0,0).toUpper();
+
+                                if(sPrefix=="COM")
+                                {
+                                    scanResult.id.fileType=XBinary::FT_COM;
+                                    scanResult.id.sArch="8086";
+                                    scanResult.id.sType="EXE";
+                                }
+                                else if(sPrefix=="TEXT") // mb TODO not set if COM
+                                {
+                                    scanResult.id.fileType=XBinary::FT_TEXT;
+                                }
+                            }
+
+                            // TODO IDs
+                            ssRecord.id=scanResult.id;
+
+                            ssRecord.sSignature=signatureRecord.sName;
+                            ssRecord.sType=listDetects.at(j).sType;
+                            ssRecord.sName=listDetects.at(j).sName;
+                            ssRecord.sVersion=listDetects.at(j).sVersion;
+                            ssRecord.sOptions=listDetects.at(j).sOptions;
+                            ssRecord.sFullString=QString("%1: %2(%3)[%4]").arg(ssRecord.sType,ssRecord.sName,ssRecord.sVersion,ssRecord.sOptions);
+                            ssRecord.sResult=QString("%1(%2)[%3]").arg(ssRecord.sName,ssRecord.sVersion,ssRecord.sOptions);
+
+                            scanResult.listRecords.append(ssRecord);
                         }
                     }
                 }
@@ -367,96 +409,6 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     }
 
     return bResult;
-}
-
-DiE_Script::SCAN_STRUCT DiE_Script::getScanStructFromString(SCAN_HEADER scanHeader, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, QString sString, SCAN_OPTIONS *pScanOptions)
-{
-    SCAN_STRUCT result={};
-
-    if(scanHeader.fileType==XBinary::FT_BINARY)
-    {
-        QString sPrefix=pSignatureRecord->sName.section(".",0,0).toUpper();
-
-        if(sPrefix=="COM")
-        {
-            result.fileType=XBinary::FT_COM;
-        }
-        else if(sPrefix=="TEXT") // mb TODO not set if COM
-        {
-            result.fileType=XBinary::FT_TEXT;
-        }
-    }
-
-    result.scanHeader=scanHeader;
-    result.sSignature=pSignatureRecord->sName;
-
-    result.sFullString=sString;
-
-    if(pScanOptions->bShowType)
-    {
-        result.sType=sString.section(": ",0,0);
-
-        QString _sType=result.sType.toLower();
-
-        if      (_sType=="archive")         result.sType=tr("Archive");
-        else if (_sType=="compiler")        result.sType=tr("Compiler");
-        else if (_sType=="cryptor")         result.sType=tr("Cryptor");
-        else if (_sType=="certificate")     result.sType=tr("Certificate");
-        else if (_sType=="converter")       result.sType=tr("Converter");
-        else if (_sType=="database")        result.sType=tr("Database");
-        else if (_sType=="debug data")      result.sType=tr("Debug data");
-        else if (_sType=="format")          result.sType=tr("Format");
-        else if (_sType=="image")           result.sType=tr("Image");
-        else if (_sType=="installer")       result.sType=tr("Installer");
-        else if (_sType=="installer data")  result.sType=tr("Installer data");
-        else if (_sType=="joiner")          result.sType=tr("Joiner");
-        else if (_sType=="language")        result.sType=tr("Language");
-        else if (_sType=="library")         result.sType=tr("Library");
-        else if (_sType=="linker")          result.sType=tr("Linker");
-        else if (_sType=="overlay")         result.sType=tr("Overlay");
-        else if (_sType=="packer")          result.sType=tr("Packer");
-        else if (_sType=="player")          result.sType=tr("Player");
-        else if (_sType=="protection")      result.sType=tr("Protection");
-        else if (_sType=="protector")       result.sType=tr("Protector");
-        else if (_sType=="protector data")  result.sType=tr("Protector data");
-        else if (_sType=="sfx")             result.sType=QString("SFX");
-        else if (_sType=="source code")     result.sType=tr("Source code");
-        else if (_sType=="stub")            result.sType=tr("Stub");
-        else if (_sType=="tool")            result.sType=tr("Tool");
-        else if (_sType==".net compressor") result.sType=QString(".NET %1").arg(tr("compressor"));
-        else if (_sType==".net obfuscator") result.sType=QString(".NET %1").arg(tr("obfuscator"));
-        else if (_sType=="dos extender")    result.sType=QString("DOS %1").arg(tr("extender"));
-
-        result.sResult=sString.section(": ",1,-1);
-    }
-    else
-    {
-        result.sResult=sString;
-    }
-
-    QString _sString=result.sResult;
-
-    if(pScanOptions->bShowOptions)
-    {
-        if(_sString.count("[")==1)
-        {
-            result.sName=_sString.section("[",0,0);
-            result.sOptions=_sString.section("[",1,-1).section("]",0,0);
-            _sString=_sString.section("[",0,0);
-        }
-    }
-    // TODO
-    // Check
-    if(pScanOptions->bShowVersion)
-    {
-        if(_sString.count("(")==1)
-        {
-            result.sVersion=_sString.section("(",1,-1).section(")",0,0);
-            result.sName=_sString.section("(",0,0);
-        }
-    }
-
-    return result;
 }
 
 bool DiE_Script::loadDatabase(QString sDatabasePath)
@@ -783,11 +735,11 @@ QString DiE_Script::scanResultToPlainString(DiE_Script::SCAN_RESULT *pScanResult
 {
     QString sResult;
 
-    sResult+=QString("filetype: %1\n").arg(XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
-    sResult+=QString("arch: %1\n").arg(pScanResult->scanHeader.sArch);
-    sResult+=QString("mode: %1\n").arg(XBinary::modeIdToString(pScanResult->scanHeader.mode));
-    sResult+=QString("endianess: %1\n").arg(XBinary::endiannessToString(pScanResult->scanHeader.bIsBigEndian));
-    sResult+=QString("type: %1\n").arg(pScanResult->scanHeader.sType);
+    sResult+=QString("filetype: %1\n").arg(XBinary::fileTypeIdToString(pScanResult->id.fileType));
+    sResult+=QString("arch: %1\n").arg(pScanResult->id.sArch);
+    sResult+=QString("mode: %1\n").arg(XBinary::modeIdToString(pScanResult->id.mode));
+    sResult+=QString("endianess: %1\n").arg(XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+    sResult+=QString("type: %1\n").arg(pScanResult->id.sType);
 
     qint32 nNumberOfRecords=pScanResult->listRecords.count();
 
@@ -805,11 +757,11 @@ QString DiE_Script::scanResultToJsonString(DiE_Script::SCAN_RESULT *pScanResult)
 
     QJsonObject jsonResult;
 
-    jsonResult.insert("filetype",XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
-    jsonResult.insert("arch",pScanResult->scanHeader.sArch);
-    jsonResult.insert("mode",XBinary::modeIdToString(pScanResult->scanHeader.mode));
-    jsonResult.insert("endianess",XBinary::endiannessToString(pScanResult->scanHeader.bIsBigEndian));
-    jsonResult.insert("type",pScanResult->scanHeader.sType);
+    jsonResult.insert("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
+    jsonResult.insert("arch",pScanResult->id.sArch);
+    jsonResult.insert("mode",XBinary::modeIdToString(pScanResult->id.mode));
+    jsonResult.insert("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+    jsonResult.insert("type",pScanResult->id.sType);
 
     QJsonArray jsArray;
 
@@ -847,11 +799,11 @@ QString DiE_Script::scanResultToXmlString(DiE_Script::SCAN_RESULT *pScanResult)
 
     xml.writeStartElement("filescan");
 
-    xml.writeAttribute("filetype",XBinary::fileTypeIdToString(pScanResult->scanHeader.fileType));
-    xml.writeAttribute("arch",pScanResult->scanHeader.sArch);
-    xml.writeAttribute("mode",XBinary::modeIdToString(pScanResult->scanHeader.mode));
-    xml.writeAttribute("endianess",XBinary::endiannessToString(pScanResult->scanHeader.bIsBigEndian));
-    xml.writeAttribute("type",pScanResult->scanHeader.sType);
+    xml.writeAttribute("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
+    xml.writeAttribute("arch",pScanResult->id.sArch);
+    xml.writeAttribute("mode",XBinary::modeIdToString(pScanResult->id.mode));
+    xml.writeAttribute("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+    xml.writeAttribute("type",pScanResult->id.sType);
 
     qint32 nNumberOfRecords=pScanResult->listRecords.count();
 
@@ -946,6 +898,107 @@ DiE_Script::DIRECTORYSTATS DiE_Script::getCurrentDirectoryStats()
     }
 
     return g_directoryStats;
+}
+
+QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStructs)
+{
+    QList<XBinary::SCANSTRUCT> listResult;
+
+    qint32 nNumberOfRecords=pListScanStructs->count();
+
+    for(qint32 i=0;i<nNumberOfRecords;i++)
+    {
+        XBinary::SCANSTRUCT record={};
+
+        record.bIsHeuristic=pListScanStructs->at(i).bIsHeuristic;
+        record.id=pListScanStructs->at(i).id;
+        record.parentId=pListScanStructs->at(i).parentId;
+        record.sType=pListScanStructs->at(i).sType;
+        record.sName=pListScanStructs->at(i).sName;
+        record.sVersion=pListScanStructs->at(i).sVersion;
+        record.sInfo=pListScanStructs->at(i).sOptions;
+
+    #ifdef QT_GUI_LIB
+        QString _sName=record.sName.toLower();
+
+        // TODO more
+        if(     (_sName=="installer")||
+                (_sName=="sfx"))
+        {
+            record.colText=QColor(Qt::blue);
+        }
+        else if((_sName=="protector")||
+                (_sName=="apk obfuscator")||
+                (_sName=="jar obfuscator")||
+                (_sName==".net obfuscator")||
+                (_sName==".net compressor")||
+                (_sName=="dongle protection")||
+                (_sName=="joiner")||
+                (_sName=="packer"))
+        {
+            record.colText=QColor(Qt::red);
+        }
+        else if((_sName=="pe tool")||
+                (_sName=="apk tool"))
+        {
+            record.colText=QColor(Qt::green);
+        }
+        else if((_sName=="operation system")||
+                (_sName=="virtual machine"))
+        {
+            record.colText=QColor(Qt::darkYellow);
+        }
+        else if(_sName=="signtool")
+        {
+            record.colText=QColor(Qt::darkMagenta);
+        }
+        else if(_sName=="language")
+        {
+            record.colText=QColor(Qt::darkCyan);
+        }
+        else
+        {
+            record.colText=QApplication::palette().text().color();
+        }
+    #endif
+
+        QString _sType=record.sType;
+
+        if      (_sType=="archive")         _sType=tr("Archive");
+        else if (_sType=="compiler")        _sType=tr("Compiler");
+        else if (_sType=="cryptor")         _sType=tr("Cryptor");
+        else if (_sType=="certificate")     _sType=tr("Certificate");
+        else if (_sType=="converter")       _sType=tr("Converter");
+        else if (_sType=="database")        _sType=tr("Database");
+        else if (_sType=="debug data")      _sType=tr("Debug data");
+        else if (_sType=="format")          _sType=tr("Format");
+        else if (_sType=="image")           _sType=tr("Image");
+        else if (_sType=="installer")       _sType=tr("Installer");
+        else if (_sType=="installer data")  _sType=tr("Installer data");
+        else if (_sType=="joiner")          _sType=tr("Joiner");
+        else if (_sType=="language")        _sType=tr("Language");
+        else if (_sType=="library")         _sType=tr("Library");
+        else if (_sType=="linker")          _sType=tr("Linker");
+        else if (_sType=="overlay")         _sType=tr("Overlay");
+        else if (_sType=="packer")          _sType=tr("Packer");
+        else if (_sType=="player")          _sType=tr("Player");
+        else if (_sType=="protection")      _sType=tr("Protection");
+        else if (_sType=="protector")       _sType=tr("Protector");
+        else if (_sType=="protector data")  _sType=tr("Protector data");
+        else if (_sType=="sfx")             _sType=QString("SFX");
+        else if (_sType=="source code")     _sType=tr("Source code");
+        else if (_sType=="stub")            _sType=tr("Stub");
+        else if (_sType=="tool")            _sType=tr("Tool");
+        else if (_sType==".net compressor") _sType=QString(".NET %1").arg(tr("compressor"));
+        else if (_sType==".net obfuscator") _sType=QString(".NET %1").arg(tr("obfuscator"));
+        else if (_sType=="dos extender")    _sType=QString("DOS %1").arg(tr("extender"));
+
+        record.sType=_sType;
+
+        listResult.append(record);
+    }
+
+    return listResult;
 }
 
 #ifdef QT_SCRIPTTOOLS_LIB

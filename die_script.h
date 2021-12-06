@@ -31,6 +31,7 @@
 #include "die_scriptengine.h"
 #include "xformats.h"
 #include "xzip.h"
+#include "scanitemmodel.h"
 #ifdef QT_SCRIPTTOOLS_LIB
 #include <QScriptEngineDebugger>
 #include <QAction>
@@ -44,22 +45,25 @@ class DiE_Script : public QObject
     Q_OBJECT
 
 public:
-    struct SCAN_HEADER
-    {
-        XBinary::FT fileType;
-        QString sArch;
-        XBinary::MODE mode;
-        bool bIsBigEndian;
-        QString sType;
-        qint64 nSize;
-        qint64 nOffset;
-        XBinary::FILEPART filePart;
-    };
+//    struct SCAN_HEADER
+//    {
+//        XBinary::FT fileType;
+//        QString sArch;
+//        XBinary::MODE mode;
+//        bool bIsBigEndian;
+//        QString sType;
+//        qint64 nSize;
+//        qint64 nOffset;
+//        XBinary::FILEPART filePart;
+//    };
 
     struct SCAN_STRUCT
     {
-        SCAN_HEADER scanHeader;
-        XBinary::FT fileType;
+        bool bIsHeuristic;
+        XBinary::SCANID id;
+        XBinary::SCANID parentId;
+//        SCAN_HEADER scanHeader;
+//        XBinary::FT fileType;
         QString sFullString;
         QString sType;
         QString sResult;
@@ -86,7 +90,8 @@ public:
         qint64 nScanTime;
         QString sFileName;
         qint64 nSize;
-        SCAN_HEADER scanHeader; // TODO set
+        XBinary::SCANID id;
+//        SCAN_HEADER scanHeader; // TODO set
         QList<SCAN_STRUCT> listRecords;
         QList<ERROR_RECORD> listErrors;
         QList<DEBUG_RECORD> listDebugRecords;
@@ -154,6 +159,8 @@ public:
     void setProcessDirectory(QString sDirectory,SCAN_OPTIONS scanOptions);
     DIRECTORYSTATS getCurrentDirectoryStats();
 
+    static QList<XBinary::SCANSTRUCT> convert(QList<SCAN_STRUCT> *pListScanStructs);
+
 public slots:
     void stop();
     void processDirectory();
@@ -163,7 +170,6 @@ private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip,QList<XArchive::RECORD> *pListRecords,QString sPrefix,XBinary::FT fileType);
     SCAN_RESULT _scan(QIODevice *pDevice,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="");
     bool _handleError(DiE_ScriptEngine *pScriptEngine,XSCRIPTVALUE scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
-    SCAN_STRUCT getScanStructFromString(SCAN_HEADER scanHeader,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,QString sString,SCAN_OPTIONS *pScanOptions);
 
 signals:
     void progressMaximumChanged(qint32 nMaximum);

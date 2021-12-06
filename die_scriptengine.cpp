@@ -27,6 +27,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
     _addFunction(_includeScript,"includeScript");
     _addFunction(_log,"_log");
+    _addFunction(_setResult,"_setResult");
 #endif
 
     g_pBinary=0;
@@ -132,6 +133,16 @@ bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
     return bResult;
 }
 
+QList<DiE_ScriptEngine::RESULT> DiE_ScriptEngine::getListResult()
+{
+    return g_listResult;
+}
+
+void DiE_ScriptEngine::clearListResult()
+{
+    g_listResult.clear();
+}
+
 void DiE_ScriptEngine::stop()
 {
     if(g_pBinary)
@@ -190,6 +201,26 @@ QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEn
 }
 #endif
 #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext,QScriptEngine *pEngine)
+{
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine=static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if(pScriptEngine)
+    {
+        QString sType=pContext->argument(0).toString();
+        QString sName=pContext->argument(1).toString();
+        QString sVersion=pContext->argument(2).toString();
+        QString sOptions=pContext->argument(3).toString();
+
+        pScriptEngine->addResult(sType,sName,sVersion,sOptions);
+    }
+
+    return result;
+}
+#endif
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
 void DiE_ScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, QString sFunctionName)
 {
     XSCRIPTVALUE func=this->newFunction(function);
@@ -211,4 +242,49 @@ void DiE_ScriptEngine::emitErrorMessage(QString sErrorMessage)
 void DiE_ScriptEngine::emitInfoMessage(QString sInfoMessage)
 {
     emit infoMessage(sInfoMessage);
+}
+
+void DiE_ScriptEngine::addResult(QString sType, QString sName, QString sVersion, QString sOptions)
+{
+    RESULT record={};
+    record.sType=sType;
+    record.sName=sName;
+    record.sVersion=sVersion;
+    record.sOptions=sOptions;
+
+    g_listResult.append(record);
+}
+
+DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(QString sString, bool bShowType, bool bShowVersion, bool bShowOptions)
+{
+    RESULT result={};
+
+    if(bShowType)
+    {
+        result.sType=sString.section(": ",0,0);
+        sString=sString.section(": ",1,-1);
+    }
+
+    QString _sString=sString;
+
+    if(bShowOptions)
+    {
+        if(_sString.count("[")==1)
+        {
+            result.sName=_sString.section("[",0,0);
+            result.sOptions=_sString.section("[",1,-1).section("]",0,0);
+            _sString=_sString.section("[",0,0);
+        }
+    }
+
+    if(bShowVersion)
+    {
+        if(_sString.count("(")==1)
+        {
+            result.sVersion=_sString.section("(",1,-1).section(")",0,0);
+            result.sName=_sString.section("(",0,0);
+        }
+    }
+
+    return result;
 }
