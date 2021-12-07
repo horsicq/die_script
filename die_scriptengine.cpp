@@ -24,7 +24,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 {
     this->g_pSignaturesList=pSignaturesList;
 
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#ifdef QT_SCRIPT_LIB
     _addFunction(_includeScript,"includeScript");
     _addFunction(_log,"_log");
     _addFunction(_setResult,"_setResult");
@@ -150,7 +150,7 @@ void DiE_ScriptEngine::stop()
         g_pBinary->setSearchProcessEnable(false);
     }
 }
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#ifdef QT_SCRIPT_LIB
 QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *pContext, QScriptEngine *pEngine)
 {
     QScriptValue result;
@@ -183,7 +183,7 @@ QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *pContext, QScriptE
     return result;
 }
 #endif
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#ifdef QT_SCRIPT_LIB
 QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEngine)
 {
     QScriptValue result;
@@ -200,7 +200,7 @@ QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEn
     return result;
 }
 #endif
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#ifdef QT_SCRIPT_LIB
 QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext,QScriptEngine *pEngine)
 {
     QScriptValue result;
@@ -220,7 +220,7 @@ QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext,QScriptEngine
     return result;
 }
 #endif
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#ifdef QT_SCRIPT_LIB
 void DiE_ScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, QString sFunctionName)
 {
     XSCRIPTVALUE func=this->newFunction(function);

@@ -36,13 +36,13 @@
 //#include "ipa_script.h"
 //#include "dex_script.h"
 
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#ifdef QT_SCRIPT_LIB
 #include <QScriptEngine>
 #else
 #include <QJSEngine>
 #endif
 
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#ifdef QT_SCRIPT_LIB
 #define XSCRIPTENGINE QScriptEngine
 #define XSCRIPTVALUE QScriptValue
 #define XSCRIPTVALUELIST QScriptValueList
@@ -85,7 +85,7 @@ public slots:
     void stop();
 
 private:
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#ifdef QT_SCRIPT_LIB
     static QScriptValue _includeScript(QScriptContext *pContext,QScriptEngine *pEngine);
     static QScriptValue _log(QScriptContext *pContext,QScriptEngine *pEngine);
     static QScriptValue _setResult(QScriptContext *pContext,QScriptEngine *pEngine);

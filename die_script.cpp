@@ -294,10 +294,10 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
                     valuelist << pOptions->bShowType << pOptions->bShowVersion << pOptions->bShowOptions;
 
-                #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-                    XSCRIPTVALUE result=detect.call(script,valuelist);
+                #ifdef QT_SCRIPT_LIB
+                    QScriptValue result=detect.call(script,valuelist);
                 #else
-                    XSCRIPTVALUE result=detect.callWithInstance(script,valuelist);
+                    QJSValue result=detect.callWithInstance(script,valuelist);
                 #endif
 
                     if(_handleError(&scriptEngine,result,&signatureRecord,&scanResult))
