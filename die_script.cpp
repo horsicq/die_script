@@ -317,7 +317,7 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::FT fileTy
 
                         qint32 nNumberOfDetects=listDetects.count();
 
-                        for(int j=0;j<nNumberOfDetects;j++)
+                        for(qint32 j=0;j<nNumberOfDetects;j++)
                         {
                             SCAN_STRUCT ssRecord={};
 
