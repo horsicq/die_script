@@ -40,6 +40,7 @@
 #include <QScriptEngine>
 #else
 #include <QJSEngine>
+#include "global_script.h"
 #endif
 
 #ifdef QT_SCRIPT_LIB
@@ -86,15 +87,17 @@ public slots:
 
 private:
 #ifdef QT_SCRIPT_LIB
-    static QScriptValue _includeScript(QScriptContext *pContext,QScriptEngine *pEngine);
+    static QScriptValue includeScript(QScriptContext *pContext,QScriptEngine *pEngine);
     static QScriptValue _log(QScriptContext *pContext,QScriptEngine *pEngine);
     static QScriptValue _setResult(QScriptContext *pContext,QScriptEngine *pEngine);
     void _addFunction(FunctionSignature function,QString sFunctionName);
 #endif
     void _addClass(QObject *pClass,QString sClassName);
-    void emitErrorMessage(QString sErrorMessage);
-    void emitInfoMessage(QString sInfoMessage);
-    void addResult(QString sType,QString sName,QString sVersion,QString sOptions);
+
+private slots:
+    void includeScriptSlot(QString sScript);
+    void _logSlot(QString sText);
+    void _setResultSlot(QString sType,QString sName,QString sVersion,QString sOptions);
 
 signals:
     void errorMessage(QString sErrorMessage);
@@ -105,6 +108,9 @@ private:
     XBinary *g_pBinary;
     Binary_Script *g_pBinaryScript;
     QList<RESULT> g_listResult;
+#ifndef QT_SCRIPT_LIB
+    global_script g_globalScript;
+#endif
 };
 
 #endif // DIE_SCRIPTENGINE_H

@@ -25,9 +25,18 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     this->g_pSignaturesList=pSignaturesList;
 
 #ifdef QT_SCRIPT_LIB
-    _addFunction(_includeScript,"includeScript");
+    _addFunction(includeScript,"includeScript");
     _addFunction(_log,"_log");
     _addFunction(_setResult,"_setResult");
+#else
+    connect(&g_globalScript,SIGNAL(includeScriptSignal(QString)),this,SLOT(includeScriptSlot(QString)),Qt::DirectConnection);
+    connect(&g_globalScript,SIGNAL(_logSignal(QString)),this,SLOT(_logSlot(QString)),Qt::DirectConnection);
+    connect(&g_globalScript,SIGNAL(_setResultSignal(QString,QString,QString,QString)),this,SLOT(_setResultSlot(QString,QString,QString,QString)),Qt::DirectConnection);
+
+    QJSValue valueGlobalScript=newQObject(&g_globalScript);
+    globalObject().setProperty("includeScript",valueGlobalScript.property("includeScript"));
+    globalObject().setProperty("_log",valueGlobalScript.property("_log"));
+    globalObject().setProperty("_setResult",valueGlobalScript.property("_setResult"));
 #endif
 
     g_pBinary=0;
@@ -151,33 +160,19 @@ void DiE_ScriptEngine::stop()
     }
 }
 #ifdef QT_SCRIPT_LIB
-QScriptValue DiE_ScriptEngine::_includeScript(QScriptContext *pContext, QScriptEngine *pEngine)
+QScriptValue DiE_ScriptEngine::includeScript(QScriptContext *pContext, QScriptEngine *pEngine)
 {
     QScriptValue result;
 
     DiE_ScriptEngine *pScriptEngine=static_cast<DiE_ScriptEngine *>(pEngine);
 
-    // TODO error, cannot find signature
-
     if(pScriptEngine)
     {
-        QString sName=pContext->argument(0).toString();
+        pEngine->currentContext()->setActivationObject(pEngine->currentContext()->parentContext()->activationObject());
 
-        qint32 nNumberOfSignatures=pScriptEngine->g_pSignaturesList->count();
+        QString sScript=pContext->argument(0).toString();
 
-        for(qint32 i=0;i<nNumberOfSignatures;i++)
-        {
-            if(pScriptEngine->g_pSignaturesList->at(i).fileType==XBinary::FT_UNKNOWN)
-            {
-                if(pScriptEngine->g_pSignaturesList->at(i).sName==sName)
-                {
-                    pEngine->currentContext()->setActivationObject(pEngine->currentContext()->parentContext()->activationObject());
-                    result=pEngine->evaluate(pScriptEngine->g_pSignaturesList->at(i).sText);
-
-                    break;
-                }
-            }
-        }
+        pScriptEngine->includeScriptSlot(sScript);
     }
 
     return result;
@@ -194,7 +189,7 @@ QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEn
     {
         QString sText=pContext->argument(0).toString();
 
-        pScriptEngine->emitInfoMessage(sText);
+        pScriptEngine->_logSlot(sText);
     }
 
     return result;
@@ -214,7 +209,7 @@ QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext,QScriptEngine
         QString sVersion=pContext->argument(2).toString();
         QString sOptions=pContext->argument(3).toString();
 
-        pScriptEngine->addResult(sType,sName,sVersion,sOptions);
+        pScriptEngine->_setResultSlot(sType,sName,sVersion,sOptions);
     }
 
     return result;
@@ -223,7 +218,7 @@ QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext,QScriptEngine
 #ifdef QT_SCRIPT_LIB
 void DiE_ScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, QString sFunctionName)
 {
-    XSCRIPTVALUE func=this->newFunction(function);
+    QScriptValue func=this->newFunction(function);
     this->globalObject().setProperty(sFunctionName,func);
 }
 #endif
@@ -234,17 +229,33 @@ void DiE_ScriptEngine::_addClass(QObject *pClass, QString sClassName)
     this->globalObject().setProperty(sClassName, objectWnd);
 }
 
-void DiE_ScriptEngine::emitErrorMessage(QString sErrorMessage)
+void DiE_ScriptEngine::includeScriptSlot(QString sScript)
 {
-    emit errorMessage(sErrorMessage);
+// TODO error, cannot find signature
+
+    qint32 nNumberOfSignatures=g_pSignaturesList->count();
+
+    for(qint32 i=0;i<nNumberOfSignatures;i++)
+    {
+        if(g_pSignaturesList->at(i).fileType==XBinary::FT_UNKNOWN)
+        {
+            if(g_pSignaturesList->at(i).sName==sScript)
+            {
+                // TODO error
+                evaluate(g_pSignaturesList->at(i).sText);
+
+                break;
+            }
+        }
+    }
 }
 
-void DiE_ScriptEngine::emitInfoMessage(QString sInfoMessage)
+void DiE_ScriptEngine::_logSlot(QString sText)
 {
-    emit infoMessage(sInfoMessage);
+    emit infoMessage(sText);
 }
 
-void DiE_ScriptEngine::addResult(QString sType, QString sName, QString sVersion, QString sOptions)
+void DiE_ScriptEngine::_setResultSlot(QString sType, QString sName, QString sVersion, QString sOptions)
 {
     RESULT record={};
     record.sType=sType;

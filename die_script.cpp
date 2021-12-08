@@ -471,6 +471,10 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
 
         g_databaseType=DBT_FOLDER;
     }
+    else
+    {
+        emit errorMessage(QString("%1: %2").arg(tr("Cannot load database"),sDatabasePath));
+    }
 
     return g_listSignatures.count();
 }
