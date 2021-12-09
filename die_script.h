@@ -22,12 +22,12 @@
 #define DIE_SCRIPT_H
 
 #include <QDir>
-#include <QXmlStreamWriter>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
 #include <QSemaphore>
 #include <QTimer>
+#include <QXmlStreamWriter>
 #include "die_scriptengine.h"
 #include "xformats.h"
 #include "xzip.h"
@@ -40,6 +40,7 @@
 bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1,const DiE_ScriptEngine::SIGNATURE_RECORD &sr2);
 bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1,const DiE_ScriptEngine::SIGNATURE_RECORD &sr2);
 
+// TODO signatures stats function
 class DiE_Script : public QObject
 {
     Q_OBJECT
