@@ -1,1 +1,1 @@
-die script
+# die_script

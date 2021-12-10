@@ -121,6 +121,12 @@ public:
         QMap<QString,qint32> mapTypes;
     };
 
+    struct SIGNATURE_STATE
+    {
+        XBinary::FT fileType;
+        qint32 nNumberOfSignatures;
+    };
+
     struct DIRECTORYSTATS
     {
         qint32 nTotal;
@@ -139,6 +145,10 @@ public:
     explicit DiE_Script(QObject *pParent=nullptr);
     bool loadDatabase(QString sDatabasePath);
     QString getDatabasePath();
+
+    QList<SIGNATURE_STATE> getSignatureStates();
+    qint32 getNumberOfSignatures(XBinary::FT fileType);
+
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> *getSignatures();
     SCAN_RESULT scanFile(QString sFileName,SCAN_OPTIONS *pOptions);
     SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions);
@@ -169,7 +179,7 @@ public slots:
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath,XBinary::FT fileType);
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip,QList<XArchive::RECORD> *pListRecords,QString sPrefix,XBinary::FT fileType);
-    SCAN_RESULT _scan(QIODevice *pDevice,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="");
+    SCAN_RESULT _scan(QIODevice *pDevice,XBinary::SCANID parentId,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="",qint64 nOffset=0);
     bool _handleError(DiE_ScriptEngine *pScriptEngine,XSCRIPTVALUE scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
 signals:
