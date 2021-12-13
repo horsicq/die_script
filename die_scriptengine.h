@@ -25,12 +25,14 @@
 #include "xbinary.h"
 #include "global_script.h"
 #include "binary_script.h"
+#include "com_script.h"
 #include "elf_script.h"
 #include "mach_script.h"
 #include "msdos_script.h"
 #include "pe_script.h"
 #include "ne_script.h"
 #include "le_script.h"
+#include "lx_script.h"
 //#include "jar_script.h"
 //#include "apk_script.h"
 //#include "ipa_script.h"
@@ -107,6 +109,9 @@ private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;
     XBinary *g_pBinary;
     Binary_Script *g_pBinaryScript;
+    XBinary *g_pExtra;
+    Binary_Script *g_pExtraScript;
+
     QList<RESULT> g_listResult;
 #ifndef QT_SCRIPT_LIB
     global_script g_globalScript;

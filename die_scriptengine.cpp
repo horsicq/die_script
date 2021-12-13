@@ -42,54 +42,68 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     g_pBinary=0;
     g_pBinaryScript=0;
 
-    if(XBinary::checkFileType(XBinary::FT_BINARY,fileType))
-    {
-        g_pBinary=new XBinary(pDevice);
-        g_pBinaryScript=new Binary_Script(g_pBinary);
-        _addClass(g_pBinaryScript,"Binary");
-    }
+    g_pExtra=0;
+    g_pExtraScript=0;
 
-    if(XBinary::checkFileType(XBinary::FT_PE,fileType))
+    g_pBinary=new XBinary(pDevice); // TODO Check memory leak!
+    g_pBinaryScript=new Binary_Script(g_pBinary); // TODO Check memory leak!
+    _addClass(g_pBinaryScript,"Binary");
+
+    if(XBinary::checkFileType(XBinary::FT_COM,fileType))
+    {
+        XCOM *pCOM=new XCOM(pDevice);
+        g_pExtraScript=new COM_Script(pCOM);
+        _addClass(g_pExtraScript,"COM");
+        g_pExtra=pCOM;
+    }
+    else if(XBinary::checkFileType(XBinary::FT_PE,fileType))
     {
         XPE *pPE=new XPE(pDevice);
-        g_pBinaryScript=new PE_Script(pPE);
-        _addClass(g_pBinaryScript,"PE");
-        g_pBinary=pPE;
+        g_pExtraScript=new PE_Script(pPE);
+        _addClass(g_pExtraScript,"PE");
+        g_pExtra=pPE;
     }
     else if(XBinary::checkFileType(XBinary::FT_ELF,fileType))
     {
         XELF *pELF=new XELF(pDevice);
-        g_pBinaryScript=new ELF_Script(pELF);
-        _addClass(g_pBinaryScript,"ELF");
-        g_pBinary=pELF;
+        g_pExtraScript=new ELF_Script(pELF);
+        _addClass(g_pExtraScript,"ELF");
+        g_pExtra=pELF;
     }
     else if(XBinary::checkFileType(XBinary::FT_MACHO,fileType))
     {
         XMACH *pMACH=new XMACH(pDevice);
-        g_pBinaryScript=new MACH_Script(pMACH);
-        _addClass(g_pBinaryScript,"MACH");
-        g_pBinary=pMACH;
+        g_pExtraScript=new MACH_Script(pMACH);
+        _addClass(g_pExtraScript,"MACH");
+        g_pExtra=pMACH;
     }
     else if(XBinary::checkFileType(XBinary::FT_NE,fileType))
     {
         XNE *pNE=new XNE(pDevice);
-        g_pBinaryScript=new NE_Script(pNE);
-        _addClass(g_pBinaryScript,"NE");
-        g_pBinary=pNE;
+        g_pExtraScript=new NE_Script(pNE);
+        _addClass(g_pExtraScript,"NE");
+        g_pExtra=pNE;
     }
     else if(XBinary::checkFileType(XBinary::FT_LE,fileType))
     {
         XLE *pLE=new XLE(pDevice);
-        g_pBinaryScript=new LE_Script(pLE);
-        _addClass(g_pBinaryScript,"LE");
-        g_pBinary=pLE;
+        g_pExtraScript=new LE_Script(pLE);
+        _addClass(g_pExtraScript,"LE");
+        g_pExtra=pLE;
+    }
+    else if(XBinary::checkFileType(XBinary::FT_LX,fileType))
+    {
+        XLE *pLE=new XLE(pDevice);
+        g_pExtraScript=new LX_Script(pLE);
+        _addClass(g_pExtraScript,"LX");
+        g_pExtra=pLE;
     }
     else if(XBinary::checkFileType(XBinary::FT_MSDOS,fileType))
     {
         XMSDOS *pXMSDOS=new XMSDOS(pDevice);
-        g_pBinaryScript=new MSDOS_Script(pXMSDOS);
-        _addClass(g_pBinaryScript,"MSDOS");
-        g_pBinary=pXMSDOS;
+        g_pExtraScript=new MSDOS_Script(pXMSDOS);
+        _addClass(g_pExtraScript,"MSDOS");
+        g_pExtra=pXMSDOS;
     }
 //    else if(XBinary::checkFileType(XBinary::FT_JAR,fileType))
 //    {
@@ -123,8 +137,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
 DiE_ScriptEngine::~DiE_ScriptEngine()
 {
-    delete g_pBinary;
-    delete g_pBinaryScript;
+    if(g_pBinary)           delete g_pBinary;
+    if(g_pExtra)            delete g_pExtra;
+    if(g_pBinaryScript)     delete g_pBinaryScript;
+    if(g_pExtraScript)      delete g_pExtraScript;
 }
 
 bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)

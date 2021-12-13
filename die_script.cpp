@@ -438,12 +438,14 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
 
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"",XBinary::FT_UNKNOWN));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"Binary",XBinary::FT_BINARY));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"COM",XBinary::FT_COM));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"JAR",XBinary::FT_JAR));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"APK",XBinary::FT_APK));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"IPA",XBinary::FT_IPA));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"DEX",XBinary::FT_DEX));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MSDOS",XBinary::FT_MSDOS));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"LE",XBinary::FT_LE));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"LX",XBinary::FT_LX));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"NE",XBinary::FT_NE));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"PE",XBinary::FT_PE));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"ELF",XBinary::FT_ELF));
@@ -459,12 +461,14 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
     {
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath,XBinary::FT_UNKNOWN));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"Binary",XBinary::FT_BINARY));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"COM",XBinary::FT_COM));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"JAR",XBinary::FT_JAR));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"APK",XBinary::FT_APK));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"IPA",XBinary::FT_IPA));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"DEX",XBinary::FT_IPA));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MSDOS",XBinary::FT_MSDOS));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"LE",XBinary::FT_LE));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"LX",XBinary::FT_LX));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"NE",XBinary::FT_NE));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
@@ -492,9 +496,11 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
     QList<XBinary::FT> listFT;
 
     listFT.append(XBinary::FT_BINARY);
+    listFT.append(XBinary::FT_COM);
     listFT.append(XBinary::FT_MSDOS);
     listFT.append(XBinary::FT_NE);
     listFT.append(XBinary::FT_LE);
+    listFT.append(XBinary::FT_LX);
     listFT.append(XBinary::FT_PE);
     listFT.append(XBinary::FT_ELF);
     listFT.append(XBinary::FT_MACHO);
@@ -625,6 +631,19 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
     else if(stFT.contains(XBinary::FT_IPA))
     {
         scanResult=_scan(pDevice,parentId,XBinary::FT_IPA,pOptions);
+    }
+    else if(stFT.contains(XBinary::FT_COM))
+    {
+        scanResult=_scan(pDevice,parentId,XBinary::FT_BINARY,pOptions);
+
+        SCAN_RESULT _scanResult=_scan(pDevice,parentId,XBinary::FT_COM,pOptions);
+
+        if(_scanResult.listRecords.count())
+        {
+            _scanResult.listRecords.append(scanResult.listRecords);
+
+            scanResult=_scanResult;
+        }
     }
     else if(stFT.contains(XBinary::FT_BINARY))
     {

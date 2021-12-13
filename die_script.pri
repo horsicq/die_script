@@ -6,6 +6,7 @@ DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/binary_script.h \
+    $$PWD/com_script.h \
     $$PWD/die_script.h \
     $$PWD/die_scriptengine.h \
     $$PWD/global_script.h \
@@ -13,11 +14,13 @@ HEADERS += \
     $$PWD/pe_script.h \
     $$PWD/ne_script.h \
     $$PWD/le_script.h \
+    $$PWD/lx_script.h \
     $$PWD/mach_script.h \
     $$PWD/elf_script.h
 
 SOURCES += \
     $$PWD/binary_script.cpp \
+    $$PWD/com_script.cpp \
     $$PWD/die_script.cpp \
     $$PWD/die_scriptengine.cpp \
     $$PWD/global_script.cpp \
@@ -25,6 +28,7 @@ SOURCES += \
     $$PWD/pe_script.cpp \
     $$PWD/ne_script.cpp \
     $$PWD/le_script.cpp \
+    $$PWD/lx_script.cpp \
     $$PWD/mach_script.cpp \
     $$PWD/elf_script.cpp
 
