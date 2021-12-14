@@ -164,16 +164,18 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::SCANID pa
 
     XBinary::_MEMORY_MAP memoryMap=XFormats::getMemoryMap(fileType,pDevice);
 
-    scanResult.sFileName=XBinary::getDeviceFileName(pDevice);
-    scanResult.id.fileType=fileType;
-    scanResult.id.sUuid=XBinary::generateUUID();
-    scanResult.id.sArch=memoryMap.sArch;
-    scanResult.id.mode=memoryMap.mode;
-    scanResult.id.bIsBigEndian=memoryMap.bIsBigEndian;
-    scanResult.id.sType=memoryMap.sType;
-    scanResult.id.nOffset=nOffset;
-    scanResult.id.nSize=pDevice->size();
-    scanResult.id.filePart=XBinary::FILEPART_HEADER;
+
+    XBinary::SCANID baseId={};
+
+    baseId.fileType=fileType;
+    baseId.sUuid=XBinary::generateUUID();
+    baseId.sArch=memoryMap.sArch;
+    baseId.mode=memoryMap.mode;
+    baseId.bIsBigEndian=memoryMap.bIsBigEndian;
+    baseId.sType=memoryMap.sType;
+    baseId.nOffset=nOffset;
+    baseId.nSize=pDevice->size();
+    baseId.filePart=XBinary::FILEPART_HEADER;
 
     qint32 nNumberOfSignatures=g_listSignatures.count();
 
@@ -321,24 +323,24 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::SCANID pa
                         {
                             SCAN_STRUCT ssRecord={};
 
-                            if(scanResult.id.fileType==XBinary::FT_BINARY)
+                            if(baseId.fileType==XBinary::FT_BINARY)
                             {
                                 QString sPrefix=signatureRecord.sName.section(".",0,0).toUpper();
 
                                 if(sPrefix=="COM")
                                 {
-                                    scanResult.id.fileType=XBinary::FT_COM;
-                                    scanResult.id.sArch="8086";
-                                    scanResult.id.sType="EXE";
+                                    baseId.fileType=XBinary::FT_COM;
+                                    baseId.sArch="8086";
+                                    baseId.sType="EXE";
                                 }
                                 else if(sPrefix=="TEXT") // mb TODO not set if COM
                                 {
-                                    scanResult.id.fileType=XBinary::FT_TEXT;
+                                    baseId.fileType=XBinary::FT_TEXT;
                                 }
                             }
 
                             // TODO IDs
-                            ssRecord.id=scanResult.id;
+                            ssRecord.id=baseId;
                             ssRecord.parentId=parentId;
 
                             ssRecord.sSignature=signatureRecord.sName;
@@ -563,100 +565,187 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
 {
     SCAN_RESULT scanResult={};
 
-    QElapsedTimer scanTimer;
-    scanTimer.start();
-
     XBinary::SCANID parentId={0};
     parentId.fileType=XBinary::FT_UNKNOWN;
     parentId.filePart=XBinary::FILEPART_HEADER;
 
-    QSet<XBinary::FT> stFT=XFormats::getFileTypes(pDevice,true);
-
-    if(pOptions->fileType!=XBinary::FT_UNKNOWN)
-    {
-        XBinary::filterFileTypes(&stFT,pOptions->fileType);
-    }
-
-    scanResult.bIsValidType=true;
-
-    // TODO a function
-    if(stFT.contains(XBinary::FT_PE32))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_PE32,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_PE64))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_PE64,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_ELF32))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_ELF32,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_ELF64))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_ELF64,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_MACHO32))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_MACHO32,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_MACHO64))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_MACHO64,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_LX))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_LX,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_LE))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_LE,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_NE))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_NE,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_MSDOS))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_MSDOS,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_JAR))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_JAR,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_APK))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_APK,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_IPA))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_IPA,pOptions);
-    }
-    else if(stFT.contains(XBinary::FT_COM))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_BINARY,pOptions);
-
-        SCAN_RESULT _scanResult=_scan(pDevice,parentId,XBinary::FT_COM,pOptions);
-
-        if(_scanResult.listRecords.count())
-        {
-            _scanResult.listRecords.append(scanResult.listRecords);
-
-            scanResult=_scanResult;
-        }
-    }
-    else if(stFT.contains(XBinary::FT_BINARY))
-    {
-        scanResult=_scan(pDevice,parentId,XBinary::FT_BINARY,pOptions);
-    }
-    else
-    {
-        scanResult.bIsValidType=false;
-    }
-
-    scanResult.nScanTime=scanTimer.elapsed();
+    scan(pDevice,&scanResult,0,pDevice->size(),parentId,pOptions,true);
 
     return scanResult;
+}
+
+void DiE_Script::scan(QIODevice *pDevice, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, SCAN_OPTIONS *pOptions, bool bInit)
+{
+    QElapsedTimer *pScanTimer=nullptr;
+
+    if(bInit)
+    {
+        pScanTimer=new QElapsedTimer;
+        pScanTimer->start();
+        pScanResult->sFileName=XBinary::getDeviceFileName(pDevice);
+    }
+
+    SubDevice sd(pDevice,nOffset,nSize);
+
+    if(sd.open(QIODevice::ReadOnly)) // TODO if not stop
+    {
+        QSet<XBinary::FT> stFT=XFormats::getFileTypes(&sd,true);
+
+        if(pOptions->fileType!=XBinary::FT_UNKNOWN)
+        {
+            XBinary::filterFileTypes(&stFT,pOptions->fileType);
+        }
+
+        if(pOptions->bAllTypesScan)
+        {
+            if( stFT.contains(XBinary::FT_PE32)||
+                stFT.contains(XBinary::FT_PE64)||
+                stFT.contains(XBinary::FT_LE)||
+                stFT.contains(XBinary::FT_LX)||
+                stFT.contains(XBinary::FT_NE))
+            {
+                SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_MSDOS,pOptions);
+
+                pScanResult->listRecords.append(_scanResult.listRecords);
+                pScanResult->listErrors.append(_scanResult.listErrors);
+                pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+            }
+        }
+
+        if(stFT.contains(XBinary::FT_PE32))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_PE32,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_PE64))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_PE64,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_ELF32))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_ELF32,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_ELF64))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_ELF64,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_MACHO32))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_MACHO32,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_MACHO64))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_MACHO64,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_LX))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_LX,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_LE))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_LE,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_NE))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_NE,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_MSDOS))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_MSDOS,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_JAR))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_JAR,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_APK))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_APK,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_IPA))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_IPA,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else if(stFT.contains(XBinary::FT_COM)&&(stFT.size()==1))
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_COM,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+        }
+        else
+        {
+            SCAN_RESULT _scanResult=_scan(&sd,parentId,XBinary::FT_BINARY,pOptions);
+
+            pScanResult->listRecords.append(_scanResult.listRecords);
+            pScanResult->listErrors.append(_scanResult.listErrors);
+            pScanResult->listDebugRecords.append(_scanResult.listDebugRecords);
+
+            SCAN_RESULT _scanResultCOM=_scan(&sd,parentId,XBinary::FT_COM,pOptions);
+
+            pScanResult->listRecords.append(_scanResultCOM.listRecords);
+            pScanResult->listErrors.append(_scanResultCOM.listErrors);
+            pScanResult->listDebugRecords.append(_scanResultCOM.listDebugRecords);
+        }
+
+        sd.close();
+    }
+
+    if(pScanTimer)
+    {
+        pScanResult->nScanTime=pScanTimer->elapsed();
+    }
 }
 
 DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::getSignatureByFilePath(QString sSignatureFilePath)
@@ -809,11 +898,11 @@ QString DiE_Script::scanResultToPlainString(DiE_Script::SCAN_RESULT *pScanResult
 {
     QString sResult;
 
-    sResult+=QString("filetype: %1\n").arg(XBinary::fileTypeIdToString(pScanResult->id.fileType));
-    sResult+=QString("arch: %1\n").arg(pScanResult->id.sArch);
-    sResult+=QString("mode: %1\n").arg(XBinary::modeIdToString(pScanResult->id.mode));
-    sResult+=QString("endianess: %1\n").arg(XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
-    sResult+=QString("type: %1\n").arg(pScanResult->id.sType);
+//    sResult+=QString("filetype: %1\n").arg(XBinary::fileTypeIdToString(pScanResult->id.fileType));
+//    sResult+=QString("arch: %1\n").arg(pScanResult->id.sArch);
+//    sResult+=QString("mode: %1\n").arg(XBinary::modeIdToString(pScanResult->id.mode));
+//    sResult+=QString("endianess: %1\n").arg(XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+//    sResult+=QString("type: %1\n").arg(pScanResult->id.sType);
 
     qint32 nNumberOfRecords=pScanResult->listRecords.count();
 
@@ -831,11 +920,11 @@ QString DiE_Script::scanResultToJsonString(DiE_Script::SCAN_RESULT *pScanResult)
 
     QJsonObject jsonResult;
 
-    jsonResult.insert("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
-    jsonResult.insert("arch",pScanResult->id.sArch);
-    jsonResult.insert("mode",XBinary::modeIdToString(pScanResult->id.mode));
-    jsonResult.insert("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
-    jsonResult.insert("type",pScanResult->id.sType);
+//    jsonResult.insert("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
+//    jsonResult.insert("arch",pScanResult->id.sArch);
+//    jsonResult.insert("mode",XBinary::modeIdToString(pScanResult->id.mode));
+//    jsonResult.insert("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+//    jsonResult.insert("type",pScanResult->id.sType);
 
     QJsonArray jsArray;
 
@@ -873,11 +962,11 @@ QString DiE_Script::scanResultToXmlString(DiE_Script::SCAN_RESULT *pScanResult)
 
     xml.writeStartElement("filescan");
 
-    xml.writeAttribute("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
-    xml.writeAttribute("arch",pScanResult->id.sArch);
-    xml.writeAttribute("mode",XBinary::modeIdToString(pScanResult->id.mode));
-    xml.writeAttribute("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
-    xml.writeAttribute("type",pScanResult->id.sType);
+//    xml.writeAttribute("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
+//    xml.writeAttribute("arch",pScanResult->id.sArch);
+//    xml.writeAttribute("mode",XBinary::modeIdToString(pScanResult->id.mode));
+//    xml.writeAttribute("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+//    xml.writeAttribute("type",pScanResult->id.sType);
 
     qint32 nNumberOfRecords=pScanResult->listRecords.count();
 

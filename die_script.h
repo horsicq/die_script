@@ -91,22 +91,24 @@ public:
         qint64 nScanTime;
         QString sFileName;
         qint64 nSize;
-        XBinary::SCANID id;
+//        XBinary::SCANID id;
 //        SCAN_HEADER scanHeader; // TODO set
         QList<SCAN_STRUCT> listRecords;
         QList<ERROR_RECORD> listErrors;
         QList<DEBUG_RECORD> listDebugRecords;
-        bool bIsValidType;
+//        bool bIsValidType;
     };
 
     struct SCAN_OPTIONS
     {
         bool bDeepScan;
+        bool bAllTypesScan;
         bool bDebug;
         bool bShowType;
         bool bShowVersion;
         bool bShowOptions;
         bool bShowEntropy;
+        bool bShowExtraInfo;
         XBinary::FT fileType; // Optional
         QString sSignatureName; // Optional
         bool bResultAsXML;
@@ -152,6 +154,7 @@ public:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> *getSignatures();
     SCAN_RESULT scanFile(QString sFileName,SCAN_OPTIONS *pOptions);
     SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions);
+    void scan(QIODevice *pDevice,SCAN_RESULT *pScanResult,qint64 nOffset,qint64 nSize,XBinary::SCANID parentId,SCAN_OPTIONS *pOptions,bool bInit);
     DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(QString sSignatureFilePath);
     bool updateSignature(QString sSignatureFilePath,QString sText);
     STATS getStats();
