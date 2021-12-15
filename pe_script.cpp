@@ -38,6 +38,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     nNumberOfResources=listResourceRecords.count();
 
     listImportHeaders=pPE->getImports(&g_memoryMap);
+    listImportRecords=pPE->getImportRecords(&g_memoryMap);
 
     nNumberOfImports=listImportHeaders.count();
 
@@ -74,6 +75,9 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     exportHeader=pPE->getExport();
 
     listExportFunctionNameStrings=pPE->getExportFunctionsList(&exportHeader);
+
+    g_nImportHash64=pPE->getImportHash64(&listImportRecords);
+    g_nImportHash32=pPE->getImportHash32(&listImportRecords);
 }
 
 PE_Script::~PE_Script()
@@ -399,4 +403,14 @@ bool PE_Script::isImportPresent()
 bool PE_Script::isResourcesPresent()
 {
     return bIsResourcesPresent;
+}
+
+quint32 PE_Script::getImportHash32()
+{
+    return g_nImportHash32;
+}
+
+quint64 PE_Script::getImportHash64()
+{
+    return g_nImportHash64;
 }

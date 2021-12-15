@@ -94,6 +94,8 @@ public slots:
     bool isTLSPresent();
     bool isImportPresent();
     bool isResourcesPresent();
+    quint32 getImportHash32();
+    quint64 getImportHash64();
 
 private:
     XPE *pPE;
@@ -106,6 +108,7 @@ private:
     QList<XPE::SECTION_RECORD> listSectionRecords;
     QList<QString> listSectionNameStrings;
     QList<XPE::IMPORT_HEADER> listImportHeaders;
+    QList<XPE::IMPORT_RECORD> listImportRecords;
     qint32 nNumberOfImports;
     XPE::RESOURCES_VERSION resourcesVersion;
     bool bIsNETPresent;
@@ -133,6 +136,8 @@ private:
     qint32 nCalculateSizeOfHeaders;
     XPE::EXPORT_HEADER exportHeader;
     QList<QString> listExportFunctionNameStrings;
+    quint64 g_nImportHash64;
+    quint64 g_nImportHash32;
 };
 
 #endif // PE_SCRIPT_H

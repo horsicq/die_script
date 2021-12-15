@@ -894,137 +894,137 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
     return bResult;
 }
 
-QString DiE_Script::scanResultToPlainString(DiE_Script::SCAN_RESULT *pScanResult)
-{
-    QString sResult;
+//QString DiE_Script::scanResultToPlainString(DiE_Script::SCAN_RESULT *pScanResult)
+//{
+//    QString sResult;
 
-//    sResult+=QString("filetype: %1\n").arg(XBinary::fileTypeIdToString(pScanResult->id.fileType));
-//    sResult+=QString("arch: %1\n").arg(pScanResult->id.sArch);
-//    sResult+=QString("mode: %1\n").arg(XBinary::modeIdToString(pScanResult->id.mode));
-//    sResult+=QString("endianess: %1\n").arg(XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
-//    sResult+=QString("type: %1\n").arg(pScanResult->id.sType);
+////    sResult+=QString("filetype: %1\n").arg(XBinary::fileTypeIdToString(pScanResult->id.fileType));
+////    sResult+=QString("arch: %1\n").arg(pScanResult->id.sArch);
+////    sResult+=QString("mode: %1\n").arg(XBinary::modeIdToString(pScanResult->id.mode));
+////    sResult+=QString("endianess: %1\n").arg(XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+////    sResult+=QString("type: %1\n").arg(pScanResult->id.sType);
 
-    qint32 nNumberOfRecords=pScanResult->listRecords.count();
+//    qint32 nNumberOfRecords=pScanResult->listRecords.count();
 
-    for(qint32 i=0;i<nNumberOfRecords;i++)
-    {
-        sResult+=QString("  %1\n").arg(pScanResult->listRecords.at(i).sFullString);
-    }
+//    for(qint32 i=0;i<nNumberOfRecords;i++)
+//    {
+//        sResult+=QString("  %1\n").arg(pScanResult->listRecords.at(i).sFullString);
+//    }
 
-    return sResult;
-}
+//    return sResult;
+//}
 
-QString DiE_Script::scanResultToJsonString(DiE_Script::SCAN_RESULT *pScanResult)
-{
-    QString sResult;
+//QString DiE_Script::scanResultToJsonString(DiE_Script::SCAN_RESULT *pScanResult)
+//{
+//    QString sResult;
 
-    QJsonObject jsonResult;
+//    QJsonObject jsonResult;
 
-//    jsonResult.insert("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
-//    jsonResult.insert("arch",pScanResult->id.sArch);
-//    jsonResult.insert("mode",XBinary::modeIdToString(pScanResult->id.mode));
-//    jsonResult.insert("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
-//    jsonResult.insert("type",pScanResult->id.sType);
+////    jsonResult.insert("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
+////    jsonResult.insert("arch",pScanResult->id.sArch);
+////    jsonResult.insert("mode",XBinary::modeIdToString(pScanResult->id.mode));
+////    jsonResult.insert("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+////    jsonResult.insert("type",pScanResult->id.sType);
 
-    QJsonArray jsArray;
+//    QJsonArray jsArray;
 
-    qint32 nNumberOfRecords=pScanResult->listRecords.count();
+//    qint32 nNumberOfRecords=pScanResult->listRecords.count();
 
-    for(qint32 i=0;i<nNumberOfRecords;i++)
-    {
-        QJsonObject jsRecord;
+//    for(qint32 i=0;i<nNumberOfRecords;i++)
+//    {
+//        QJsonObject jsRecord;
 
-        jsRecord.insert("type",pScanResult->listRecords.at(i).sType);
-        jsRecord.insert("name",pScanResult->listRecords.at(i).sName);
-        jsRecord.insert("version",pScanResult->listRecords.at(i).sVersion);
-        jsRecord.insert("options",pScanResult->listRecords.at(i).sOptions);
-        jsRecord.insert("string",pScanResult->listRecords.at(i).sFullString);
+//        jsRecord.insert("type",pScanResult->listRecords.at(i).sType);
+//        jsRecord.insert("name",pScanResult->listRecords.at(i).sName);
+//        jsRecord.insert("version",pScanResult->listRecords.at(i).sVersion);
+//        jsRecord.insert("options",pScanResult->listRecords.at(i).sOptions);
+//        jsRecord.insert("string",pScanResult->listRecords.at(i).sFullString);
 
-        jsArray.append(jsRecord);
-    }
+//        jsArray.append(jsRecord);
+//    }
 
-    jsonResult.insert("detects",jsArray);
+//    jsonResult.insert("detects",jsArray);
 
-    QJsonDocument saveFormat(jsonResult);
+//    QJsonDocument saveFormat(jsonResult);
 
-    sResult=saveFormat.toJson(QJsonDocument::Indented).constData();
+//    sResult=saveFormat.toJson(QJsonDocument::Indented).constData();
 
-    return sResult;
-}
+//    return sResult;
+//}
 
-QString DiE_Script::scanResultToXmlString(DiE_Script::SCAN_RESULT *pScanResult)
-{
-    QString sResult;
+//QString DiE_Script::scanResultToXmlString(DiE_Script::SCAN_RESULT *pScanResult)
+//{
+//    QString sResult;
 
-    QXmlStreamWriter xml(&sResult);
+//    QXmlStreamWriter xml(&sResult);
 
-    xml.setAutoFormatting(true);
+//    xml.setAutoFormatting(true);
 
-    xml.writeStartElement("filescan");
+//    xml.writeStartElement("filescan");
 
-//    xml.writeAttribute("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
-//    xml.writeAttribute("arch",pScanResult->id.sArch);
-//    xml.writeAttribute("mode",XBinary::modeIdToString(pScanResult->id.mode));
-//    xml.writeAttribute("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
-//    xml.writeAttribute("type",pScanResult->id.sType);
+////    xml.writeAttribute("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
+////    xml.writeAttribute("arch",pScanResult->id.sArch);
+////    xml.writeAttribute("mode",XBinary::modeIdToString(pScanResult->id.mode));
+////    xml.writeAttribute("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+////    xml.writeAttribute("type",pScanResult->id.sType);
 
-    qint32 nNumberOfRecords=pScanResult->listRecords.count();
+//    qint32 nNumberOfRecords=pScanResult->listRecords.count();
 
-    for(qint32 i=0;i<nNumberOfRecords;i++)
-    {
-        xml.writeStartElement("detect");
-        xml.writeAttribute("type",pScanResult->listRecords.at(i).sType);
-        xml.writeAttribute("name",pScanResult->listRecords.at(i).sName);
-        xml.writeAttribute("version",pScanResult->listRecords.at(i).sVersion);
-        xml.writeAttribute("options",pScanResult->listRecords.at(i).sOptions);
-        xml.writeCharacters(pScanResult->listRecords.at(i).sFullString);
-        xml.writeEndElement();
-    }
+//    for(qint32 i=0;i<nNumberOfRecords;i++)
+//    {
+//        xml.writeStartElement("detect");
+//        xml.writeAttribute("type",pScanResult->listRecords.at(i).sType);
+//        xml.writeAttribute("name",pScanResult->listRecords.at(i).sName);
+//        xml.writeAttribute("version",pScanResult->listRecords.at(i).sVersion);
+//        xml.writeAttribute("options",pScanResult->listRecords.at(i).sOptions);
+//        xml.writeCharacters(pScanResult->listRecords.at(i).sFullString);
+//        xml.writeEndElement();
+//    }
 
-    xml.writeEndElement();
+//    xml.writeEndElement();
 
-    return sResult;
-}
+//    return sResult;
+//}
 
-QString DiE_Script::scanResultToCsvString(SCAN_RESULT *pScanResult)
-{
-    QString sResult;
+//QString DiE_Script::scanResultToCsvString(SCAN_RESULT *pScanResult)
+//{
+//    QString sResult;
 
-    qint32 nNumberOfRecords=pScanResult->listRecords.count();
+//    qint32 nNumberOfRecords=pScanResult->listRecords.count();
 
-    for(qint32 i=0;i<nNumberOfRecords;i++)
-    {
-        QString sRecord=QString("%1;%2;%3;%4;%5\n").arg(pScanResult->listRecords.at(i).sType,
-                                                        pScanResult->listRecords.at(i).sName,
-                                                        pScanResult->listRecords.at(i).sVersion,
-                                                        pScanResult->listRecords.at(i).sOptions,
-                                                        pScanResult->listRecords.at(i).sFullString);
+//    for(qint32 i=0;i<nNumberOfRecords;i++)
+//    {
+//        QString sRecord=QString("%1;%2;%3;%4;%5\n").arg(pScanResult->listRecords.at(i).sType,
+//                                                        pScanResult->listRecords.at(i).sName,
+//                                                        pScanResult->listRecords.at(i).sVersion,
+//                                                        pScanResult->listRecords.at(i).sOptions,
+//                                                        pScanResult->listRecords.at(i).sFullString);
 
-        sResult+=sRecord;
-    }
+//        sResult+=sRecord;
+//    }
 
-    return sResult;
-}
+//    return sResult;
+//}
 
-QString DiE_Script::scanResultToTsvString(SCAN_RESULT *pScanResult)
-{
-    QString sResult;
+//QString DiE_Script::scanResultToTsvString(SCAN_RESULT *pScanResult)
+//{
+//    QString sResult;
 
-    qint32 nNumberOfRecords=pScanResult->listRecords.count();
+//    qint32 nNumberOfRecords=pScanResult->listRecords.count();
 
-    for(qint32 i=0;i<nNumberOfRecords;i++)
-    {
-        QString sRecord=QString("%1\t%2\t%3\t%4\t%5\n").arg(pScanResult->listRecords.at(i).sType,
-                                                            pScanResult->listRecords.at(i).sName,
-                                                            pScanResult->listRecords.at(i).sVersion,
-                                                            pScanResult->listRecords.at(i).sOptions,
-                                                            pScanResult->listRecords.at(i).sFullString);
+//    for(qint32 i=0;i<nNumberOfRecords;i++)
+//    {
+//        QString sRecord=QString("%1\t%2\t%3\t%4\t%5\n").arg(pScanResult->listRecords.at(i).sType,
+//                                                            pScanResult->listRecords.at(i).sName,
+//                                                            pScanResult->listRecords.at(i).sVersion,
+//                                                            pScanResult->listRecords.at(i).sOptions,
+//                                                            pScanResult->listRecords.at(i).sFullString);
 
-        sResult+=sRecord;
-    }
+//        sResult+=sRecord;
+//    }
 
-    return sResult;
-}
+//    return sResult;
+//}
 
 QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
 {
@@ -1080,6 +1080,7 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
         record.sName=pListScanStructs->at(i).sName;
         record.sVersion=pListScanStructs->at(i).sVersion;
         record.sInfo=pListScanStructs->at(i).sOptions;
+        record.varInfo=pListScanStructs->at(i).sSignature;
 
     #ifdef QT_GUI_LIB
         QString _sName=record.sName.toLower();
