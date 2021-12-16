@@ -96,6 +96,7 @@ public slots:
     bool isResourcesPresent();
     quint32 getImportHash32();
     quint64 getImportHash64();
+    bool isImportPositionHashPresent(qint32 nIndex,quint32 nHash);
 
 private:
     XPE *pPE;
@@ -138,6 +139,7 @@ private:
     QList<QString> listExportFunctionNameStrings;
     quint64 g_nImportHash64;
     quint64 g_nImportHash32;
+    QList<quint32> g_listImportPositionHashes;
 };
 
 #endif // PE_SCRIPT_H

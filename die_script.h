@@ -91,7 +91,7 @@ public:
         qint64 nScanTime;
         QString sFileName;
         qint64 nSize;
-        XBinary::SCANID id;
+//        XBinary::SCANID id;
 //        SCAN_HEADER scanHeader; // TODO set
         QList<SCAN_STRUCT> listRecords;
         QList<ERROR_RECORD> listErrors;
@@ -103,6 +103,7 @@ public:
     {
         bool bDeepScan;
         bool bAllTypesScan;
+        bool bRecursiveScan;
         bool bDebug;
         bool bShowType;
         bool bShowVersion;
@@ -182,7 +183,7 @@ public slots:
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath,XBinary::FT fileType);
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip,QList<XArchive::RECORD> *pListRecords,QString sPrefix,XBinary::FT fileType);
-    SCAN_RESULT _scan(QIODevice *pDevice,XBinary::SCANID parentId,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="",qint64 nOffset=0);
+    XBinary::SCANID _scan(SCAN_RESULT *pScanResult,QIODevice *pDevice,XBinary::SCANID parentId,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="",qint64 nOffset=0,bool bAddUnknown=true);
     bool _handleError(DiE_ScriptEngine *pScriptEngine,XSCRIPTVALUE scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
 signals:

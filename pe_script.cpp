@@ -78,6 +78,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
 
     g_nImportHash64=pPE->getImportHash64(&listImportRecords);
     g_nImportHash32=pPE->getImportHash32(&listImportRecords);
+    g_listImportPositionHashes=pPE->getImportPositionHashes(&listImportHeaders);
 }
 
 PE_Script::~PE_Script()
@@ -413,4 +414,9 @@ quint32 PE_Script::getImportHash32()
 quint64 PE_Script::getImportHash64()
 {
     return g_nImportHash64;
+}
+
+bool PE_Script::isImportPositionHashPresent(qint32 nIndex, quint32 nHash)
+{
+    return XPE::isImportPositionHashPresent(&g_listImportPositionHashes,nIndex,nHash);
 }
