@@ -91,7 +91,7 @@ public:
         qint64 nScanTime;
         QString sFileName;
         qint64 nSize;
-//        XBinary::SCANID id;
+        XBinary::SCANID id;
 //        SCAN_HEADER scanHeader; // TODO set
         QList<SCAN_STRUCT> listRecords;
         QList<ERROR_RECORD> listErrors;

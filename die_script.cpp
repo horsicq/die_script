@@ -164,18 +164,15 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::SCANID pa
 
     XBinary::_MEMORY_MAP memoryMap=XFormats::getMemoryMap(fileType,pDevice);
 
-
-    XBinary::SCANID baseId={};
-
-    baseId.fileType=fileType;
-    baseId.sUuid=XBinary::generateUUID();
-    baseId.sArch=memoryMap.sArch;
-    baseId.mode=memoryMap.mode;
-    baseId.bIsBigEndian=memoryMap.bIsBigEndian;
-    baseId.sType=memoryMap.sType;
-    baseId.nOffset=nOffset;
-    baseId.nSize=pDevice->size();
-    baseId.filePart=XBinary::FILEPART_HEADER;
+    scanResult.id.fileType=fileType;
+    scanResult.id.sUuid=XBinary::generateUUID();
+    scanResult.id.sArch=memoryMap.sArch;
+    scanResult.id.mode=memoryMap.mode;
+    scanResult.id.bIsBigEndian=memoryMap.bIsBigEndian;
+    scanResult.id.sType=memoryMap.sType;
+    scanResult.id.nOffset=nOffset;
+    scanResult.id.nSize=pDevice->size();
+    scanResult.id.filePart=XBinary::FILEPART_HEADER;
 
     qint32 nNumberOfSignatures=g_listSignatures.count();
 
@@ -323,24 +320,24 @@ DiE_Script::SCAN_RESULT DiE_Script::_scan(QIODevice *pDevice, XBinary::SCANID pa
                         {
                             SCAN_STRUCT ssRecord={};
 
-                            if(baseId.fileType==XBinary::FT_BINARY)
+                            if(scanResult.id.fileType==XBinary::FT_BINARY)
                             {
                                 QString sPrefix=signatureRecord.sName.section(".",0,0).toUpper();
 
                                 if(sPrefix=="COM")
                                 {
-                                    baseId.fileType=XBinary::FT_COM;
-                                    baseId.sArch="8086";
-                                    baseId.sType="EXE";
+                                    scanResult.id.fileType=XBinary::FT_COM;
+                                    scanResult.id.sArch="8086";
+                                    scanResult.id.sType="EXE";
                                 }
                                 else if(sPrefix=="TEXT") // mb TODO not set if COM
                                 {
-                                    baseId.fileType=XBinary::FT_TEXT;
+                                    scanResult.id.fileType=XBinary::FT_TEXT;
                                 }
                             }
 
                             // TODO IDs
-                            ssRecord.id=baseId;
+                            ssRecord.id=scanResult.id;
                             ssRecord.parentId=parentId;
 
                             ssRecord.sSignature=signatureRecord.sName;
