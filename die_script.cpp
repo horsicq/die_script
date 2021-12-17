@@ -386,8 +386,6 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
         }
     }
 
-    g_bIsStop=false;
-
     emit progressValueChanged(100);
 
     return resultId;
@@ -580,6 +578,7 @@ void DiE_Script::scan(QIODevice *pDevice, SCAN_RESULT *pScanResult, qint64 nOffs
 
     if(bInit)
     {
+        g_bIsStop=false;
         pScanTimer=new QElapsedTimer;
         pScanTimer->start();
         pScanResult->sFileName=XBinary::getDeviceFileName(pDevice);
@@ -608,61 +607,63 @@ void DiE_Script::scan(QIODevice *pDevice, SCAN_RESULT *pScanResult, qint64 nOffs
             }
         }
 
+        XBinary::SCANID scanIdMain={};
+
         if(stFT.contains(XBinary::FT_PE32))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_PE32,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_PE32,pOptions);
         }
         else if(stFT.contains(XBinary::FT_PE64))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_PE64,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_PE64,pOptions);
         }
         else if(stFT.contains(XBinary::FT_ELF32))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_ELF32,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_ELF32,pOptions);
         }
         else if(stFT.contains(XBinary::FT_ELF64))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_ELF64,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_ELF64,pOptions);
         }
         else if(stFT.contains(XBinary::FT_MACHO32))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_MACHO32,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_MACHO32,pOptions);
         }
         else if(stFT.contains(XBinary::FT_MACHO64))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_MACHO64,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_MACHO64,pOptions);
         }
         else if(stFT.contains(XBinary::FT_LX))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_LX,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_LX,pOptions);
         }
         else if(stFT.contains(XBinary::FT_LE))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_LE,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_LE,pOptions);
         }
         else if(stFT.contains(XBinary::FT_NE))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_NE,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_NE,pOptions);
         }
         else if(stFT.contains(XBinary::FT_MSDOS))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_MSDOS,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_MSDOS,pOptions);
         }
         else if(stFT.contains(XBinary::FT_JAR))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_JAR,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_JAR,pOptions);
         }
         else if(stFT.contains(XBinary::FT_APK))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_APK,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_APK,pOptions);
         }
         else if(stFT.contains(XBinary::FT_IPA))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_IPA,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_IPA,pOptions);
         }
         else if(stFT.contains(XBinary::FT_COM)&&(stFT.size()==1))
         {
-            _scan(pScanResult,&sd,parentId,XBinary::FT_COM,pOptions);
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_COM,pOptions);
         }
         else
         {
@@ -673,7 +674,7 @@ void DiE_Script::scan(QIODevice *pDevice, SCAN_RESULT *pScanResult, qint64 nOffs
             bool bAddUnknown=(_scanResultCOM.listRecords.count()==0);
 
             SCAN_RESULT _scanResultBinary={};
-            _scan(&_scanResultBinary,&sd,parentId,XBinary::FT_BINARY,pOptions,"",0,bAddUnknown);
+            scanIdMain=_scan(&_scanResultBinary,&sd,parentId,XBinary::FT_BINARY,pOptions,"",0,bAddUnknown);
 
             pScanResult->listRecords.append(_scanResultBinary.listRecords);
             pScanResult->listErrors.append(_scanResultBinary.listErrors);
@@ -684,8 +685,58 @@ void DiE_Script::scan(QIODevice *pDevice, SCAN_RESULT *pScanResult, qint64 nOffs
             pScanResult->listDebugRecords.append(_scanResultCOM.listDebugRecords);
         }
 
-        // TODO if overlay
-        // TODO if resources
+        if(pOptions->bRecursiveScan)
+        {
+            if(stFT.contains(XBinary::FT_PE32)||stFT.contains(XBinary::FT_PE64))
+            {
+                XPE pe(&sd);
+
+                if(pe.isValid())
+                {
+                    if(pe.isResourcesPresent())
+                    {
+                        QList<XPE::RESOURCE_RECORD> listResources=pe.getResources();
+
+                        qint32 nNumberOfResources=listResources.count();
+
+                        for(qint32 i=0;(i<nNumberOfResources)&&(!(g_bIsStop));i++)
+                        {
+                            qint64 nResourceOffset=listResources.at(i).nOffset;
+                            qint64 nResourceSize=listResources.at(i).nSize;
+
+                            QSet<XBinary::FT> stFT=XFormats::getFileTypes(pDevice,nResourceOffset,nResourceSize);
+
+                            if( stFT.contains(XBinary::FT_MSDOS)||
+                                stFT.contains(XBinary::FT_NE)||
+                                stFT.contains(XBinary::FT_LE)||
+                                stFT.contains(XBinary::FT_LX)||
+                                stFT.contains(XBinary::FT_PE)||
+                                stFT.contains(XBinary::FT_ELF)||
+                                stFT.contains(XBinary::FT_MACHO)||
+                                stFT.contains(XBinary::FT_DEX)||
+                                stFT.contains(XBinary::FT_ARCHIVE))
+                            {
+                                XBinary::SCANID scanIdResource=scanIdMain;
+
+                                scanIdResource.filePart=XBinary::FILEPART_RESOURCE;
+                                scanIdResource.sInfo=XBinary::valueToHexEx(nResourceOffset);
+
+                                scan(&sd,pScanResult,pe.getOverlayOffset(),pe.getOverlaySize(),scanIdResource,pOptions,false);
+                            }
+                        }
+                    }
+
+                    if(pe.isOverlayPresent())
+                    {
+                        XBinary::SCANID scanIdOverlay=scanIdMain;
+
+                        scanIdOverlay.filePart=XBinary::FILEPART_OVERLAY;
+
+                        scan(&sd,pScanResult,pe.getOverlayOffset(),pe.getOverlaySize(),scanIdOverlay,pOptions,false);
+                    }
+                }
+            }
+        }
 
         sd.close();
     }
@@ -793,8 +844,6 @@ void DiE_Script::processDirectory()
     emit directoryScanCompleted(g_pDirectoryElapsedTimer->elapsed());
     delete g_pDirectoryElapsedTimer;
     g_pDirectoryElapsedTimer=nullptr;
-
-    g_bIsStop=false;
 }
 
 DiE_Script::STATS DiE_Script::getStats()
@@ -1030,41 +1079,42 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
         record.sInfo=pListScanStructs->at(i).sOptions;
         record.varInfo=pListScanStructs->at(i).sSignature;
 
+        QString _sType=record.sType.toLower();
+
     #ifdef QT_GUI_LIB
-        QString _sName=record.sName.toLower();
 
         // TODO more
-        if(     (_sName=="installer")||
-                (_sName=="sfx"))
+        if(     (_sType=="installer")||
+                (_sType=="sfx"))
         {
             record.colText=QColor(Qt::blue);
         }
-        else if((_sName=="protector")||
-                (_sName=="apk obfuscator")||
-                (_sName=="jar obfuscator")||
-                (_sName==".net obfuscator")||
-                (_sName==".net compressor")||
-                (_sName=="dongle protection")||
-                (_sName=="joiner")||
-                (_sName=="packer"))
+        else if((_sType=="protector")||
+                (_sType=="apk obfuscator")||
+                (_sType=="jar obfuscator")||
+                (_sType==".net obfuscator")||
+                (_sType==".net compressor")||
+                (_sType=="dongle protection")||
+                (_sType=="joiner")||
+                (_sType=="packer"))
         {
             record.colText=QColor(Qt::red);
         }
-        else if((_sName=="pe tool")||
-                (_sName=="apk tool"))
+        else if((_sType=="pe tool")||
+                (_sType=="apk tool"))
         {
             record.colText=QColor(Qt::green);
         }
-        else if((_sName=="operation system")||
-                (_sName=="virtual machine"))
+        else if((_sType=="operation system")||
+                (_sType=="virtual machine"))
         {
             record.colText=QColor(Qt::darkYellow);
         }
-        else if(_sName=="signtool")
+        else if(_sType=="signtool")
         {
             record.colText=QColor(Qt::darkMagenta);
         }
-        else if(_sName=="language")
+        else if(_sType=="language")
         {
             record.colText=QColor(Qt::darkCyan);
         }
@@ -1074,13 +1124,12 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
         }
     #endif
 
-        QString _sType=record.sType;
-
         if      (_sType=="archive")         _sType=tr("Archive");
         else if (_sType=="compiler")        _sType=tr("Compiler");
         else if (_sType=="cryptor")         _sType=tr("Cryptor");
         else if (_sType=="certificate")     _sType=tr("Certificate");
         else if (_sType=="converter")       _sType=tr("Converter");
+        else if (_sType=="data")            _sType=tr("Data");
         else if (_sType=="database")        _sType=tr("Database");
         else if (_sType=="debug data")      _sType=tr("Debug data");
         else if (_sType=="format")          _sType=tr("Format");
