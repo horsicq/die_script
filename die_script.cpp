@@ -505,7 +505,7 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
     listFT.append(XBinary::FT_ELF);
     listFT.append(XBinary::FT_MACHO);
 
-    int nNumberOfFileTypes=listFT.count();
+    qint32 nNumberOfFileTypes=listFT.count();
 
     for(qint32 i=0;i<nNumberOfFileTypes;i++)
     {
