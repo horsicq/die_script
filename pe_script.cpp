@@ -58,6 +58,7 @@ PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
     nResourcesSection=pPE->getResourcesSection(&g_memoryMap);
     nEntryPointSection=pPE->getEntryPointSection(&g_memoryMap);
     nRelocsSection=pPE->getRelocsSection(&g_memoryMap);
+    nTLSSection=pPE->getTLSSection(&g_memoryMap);
 
     nMajorLinkerVersion=pPE->getOptionalHeader_MajorLinkerVersion();
     nMinorLinkerVersion=pPE->getOptionalHeader_MinorLinkerVersion();
@@ -234,6 +235,11 @@ qint32 PE_Script::getEntryPointSection()
 qint32 PE_Script::getRelocsSection()
 {
     return nRelocsSection;
+}
+
+qint32 PE_Script::getTLSSection()
+{
+    return nTLSSection;
 }
 
 quint8 PE_Script::getMajorLinkerVersion()

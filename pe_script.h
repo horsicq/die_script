@@ -63,6 +63,7 @@ public slots:
     qint32 getResourceSection();
     qint32 getEntryPointSection();
     qint32 getRelocsSection();
+    qint32 getTLSSection();
     quint8 getMajorLinkerVersion();
     quint8 getMinorLinkerVersion();
     QString getManifest();
@@ -127,6 +128,7 @@ private:
     qint32 nResourcesSection;
     qint32 nEntryPointSection;
     qint32 nRelocsSection;
+    qint32 nTLSSection;
     quint8 nMajorLinkerVersion;
     quint8 nMinorLinkerVersion;
     quint32 nSizeOfCode;
