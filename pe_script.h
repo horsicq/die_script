@@ -76,7 +76,7 @@ public slots:
     QString getCompilerVersion();
     bool isConsole();
     bool isSignedFile();
-    QString getSectionNameCollision(QString sString1,QString sString2);
+    QString getSectionNameCollision(QString sString1,QString sString2); // mb TODO move to Binary
     qint32 getSectionNumber(QString sSectionName);
     qint32 getSectionNumberExp(QString sSectionName);
     bool isDll();
