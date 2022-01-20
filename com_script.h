@@ -33,7 +33,7 @@ public:
     ~COM_Script();
 
 private:
-    XCOM *pCOM;
+    XCOM *g_pCOM;
 };
 
 #endif // COM_SCRIPT_H

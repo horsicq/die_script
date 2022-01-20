@@ -22,7 +22,7 @@
 
 COM_Script::COM_Script(XCOM *pCOM) : Binary_Script(pCOM)
 {
-    this->pCOM=pCOM;
+    this->g_pCOM=pCOM;
 }
 
 COM_Script::~COM_Script()
