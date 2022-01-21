@@ -33,7 +33,7 @@ public:
     ~LE_Script();
 
 private:
-    XLE *pLE;
+    XLE *g_pLE;
 };
 
 #endif // LE_SCRIPT_H

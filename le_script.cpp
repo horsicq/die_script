@@ -22,7 +22,7 @@
 
 LE_Script::LE_Script(XLE *pLE) : MSDOS_Script(pLE)
 {
-    this->pLE=pLE;
+    this->g_pLE=pLE;
 }
 
 LE_Script::~LE_Script()
