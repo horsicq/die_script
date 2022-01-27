@@ -110,6 +110,7 @@ public:
         bool bShowOptions;
         bool bShowEntropy;
         bool bShowExtraInfo;
+        QString sSpecial; // Special info
         XBinary::FT fileType; // Optional
         QString sSignatureName; // Optional
         bool bResultAsXML;
