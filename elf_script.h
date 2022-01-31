@@ -56,6 +56,7 @@ public slots:
     quint64 getSectionFileOffset(quint32 nNumber);
     quint64 getSectionFileSize(quint32 nNumber);
     bool isStringInTablePresent(QString sSectionName,QString sString);
+    bool isNotePresent(QString sNote);
 
 private:
     XELF *g_pELF;
@@ -64,6 +65,7 @@ private:
     QByteArray g_baStringTable;
     QList<XELF_DEF::Elf_Shdr> g_listSectionHeaders;
     QList<XELF_DEF::Elf_Phdr> g_listProgramHeaders;
+    QList<XELF::NOTE> g_listNotes;
     QList<XELF::SECTION_RECORD> g_listSectionRecords;
     QString g_sGeneralOptions;
 };

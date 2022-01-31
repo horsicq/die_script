@@ -33,6 +33,13 @@ ELF_Script::ELF_Script(XELF *pELF) : Binary_Script(pELF)
     g_listSectionHeaders=pELF->getElf_ShdrList();
     g_listProgramHeaders=pELF->getElf_PhdrList();
 
+    g_listNotes=pELF->getNotes(&g_listProgramHeaders);
+
+    if(g_listNotes.count()==0)
+    {
+        g_listNotes=pELF->getNotes(&g_listSectionHeaders);
+    }
+
     g_listSectionRecords=pELF->getSectionRecords(&g_listSectionHeaders,bIs64,&g_baStringTable);
 
     g_sGeneralOptions=QString("%1 %2-%3").arg(XELF::getTypesS().value(g_elfHeader.e_type)).arg(XELF::getMachinesS().value(g_elfHeader.e_machine)).arg(bIs64?("64"):("32")); // TODO Check
@@ -165,4 +172,9 @@ bool ELF_Script::isStringInTablePresent(QString sSectionName, QString sString)
     }
 
     return bResult;
+}
+
+bool ELF_Script::isNotePresent(QString sNote)
+{
+    return g_pELF->isNotePresent(&g_listNotes,sNote);
 }
