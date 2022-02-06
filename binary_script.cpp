@@ -69,7 +69,7 @@ qint64 Binary_Script::getSize()
     return g_nSize;
 }
 
-bool Binary_Script::compare(QString sSignature, qint64 nOffset)
+bool Binary_Script::compare(QString sSignature,qint64 nOffset)
 {
     bool bResult=false;
 
