@@ -145,7 +145,7 @@ qint64 Binary_Script::readSQword(qint64 nOffset)
     return g_pBinary->read_int64(nOffset);
 }
 
-QString Binary_Script::getString(qint64 nOffset, qint64 nMaxSize)
+QString Binary_Script::getString(qint64 nOffset,qint64 nMaxSize)
 {
     return g_pBinary->read_ansiString(nOffset,nMaxSize);
 }
