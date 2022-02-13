@@ -170,7 +170,7 @@ qint64 Binary_Script::findWord(qint64 nOffset, qint64 nSize, quint16 nValue)
     return g_pBinary->find_uint16(nOffset,nSize,nValue);
 }
 
-qint64 Binary_Script::findDword(qint64 nOffset, qint64 nSize, quint32 nValue)
+qint64 Binary_Script::findDword(qint64 nOffset,qint64 nSize,quint32 nValue)
 {
     return g_pBinary->find_uint32(nOffset,nSize,nValue);
 }
