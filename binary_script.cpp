@@ -155,7 +155,7 @@ qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, QString sSigna
     return g_pBinary->find_signature(&g_memoryMap,nOffset,nSize,sSignature);
 }
 
-qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, QString sString)
+qint64 Binary_Script::findString(qint64 nOffset,qint64 nSize,QString sString)
 {
     return g_pBinary->find_ansiString(nOffset,nSize,sString);
 }
