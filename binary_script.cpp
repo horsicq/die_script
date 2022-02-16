@@ -218,7 +218,7 @@ bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
     return bResult;
 }
 
-bool Binary_Script::isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSignature)
+bool Binary_Script::isSignaturePresent(qint64 nOffset,qint64 nSize,QString sSignature)
 {
     return g_pBinary->isSignaturePresent(&g_memoryMap,nOffset,nSize,sSignature);
 }
