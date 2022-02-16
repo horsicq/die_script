@@ -285,7 +285,7 @@ QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize)
     return g_pBinary->getSignature(nOffset,nSize);
 }
 
-double Binary_Script::calculateEntropy(qint64 nOffset, qint64 nSize)
+double Binary_Script::calculateEntropy(qint64 nOffset,qint64 nSize)
 {
     return g_pBinary->getEntropy(nOffset,nSize);
 }
