@@ -165,7 +165,7 @@ qint64 Binary_Script::findByte(qint64 nOffset, qint64 nSize, quint8 nValue)
     return g_pBinary->find_uint8(nOffset,nSize,nValue);
 }
 
-qint64 Binary_Script::findWord(qint64 nOffset, qint64 nSize, quint16 nValue)
+qint64 Binary_Script::findWord(qint64 nOffset,qint64 nSize,quint16 nValue)
 {
     return g_pBinary->find_uint16(nOffset,nSize,nValue);
 }
