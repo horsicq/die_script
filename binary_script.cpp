@@ -280,7 +280,7 @@ QString Binary_Script::getFileSuffix()
     return g_sFileSuffix;
 }
 
-QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize)
+QString Binary_Script::getSignature(qint64 nOffset,qint64 nSize)
 {
     return g_pBinary->getSignature(nOffset,nSize);
 }
