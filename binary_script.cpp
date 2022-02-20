@@ -290,7 +290,7 @@ double Binary_Script::calculateEntropy(qint64 nOffset,qint64 nSize)
     return g_pBinary->getEntropy(nOffset,nSize);
 }
 
-QString Binary_Script::calculateMD5(qint64 nOffset, qint64 nSize)
+QString Binary_Script::calculateMD5(qint64 nOffset,qint64 nSize)
 {
     return g_pBinary->getHash(XBinary::HASH_MD5,nOffset,nSize);
 }
