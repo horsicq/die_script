@@ -160,7 +160,7 @@ qint64 Binary_Script::findString(qint64 nOffset,qint64 nSize,QString sString)
     return g_pBinary->find_ansiString(nOffset,nSize,sString);
 }
 
-qint64 Binary_Script::findByte(qint64 nOffset, qint64 nSize, quint8 nValue)
+qint64 Binary_Script::findByte(qint64 nOffset,qint64 nSize,quint8 nValue)
 {
     return g_pBinary->find_uint8(nOffset,nSize,nValue);
 }
