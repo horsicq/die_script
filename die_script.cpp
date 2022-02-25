@@ -153,7 +153,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
     return listResult;
 }
 
-XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, XBinary::SCANID parentId, XBinary::FT fileType, SCAN_OPTIONS *pOptions, QString sSignatureFilePath, qint64 nOffset,bool bAddUnknown)
+XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult,QIODevice *pDevice,XBinary::SCANID parentId,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath,qint64 nOffset,bool bAddUnknown)
 {
     XBinary::SCANID resultId={};
 
@@ -572,7 +572,7 @@ DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice,SCAN_OPTIONS *
     return scanResult;
 }
 
-void DiE_Script::scan(QIODevice *pDevice, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, SCAN_OPTIONS *pOptions, bool bInit)
+void DiE_Script::scan(QIODevice *pDevice,SCAN_RESULT *pScanResult,qint64 nOffset,qint64 nSize,XBinary::SCANID parentId,SCAN_OPTIONS *pOptions,bool bInit)
 {
     QElapsedTimer *pScanTimer=nullptr;
 
