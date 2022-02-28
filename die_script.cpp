@@ -64,7 +64,7 @@ bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1,const DiE
     return (sr1.sName<sr2.sName);
 }
 
-bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2)
+bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1,const DiE_ScriptEngine::SIGNATURE_RECORD &sr2)
 {
     if((sr1.sName=="_init")&&(sr2.sName=="_init"))
     {
