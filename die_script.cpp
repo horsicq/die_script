@@ -1037,7 +1037,7 @@ QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
     return sResult;
 }
 
-void DiE_Script::setProcessDirectory(QString sDirectory, SCAN_OPTIONS scanOptions)
+void DiE_Script::setProcessDirectory(QString sDirectory,SCAN_OPTIONS scanOptions)
 {
     g_sDirectoryProcess=sDirectory;
     g_scanOptionsProcess=scanOptions;
