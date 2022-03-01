@@ -176,7 +176,7 @@ void DiE_ScriptEngine::stop()
     }
 }
 #ifdef QT_SCRIPT_LIB
-QScriptValue DiE_ScriptEngine::includeScript(QScriptContext *pContext, QScriptEngine *pEngine)
+QScriptValue DiE_ScriptEngine::includeScript(QScriptContext *pContext,QScriptEngine *pEngine)
 {
     QScriptValue result;
 
