@@ -239,7 +239,7 @@ void DiE_ScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, Q
 }
 #endif
 
-void DiE_ScriptEngine::_addClass(QObject *pClass, QString sClassName)
+void DiE_ScriptEngine::_addClass(QObject *pClass,QString sClassName)
 {
     XSCRIPTVALUE objectWnd=this->newQObject(pClass);
     this->globalObject().setProperty(sClassName, objectWnd);
