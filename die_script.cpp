@@ -1081,13 +1081,11 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
 
         QString _sType=record.sType.toLower();
 
-    #ifdef QT_GUI_LIB
-
         // TODO more
         if(     (_sType=="installer")||
                 (_sType=="sfx"))
         {
-            record.colText=QColor(Qt::blue);
+            record.globalColor=Qt::blue;
         }
         else if((_sType=="protector")||
                 (_sType=="apk obfuscator")||
@@ -1098,31 +1096,30 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
                 (_sType=="joiner")||
                 (_sType=="packer"))
         {
-            record.colText=QColor(Qt::red);
+            record.globalColor=Qt::red;
         }
         else if((_sType=="pe tool")||
                 (_sType=="apk tool"))
         {
-            record.colText=QColor(Qt::green);
+            record.globalColor=Qt::green;
         }
         else if((_sType=="operation system")||
                 (_sType=="virtual machine"))
         {
-            record.colText=QColor(Qt::darkYellow);
+            record.globalColor=Qt::darkYellow;
         }
         else if(_sType=="signtool")
         {
-            record.colText=QColor(Qt::darkMagenta);
+            record.globalColor=Qt::darkMagenta;
         }
         else if(_sType=="language")
         {
-            record.colText=QColor(Qt::darkCyan);
+            record.globalColor=Qt::darkCyan;
         }
         else
         {
-            record.colText=QApplication::palette().text().color();
+            record.globalColor=Qt::transparent;
         }
-    #endif
 
         if      (_sType=="archive")         _sType=tr("Archive");
         else if (_sType=="compiler")        _sType=tr("Compiler");
