@@ -898,7 +898,7 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
 ////    sResult+=QString("filetype: %1\n").arg(XBinary::fileTypeIdToString(pScanResult->id.fileType));
 ////    sResult+=QString("arch: %1\n").arg(pScanResult->id.sArch);
 ////    sResult+=QString("mode: %1\n").arg(XBinary::modeIdToString(pScanResult->id.mode));
-////    sResult+=QString("endianess: %1\n").arg(XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+////    sResult+=QString("endianness: %1\n").arg(XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
 ////    sResult+=QString("type: %1\n").arg(pScanResult->id.sType);
 
 //    qint32 nNumberOfRecords=pScanResult->listRecords.count();
@@ -920,7 +920,7 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
 ////    jsonResult.insert("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
 ////    jsonResult.insert("arch",pScanResult->id.sArch);
 ////    jsonResult.insert("mode",XBinary::modeIdToString(pScanResult->id.mode));
-////    jsonResult.insert("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+////    jsonResult.insert("endianness",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
 ////    jsonResult.insert("type",pScanResult->id.sType);
 
 //    QJsonArray jsArray;
@@ -962,7 +962,7 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
 ////    xml.writeAttribute("filetype",XBinary::fileTypeIdToString(pScanResult->id.fileType));
 ////    xml.writeAttribute("arch",pScanResult->id.sArch);
 ////    xml.writeAttribute("mode",XBinary::modeIdToString(pScanResult->id.mode));
-////    xml.writeAttribute("endianess",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
+////    xml.writeAttribute("endianness",XBinary::endiannessToString(pScanResult->id.bIsBigEndian));
 ////    xml.writeAttribute("type",pScanResult->id.sType);
 
 //    qint32 nNumberOfRecords=pScanResult->listRecords.count();
