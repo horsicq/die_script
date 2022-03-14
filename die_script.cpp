@@ -541,7 +541,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> *DiE_Script::getSignatures()
     return &g_listSignatures;
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName, SCAN_OPTIONS *pOptions)
+DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName,SCAN_OPTIONS *pOptions)
 {
     SCAN_RESULT scanResult={};
 
