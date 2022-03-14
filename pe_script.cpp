@@ -207,7 +207,7 @@ bool PE_Script::isLibraryFunctionPresent(QString sLibraryName, QString sFunction
     return pPE->isImportFunctionPresentI(sLibraryName,sFunctionName,&listImportHeaders);
 }
 
-QString PE_Script::getImportFunctionName(quint32 nImport, quint32 nFunctionNumber)
+QString PE_Script::getImportFunctionName(quint32 nImport,quint32 nFunctionNumber)
 {
     return pPE->getImportFunctionName(nImport,nFunctionNumber,&listImportHeaders);
 }
