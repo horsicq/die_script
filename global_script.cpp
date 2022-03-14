@@ -35,7 +35,7 @@ void global_script::_log(QString sText)
     emit _logSignal(sText);
 }
 
-void global_script::_setResult(QString sType, QString sName, QString sVersion, QString sOptions)
+void global_script::_setResult(QString sType,QString sName,QString sVersion,QString sOptions)
 {
     emit _setResultSignal(sType,sName,sVersion,sOptions);
 }

@@ -391,7 +391,7 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult,QIODevice *pDevice,XB
     return resultId;
 }
 
-bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, DiE_Script::SCAN_RESULT *pScanResult)
+bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine,XSCRIPTVALUE scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,DiE_Script::SCAN_RESULT *pScanResult)
 {
     bool bResult=false;
 
