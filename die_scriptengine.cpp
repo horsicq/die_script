@@ -282,7 +282,7 @@ void DiE_ScriptEngine::_setResultSlot(QString sType, QString sName, QString sVer
     g_listResult.append(record);
 }
 
-DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(QString sString, bool bShowType, bool bShowVersion, bool bShowOptions)
+DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(QString sString,bool bShowType,bool bShowVersion,bool bShowOptions)
 {
     RESULT result={};
 
