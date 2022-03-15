@@ -143,7 +143,7 @@ DiE_ScriptEngine::~DiE_ScriptEngine()
     if(g_pExtraScript)      delete g_pExtraScript;
 }
 
-bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
+bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value,QString *psErrorString)
 {
     bool bResult=true;
 
