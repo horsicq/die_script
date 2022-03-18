@@ -295,7 +295,7 @@ QString Binary_Script::calculateMD5(qint64 nOffset,qint64 nSize)
     return g_pBinary->getHash(XBinary::HASH_MD5,nOffset,nSize);
 }
 
-quint32 Binary_Script::calculateCRC32(qint64 nOffset, qint64 nSize)
+quint32 Binary_Script::calculateCRC32(qint64 nOffset,qint64 nSize)
 {
     return g_pBinary->_getCRC32(nOffset,nSize);
 }
