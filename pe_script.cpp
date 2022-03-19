@@ -202,7 +202,7 @@ bool PE_Script::isLibraryPresent(QString sLibraryName)
     return pPE->isImportLibraryPresentI(sLibraryName,&listImportHeaders);
 }
 
-bool PE_Script::isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName)
+bool PE_Script::isLibraryFunctionPresent(QString sLibraryName,QString sFunctionName)
 {
     return pPE->isImportFunctionPresentI(sLibraryName,sFunctionName,&listImportHeaders);
 }
