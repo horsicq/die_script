@@ -422,7 +422,7 @@ quint64 PE_Script::getImportHash64()
     return g_nImportHash64;
 }
 
-bool PE_Script::isImportPositionHashPresent(qint32 nIndex, quint32 nHash)
+bool PE_Script::isImportPositionHashPresent(qint32 nIndex,quint32 nHash)
 {
     return XPE::isImportPositionHashPresent(&g_listImportPositionHashes,nIndex,nHash);
 }
