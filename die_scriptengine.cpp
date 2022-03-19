@@ -195,7 +195,7 @@ QScriptValue DiE_ScriptEngine::includeScript(QScriptContext *pContext,QScriptEng
 }
 #endif
 #ifdef QT_SCRIPT_LIB
-QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEngine)
+QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext,QScriptEngine *pEngine)
 {
     QScriptValue result;
 
@@ -232,7 +232,7 @@ QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext,QScriptEngine
 }
 #endif
 #ifdef QT_SCRIPT_LIB
-void DiE_ScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, QString sFunctionName)
+void DiE_ScriptEngine::_addFunction(QScriptEngine::FunctionSignature function,QString sFunctionName)
 {
     QScriptValue func=this->newFunction(function);
     this->globalObject().setProperty(sFunctionName,func);
