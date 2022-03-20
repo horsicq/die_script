@@ -302,7 +302,7 @@ bool PE_Script::isSignedFile()
     return bIsSignPresent;
 }
 
-QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
+QString PE_Script::getSectionNameCollision(QString sString1,QString sString2)
 {
     return pPE->getStringCollision(&listSectionNameStrings,sString1,sString2);
 }
