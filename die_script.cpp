@@ -661,6 +661,10 @@ void DiE_Script::scan(QIODevice *pDevice,SCAN_RESULT *pScanResult,qint64 nOffset
         {
             scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_IPA,pOptions);
         }
+        else if(stFT.contains(XBinary::FT_MACHOFAT))
+        {
+            scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_MACHOFAT,pOptions);
+        }
         else if(stFT.contains(XBinary::FT_COM)&&(stFT.size()==1))
         {
             scanIdMain=_scan(pScanResult,&sd,parentId,XBinary::FT_COM,pOptions);
