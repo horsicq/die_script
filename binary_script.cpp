@@ -35,7 +35,7 @@ Binary_Script::Binary_Script(XBinary *pBinary)
     g_bIsOverlayPresent=pBinary->isOverlayPresent(&g_memoryMap);
 
     g_sHeaderSignature=pBinary->getSignature(0,256); // TODO const
-    g_nHeaderSignatureSize=g_sHeaderSignature.size();
+    g_nHeaderSignatureSize=g_sHeaderSignature.size()/2;
 
     if(g_nEntryPointOffset>0)
     {
