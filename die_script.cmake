@@ -1,14 +1,16 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 include(${CMAKE_CURRENT_LIST_DIR}/../XDEX/xdex.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/../XArchive/xarchive.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../XPDF/xpdf.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../XArchive/xarchives.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../Formats/xformats.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../Formats/scanitem.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XCapstone/xcapstone.cmake)
 
 set(DIE_SCRIPT_SOURCES
     ${XDEX_SOURCES}
-    ${XARCHIVE_SOURCES}
+    ${XPDF_SOURCES}
+    ${XARCHIVES_SOURCES}
     ${XFORMATS_SOURCES}
     ${XCAPSTONE_SOURCES}
     ${SCANITEM_SOURCES}
