@@ -287,7 +287,7 @@ QString Binary_Script::getSignature(qint64 nOffset,qint64 nSize)
 
 double Binary_Script::calculateEntropy(qint64 nOffset,qint64 nSize)
 {
-    return g_pBinary->getEntropy(nOffset,nSize);
+    return g_pBinary->getEntropy(nOffset,nSize); // TODO ProcessData
 }
 
 QString Binary_Script::calculateMD5(qint64 nOffset,qint64 nSize)
