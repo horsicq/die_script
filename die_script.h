@@ -190,7 +190,7 @@ private:
 signals:
     void progressMaximumChanged(qint32 nMaximum);
     void progressValueChanged(qint32 nValue);
-    void stopEngine();
+    void stopEngine(); // TODO remove
     void directoryScanCompleted(qint64 nTime);
     void directoryScanFileStarted(QString sFileName);
     void directoryScanResult(DiE_Script::SCAN_RESULT scanResult);
@@ -207,7 +207,7 @@ private:
 #endif
     QString g_sDirectoryProcess;
     SCAN_OPTIONS g_scanOptionsProcess;
-    DIRECTORYSTATS g_directoryStats;
+    DIRECTORYSTATS g_directoryStats; // TODO remove
     QElapsedTimer *g_pDirectoryElapsedTimer;
 //    QMutex g_mutex;
 //    QSemaphore g_semaphore;

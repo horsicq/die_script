@@ -172,7 +172,8 @@ void DiE_ScriptEngine::stop()
 {
     if(g_pBinary)
     {
-        g_pBinary->setSearchProcessEnable(false);
+        // TODO
+//        g_pBinary->setSearchProcessEnable(false);
     }
 }
 #ifdef QT_SCRIPT_LIB
