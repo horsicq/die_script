@@ -77,15 +77,12 @@ public:
         QString sOptions;
     };
 
-    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType,XBinary::PDSTRUCT *pPdStruct);
+    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType,Binary_Script::OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
     ~DiE_ScriptEngine();
     bool handleError(XSCRIPTVALUE value,QString *psErrorString);
     QList<RESULT> getListResult();
     void clearListResult();
     static RESULT stringToResult(QString sString,bool bShowType,bool bShowVersion,bool bShowOptions);
-
-public slots:
-    void stop();
 
 private:
 #ifdef QT_SCRIPT_LIB

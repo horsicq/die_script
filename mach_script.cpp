@@ -20,7 +20,7 @@
  */
 #include "mach_script.h"
 
-MACH_Script::MACH_Script(XMACH *pMACH,XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pMACH,pPdStruct)
+MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pMACH,pOptions,pPdStruct)
 {
     this->g_pMACH=pMACH;
 

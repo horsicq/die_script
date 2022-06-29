@@ -29,7 +29,7 @@ class LX_Script : public MSDOS_Script
     Q_OBJECT
 
 public:
-    explicit LX_Script(XLE *pLX,XBinary::PDSTRUCT *pPdStruct);
+    explicit LX_Script(XLE *pLX,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
     ~LX_Script();
 
 private:

@@ -204,8 +204,12 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
         }  
     }
 
-    DiE_ScriptEngine scriptEngine(&g_listSignatures,pDevice,fileType,pPdStruct);
-    connect(this,SIGNAL(stopEngine()),&scriptEngine,SLOT(stop()),Qt::DirectConnection); // TODO remove
+    Binary_Script::OPTIONS _options={};
+    _options.bIsDeepScan=pOptions->bIsDeepScan;
+    _options.bIsHeuristicScan=pOptions->bIsHeuristicScan;
+
+    DiE_ScriptEngine scriptEngine(&g_listSignatures,pDevice,fileType,&_options,pPdStruct);
+
     connect(&scriptEngine,SIGNAL(errorMessage(QString)),this,SIGNAL(errorMessage(QString)));
     connect(&scriptEngine,SIGNAL(infoMessage(QString)),this,SIGNAL(infoMessage(QString)));
 
@@ -246,11 +250,21 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
             }
         }
 
-        if(!pOptions->bDeepScan)
+        if(!pOptions->bIsDeepScan)
         {
             QString sPrefix=g_listSignatures.at(i).sName.section(".",0,0).toUpper();
 
             if((sPrefix=="DS")||(sPrefix=="EP"))
+            {
+                bExec=false;
+            }
+        }
+
+        if(!pOptions->bIsHeuristicScan)
+        {
+            QString sPrefix=g_listSignatures.at(i).sName.section(".",0,0).toUpper();
+
+            if(sPrefix=="HEUR")
             {
                 bExec=false;
             }

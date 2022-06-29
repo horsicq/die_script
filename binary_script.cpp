@@ -20,10 +20,11 @@
  */
 #include "binary_script.h"
 
-Binary_Script::Binary_Script(XBinary *pBinary,XBinary::PDSTRUCT *pPdStruct)
+Binary_Script::Binary_Script(XBinary *pBinary,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct)
 {
     this->g_pBinary=pBinary;
     this->g_pPdStruct=pPdStruct;
+    this->g_pOptions=pOptions;
 
     g_nSize=pBinary->getSize();
     g_memoryMap=pBinary->getMemoryMap();
@@ -153,7 +154,9 @@ QString Binary_Script::getString(qint64 nOffset,qint64 nMaxSize)
 
 qint64 Binary_Script::findSignature(qint64 nOffset,qint64 nSize,QString sSignature)
 {
-    return g_pBinary->find_signature(&g_memoryMap,nOffset,nSize,sSignature,g_pPdStruct);
+    qint64 nResultSize=0;
+
+    return g_pBinary->find_signature(&g_memoryMap,nOffset,nSize,sSignature,&nResultSize,g_pPdStruct);
 }
 
 qint64 Binary_Script::findString(qint64 nOffset,qint64 nSize,QString sString)
@@ -354,4 +357,14 @@ bool Binary_Script::is32()
 bool Binary_Script::is64()
 {
     return XBinary::is64(&g_memoryMap);
+}
+
+bool Binary_Script::isDeepScan()
+{
+    return g_pOptions->bIsDeepScan;
+}
+
+bool Binary_Script::isHeuristicScan()
+{
+    return g_pOptions->bIsHeuristicScan;
 }

@@ -20,7 +20,7 @@
  */
 #include "lx_script.h"
 
-LX_Script::LX_Script(XLE *pLX,XBinary::PDSTRUCT *pPdStruct) : MSDOS_Script(pLX,pPdStruct)
+LX_Script::LX_Script(XLE *pLX, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : MSDOS_Script(pLX,pOptions,pPdStruct)
 {
     this->pLX=pLX;
 }

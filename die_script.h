@@ -101,7 +101,8 @@ public:
 
     struct SCAN_OPTIONS
     {
-        bool bDeepScan;
+        bool bIsDeepScan;
+        bool bIsHeuristicScan;
         bool bAllTypesScan;
         bool bRecursiveScan;
         bool bDebug;

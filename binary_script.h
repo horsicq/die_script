@@ -29,7 +29,13 @@ class Binary_Script : public QObject
     Q_OBJECT
 
 public:
-    explicit Binary_Script(XBinary *pBinary,XBinary::PDSTRUCT *pPdStruct);
+    struct OPTIONS
+    {
+        bool bIsDeepScan;
+        bool bIsHeuristicScan;
+    };
+
+    explicit Binary_Script(XBinary *pBinary,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
     ~Binary_Script();
 
 public slots:
@@ -82,6 +88,8 @@ public slots:
     bool is16();
     bool is32();
     bool is64();
+    bool isDeepScan();
+    bool isHeuristicScan();
 
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
@@ -89,6 +97,7 @@ protected:
 
 private:
     XBinary *g_pBinary;
+    OPTIONS *g_pOptions;
     XBinary::PDSTRUCT *g_pPdStruct;
     csh g_disasmHandle;
     qint64 g_nSize;
