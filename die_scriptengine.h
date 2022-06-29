@@ -77,7 +77,7 @@ public:
         QString sOptions;
     };
 
-    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType);
+    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType,XBinary::PDSTRUCT *pPdStruct);
     ~DiE_ScriptEngine();
     bool handleError(XSCRIPTVALUE value,QString *psErrorString);
     QList<RESULT> getListResult();
@@ -111,6 +111,7 @@ private:
     Binary_Script *g_pBinaryScript;
     XBinary *g_pExtra;
     Binary_Script *g_pExtraScript;
+    XBinary::PDSTRUCT *g_pPdStruct;
 
     QList<RESULT> g_listResult;
 #ifndef QT_SCRIPT_LIB

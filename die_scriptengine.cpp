@@ -20,9 +20,10 @@
  */
 #include "die_scriptengine.h"
 
-DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType)
+DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType,XBinary::PDSTRUCT *pPdStruct)
 {
-    this->g_pSignaturesList=pSignaturesList;
+    g_pSignaturesList=pSignaturesList;
+    g_pPdStruct=pPdStruct;
 
 #ifdef QT_SCRIPT_LIB
     _addFunction(includeScript,"includeScript");
@@ -46,62 +47,62 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     g_pExtraScript=0;
 
     g_pBinary=new XBinary(pDevice); // TODO Check memory leak!
-    g_pBinaryScript=new Binary_Script(g_pBinary); // TODO Check memory leak!
+    g_pBinaryScript=new Binary_Script(g_pBinary,pPdStruct); // TODO Check memory leak!
     _addClass(g_pBinaryScript,"Binary");
 
     if(XBinary::checkFileType(XBinary::FT_COM,fileType))
     {
         XCOM *pCOM=new XCOM(pDevice);
-        g_pExtraScript=new COM_Script(pCOM);
+        g_pExtraScript=new COM_Script(pCOM,pPdStruct);
         _addClass(g_pExtraScript,"COM");
         g_pExtra=pCOM;
     }
     else if(XBinary::checkFileType(XBinary::FT_PE,fileType))
     {
         XPE *pPE=new XPE(pDevice);
-        g_pExtraScript=new PE_Script(pPE);
+        g_pExtraScript=new PE_Script(pPE,pPdStruct);
         _addClass(g_pExtraScript,"PE");
         g_pExtra=pPE;
     }
     else if(XBinary::checkFileType(XBinary::FT_ELF,fileType))
     {
         XELF *pELF=new XELF(pDevice);
-        g_pExtraScript=new ELF_Script(pELF);
+        g_pExtraScript=new ELF_Script(pELF,pPdStruct);
         _addClass(g_pExtraScript,"ELF");
         g_pExtra=pELF;
     }
     else if(XBinary::checkFileType(XBinary::FT_MACHO,fileType))
     {
         XMACH *pMACH=new XMACH(pDevice);
-        g_pExtraScript=new MACH_Script(pMACH);
+        g_pExtraScript=new MACH_Script(pMACH,pPdStruct);
         _addClass(g_pExtraScript,"MACH");
         g_pExtra=pMACH;
     }
     else if(XBinary::checkFileType(XBinary::FT_NE,fileType))
     {
         XNE *pNE=new XNE(pDevice);
-        g_pExtraScript=new NE_Script(pNE);
+        g_pExtraScript=new NE_Script(pNE,pPdStruct);
         _addClass(g_pExtraScript,"NE");
         g_pExtra=pNE;
     }
     else if(XBinary::checkFileType(XBinary::FT_LE,fileType))
     {
         XLE *pLE=new XLE(pDevice);
-        g_pExtraScript=new LE_Script(pLE);
+        g_pExtraScript=new LE_Script(pLE,pPdStruct);
         _addClass(g_pExtraScript,"LE");
         g_pExtra=pLE;
     }
     else if(XBinary::checkFileType(XBinary::FT_LX,fileType))
     {
         XLE *pLE=new XLE(pDevice);
-        g_pExtraScript=new LX_Script(pLE);
+        g_pExtraScript=new LX_Script(pLE,pPdStruct);
         _addClass(g_pExtraScript,"LX");
         g_pExtra=pLE;
     }
     else if(XBinary::checkFileType(XBinary::FT_MSDOS,fileType))
     {
         XMSDOS *pXMSDOS=new XMSDOS(pDevice);
-        g_pExtraScript=new MSDOS_Script(pXMSDOS);
+        g_pExtraScript=new MSDOS_Script(pXMSDOS,pPdStruct);
         _addClass(g_pExtraScript,"MSDOS");
         g_pExtra=pXMSDOS;
     }

@@ -29,7 +29,7 @@ class ELF_Script : public Binary_Script
     Q_OBJECT
 
 public:
-    explicit ELF_Script(XELF *pELF);
+    explicit ELF_Script(XELF *pELF,XBinary::PDSTRUCT *pPdStruct);
     ~ELF_Script();
 
 public slots:

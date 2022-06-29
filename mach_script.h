@@ -29,7 +29,7 @@ class MACH_Script : public Binary_Script
     Q_OBJECT
 
 public:
-    MACH_Script(XMACH *pMACH);
+    MACH_Script(XMACH *pMACH,XBinary::PDSTRUCT *pPdStruct);
     ~MACH_Script();
 
 public slots:

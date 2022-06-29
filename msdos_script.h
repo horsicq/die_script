@@ -29,7 +29,7 @@ class MSDOS_Script : public Binary_Script
     Q_OBJECT
 
 public:
-    explicit MSDOS_Script(XMSDOS *pMSDOS);
+    explicit MSDOS_Script(XMSDOS *pMSDOS, XBinary::PDSTRUCT *pPdStruct);
     ~MSDOS_Script();
 
 public slots:

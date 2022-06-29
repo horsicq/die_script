@@ -131,14 +131,6 @@ public:
         qint32 nNumberOfSignatures;
     };
 
-    struct DIRECTORYSTATS
-    {
-        qint32 nTotal;
-        qint32 nCurrent;
-        qint64 nElapsed;
-        QString sStatus;
-    };
-
     enum DBT
     {
         DBT_UNKNOWN=0,
@@ -154,43 +146,36 @@ public:
     qint32 getNumberOfSignatures(XBinary::FT fileType);
 
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> *getSignatures();
-    SCAN_RESULT scanFile(QString sFileName,SCAN_OPTIONS *pOptions);
-    SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions);
-    void scan(QIODevice *pDevice,SCAN_RESULT *pScanResult,qint64 nOffset,qint64 nSize,XBinary::SCANID parentId,SCAN_OPTIONS *pOptions,bool bInit);
+    SCAN_RESULT scanFile(QString sFileName,SCAN_OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct=nullptr);
+    SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct=nullptr);
+    void scan(QIODevice *pDevice,SCAN_RESULT *pScanResult,qint64 nOffset,qint64 nSize,XBinary::SCANID parentId,SCAN_OPTIONS *pOptions,bool bInit,XBinary::PDSTRUCT *pPdStruct);
     DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(QString sSignatureFilePath);
     bool updateSignature(QString sSignatureFilePath,QString sText);
     STATS getStats();
     DBT getDatabaseType();
     bool isSignaturesPresent(XBinary::FT fileType);
-//    static QString scanResultToPlainString(SCAN_RESULT *pScanResult);
-//    static QString scanResultToJsonString(SCAN_RESULT *pScanResult);
-//    static QString scanResultToXmlString(SCAN_RESULT *pScanResult);
-//    static QString scanResultToCsvString(SCAN_RESULT *pScanResult);
-//    static QString scanResultToTsvString(SCAN_RESULT *pScanResult);
+
     static QString getErrorsString(SCAN_RESULT *pScanResult);
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
 #endif
-    void setProcessDirectory(QString sDirectory,SCAN_OPTIONS scanOptions);
-    DIRECTORYSTATS getCurrentDirectoryStats();
+    void setProcessDirectory(QString sDirectory, SCAN_OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct);
 
     static QList<XBinary::SCANSTRUCT> convert(QList<SCAN_STRUCT> *pListScanStructs);
 
 public slots:
-    void stop();
     void processDirectory();
 
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath,XBinary::FT fileType);
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip,QList<XArchive::RECORD> *pListRecords,QString sPrefix,XBinary::FT fileType);
-    XBinary::SCANID _scan(SCAN_RESULT *pScanResult,QIODevice *pDevice,XBinary::SCANID parentId,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath="",qint64 nOffset=0,bool bAddUnknown=true);
+    XBinary::SCANID _scan(SCAN_RESULT *pScanResult,QIODevice *pDevice,XBinary::SCANID parentId,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath,qint64 nOffset,bool bAddUnknown,XBinary::PDSTRUCT *pPdStruct);
     bool _handleError(DiE_ScriptEngine *pScriptEngine,XSCRIPTVALUE scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
 signals:
     void progressMaximumChanged(qint32 nMaximum);
     void progressValueChanged(qint32 nValue);
-    void stopEngine(); // TODO remove
     void directoryScanCompleted(qint64 nTime);
     void directoryScanFileStarted(QString sFileName);
     void directoryScanResult(DiE_Script::SCAN_RESULT scanResult);
@@ -200,15 +185,14 @@ signals:
 private:
     QString g_sDatabasePath;
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> g_listSignatures;
-    bool g_bIsStop;
     DBT g_databaseType;
 #ifdef QT_SCRIPTTOOLS_LIB
     QScriptEngineDebugger *pDebugger;
 #endif
     QString g_sDirectoryProcess;
     SCAN_OPTIONS g_scanOptionsProcess;
-    DIRECTORYSTATS g_directoryStats; // TODO remove
     QElapsedTimer *g_pDirectoryElapsedTimer;
+    XBinary::PDSTRUCT *g_pPdStruct;
 //    QMutex g_mutex;
 //    QSemaphore g_semaphore;
 };

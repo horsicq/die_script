@@ -20,7 +20,7 @@
  */
 #include "pe_script.h"
 
-PE_Script::PE_Script(XPE *pPE) : MSDOS_Script(pPE)
+PE_Script::PE_Script(XPE *pPE,XBinary::PDSTRUCT *pPdStruct) : MSDOS_Script(pPE,pPdStruct)
 {
     this->pPE=pPE;
 

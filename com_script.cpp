@@ -20,7 +20,7 @@
  */
 #include "com_script.h"
 
-COM_Script::COM_Script(XCOM *pCOM) : Binary_Script(pCOM)
+COM_Script::COM_Script(XCOM *pCOM,XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pCOM,pPdStruct)
 {
     this->g_pCOM=pCOM;
 }

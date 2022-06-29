@@ -20,9 +20,10 @@
  */
 #include "binary_script.h"
 
-Binary_Script::Binary_Script(XBinary *pBinary)
+Binary_Script::Binary_Script(XBinary *pBinary,XBinary::PDSTRUCT *pPdStruct)
 {
     this->g_pBinary=pBinary;
+    this->g_pPdStruct=pPdStruct;
 
     g_nSize=pBinary->getSize();
     g_memoryMap=pBinary->getMemoryMap();
@@ -152,27 +153,27 @@ QString Binary_Script::getString(qint64 nOffset,qint64 nMaxSize)
 
 qint64 Binary_Script::findSignature(qint64 nOffset,qint64 nSize,QString sSignature)
 {
-    return g_pBinary->find_signature(&g_memoryMap,nOffset,nSize,sSignature);
+    return g_pBinary->find_signature(&g_memoryMap,nOffset,nSize,sSignature,g_pPdStruct);
 }
 
 qint64 Binary_Script::findString(qint64 nOffset,qint64 nSize,QString sString)
 {
-    return g_pBinary->find_ansiString(nOffset,nSize,sString);
+    return g_pBinary->find_ansiString(nOffset,nSize,sString,g_pPdStruct);
 }
 
 qint64 Binary_Script::findByte(qint64 nOffset,qint64 nSize,quint8 nValue)
 {
-    return g_pBinary->find_uint8(nOffset,nSize,nValue);
+    return g_pBinary->find_uint8(nOffset,nSize,nValue,g_pPdStruct);
 }
 
 qint64 Binary_Script::findWord(qint64 nOffset,qint64 nSize,quint16 nValue)
 {
-    return g_pBinary->find_uint16(nOffset,nSize,nValue);
+    return g_pBinary->find_uint16(nOffset,nSize,nValue,g_pPdStruct);
 }
 
 qint64 Binary_Script::findDword(qint64 nOffset,qint64 nSize,quint32 nValue)
 {
-    return g_pBinary->find_uint32(nOffset,nSize,nValue);
+    return g_pBinary->find_uint32(nOffset,nSize,nValue,g_pPdStruct);
 }
 
 qint64 Binary_Script::getEntryPointOffset()

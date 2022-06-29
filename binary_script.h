@@ -29,7 +29,7 @@ class Binary_Script : public QObject
     Q_OBJECT
 
 public:
-    explicit Binary_Script(XBinary *pBinary);
+    explicit Binary_Script(XBinary *pBinary,XBinary::PDSTRUCT *pPdStruct);
     ~Binary_Script();
 
 public slots:
@@ -89,6 +89,7 @@ protected:
 
 private:
     XBinary *g_pBinary;
+    XBinary::PDSTRUCT *g_pPdStruct;
     csh g_disasmHandle;
     qint64 g_nSize;
     qint64 g_nEntryPointOffset;
