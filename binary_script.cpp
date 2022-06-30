@@ -291,22 +291,22 @@ QString Binary_Script::getSignature(qint64 nOffset,qint64 nSize)
 
 double Binary_Script::calculateEntropy(qint64 nOffset,qint64 nSize)
 {
-    return g_pBinary->getEntropy(nOffset,nSize); // TODO ProcessData
+    return g_pBinary->getEntropy(nOffset,nSize,g_pPdStruct);
 }
 
 QString Binary_Script::calculateMD5(qint64 nOffset,qint64 nSize)
 {
-    return g_pBinary->getHash(XBinary::HASH_MD5,nOffset,nSize);
+    return g_pBinary->getHash(XBinary::HASH_MD5,nOffset,nSize,g_pPdStruct);
 }
 
 quint32 Binary_Script::calculateCRC32(qint64 nOffset,qint64 nSize)
 {
-    return g_pBinary->_getCRC32(nOffset,nSize);
+    return g_pBinary->_getCRC32(nOffset,nSize,g_pPdStruct);
 }
 
 bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber,QString sSignature)
 {
-    return g_pBinary->isSignatureInLoadSegmentPresent(&g_memoryMap,nNumber,sSignature);
+    return g_pBinary->isSignatureInLoadSegmentPresent(&g_memoryMap,nNumber,sSignature,g_pPdStruct);
 }
 
 qint64 Binary_Script::getImageBase()
@@ -367,4 +367,64 @@ bool Binary_Script::isDeepScan()
 bool Binary_Script::isHeuristicScan()
 {
     return g_pOptions->bIsHeuristicScan;
+}
+
+quint8 Binary_Script::read_uint8(qint64 nOffset)
+{
+    return g_pBinary->read_uint8(nOffset);
+}
+
+qint8 Binary_Script::read_int8(qint64 nOffset)
+{
+    return g_pBinary->read_int8(nOffset);
+}
+
+quint16 Binary_Script::read_uint16(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_uint16(nOffset,bIsBigEndian);
+}
+
+qint16 Binary_Script::read_int16(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_int16(nOffset,bIsBigEndian);
+}
+
+quint32 Binary_Script::read_uint32(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_uint32(nOffset,bIsBigEndian);
+}
+
+qint32 Binary_Script::read_int32(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_int32(nOffset,bIsBigEndian);
+}
+
+quint64 Binary_Script::read_uint64(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_uint64(nOffset,bIsBigEndian);
+}
+
+qint64 Binary_Script::read_int64(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_int64(nOffset,bIsBigEndian);
+}
+
+QString Binary_Script::read_ansiString(qint64 nOffset, qint64 nMaxSize)
+{
+    return g_pBinary->read_ansiString(nOffset,nMaxSize);
+}
+
+QString Binary_Script::read_unicodeString(qint64 nOffset, qint64 nMaxSize)
+{
+    return g_pBinary->read_unicodeString(nOffset,nMaxSize);
+}
+
+QString Binary_Script::read_utf8String(qint64 nOffset, qint64 nMaxSize)
+{
+    return g_pBinary->read_utf8String(nOffset,nMaxSize);
+}
+
+QString Binary_Script::read_ucsdString(qint64 nOffset)
+{
+    return g_pBinary->read_ucsdString(nOffset);
 }

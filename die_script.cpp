@@ -156,11 +156,6 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
 {
     XBinary::SCANID resultId={};
 
-    qint32 nCurrent=0;
-
-    emit progressMaximumChanged(100); // TODO const
-    emit progressValueChanged(nCurrent);
-
     XBinary::_MEMORY_MAP memoryMap=XFormats::getMemoryMap(fileType,pDevice);
 
     resultId.fileType=fileType;
@@ -232,6 +227,10 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
             _handleError(&scriptEngine,scriptEngine.evaluate(srInit.sText,srInit.sFilePath),&srInit,pScanResult);
         }
     }
+
+    pPdStruct->pdRecordOpt.bIsValid=true;
+    pPdStruct->pdRecordOpt.nCurrent=0;
+    pPdStruct->pdRecordOpt.nTotal=nNumberOfSignatures;
 
     for(qint32 i=0;(i<nNumberOfSignatures)&&(!(pPdStruct->bIsStop));i++)
     {
@@ -379,11 +378,8 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
             }
         }
 
-        if((i*100)/nNumberOfSignatures>nCurrent)
-        {
-            nCurrent++;
-            emit progressValueChanged(nCurrent);
-        }
+        pPdStruct->pdRecordOpt.nCurrent++;
+        pPdStruct->pdRecordOpt.sStatus=g_listSignatures.at(i).sName;
     }
 
     if(bAddUnknown)
@@ -399,7 +395,12 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
         }
     }
 
-    emit progressValueChanged(100);
+    if(!(pPdStruct->bIsStop))
+    {
+        pPdStruct->pdRecordOpt.bSuccess=true;
+    }
+
+    pPdStruct->pdRecordOpt.bFinished=true;
 
     return resultId;
 }
@@ -831,7 +832,7 @@ void DiE_Script::processDirectory()
     g_pDirectoryElapsedTimer=new QElapsedTimer;
     g_pDirectoryElapsedTimer->start();
 
-    g_pPdStruct->pdRecordOpt.bIsValid=true;
+    g_pPdStruct->pdRecordObj.bIsValid=true;
 
     if(g_sDirectoryProcess!="")
     {
@@ -840,18 +841,18 @@ void DiE_Script::processDirectory()
 
         XBinary::findFiles(g_sDirectoryProcess,&listFileNames,g_scanOptionsProcess.bSubdirectories,0,g_pPdStruct);
 
-        g_pPdStruct->pdRecordOpt.nTotal=listFileNames.count();
+        g_pPdStruct->pdRecordObj.nTotal=listFileNames.count();
 
-        for(qint32 i=0;(i<g_pPdStruct->pdRecordOpt.nTotal)&&(!(g_pPdStruct->bIsStop));i++)
+        for(qint32 i=0;(i<g_pPdStruct->pdRecordObj.nTotal)&&(!(g_pPdStruct->bIsStop));i++)
         {
 //            g_mutex.lock();
 
-            g_pPdStruct->pdRecordOpt.nCurrent=i+1;
-            g_pPdStruct->pdRecordOpt.sStatus=listFileNames.at(i);
+            g_pPdStruct->pdRecordObj.nCurrent=i+1;
+            g_pPdStruct->pdRecordObj.sStatus=listFileNames.at(i);
 
-            emit directoryScanFileStarted(g_pPdStruct->pdRecordOpt.sStatus);
+            emit directoryScanFileStarted(g_pPdStruct->pdRecordObj.sStatus);
 
-            SCAN_RESULT _scanResult=scanFile(g_pPdStruct->pdRecordOpt.sStatus,&g_scanOptionsProcess,g_pPdStruct);
+            SCAN_RESULT _scanResult=scanFile(g_pPdStruct->pdRecordObj.sStatus,&g_scanOptionsProcess,g_pPdStruct);
 
             emit directoryScanResult(_scanResult);
 
@@ -869,10 +870,10 @@ void DiE_Script::processDirectory()
 
     if(!(g_pPdStruct->bIsStop))
     {
-        g_pPdStruct->pdRecordOpt.bSuccess=true;
+        g_pPdStruct->pdRecordObj.bSuccess=true;
     }
 
-    g_pPdStruct->pdRecordOpt.bFinished=true;
+    g_pPdStruct->pdRecordObj.bFinished=true;
 
     emit directoryScanCompleted(g_pDirectoryElapsedTimer->elapsed());
     delete g_pDirectoryElapsedTimer;

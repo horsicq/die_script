@@ -175,8 +175,6 @@ private:
     bool _handleError(DiE_ScriptEngine *pScriptEngine,XSCRIPTVALUE scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
 signals:
-    void progressMaximumChanged(qint32 nMaximum);
-    void progressValueChanged(qint32 nValue);
     void directoryScanCompleted(qint64 nTime);
     void directoryScanFileStarted(QString sFileName);
     void directoryScanResult(DiE_Script::SCAN_RESULT scanResult);
