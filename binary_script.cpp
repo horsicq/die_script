@@ -404,7 +404,7 @@ quint64 Binary_Script::read_uint64(qint64 nOffset, bool bIsBigEndian)
     return g_pBinary->read_uint64(nOffset,bIsBigEndian);
 }
 
-qint64 Binary_Script::read_int64(qint64 nOffset, bool bIsBigEndian)
+qint64 Binary_Script::read_int64(qint64 nOffset,bool bIsBigEndian)
 {
     return g_pBinary->read_int64(nOffset,bIsBigEndian);
 }
