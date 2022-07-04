@@ -431,5 +431,5 @@ QString Binary_Script::read_ucsdString(qint64 nOffset)
 
 QString Binary_Script::bytesCountToString(quint64 nValue)
 {
-
+    return g_pBinary->bytesCountToString(nValue);
 }

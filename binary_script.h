@@ -104,6 +104,8 @@ public slots:
     QString read_utf8String(qint64 nOffset,qint64 nMaxSize=50);
     QString read_ucsdString(qint64 nOffset);
 
+    QString bytesCountToString(quint64 nValue);
+
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
     qint64 g_nBaseAddress;
