@@ -33,6 +33,7 @@ public:
     {
         bool bIsDeepScan;
         bool bIsHeuristicScan;
+        bool bIsVerbose;
     };
 
     explicit Binary_Script(XBinary *pBinary,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
@@ -91,6 +92,8 @@ public slots:
 
     bool isDeepScan();
     bool isHeuristicScan();
+    bool isVerbose();
+
     quint8 read_uint8(qint64 nOffset);
     qint8 read_int8(qint64 nOffset);
     quint16 read_uint16(qint64 nOffset,bool bIsBigEndian=false);

@@ -103,6 +103,7 @@ public:
     {
         bool bIsDeepScan;
         bool bIsHeuristicScan;
+        bool bIsVerbose;
         bool bAllTypesScan;
         bool bRecursiveScan;
         bool bDebug;
@@ -190,7 +191,6 @@ private:
 #endif
     QString g_sDirectoryProcess;
     SCAN_OPTIONS g_scanOptionsProcess;
-    QElapsedTimer *g_pDirectoryElapsedTimer;
     XBinary::PDSTRUCT *g_pPdStruct;
 //    QMutex g_mutex;
 //    QSemaphore g_semaphore;

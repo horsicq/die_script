@@ -86,7 +86,6 @@ bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1,const DiE
 DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
 {
     g_databaseType=DBT_UNKNOWN;
-    g_pDirectoryElapsedTimer=nullptr;
     g_pPdStruct=nullptr;
 #ifdef QT_SCRIPTTOOLS_LIB
     pDebugger=0;
@@ -141,7 +140,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
 
             record.fileType=fileType;
             record.sName=fi.fileName();
-            record.sText=pZip->decompress(&zipRecord);
+            record.sText=pZip->decompress(&zipRecord,false,nullptr);
             record.sFilePath=zipRecord.sFileName;
             record.bReadOnly=true;
 
@@ -202,6 +201,7 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
     Binary_Script::OPTIONS _options={};
     _options.bIsDeepScan=pOptions->bIsDeepScan;
     _options.bIsHeuristicScan=pOptions->bIsHeuristicScan;
+    _options.bIsVerbose=pOptions->bIsVerbose;
 
     DiE_ScriptEngine scriptEngine(&g_listSignatures,pDevice,fileType,&_options,pPdStruct);
 
@@ -228,9 +228,9 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
         }
     }
 
-    pPdStruct->pdRecordOpt.bIsValid=true;
-    pPdStruct->pdRecordOpt.nCurrent=0;
-    pPdStruct->pdRecordOpt.nTotal=nNumberOfSignatures;
+    pPdStruct->pdRecordObj.bIsValid=true;
+    pPdStruct->pdRecordObj.nCurrent=0;
+    pPdStruct->pdRecordObj.nTotal=nNumberOfSignatures;
 
     for(qint32 i=0;(i<nNumberOfSignatures)&&(!(pPdStruct->bIsStop));i++)
     {
@@ -378,8 +378,8 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
             }
         }
 
-        pPdStruct->pdRecordOpt.nCurrent++;
-        pPdStruct->pdRecordOpt.sStatus=g_listSignatures.at(i).sName;
+        pPdStruct->pdRecordObj.nCurrent++;
+        pPdStruct->pdRecordObj.sStatus=g_listSignatures.at(i).sName;
     }
 
     if(bAddUnknown)
@@ -397,10 +397,10 @@ XBinary::SCANID DiE_Script::_scan(SCAN_RESULT *pScanResult, QIODevice *pDevice, 
 
     if(!(pPdStruct->bIsStop))
     {
-        pPdStruct->pdRecordOpt.bSuccess=true;
+        pPdStruct->pdRecordObj.bSuccess=true;
     }
 
-    pPdStruct->pdRecordOpt.bFinished=true;
+    pPdStruct->pdRecordObj.bFinished=true;
 
     return resultId;
 }
@@ -829,10 +829,10 @@ bool DiE_Script::updateSignature(QString sSignatureFilePath,QString sText)
 
 void DiE_Script::processDirectory()
 {
-    g_pDirectoryElapsedTimer=new QElapsedTimer;
-    g_pDirectoryElapsedTimer->start();
+    QElapsedTimer elapsedTimer;
+    elapsedTimer.start();
 
-    g_pPdStruct->pdRecordObj.bIsValid=true;
+    g_pPdStruct->pdRecordFiles.bIsValid=true;
 
     if(g_sDirectoryProcess!="")
     {
@@ -841,18 +841,20 @@ void DiE_Script::processDirectory()
 
         XBinary::findFiles(g_sDirectoryProcess,&listFileNames,g_scanOptionsProcess.bSubdirectories,0,g_pPdStruct);
 
-        g_pPdStruct->pdRecordObj.nTotal=listFileNames.count();
+        qint32 nTotal=listFileNames.count();
+        g_pPdStruct->pdRecordFiles.nTotal=nTotal;
 
-        for(qint32 i=0;(i<g_pPdStruct->pdRecordObj.nTotal)&&(!(g_pPdStruct->bIsStop));i++)
+        for(qint32 i=0;(i<nTotal)&&(!(g_pPdStruct->bIsStop));i++)
         {
+            QString sFileName=listFileNames.at(i);
 //            g_mutex.lock();
 
-            g_pPdStruct->pdRecordObj.nCurrent=i+1;
-            g_pPdStruct->pdRecordObj.sStatus=listFileNames.at(i);
+            g_pPdStruct->pdRecordFiles.nCurrent=i;
+            g_pPdStruct->pdRecordFiles.sStatus=sFileName;
 
-            emit directoryScanFileStarted(g_pPdStruct->pdRecordObj.sStatus);
+            emit directoryScanFileStarted(sFileName);
 
-            SCAN_RESULT _scanResult=scanFile(g_pPdStruct->pdRecordObj.sStatus,&g_scanOptionsProcess,g_pPdStruct);
+            SCAN_RESULT _scanResult=scanFile(sFileName,&g_scanOptionsProcess,g_pPdStruct);
 
             emit directoryScanResult(_scanResult);
 
@@ -870,14 +872,12 @@ void DiE_Script::processDirectory()
 
     if(!(g_pPdStruct->bIsStop))
     {
-        g_pPdStruct->pdRecordObj.bSuccess=true;
+        g_pPdStruct->pdRecordFiles.bSuccess=true;
     }
 
-    g_pPdStruct->pdRecordObj.bFinished=true;
+    g_pPdStruct->pdRecordFiles.bFinished=true;
 
-    emit directoryScanCompleted(g_pDirectoryElapsedTimer->elapsed());
-    delete g_pDirectoryElapsedTimer;
-    g_pDirectoryElapsedTimer=nullptr;
+    emit directoryScanCompleted(elapsedTimer.elapsed());
 }
 
 DiE_Script::STATS DiE_Script::getStats()

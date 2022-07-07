@@ -369,6 +369,11 @@ bool Binary_Script::isHeuristicScan()
     return g_pOptions->bIsHeuristicScan;
 }
 
+bool Binary_Script::isVerbose()
+{
+    return g_pOptions->bIsVerbose;
+}
+
 quint8 Binary_Script::read_uint8(qint64 nOffset)
 {
     return g_pBinary->read_uint8(nOffset);
