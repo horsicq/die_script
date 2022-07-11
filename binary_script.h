@@ -109,6 +109,10 @@ public slots:
 
     QString bytesCountToString(quint64 nValue);
 
+    qint64 find_ansiString(qint64 nOffset,qint64 nSize,QString sString);
+    qint64 find_unicodeString(qint64 nOffset,qint64 nSize,QString sString);
+    qint64 find_utf8String(qint64 nOffset,qint64 nSize,QString sString);
+
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
     qint64 g_nBaseAddress;

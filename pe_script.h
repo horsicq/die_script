@@ -101,7 +101,6 @@ public slots:
 
 private:
     XPE *pPE;
-    qint64 g_nBaseAddress;
     qint32 g_nNumberOfSections;
     XPE::CLI_INFO g_cliInfo;
     QList<XPE::RESOURCE_RECORD> g_listResourceRecords;

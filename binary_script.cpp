@@ -384,7 +384,7 @@ qint8 Binary_Script::read_int8(qint64 nOffset)
     return g_pBinary->read_int8(nOffset);
 }
 
-quint16 Binary_Script::read_uint16(qint64 nOffset, bool bIsBigEndian)
+quint16 Binary_Script::read_uint16(qint64 nOffset,bool bIsBigEndian)
 {
     return g_pBinary->read_uint16(nOffset,bIsBigEndian);
 }
@@ -437,4 +437,19 @@ QString Binary_Script::read_ucsdString(qint64 nOffset)
 QString Binary_Script::bytesCountToString(quint64 nValue)
 {
     return g_pBinary->bytesCountToString(nValue);
+}
+
+qint64 Binary_Script::find_ansiString(qint64 nOffset, qint64 nSize, QString sString)
+{
+    return g_pBinary->find_ansiString(nOffset,nSize,sString);
+}
+
+qint64 Binary_Script::find_unicodeString(qint64 nOffset, qint64 nSize, QString sString)
+{
+    return g_pBinary->find_unicodeString(nOffset,nSize,sString);
+}
+
+qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, QString sString)
+{
+    return g_pBinary->find_utf8String(nOffset,nSize,sString);
 }
