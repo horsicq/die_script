@@ -113,6 +113,8 @@ public slots:
     qint64 find_unicodeString(qint64 nOffset,qint64 nSize,QString sString);
     qint64 find_utf8String(qint64 nOffset,qint64 nSize,QString sString);
 
+    QString read_UUID(qint64 nOffset);
+
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
     qint64 g_nBaseAddress;

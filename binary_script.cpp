@@ -439,7 +439,7 @@ QString Binary_Script::bytesCountToString(quint64 nValue)
     return g_pBinary->bytesCountToString(nValue);
 }
 
-qint64 Binary_Script::find_ansiString(qint64 nOffset, qint64 nSize, QString sString)
+qint64 Binary_Script::find_ansiString(qint64 nOffset,qint64 nSize,QString sString)
 {
     return g_pBinary->find_ansiString(nOffset,nSize,sString);
 }
@@ -452,4 +452,9 @@ qint64 Binary_Script::find_unicodeString(qint64 nOffset, qint64 nSize, QString s
 qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, QString sString)
 {
     return g_pBinary->find_utf8String(nOffset,nSize,sString);
+}
+
+QString Binary_Script::read_UUID(qint64 nOffset)
+{
+    return g_pBinary->read_UUID(nOffset);
 }
