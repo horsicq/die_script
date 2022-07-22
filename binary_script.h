@@ -114,9 +114,12 @@ public slots:
     qint64 find_utf8String(qint64 nOffset,qint64 nSize,QString sString);
 
     QString read_UUID(qint64 nOffset);
+    QString read_UUID2(qint64 nOffset,bool bIsBigEndian=false);
 
     float read_float(qint64 nOffset,bool bIsBigEndian=false);
     double read_double(qint64 nOffset,bool bIsBigEndian=false);
+    float read_float32(qint64 nOffset,bool bIsBigEndian=false);
+    double read_float64(qint64 nOffset,bool bIsBigEndian=false);
 
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
