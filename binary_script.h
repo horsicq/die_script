@@ -113,8 +113,8 @@ public slots:
     qint64 find_unicodeString(qint64 nOffset,qint64 nSize,QString sString);
     qint64 find_utf8String(qint64 nOffset,qint64 nSize,QString sString);
 
-    QString read_UUID(qint64 nOffset);
-    QString read_UUID2(qint64 nOffset,bool bIsBigEndian=false);
+    QString read_UUID_bytes(qint64 nOffset);
+    QString read_UUID(qint64 nOffset,bool bIsBigEndian=false);
 
     float read_float(qint64 nOffset,bool bIsBigEndian=false);
     double read_double(qint64 nOffset,bool bIsBigEndian=false);

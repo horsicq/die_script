@@ -454,14 +454,14 @@ qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, QString sStr
     return g_pBinary->find_utf8String(nOffset,nSize,sString);
 }
 
-QString Binary_Script::read_UUID(qint64 nOffset)
+QString Binary_Script::read_UUID_bytes(qint64 nOffset)
 {
-    return g_pBinary->read_UUID(nOffset);
+    return g_pBinary->read_UUID_bytes(nOffset);
 }
 
-QString Binary_Script::read_UUID2(qint64 nOffset, bool bIsBigEndian)
+QString Binary_Script::read_UUID(qint64 nOffset, bool bIsBigEndian)
 {
-    return g_pBinary->read_UUID2(nOffset,bIsBigEndian);
+    return g_pBinary->read_UUID(nOffset,bIsBigEndian);
 }
 
 float Binary_Script::read_float(qint64 nOffset,bool bIsBigEndian)
