@@ -444,7 +444,7 @@ qint64 Binary_Script::find_ansiString(qint64 nOffset,qint64 nSize,QString sStrin
     return g_pBinary->find_ansiString(nOffset,nSize,sString);
 }
 
-qint64 Binary_Script::find_unicodeString(qint64 nOffset, qint64 nSize, QString sString)
+qint64 Binary_Script::find_unicodeString(qint64 nOffset,qint64 nSize,QString sString)
 {
     return g_pBinary->find_unicodeString(nOffset,nSize,sString);
 }
