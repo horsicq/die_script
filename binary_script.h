@@ -83,6 +83,10 @@ public slots:
     QString upperCase(QString sString);
     QString lowerCase(QString sString);
     bool isPlainText();
+    bool isUTF8Text();
+    bool isUnicodeText();
+    bool isText();
+    QString getHeaderString();
     qint32 getDisasmLength(qint64 nAddress);
     QString getDisasmString(qint64 nAddress);
     qint64 getDisasmNextAddress(qint64 nAddress);
@@ -143,6 +147,9 @@ private:
     QString g_sOverlaySignature;
     qint32 g_nOverlaySignatureSize;
     bool g_bIsPlainText;
+    bool g_bIsUTF8Text;
+    bool g_bIsUnicodeText;
+    QString g_sHeaderString;
     QString g_sFileDirectory;
     QString g_sFileBaseName;
     QString g_sFileCompleteSuffix;

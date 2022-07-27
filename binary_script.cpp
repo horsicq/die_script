@@ -57,6 +57,22 @@ Binary_Script::Binary_Script(XBinary *pBinary,OPTIONS *pOptions,XBinary::PDSTRUC
     g_sFileSuffix=XBinary::getDeviceFileSuffix(pBinary->getDevice());
 
     g_bIsPlainText=pBinary->isPlainTextType();
+    g_bIsUTF8Text=pBinary->isUTF8TextType();
+    XBinary::UNICODE_TYPE unicodeType=pBinary->getUnicodeType();
+
+    if(unicodeType!=XBinary::UNICODE_TYPE_NONE)
+    {
+        g_sHeaderString=pBinary->read_unicodeString(2,qMin(g_nSize,(qint64)0x1000),(unicodeType==XBinary::UNICODE_TYPE_BE));
+        g_bIsUnicodeText=true;
+    }
+    else if(g_bIsUTF8Text)
+    {
+        g_sHeaderString=pBinary->read_utf8String(3,qMin(g_nSize,(qint64)0x1000));
+    }
+    else if(g_bIsPlainText)
+    {
+        g_sHeaderString=pBinary->read_ansiString(0,qMin(g_nSize,(qint64)0x1000));
+    }
 
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap),&g_disasmHandle,true);
 }
@@ -327,6 +343,26 @@ QString Binary_Script::lowerCase(QString sString)
 bool Binary_Script::isPlainText()
 {
     return g_bIsPlainText;
+}
+
+bool Binary_Script::isUTF8Text()
+{
+    return g_bIsUTF8Text;
+}
+
+bool Binary_Script::isUnicodeText()
+{
+    return g_bIsUnicodeText;
+}
+
+bool Binary_Script::isText()
+{
+    return g_bIsPlainText|g_bIsUTF8Text|g_bIsUnicodeText;
+}
+
+QString Binary_Script::getHeaderString()
+{
+    return g_sHeaderString;
 }
 
 qint32 Binary_Script::getDisasmLength(qint64 nAddress)
