@@ -470,7 +470,7 @@ QString Binary_Script::read_ucsdString(qint64 nOffset)
     return g_pBinary->read_ucsdString(nOffset);
 }
 
-QString Binary_Script::read_codePageString(QString sCodePage, qint64 nOffset, qint64 nMaxByteSize)
+QString Binary_Script::read_codePageString(QString sCodePage,qint64 nOffset,qint64 nMaxByteSize)
 {
     return g_pBinary->read_codePageString(sCodePage,nOffset,nMaxByteSize);
 }
