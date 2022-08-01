@@ -470,9 +470,9 @@ QString Binary_Script::read_ucsdString(qint64 nOffset)
     return g_pBinary->read_ucsdString(nOffset);
 }
 
-QString Binary_Script::read_codePageString(QString sCodePage,qint64 nOffset,qint64 nMaxByteSize)
+QString Binary_Script::read_codePageString(qint64 nOffset,qint64 nMaxByteSize,QString sCodePage)
 {
-    return g_pBinary->read_codePageString(sCodePage,nOffset,nMaxByteSize);
+    return g_pBinary->read_codePageString(nOffset,nMaxByteSize,sCodePage);
 }
 
 QString Binary_Script::bytesCountToString(quint64 nValue)
@@ -515,12 +515,12 @@ double Binary_Script::read_double(qint64 nOffset,bool bIsBigEndian)
     return g_pBinary->read_double(nOffset,bIsBigEndian);
 }
 
-float Binary_Script::read_float32(qint64 nOffset,bool bIsBigEndian)
+float Binary_Script::read_float32(qint64 nOffset, bool bIsBigEndian)
 {
     return g_pBinary->read_float(nOffset,bIsBigEndian);
 }
 
-double Binary_Script::read_float64(qint64 nOffset,bool bIsBigEndian)
+double Binary_Script::read_float64(qint64 nOffset, bool bIsBigEndian)
 {
     return g_pBinary->read_double(nOffset,bIsBigEndian);
 }

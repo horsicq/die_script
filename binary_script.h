@@ -111,7 +111,7 @@ public slots:
     QString read_utf8String(qint64 nOffset,qint64 nMaxSize=50);
     QString read_ucsdString(qint64 nOffset);
 
-    QString read_codePageString(QString sCodePage,qint64 nOffset,qint64 nMaxByteSize=256);
+    QString read_codePageString(qint64 nOffset,qint64 nMaxByteSize=256,QString sCodePage="System");
 
     QString bytesCountToString(quint64 nValue);
 
