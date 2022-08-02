@@ -21,6 +21,7 @@
 #ifndef GLOBAL_SCRIPT_H
 #define GLOBAL_SCRIPT_H
 
+// TODO rename to die_global_script
 #include <QObject>
 
 class global_script : public QObject

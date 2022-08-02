@@ -26,4 +26,5 @@ set(DIE_SCRIPT_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/msdos_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ne_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pe_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/xscriptengine.cpp
 )

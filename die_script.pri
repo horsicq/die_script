@@ -16,7 +16,8 @@ HEADERS += \
     $$PWD/le_script.h \
     $$PWD/lx_script.h \
     $$PWD/mach_script.h \
-    $$PWD/elf_script.h
+    $$PWD/elf_script.h \
+    $$PWD/xscriptengine.h
 
 SOURCES += \
     $$PWD/binary_script.cpp \
@@ -30,7 +31,8 @@ SOURCES += \
     $$PWD/le_script.cpp \
     $$PWD/lx_script.cpp \
     $$PWD/mach_script.cpp \
-    $$PWD/elf_script.cpp
+    $$PWD/elf_script.cpp \
+    $$PWD/xscriptengine.cpp
 
 !contains(XCONFIG, xformats) {
     XCONFIG += xformats

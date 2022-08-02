@@ -23,7 +23,6 @@
 
 #include <QIODevice>
 #include "xbinary.h"
-#include "global_script.h"
 #include "binary_script.h"
 #include "com_script.h"
 #include "elf_script.h"
@@ -37,25 +36,9 @@
 //#include "apk_script.h"
 //#include "ipa_script.h"
 //#include "dex_script.h"
+#include "xscriptengine.h"
 
-#ifdef QT_SCRIPT_LIB
-#include <QScriptEngine>
-#else
-#include <QJSEngine>
-#include "global_script.h"
-#endif
-
-#ifdef QT_SCRIPT_LIB
-#define XSCRIPTENGINE QScriptEngine
-#define XSCRIPTVALUE QScriptValue
-#define XSCRIPTVALUELIST QScriptValueList
-#else
-#define XSCRIPTENGINE QJSEngine
-#define XSCRIPTVALUE QJSValue
-#define XSCRIPTVALUELIST QJSValueList
-#endif
-
-class DiE_ScriptEngine : public XSCRIPTENGINE
+class DiE_ScriptEngine : public XScriptEngine
 {
     Q_OBJECT
 
