@@ -124,6 +124,7 @@ public slots:
 
     float read_float(qint64 nOffset,bool bIsBigEndian=false);
     double read_double(qint64 nOffset,bool bIsBigEndian=false);
+    float read_float16(qint64 nOffset,bool bIsBigEndian=false);
     float read_float32(qint64 nOffset,bool bIsBigEndian=false);
     double read_float64(qint64 nOffset,bool bIsBigEndian=false);
 

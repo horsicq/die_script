@@ -45,8 +45,15 @@ class XScriptEngine : public XSCRIPTENGINE
 public:
     explicit XScriptEngine();
 
-signals:
+protected:
+#ifdef QT_SCRIPT_LIB
+    void _addFunction(FunctionSignature function,QString sFunctionName);
+#endif
+    void _addClass(QObject *pClass,QString sClassName);
 
+signals:
+    void errorMessage(QString sErrorMessage);
+    void infoMessage(QString sInfoMessage);
 };
 
 #endif // XSCRIPTENGINE_H

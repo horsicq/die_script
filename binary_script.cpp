@@ -515,6 +515,11 @@ double Binary_Script::read_double(qint64 nOffset,bool bIsBigEndian)
     return g_pBinary->read_double(nOffset,bIsBigEndian);
 }
 
+float Binary_Script::read_float16(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_float16(nOffset,bIsBigEndian);
+}
+
 float Binary_Script::read_float32(qint64 nOffset, bool bIsBigEndian)
 {
     return g_pBinary->read_float(nOffset,bIsBigEndian);

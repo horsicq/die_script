@@ -72,18 +72,12 @@ private:
     static QScriptValue includeScript(QScriptContext *pContext,QScriptEngine *pEngine);
     static QScriptValue _log(QScriptContext *pContext,QScriptEngine *pEngine);
     static QScriptValue _setResult(QScriptContext *pContext,QScriptEngine *pEngine);
-    void _addFunction(FunctionSignature function,QString sFunctionName);
 #endif
-    void _addClass(QObject *pClass,QString sClassName);
 
 private slots:
     void includeScriptSlot(QString sScript);
     void _logSlot(QString sText);
     void _setResultSlot(QString sType,QString sName,QString sVersion,QString sOptions);
-
-signals:
-    void errorMessage(QString sErrorMessage);
-    void infoMessage(QString sInfoMessage);
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;

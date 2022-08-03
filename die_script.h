@@ -99,7 +99,7 @@ public:
 //        bool bIsValidType;
     };
 
-    struct SCAN_OPTIONS
+    struct OPTIONS
     {
         bool bIsDeepScan;
         bool bIsHeuristicScan;
@@ -148,9 +148,10 @@ public:
     qint32 getNumberOfSignatures(XBinary::FT fileType);
 
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> *getSignatures();
-    SCAN_RESULT scanFile(QString sFileName,SCAN_OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct=nullptr);
-    SCAN_RESULT scanDevice(QIODevice *pDevice,SCAN_OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct=nullptr);
-    void scan(QIODevice *pDevice,SCAN_RESULT *pScanResult,qint64 nOffset,qint64 nSize,XBinary::SCANID parentId,SCAN_OPTIONS *pOptions,bool bInit,XBinary::PDSTRUCT *pPdStruct);
+    SCAN_RESULT scanFile(QString sFileName,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct=nullptr);
+    SCAN_RESULT processFile(QString sFileName,OPTIONS *pOptions,QString sFunction,XBinary::PDSTRUCT *pPdStruct=nullptr);
+    SCAN_RESULT processDevice(QIODevice *pDevice,OPTIONS *pOptions,QString sFunction,XBinary::PDSTRUCT *pPdStruct=nullptr);
+    void process(QIODevice *pDevice,QString sFunction,SCAN_RESULT *pScanResult,qint64 nOffset,qint64 nSize,XBinary::SCANID parentId,OPTIONS *pOptions,bool bInit,XBinary::PDSTRUCT *pPdStruct);
     DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(QString sSignatureFilePath);
     bool updateSignature(QString sSignatureFilePath,QString sText);
     STATS getStats();
@@ -162,17 +163,17 @@ public:
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
 #endif
-    void setProcessDirectory(QString sDirectory, SCAN_OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct);
+    void setProcessDirectory(QString sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct);
 
     static QList<XBinary::SCANSTRUCT> convert(QList<SCAN_STRUCT> *pListScanStructs);
 
 public slots:
-    void processDirectory();
+    void scanDirectory();
 
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath,XBinary::FT fileType);
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip,QList<XArchive::RECORD> *pListRecords,QString sPrefix,XBinary::FT fileType);
-    XBinary::SCANID _scan(SCAN_RESULT *pScanResult,QIODevice *pDevice,XBinary::SCANID parentId,XBinary::FT fileType,SCAN_OPTIONS *pOptions,QString sSignatureFilePath,qint64 nOffset,bool bAddUnknown,XBinary::PDSTRUCT *pPdStruct);
+    XBinary::SCANID _process(SCAN_RESULT *pScanResult,QIODevice *pDevice,QString sFunction,XBinary::SCANID parentId,XBinary::FT fileType,OPTIONS *pOptions,QString sSignatureFilePath,qint64 nOffset,bool bAddUnknown,XBinary::PDSTRUCT *pPdStruct);
     bool _handleError(DiE_ScriptEngine *pScriptEngine,XSCRIPTVALUE scriptValue,DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,SCAN_RESULT *pScanResult);
 
 signals:
@@ -190,7 +191,7 @@ private:
     QScriptEngineDebugger *pDebugger;
 #endif
     QString g_sDirectoryProcess;
-    SCAN_OPTIONS g_scanOptionsProcess;
+    OPTIONS g_scanOptionsProcess;
     XBinary::PDSTRUCT *g_pPdStruct;
 //    QMutex g_mutex;
 //    QSemaphore g_semaphore;

@@ -226,19 +226,6 @@ QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext,QScriptEngine
     return result;
 }
 #endif
-#ifdef QT_SCRIPT_LIB
-void DiE_ScriptEngine::_addFunction(QScriptEngine::FunctionSignature function,QString sFunctionName)
-{
-    QScriptValue func=this->newFunction(function);
-    this->globalObject().setProperty(sFunctionName,func);
-}
-#endif
-
-void DiE_ScriptEngine::_addClass(QObject *pClass,QString sClassName)
-{
-    XSCRIPTVALUE objectWnd=this->newQObject(pClass);
-    this->globalObject().setProperty(sClassName,objectWnd);
-}
 
 void DiE_ScriptEngine::includeScriptSlot(QString sScript)
 {
