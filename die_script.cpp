@@ -151,7 +151,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
     return listResult;
 }
 
-XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult, QIODevice *pDevice, QString sFunction, XBinary::SCANID parentId, XBinary::FT fileType, OPTIONS *pOptions, QString sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
+XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult,QIODevice *pDevice,QString sFunction,XBinary::SCANID parentId,XBinary::FT fileType,OPTIONS *pOptions,QString sSignatureFilePath,qint64 nOffset,bool bAddUnknown,XBinary::PDSTRUCT *pPdStruct)
 {
     XBinary::SCANID resultId={};
 
@@ -169,8 +169,8 @@ XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult, QIODevice *pDevic
 
     qint32 nNumberOfSignatures=g_listSignatures.count();
 
-    DiE_ScriptEngine::SIGNATURE_RECORD srGlobalInit;
-    DiE_ScriptEngine::SIGNATURE_RECORD srInit;
+    DiE_ScriptEngine::SIGNATURE_RECORD srGlobalInit={};
+    DiE_ScriptEngine::SIGNATURE_RECORD srInit={};
 
     bool bGlobalInit=false;
     bool bInit=false;
