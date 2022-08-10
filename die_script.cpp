@@ -106,14 +106,19 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString 
     {
         if(eil.at(i).isFile())
         {
-            DiE_ScriptEngine::SIGNATURE_RECORD record={};
+            QString sSuffix=eil.at(i).suffix().toLower();
 
-            record.fileType=fileType;
-            record.sName=eil.at(i).fileName();
-            record.sText=XBinary::readFile(eil.at(i).absoluteFilePath());
-            record.sFilePath=eil.at(i).absoluteFilePath();
+            if((sSuffix=="sg")||(sSuffix==""))
+            {
+                DiE_ScriptEngine::SIGNATURE_RECORD record={};
 
-            listResult.append(record);
+                record.fileType=fileType;
+                record.sName=eil.at(i).fileName();
+                record.sText=XBinary::readFile(eil.at(i).absoluteFilePath());
+                record.sFilePath=eil.at(i).absoluteFilePath();
+
+                listResult.append(record);
+            }
         }
     }
 

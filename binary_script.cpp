@@ -490,7 +490,7 @@ qint64 Binary_Script::find_unicodeString(qint64 nOffset,qint64 nSize,QString sSt
     return g_pBinary->find_unicodeString(nOffset,nSize,sString);
 }
 
-qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, QString sString)
+qint64 Binary_Script::find_utf8String(qint64 nOffset,qint64 nSize,QString sString)
 {
     return g_pBinary->find_utf8String(nOffset,nSize,sString);
 }
@@ -528,4 +528,14 @@ float Binary_Script::read_float32(qint64 nOffset, bool bIsBigEndian)
 double Binary_Script::read_float64(qint64 nOffset, bool bIsBigEndian)
 {
     return g_pBinary->read_double(nOffset,bIsBigEndian);
+}
+
+quint32 Binary_Script::read_uint24(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_uint24(nOffset,bIsBigEndian);
+}
+
+qint32 Binary_Script::read_int24(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_int24(nOffset,bIsBigEndian);
 }

@@ -128,6 +128,9 @@ public slots:
     float read_float32(qint64 nOffset,bool bIsBigEndian=false);
     double read_float64(qint64 nOffset,bool bIsBigEndian=false);
 
+    quint32 read_uint24(qint64 nOffset,bool bIsBigEndian=false);
+    qint32 read_int24(qint64 nOffset,bool bIsBigEndian=false);
+
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
     qint64 g_nBaseAddress;
