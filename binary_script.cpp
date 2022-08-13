@@ -430,7 +430,7 @@ qint16 Binary_Script::read_int16(qint64 nOffset, bool bIsBigEndian)
     return g_pBinary->read_int16(nOffset,bIsBigEndian);
 }
 
-quint32 Binary_Script::read_uint32(qint64 nOffset, bool bIsBigEndian)
+quint32 Binary_Script::read_uint32(qint64 nOffset,bool bIsBigEndian)
 {
     return g_pBinary->read_uint32(nOffset,bIsBigEndian);
 }
