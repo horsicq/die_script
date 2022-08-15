@@ -599,7 +599,7 @@ DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice,OPTIONS *pO
     return scanResult;
 }
 
-void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions, bool bInit, XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::process(QIODevice *pDevice,QString sFunction,SCAN_RESULT *pScanResult,qint64 nOffset,qint64 nSize,XBinary::SCANID parentId,OPTIONS *pOptions,bool bInit,XBinary::PDSTRUCT *pPdStruct)
 {
     XBinary::PDSTRUCT pdStructEmpty={};
 
