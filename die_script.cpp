@@ -563,7 +563,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> *DiE_Script::getSignatures()
     return &g_listSignatures;
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct)
 {
     return processFile(sFileName,pOptions,"detect",pPdStruct);
 }
