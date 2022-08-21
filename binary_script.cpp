@@ -500,7 +500,7 @@ QString Binary_Script::read_UUID_bytes(qint64 nOffset)
     return g_pBinary->read_UUID_bytes(nOffset);
 }
 
-QString Binary_Script::read_UUID(qint64 nOffset, bool bIsBigEndian)
+QString Binary_Script::read_UUID(qint64 nOffset,bool bIsBigEndian)
 {
     return g_pBinary->read_UUID(nOffset,bIsBigEndian);
 }
