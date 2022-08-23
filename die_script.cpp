@@ -316,7 +316,7 @@ XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult,QIODevice *pDevice
                 #ifdef QT_SCRIPT_LIB
                     QScriptValue result=_scriptValue.call(script,valuelist);
                 #else
-                    QJSValue result=detect.callWithInstance(script,valuelist);
+                    QJSValue result=_scriptValue.callWithInstance(script,valuelist);
                 #endif
 
                     if(_handleError(&scriptEngine,result,&signatureRecord,pScanResult))
