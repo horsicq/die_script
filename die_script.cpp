@@ -456,18 +456,18 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
 
             if(zip.isValid())
             {
-                QList<XArchive::RECORD> listRecords=zip.getRecords();
+                QList<XArchive::RECORD> listRecords=zip.getRecords(-1,g_pPdStruct); // TODO Check
 
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"",XBinary::FT_UNKNOWN));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"Binary",XBinary::FT_BINARY));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"COM",XBinary::FT_COM));
-                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"JAR",XBinary::FT_JAR));
-                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"APK",XBinary::FT_APK));
-                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"IPA",XBinary::FT_IPA));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"JAR",XBinary::FT_JAR)); // TODO -> ZIP
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"APK",XBinary::FT_APK)); // TODO -> ZIP
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"IPA",XBinary::FT_IPA)); // TODO -> ZIP
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"DEX",XBinary::FT_DEX));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"MSDOS",XBinary::FT_MSDOS));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"LE",XBinary::FT_LE));
-                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"LX",XBinary::FT_LX));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"LX",XBinary::FT_LX)); // TODO Check
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"NE",XBinary::FT_NE));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"PE",XBinary::FT_PE));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip,&listRecords,"ELF",XBinary::FT_ELF));
@@ -484,13 +484,13 @@ bool DiE_Script::loadDatabase(QString sDatabasePath)
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath,XBinary::FT_UNKNOWN));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"Binary",XBinary::FT_BINARY));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"COM",XBinary::FT_COM));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"JAR",XBinary::FT_JAR));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"APK",XBinary::FT_APK));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"IPA",XBinary::FT_IPA));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"JAR",XBinary::FT_JAR)); // TODO -> ZIP
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"APK",XBinary::FT_APK)); // TODO -> ZIP
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"IPA",XBinary::FT_IPA)); // TODO -> ZIP
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"DEX",XBinary::FT_IPA));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"MSDOS",XBinary::FT_MSDOS));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"LE",XBinary::FT_LE));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"LX",XBinary::FT_LX));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"LX",XBinary::FT_LX)); // TODO Check
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"NE",XBinary::FT_NE));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"PE",XBinary::FT_PE));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath+QDir::separator()+"ELF",XBinary::FT_ELF));
