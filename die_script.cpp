@@ -233,9 +233,8 @@ XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult,QIODevice *pDevice
         }
     }
 
-    pPdStruct->pdRecordObj.bIsValid=true;
-    pPdStruct->pdRecordObj.nCurrent=0;
-    pPdStruct->pdRecordObj.nTotal=nNumberOfSignatures;
+    qint32 _nFreeIndex=XBinary::getFreeIndex(pPdStruct);
+    XBinary::setPdStructInit(pPdStruct,_nFreeIndex,nNumberOfSignatures);
 
     for(qint32 i=0;(i<nNumberOfSignatures)&&(!(pPdStruct->bIsStop));i++)
     {
@@ -386,8 +385,8 @@ XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult,QIODevice *pDevice
             }
         }
 
-        pPdStruct->pdRecordObj.nCurrent++;
-        pPdStruct->pdRecordObj.sStatus=g_listSignatures.at(i).sName;
+        XBinary::setPdStructCurrentIncrement(pPdStruct,_nFreeIndex);
+        XBinary::setPdStructStatus(pPdStruct,_nFreeIndex,g_listSignatures.at(i).sName);
     }
 
     if(bAddUnknown)
@@ -403,12 +402,7 @@ XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult,QIODevice *pDevice
         }
     }
 
-    if(!(pPdStruct->bIsStop))
-    {
-        pPdStruct->pdRecordObj.bSuccess=true;
-    }
-
-    pPdStruct->pdRecordObj.bFinished=true;
+    XBinary::setPdStructFinished(pPdStruct,_nFreeIndex);
 
     return resultId;
 }
@@ -845,25 +839,24 @@ void DiE_Script::scanDirectory()
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
 
-    g_pPdStruct->pdRecordFiles.bIsValid=true;
-
     if(g_sDirectoryProcess!="")
     {
-        g_pPdStruct->sStatus=tr("Directory scan");
         QList<QString> listFileNames;
 
         XBinary::findFiles(g_sDirectoryProcess,&listFileNames,g_scanOptionsProcess.bSubdirectories,0,g_pPdStruct);
 
         qint32 nTotal=listFileNames.count();
-        g_pPdStruct->pdRecordFiles.nTotal=nTotal;
+
+        qint32 _nFreeIndex=XBinary::getFreeIndex(g_pPdStruct);
+        XBinary::setPdStructInit(g_pPdStruct,_nFreeIndex,nTotal);
 
         for(qint32 i=0;(i<nTotal)&&(!(g_pPdStruct->bIsStop));i++)
         {
             QString sFileName=listFileNames.at(i);
 //            g_mutex.lock();
 
-            g_pPdStruct->pdRecordFiles.nCurrent=i;
-            g_pPdStruct->pdRecordFiles.sStatus=sFileName;
+            XBinary::setPdStructCurrent(g_pPdStruct,_nFreeIndex,i);
+            XBinary::setPdStructStatus(g_pPdStruct,_nFreeIndex,sFileName);
 
             emit directoryScanFileStarted(sFileName);
 
@@ -881,14 +874,9 @@ void DiE_Script::scanDirectory()
 //            t.start(1);
 //            loop.exec();
         }
-    }
 
-    if(!(g_pPdStruct->bIsStop))
-    {
-        g_pPdStruct->pdRecordFiles.bSuccess=true;
+        XBinary::setPdStructFinished(g_pPdStruct,_nFreeIndex);
     }
-
-    g_pPdStruct->pdRecordFiles.bFinished=true;
 
     emit directoryScanCompleted(elapsedTimer.elapsed());
 }
