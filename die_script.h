@@ -29,9 +29,9 @@
 #include <QTimer>
 #include <QXmlStreamWriter>
 #include "die_scriptengine.h"
+#include "scanitemmodel.h"
 #include "xformats.h"
 #include "xzip.h"
-#include "scanitemmodel.h"
 #ifdef QT_SCRIPTTOOLS_LIB
 #include <QScriptEngineDebugger>
 #include <QAction>
