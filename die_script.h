@@ -40,7 +40,6 @@
 bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1,const DiE_ScriptEngine::SIGNATURE_RECORD &sr2);
 bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1,const DiE_ScriptEngine::SIGNATURE_RECORD &sr2);
 
-// TODO signatures stats function
 class DiE_Script : public QObject
 {
     Q_OBJECT
@@ -146,7 +145,6 @@ public:
 
     QList<SIGNATURE_STATE> getSignatureStates();
     qint32 getNumberOfSignatures(XBinary::FT fileType);
-
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> *getSignatures();
     SCAN_RESULT scanFile(QString sFileName,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct=nullptr);
     SCAN_RESULT processFile(QString sFileName,OPTIONS *pOptions,QString sFunction,XBinary::PDSTRUCT *pPdStruct=nullptr);
