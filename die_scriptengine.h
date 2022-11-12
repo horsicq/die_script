@@ -22,29 +22,28 @@
 #define DIE_SCRIPTENGINE_H
 
 #include <QIODevice>
-#include "xbinary.h"
+
 #include "binary_script.h"
 #include "com_script.h"
 #include "elf_script.h"
-#include "mach_script.h"
-#include "msdos_script.h"
-#include "pe_script.h"
-#include "ne_script.h"
 #include "le_script.h"
 #include "lx_script.h"
+#include "mach_script.h"
+#include "msdos_script.h"
+#include "ne_script.h"
+#include "pe_script.h"
+#include "xbinary.h"
 //#include "jar_script.h"
 //#include "apk_script.h"
 //#include "ipa_script.h"
 //#include "dex_script.h"
 #include "xscriptengine.h"
 
-class DiE_ScriptEngine : public XScriptEngine
-{
+class DiE_ScriptEngine : public XScriptEngine {
     Q_OBJECT
 
 public:
-    struct SIGNATURE_RECORD
-    {
+    struct SIGNATURE_RECORD {
         XBinary::FT fileType;
         QString sName;
         QString sFilePath;
@@ -52,32 +51,32 @@ public:
         bool bReadOnly;
     };
 
-    struct RESULT
-    {
+    struct RESULT {
         QString sType;
         QString sName;
         QString sVersion;
         QString sOptions;
     };
 
-    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList,QIODevice *pDevice,XBinary::FT fileType,Binary_Script::OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
+    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, XBinary::FT fileType, Binary_Script::OPTIONS *pOptions,
+                     XBinary::PDSTRUCT *pPdStruct);
     ~DiE_ScriptEngine();
-    bool handleError(XSCRIPTVALUE value,QString *psErrorString);
+    bool handleError(XSCRIPTVALUE value, QString *psErrorString);
     QList<RESULT> getListResult();
     void clearListResult();
-    static RESULT stringToResult(QString sString,bool bShowType,bool bShowVersion,bool bShowOptions);
+    static RESULT stringToResult(QString sString, bool bShowType, bool bShowVersion, bool bShowOptions);
 
 private:
 #ifdef QT_SCRIPT_LIB
-    static QScriptValue includeScript(QScriptContext *pContext,QScriptEngine *pEngine);
-    static QScriptValue _log(QScriptContext *pContext,QScriptEngine *pEngine);
-    static QScriptValue _setResult(QScriptContext *pContext,QScriptEngine *pEngine);
+    static QScriptValue includeScript(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _log(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _setResult(QScriptContext *pContext, QScriptEngine *pEngine);
 #endif
 
 private slots:
     void includeScriptSlot(QString sScript);
     void _logSlot(QString sText);
-    void _setResultSlot(QString sType,QString sName,QString sVersion,QString sOptions);
+    void _setResultSlot(QString sType, QString sName, QString sVersion, QString sOptions);
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;
@@ -93,4 +92,4 @@ private:
 #endif
 };
 
-#endif // DIE_SCRIPTENGINE_H
+#endif  // DIE_SCRIPTENGINE_H

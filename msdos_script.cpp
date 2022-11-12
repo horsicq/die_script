@@ -20,97 +20,80 @@
  */
 #include "msdos_script.h"
 
-MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pMSDOS,pOptions,pPdStruct)
-{
-    this->pMSDOS=pMSDOS;
+MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pMSDOS, pOptions, pPdStruct) {
+    this->pMSDOS = pMSDOS;
 
-    bIsLE=pMSDOS->isLE();
-    bIsLX=pMSDOS->isLX();
-    bIsNE=pMSDOS->isNE();
-    bIsPE=pMSDOS->isPE();
+    bIsLE = pMSDOS->isLE();
+    bIsLX = pMSDOS->isLX();
+    bIsNE = pMSDOS->isNE();
+    bIsPE = pMSDOS->isPE();
 
-    nNumberOfRichIDs=0;
-    bIisRichSignaturePresent=false;
+    nNumberOfRichIDs = 0;
+    bIisRichSignaturePresent = false;
 
-    if(bIsLE||bIsPE)
-    {
-        bIisRichSignaturePresent=pMSDOS->isRichSignaturePresent();
+    if (bIsLE || bIsPE) {
+        bIisRichSignaturePresent = pMSDOS->isRichSignaturePresent();
 
-        if(bIisRichSignaturePresent)
-        {
-            listRich=pMSDOS->getRichSignatureRecords();
+        if (bIisRichSignaturePresent) {
+            listRich = pMSDOS->getRichSignatureRecords();
 
-            nNumberOfRichIDs=listRich.count();
+            nNumberOfRichIDs = listRich.count();
         }
     }
 
-    nDosStubOffset=0;
-    nDosStubSize=0;
-    bIsDosStubPresent=false;
+    nDosStubOffset = 0;
+    nDosStubSize = 0;
+    bIsDosStubPresent = false;
 
-    if(bIsLE||bIsLX||bIsNE||bIsPE)
-    {
-        bIsDosStubPresent=pMSDOS->isDosStubPresent();
+    if (bIsLE || bIsLX || bIsNE || bIsPE) {
+        bIsDosStubPresent = pMSDOS->isDosStubPresent();
 
-        if(bIsDosStubPresent)
-        {
-            nDosStubOffset=pMSDOS->getDosStubOffset();
-            nDosStubSize=pMSDOS->getDosStubSize();
+        if (bIsDosStubPresent) {
+            nDosStubOffset = pMSDOS->getDosStubOffset();
+            nDosStubSize = pMSDOS->getDosStubSize();
         }
     }
 }
 
-MSDOS_Script::~MSDOS_Script()
-{
-
+MSDOS_Script::~MSDOS_Script() {
 }
 
-bool MSDOS_Script::isLE()
-{
+bool MSDOS_Script::isLE() {
     return bIsLE;
 }
 
-bool MSDOS_Script::isLX()
-{
+bool MSDOS_Script::isLX() {
     return bIsLX;
 }
 
-bool MSDOS_Script::isNE()
-{
+bool MSDOS_Script::isNE() {
     return bIsNE;
 }
 
-bool MSDOS_Script::isPE()
-{
+bool MSDOS_Script::isPE() {
     return bIsPE;
 }
 
-qint64 MSDOS_Script::getDosStubOffset()
-{
+qint64 MSDOS_Script::getDosStubOffset() {
     return nDosStubOffset;
 }
 
-qint64 MSDOS_Script::getDosStubSize()
-{
+qint64 MSDOS_Script::getDosStubSize() {
     return nDosStubSize;
 }
 
-bool MSDOS_Script::isDosStubPresent()
-{
+bool MSDOS_Script::isDosStubPresent() {
     return bIsDosStubPresent;
 }
 
-qint32 MSDOS_Script::getNumberOfRichIDs()
-{
+qint32 MSDOS_Script::getNumberOfRichIDs() {
     return nNumberOfRichIDs;
 }
 
-bool MSDOS_Script::isRichVersionPresent(quint32 nVersion)
-{
-    return pMSDOS->isRichVersionPresent(nVersion,&listRich);
+bool MSDOS_Script::isRichVersionPresent(quint32 nVersion) {
+    return pMSDOS->isRichVersionPresent(nVersion, &listRich);
 }
 
-bool MSDOS_Script::isRichSignaturePresent()
-{
+bool MSDOS_Script::isRichSignaturePresent() {
     return bIisRichSignaturePresent;
 }

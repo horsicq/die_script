@@ -20,32 +20,27 @@
  */
 #include "global_script.h"
 
-global_script::global_script(QObject *parent) : QObject(parent)
-{
-
+global_script::global_script(QObject *parent) : QObject(parent) {
 }
 
-void global_script::includeScript(QString sScript)
-{
+void global_script::includeScript(QString sScript) {
     emit includeScriptSignal(sScript);
 }
 
-void global_script::_log(QString sText)
-{
+void global_script::_log(QString sText) {
     emit _logSignal(sText);
 }
 
-//qint64 global_script::_min(qint64 nValue1,qint64 nValue2)
+// qint64 global_script::_min(qint64 nValue1,qint64 nValue2)
 //{
-//    return qMin(nValue1,nValue2);
-//}
+//     return qMin(nValue1,nValue2);
+// }
 
-//qint64 global_script::_max(qint64 nValue1,qint64 nValue2)
+// qint64 global_script::_max(qint64 nValue1,qint64 nValue2)
 //{
-//    return qMax(nValue1,nValue2);
-//}
+//     return qMax(nValue1,nValue2);
+// }
 
-void global_script::_setResult(QString sType,QString sName,QString sVersion,QString sOptions)
-{
-    emit _setResultSignal(sType,sName,sVersion,sOptions);
+void global_script::_setResult(QString sType, QString sName, QString sVersion, QString sOptions) {
+    emit _setResultSignal(sType, sName, sVersion, sOptions);
 }

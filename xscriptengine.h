@@ -26,6 +26,7 @@
 #include <QScriptEngine>
 #else
 #include <QJSEngine>
+
 #include "global_script.h"
 #endif
 
@@ -39,21 +40,20 @@
 #define XSCRIPTVALUELIST QJSValueList
 #endif
 
-class XScriptEngine : public XSCRIPTENGINE
-{
+class XScriptEngine : public XSCRIPTENGINE {
     Q_OBJECT
 public:
     explicit XScriptEngine();
 
 protected:
 #ifdef QT_SCRIPT_LIB
-    void _addFunction(FunctionSignature function,QString sFunctionName);
+    void _addFunction(FunctionSignature function, QString sFunctionName);
 #endif
-    void _addClass(QObject *pClass,QString sClassName);
+    void _addClass(QObject *pClass, QString sClassName);
 
 signals:
     void errorMessage(QString sErrorMessage);
     void infoMessage(QString sInfoMessage);
 };
 
-#endif // XSCRIPTENGINE_H
+#endif  // XSCRIPTENGINE_H

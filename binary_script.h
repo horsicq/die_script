@@ -24,25 +24,23 @@
 #include "xbinary.h"
 #include "xcapstone.h"
 
-class Binary_Script : public QObject
-{
+class Binary_Script : public QObject {
     Q_OBJECT
 
 public:
-    struct OPTIONS
-    {
+    struct OPTIONS {
         bool bIsDeepScan;
         bool bIsHeuristicScan;
         bool bIsVerbose;
     };
 
-    explicit Binary_Script(XBinary *pBinary,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
+    explicit Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~Binary_Script();
 
 public slots:
     qint64 getSize();
-    bool compare(QString sSignature,qint64 nOffset=0);
-    bool compareEP(QString sSignature,qint64 nOffset=0);
+    bool compare(QString sSignature, qint64 nOffset = 0);
+    bool compareEP(QString sSignature, qint64 nOffset = 0);
     quint8 readByte(qint64 nOffset);
     qint8 readSByte(qint64 nOffset);
     quint16 readWord(qint64 nOffset);
@@ -51,19 +49,19 @@ public slots:
     qint32 readSDword(qint64 nOffset);
     quint64 readQword(qint64 nOffset);
     qint64 readSQword(qint64 nOffset);
-    QString getString(qint64 nOffset,qint64 nMaxSize=50);
-    qint64 findSignature(qint64 nOffset,qint64 nSize,QString sSignature);
-    qint64 findString(qint64 nOffset,qint64 nSize,QString sString);
-    qint64 findByte(qint64 nOffset,qint64 nSize,quint8 nValue);
-    qint64 findWord(qint64 nOffset,qint64 nSize,quint16 nValue);
-    qint64 findDword(qint64 nOffset,qint64 nSize,quint32 nValue);
+    QString getString(qint64 nOffset, qint64 nMaxSize = 50);
+    qint64 findSignature(qint64 nOffset, qint64 nSize, QString sSignature);
+    qint64 findString(qint64 nOffset, qint64 nSize, QString sString);
+    qint64 findByte(qint64 nOffset, qint64 nSize, quint8 nValue);
+    qint64 findWord(qint64 nOffset, qint64 nSize, quint16 nValue);
+    qint64 findDword(qint64 nOffset, qint64 nSize, quint32 nValue);
     qint64 getEntryPointOffset();
     qint64 getOverlayOffset();
     qint64 getOverlaySize();
     qint64 getAddressOfEntryPoint();
     bool isOverlayPresent();
-    bool compareOverlay(QString sSignature,qint64 nOffset=0);
-    bool isSignaturePresent(qint64 nOffset,qint64 nSize,QString sSignature);
+    bool compareOverlay(QString sSignature, qint64 nOffset = 0);
+    bool isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSignature);
     quint32 swapBytes(quint32 nValue);
     virtual QString getGeneralOptions();
     qint64 RVAToOffset(qint64 nRVA);
@@ -74,11 +72,11 @@ public slots:
     QString getFileBaseName();
     QString getFileCompleteSuffix();
     QString getFileSuffix();
-    QString getSignature(qint64 nOffset,qint64 nSize);
-    double calculateEntropy(qint64 nOffset,qint64 nSize);
-    QString calculateMD5(qint64 nOffset,qint64 nSize);
-    quint32 calculateCRC32(qint64 nOffset,qint64 nSize);
-    bool isSignatureInSectionPresent(quint32 nNumber,QString sSignature);
+    QString getSignature(qint64 nOffset, qint64 nSize);
+    double calculateEntropy(qint64 nOffset, qint64 nSize);
+    QString calculateMD5(qint64 nOffset, qint64 nSize);
+    quint32 calculateCRC32(qint64 nOffset, qint64 nSize);
+    bool isSignatureInSectionPresent(quint32 nNumber, QString sSignature);
     qint64 getImageBase();
     QString upperCase(QString sString);
     QString lowerCase(QString sString);
@@ -100,36 +98,36 @@ public slots:
 
     quint8 read_uint8(qint64 nOffset);
     qint8 read_int8(qint64 nOffset);
-    quint16 read_uint16(qint64 nOffset,bool bIsBigEndian=false);
-    qint16 read_int16(qint64 nOffset,bool bIsBigEndian=false);
-    quint32 read_uint32(qint64 nOffset,bool bIsBigEndian=false);
-    qint32 read_int32(qint64 nOffset,bool bIsBigEndian=false);
-    quint64 read_uint64(qint64 nOffset,bool bIsBigEndian=false);
-    qint64 read_int64(qint64 nOffset,bool bIsBigEndian=false);
-    QString read_ansiString(qint64 nOffset,qint64 nMaxSize=50);
-    QString read_unicodeString(qint64 nOffset,qint64 nMaxSize=50);
-    QString read_utf8String(qint64 nOffset,qint64 nMaxSize=50);
+    quint16 read_uint16(qint64 nOffset, bool bIsBigEndian = false);
+    qint16 read_int16(qint64 nOffset, bool bIsBigEndian = false);
+    quint32 read_uint32(qint64 nOffset, bool bIsBigEndian = false);
+    qint32 read_int32(qint64 nOffset, bool bIsBigEndian = false);
+    quint64 read_uint64(qint64 nOffset, bool bIsBigEndian = false);
+    qint64 read_int64(qint64 nOffset, bool bIsBigEndian = false);
+    QString read_ansiString(qint64 nOffset, qint64 nMaxSize = 50);
+    QString read_unicodeString(qint64 nOffset, qint64 nMaxSize = 50);
+    QString read_utf8String(qint64 nOffset, qint64 nMaxSize = 50);
     QString read_ucsdString(qint64 nOffset);
 
-    QString read_codePageString(qint64 nOffset,qint64 nMaxByteSize=256,QString sCodePage="System");
+    QString read_codePageString(qint64 nOffset, qint64 nMaxByteSize = 256, QString sCodePage = "System");
 
     QString bytesCountToString(quint64 nValue);
 
-    qint64 find_ansiString(qint64 nOffset,qint64 nSize,QString sString);
-    qint64 find_unicodeString(qint64 nOffset,qint64 nSize,QString sString);
-    qint64 find_utf8String(qint64 nOffset,qint64 nSize,QString sString);
+    qint64 find_ansiString(qint64 nOffset, qint64 nSize, QString sString);
+    qint64 find_unicodeString(qint64 nOffset, qint64 nSize, QString sString);
+    qint64 find_utf8String(qint64 nOffset, qint64 nSize, QString sString);
 
     QString read_UUID_bytes(qint64 nOffset);
-    QString read_UUID(qint64 nOffset,bool bIsBigEndian=false);
+    QString read_UUID(qint64 nOffset, bool bIsBigEndian = false);
 
-    float read_float(qint64 nOffset,bool bIsBigEndian=false);
-    double read_double(qint64 nOffset,bool bIsBigEndian=false);
-    float read_float16(qint64 nOffset,bool bIsBigEndian=false);
-    float read_float32(qint64 nOffset,bool bIsBigEndian=false);
-    double read_float64(qint64 nOffset,bool bIsBigEndian=false);
+    float read_float(qint64 nOffset, bool bIsBigEndian = false);
+    double read_double(qint64 nOffset, bool bIsBigEndian = false);
+    float read_float16(qint64 nOffset, bool bIsBigEndian = false);
+    float read_float32(qint64 nOffset, bool bIsBigEndian = false);
+    double read_float64(qint64 nOffset, bool bIsBigEndian = false);
 
-    quint32 read_uint24(qint64 nOffset,bool bIsBigEndian=false);
-    qint32 read_int24(qint64 nOffset,bool bIsBigEndian=false);
+    quint32 read_uint24(qint64 nOffset, bool bIsBigEndian = false);
+    qint32 read_int24(qint64 nOffset, bool bIsBigEndian = false);
 
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
@@ -162,4 +160,4 @@ private:
     QString g_sFileSuffix;
 };
 
-#endif // BINARY_SCRIPT_H
+#endif  // BINARY_SCRIPT_H

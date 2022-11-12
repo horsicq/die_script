@@ -24,16 +24,15 @@
 #include "binary_script.h"
 #include "xcom.h"
 
-class COM_Script : public Binary_Script
-{
+class COM_Script : public Binary_Script {
     Q_OBJECT
 
 public:
-    explicit COM_Script(XCOM *pCOM,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
+    explicit COM_Script(XCOM *pCOM, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~COM_Script();
 
 private:
     XCOM *g_pCOM;
 };
 
-#endif // COM_SCRIPT_H
+#endif  // COM_SCRIPT_H

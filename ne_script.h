@@ -24,16 +24,15 @@
 #include "msdos_script.h"
 #include "xne.h"
 
-class NE_Script : public MSDOS_Script
-{
+class NE_Script : public MSDOS_Script {
     Q_OBJECT
 
 public:
-    explicit NE_Script(XNE *pNE,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
+    explicit NE_Script(XNE *pNE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~NE_Script();
 
 private:
     XNE *pNE;
 };
 
-#endif // NE_SCRIPT_H
+#endif  // NE_SCRIPT_H

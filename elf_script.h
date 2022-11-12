@@ -24,12 +24,11 @@
 #include "binary_script.h"
 #include "xelf.h"
 
-class ELF_Script : public Binary_Script
-{
+class ELF_Script : public Binary_Script {
     Q_OBJECT
 
 public:
-    explicit ELF_Script(XELF *pELF,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
+    explicit ELF_Script(XELF *pELF, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~ELF_Script();
 
 public slots:
@@ -55,7 +54,7 @@ public slots:
     quint64 getProgramFileOffset(quint32 nNumber);
     quint64 getSectionFileOffset(quint32 nNumber);
     quint64 getSectionFileSize(quint32 nNumber);
-    bool isStringInTablePresent(QString sSectionName,QString sString);
+    bool isStringInTablePresent(QString sSectionName, QString sString);
     bool isNotePresent(QString sNote);
 
 private:
@@ -70,4 +69,4 @@ private:
     QString g_sGeneralOptions;
 };
 
-#endif // ELF_SCRIPT_H
+#endif  // ELF_SCRIPT_H

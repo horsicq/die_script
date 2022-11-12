@@ -20,12 +20,9 @@
  */
 #include "ne_script.h"
 
-NE_Script::NE_Script(XNE *pNE,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct) : MSDOS_Script(pNE,pOptions,pPdStruct)
-{
-    this->pNE=pNE;
+NE_Script::NE_Script(XNE *pNE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : MSDOS_Script(pNE, pOptions, pPdStruct) {
+    this->pNE = pNE;
 }
 
-NE_Script::~NE_Script()
-{
-
+NE_Script::~NE_Script() {
 }

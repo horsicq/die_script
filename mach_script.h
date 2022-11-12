@@ -24,12 +24,11 @@
 #include "binary_script.h"
 #include "xmach.h"
 
-class MACH_Script : public Binary_Script
-{
+class MACH_Script : public Binary_Script {
     Q_OBJECT
 
 public:
-    MACH_Script(XMACH *pMACH,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
+    MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~MACH_Script();
 
 public slots:
@@ -53,4 +52,4 @@ private:
     qint32 nNumberOfSegments;
 };
 
-#endif // MACH_SCRIPT_H
+#endif  // MACH_SCRIPT_H

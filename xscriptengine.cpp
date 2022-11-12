@@ -20,21 +20,17 @@
  */
 #include "xscriptengine.h"
 
-XScriptEngine::XScriptEngine()
-{
-
+XScriptEngine::XScriptEngine() {
 }
 
 #ifdef QT_SCRIPT_LIB
-void XScriptEngine::_addFunction(QScriptEngine::FunctionSignature function,QString sFunctionName)
-{
-    QScriptValue func=this->newFunction(function);
-    this->globalObject().setProperty(sFunctionName,func);
+void XScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, QString sFunctionName) {
+    QScriptValue func = this->newFunction(function);
+    this->globalObject().setProperty(sFunctionName, func);
 }
 #endif
 
-void XScriptEngine::_addClass(QObject *pClass,QString sClassName)
-{
-    XSCRIPTVALUE objectWnd=this->newQObject(pClass);
-    this->globalObject().setProperty(sClassName,objectWnd);
+void XScriptEngine::_addClass(QObject *pClass, QString sClassName) {
+    XSCRIPTVALUE objectWnd = this->newQObject(pClass);
+    this->globalObject().setProperty(sClassName, objectWnd);
 }

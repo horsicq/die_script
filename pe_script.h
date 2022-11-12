@@ -24,12 +24,11 @@
 #include "msdos_script.h"
 #include "xpe.h"
 
-class PE_Script : public MSDOS_Script
-{
+class PE_Script : public MSDOS_Script {
     Q_OBJECT
 
 public:
-    explicit PE_Script(XPE *pPE,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
+    explicit PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~PE_Script();
 
 public slots:
@@ -56,8 +55,8 @@ public slots:
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(QString sLibraryName);
-    bool isLibraryFunctionPresent(QString sLibraryName,QString sFunctionName);
-    QString getImportFunctionName(quint32 nImport,quint32 nFunctionNumber);
+    bool isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName);
+    QString getImportFunctionName(quint32 nImport, quint32 nFunctionNumber);
     qint32 getImportSection();
     qint32 getExportSection();
     qint32 getResourceSection();
@@ -76,13 +75,13 @@ public slots:
     QString getCompilerVersion();
     bool isConsole();
     bool isSignedFile();
-    QString getSectionNameCollision(QString sString1,QString sString2); // mb TODO move to Binary
+    QString getSectionNameCollision(QString sString1, QString sString2);  // mb TODO move to Binary
     qint32 getSectionNumber(QString sSectionName);
     qint32 getSectionNumberExp(QString sSectionName);
     bool isDll();
     bool isDriver();
     QString getNETVersion();
-    bool compareEP_NET(QString sSignature,qint64 nOffset=0);
+    bool compareEP_NET(QString sSignature, qint64 nOffset = 0);
     quint32 getSizeOfCode();
     quint32 getSizeOfUninitializedData();
     QString getPEFileVersion(QString sFileName);
@@ -97,7 +96,7 @@ public slots:
     bool isResourcesPresent();
     quint32 getImportHash32();
     quint64 getImportHash64();
-    bool isImportPositionHashPresent(qint32 nIndex,quint32 nHash);
+    bool isImportPositionHashPresent(qint32 nIndex, quint32 nHash);
 
 private:
     XPE *pPE;
@@ -143,4 +142,4 @@ private:
     QList<quint32> g_listImportPositionHashes;
 };
 
-#endif // PE_SCRIPT_H
+#endif  // PE_SCRIPT_H

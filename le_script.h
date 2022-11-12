@@ -24,16 +24,15 @@
 #include "msdos_script.h"
 #include "xle.h"
 
-class LE_Script : public MSDOS_Script
-{
+class LE_Script : public MSDOS_Script {
     Q_OBJECT
 
 public:
-    explicit LE_Script(XLE *pLE,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
+    explicit LE_Script(XLE *pLE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~LE_Script();
 
 private:
     XLE *g_pLE;
 };
 
-#endif // LE_SCRIPT_H
+#endif  // LE_SCRIPT_H

@@ -24,12 +24,11 @@
 #include "binary_script.h"
 #include "xmsdos.h"
 
-class MSDOS_Script : public Binary_Script
-{
+class MSDOS_Script : public Binary_Script {
     Q_OBJECT
 
 public:
-    explicit MSDOS_Script(XMSDOS *pMSDOS,OPTIONS *pOptions,XBinary::PDSTRUCT *pPdStruct);
+    explicit MSDOS_Script(XMSDOS *pMSDOS, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~MSDOS_Script();
 
 public slots:
@@ -58,4 +57,4 @@ private:
     bool bIsPE;
 };
 
-#endif // MSDOS_SCRIPT_H
+#endif  // MSDOS_SCRIPT_H

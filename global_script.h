@@ -24,24 +24,23 @@
 // TODO rename to die_global_script
 #include <QObject>
 
-class global_script : public QObject
-{
+class global_script : public QObject {
     Q_OBJECT
 
 public:
-    explicit global_script(QObject *pParent=nullptr);
+    explicit global_script(QObject *pParent = nullptr);
 
 public slots:
     void includeScript(QString sScript);
     void _log(QString sText);
-//    qint64 _min(qint64 nValue1,qint64 nValue2);
-//    qint64 _max(qint64 nValue1,qint64 nValue2);
-    void _setResult(QString sType,QString sName,QString sVersion,QString sOptions);
+    //    qint64 _min(qint64 nValue1,qint64 nValue2);
+    //    qint64 _max(qint64 nValue1,qint64 nValue2);
+    void _setResult(QString sType, QString sName, QString sVersion, QString sOptions);
 
 signals:
     void includeScriptSignal(QString sScript);
     void _logSignal(QString sText);
-    void _setResultSignal(QString sType,QString sName,QString sVersion,QString sOptions);
+    void _setResultSignal(QString sType, QString sName, QString sVersion, QString sOptions);
 };
 
-#endif // GLOBAL_SCRIPT_H
+#endif  // GLOBAL_SCRIPT_H
