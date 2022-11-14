@@ -105,8 +105,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString 
     return listResult;
 }
 
-QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix,
-                                                                           XBinary::FT fileType) {
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix, XBinary::FT fileType) {
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
 
     qint32 nNumberOfRecords = pListRecords->count();
@@ -133,8 +132,8 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
     return listResult;
 }
 
-XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult, QIODevice *pDevice, QString sFunction, XBinary::SCANID parentId, XBinary::FT fileType,
-                                     OPTIONS *pOptions, QString sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct) {
+XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult, QIODevice *pDevice, QString sFunction, XBinary::SCANID parentId, XBinary::FT fileType, OPTIONS *pOptions,
+                                     QString sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct) {
     XBinary::SCANID resultId = {};
 
     XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(fileType, pDevice);
@@ -520,8 +519,8 @@ DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *p
     return scanResult;
 }
 
-void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId,
-                         OPTIONS *pOptions, bool bInit, XBinary::PDSTRUCT *pPdStruct) {
+void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions, bool bInit,
+                         XBinary::PDSTRUCT *pPdStruct) {
     XBinary::PDSTRUCT pdStructEmpty = {};
 
     if (!pPdStruct) {
@@ -554,8 +553,7 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
     }
 
     if (pOptions->bAllTypesScan) {
-        if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) ||
-            stFT.contains(XBinary::FT_NE)) {
+        if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) || stFT.contains(XBinary::FT_NE)) {
             _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", 0, true, pPdStruct);
         }
     }
@@ -627,9 +625,9 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
 
                         QSet<XBinary::FT> stFT = XFormats::getFileTypes(pDevice, nResourceOffset, nResourceSize);
 
-                        if (stFT.contains(XBinary::FT_MSDOS) || stFT.contains(XBinary::FT_NE) || stFT.contains(XBinary::FT_LE) ||
-                            stFT.contains(XBinary::FT_LX) || stFT.contains(XBinary::FT_PE) || stFT.contains(XBinary::FT_ELF) ||
-                            stFT.contains(XBinary::FT_MACHO) || stFT.contains(XBinary::FT_DEX) || stFT.contains(XBinary::FT_ARCHIVE)) {
+                        if (stFT.contains(XBinary::FT_MSDOS) || stFT.contains(XBinary::FT_NE) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) ||
+                            stFT.contains(XBinary::FT_PE) || stFT.contains(XBinary::FT_ELF) || stFT.contains(XBinary::FT_MACHO) || stFT.contains(XBinary::FT_DEX) ||
+                            stFT.contains(XBinary::FT_ARCHIVE)) {
                             XBinary::SCANID scanIdResource = scanIdMain;
 
                             scanIdResource.filePart = XBinary::FILEPART_RESOURCE;
@@ -819,8 +817,8 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
         // TODO more
         if ((_sType == "installer") || (_sType == "sfx")) {
             record.globalColor = Qt::blue;
-        } else if ((_sType == "protector") || (_sType == "apk obfuscator") || (_sType == "jar obfuscator") || (_sType == ".net obfuscator") ||
-                   (_sType == ".net compressor") || (_sType == "dongle protection") || (_sType == "joiner") || (_sType == "packer")) {
+        } else if ((_sType == "protector") || (_sType == "apk obfuscator") || (_sType == "jar obfuscator") || (_sType == ".net obfuscator") || (_sType == ".net compressor") ||
+                   (_sType == "dongle protection") || (_sType == "joiner") || (_sType == "packer")) {
             record.globalColor = Qt::red;
         } else if ((_sType == "pe tool") || (_sType == "apk tool")) {
             record.globalColor = Qt::green;

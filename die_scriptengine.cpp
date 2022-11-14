@@ -20,8 +20,8 @@
  */
 #include "die_scriptengine.h"
 
-DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, XBinary::FT fileType,
-                                   Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, XBinary::FT fileType, Binary_Script::OPTIONS *pOptions,
+                                   XBinary::PDSTRUCT *pPdStruct)
     : XScriptEngine() {
     g_pSignaturesList = pSignaturesList;
     g_pPdStruct = pPdStruct;
@@ -33,8 +33,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 #else
     connect(&g_globalScript, SIGNAL(includeScriptSignal(QString)), this, SLOT(includeScriptSlot(QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_setResultSignal(QString, QString, QString, QString)), this, SLOT(_setResultSlot(QString, QString, QString, QString)),
-            Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_setResultSignal(QString, QString, QString, QString)), this, SLOT(_setResultSlot(QString, QString, QString, QString)), Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&g_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
