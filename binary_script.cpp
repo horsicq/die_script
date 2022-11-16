@@ -20,7 +20,8 @@
  */
 #include "binary_script.h"
 
-Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) {
+Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+{
     this->g_pBinary = pBinary;
     this->g_pPdStruct = pPdStruct;
     this->g_pOptions = pOptions;
@@ -69,15 +70,18 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
 }
 
-Binary_Script::~Binary_Script() {
+Binary_Script::~Binary_Script()
+{
     XCapstone::closeHandle(&g_disasmHandle);
 }
 
-qint64 Binary_Script::getSize() {
+qint64 Binary_Script::getSize()
+{
     return g_nSize;
 }
 
-bool Binary_Script::compare(QString sSignature, qint64 nOffset) {
+bool Binary_Script::compare(QString sSignature, qint64 nOffset)
+{
     bool bResult = false;
 
     qint32 nSignatureSize = sSignature.size();
@@ -91,7 +95,8 @@ bool Binary_Script::compare(QString sSignature, qint64 nOffset) {
     return bResult;
 }
 
-bool Binary_Script::compareEP(QString sSignature, qint64 nOffset) {
+bool Binary_Script::compareEP(QString sSignature, qint64 nOffset)
+{
     bool bResult = false;
 
     qint32 nSignatureSize = sSignature.size();
@@ -105,85 +110,105 @@ bool Binary_Script::compareEP(QString sSignature, qint64 nOffset) {
     return bResult;
 }
 
-quint8 Binary_Script::readByte(qint64 nOffset) {
+quint8 Binary_Script::readByte(qint64 nOffset)
+{
     return g_pBinary->read_uint8(nOffset);
 }
 
-qint8 Binary_Script::readSByte(qint64 nOffset) {
+qint8 Binary_Script::readSByte(qint64 nOffset)
+{
     return g_pBinary->read_int8(nOffset);
 }
 
-quint16 Binary_Script::readWord(qint64 nOffset) {
+quint16 Binary_Script::readWord(qint64 nOffset)
+{
     return g_pBinary->read_uint16(nOffset);
 }
 
-qint16 Binary_Script::readSWord(qint64 nOffset) {
+qint16 Binary_Script::readSWord(qint64 nOffset)
+{
     return g_pBinary->read_int16(nOffset);
 }
 
-quint32 Binary_Script::readDword(qint64 nOffset) {
+quint32 Binary_Script::readDword(qint64 nOffset)
+{
     return g_pBinary->read_uint32(nOffset);
 }
 
-qint32 Binary_Script::readSDword(qint64 nOffset) {
+qint32 Binary_Script::readSDword(qint64 nOffset)
+{
     return g_pBinary->read_int32(nOffset);
 }
 
-quint64 Binary_Script::readQword(qint64 nOffset) {
+quint64 Binary_Script::readQword(qint64 nOffset)
+{
     return g_pBinary->read_uint64(nOffset);
 }
 
-qint64 Binary_Script::readSQword(qint64 nOffset) {
+qint64 Binary_Script::readSQword(qint64 nOffset)
+{
     return g_pBinary->read_int64(nOffset);
 }
 
-QString Binary_Script::getString(qint64 nOffset, qint64 nMaxSize) {
+QString Binary_Script::getString(qint64 nOffset, qint64 nMaxSize)
+{
     return g_pBinary->read_ansiString(nOffset, nMaxSize);
 }
 
-qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, QString sSignature) {
+qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, QString sSignature)
+{
     qint64 nResultSize = 0;
 
     return g_pBinary->find_signature(&g_memoryMap, nOffset, nSize, sSignature, &nResultSize, g_pPdStruct);
 }
 
-qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, QString sString) {
+qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, QString sString)
+{
     return g_pBinary->find_ansiString(nOffset, nSize, sString, g_pPdStruct);
 }
 
-qint64 Binary_Script::findByte(qint64 nOffset, qint64 nSize, quint8 nValue) {
+qint64 Binary_Script::findByte(qint64 nOffset, qint64 nSize, quint8 nValue)
+{
     return g_pBinary->find_uint8(nOffset, nSize, nValue, g_pPdStruct);
 }
 
-qint64 Binary_Script::findWord(qint64 nOffset, qint64 nSize, quint16 nValue) {
+qint64 Binary_Script::findWord(qint64 nOffset, qint64 nSize, quint16 nValue)
+{
     return g_pBinary->find_uint16(nOffset, nSize, nValue, g_pPdStruct);
 }
 
-qint64 Binary_Script::findDword(qint64 nOffset, qint64 nSize, quint32 nValue) {
+qint64 Binary_Script::findDword(qint64 nOffset, qint64 nSize, quint32 nValue)
+{
     return g_pBinary->find_uint32(nOffset, nSize, nValue, g_pPdStruct);
 }
 
-qint64 Binary_Script::getEntryPointOffset() {
+qint64 Binary_Script::getEntryPointOffset()
+{
     return g_nEntryPointOffset;
 }
 
-qint64 Binary_Script::getOverlayOffset() {
+qint64 Binary_Script::getOverlayOffset()
+{
     return g_nOverlayOffset;
 }
 
-qint64 Binary_Script::getOverlaySize() {
+qint64 Binary_Script::getOverlaySize()
+{
     return g_nOverlaySize;
 }
 
-qint64 Binary_Script::getAddressOfEntryPoint() {
+qint64 Binary_Script::getAddressOfEntryPoint()
+{
     return g_nEntryPointAddress;
 }
 
-bool Binary_Script::isOverlayPresent() {
+bool Binary_Script::isOverlayPresent()
+{
     return g_bIsOverlayPresent;
 }
 
-bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset) {
+bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
+{
     bool bResult = false;
 
     qint32 nSignatureSize = sSignature.size();
@@ -197,31 +222,38 @@ bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset) {
     return bResult;
 }
 
-bool Binary_Script::isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSignature) {
+bool Binary_Script::isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSignature)
+{
     return g_pBinary->isSignaturePresent(&g_memoryMap, nOffset, nSize, sSignature);
 }
 
-quint32 Binary_Script::swapBytes(quint32 nValue) {
+quint32 Binary_Script::swapBytes(quint32 nValue)
+{
     return g_pBinary->swapBytes(nValue);
 }
 
-QString Binary_Script::getGeneralOptions() {
+QString Binary_Script::getGeneralOptions()
+{
     return "";
 }
 
-qint64 Binary_Script::RVAToOffset(qint64 nRVA) {
+qint64 Binary_Script::RVAToOffset(qint64 nRVA)
+{
     return g_pBinary->addressToOffset(&g_memoryMap, nRVA + g_nBaseAddress);
 }
 
-qint64 Binary_Script::VAToOffset(qint64 nVA) {
+qint64 Binary_Script::VAToOffset(qint64 nVA)
+{
     return g_pBinary->addressToOffset(&g_memoryMap, nVA);
 }
 
-qint64 Binary_Script::OffsetToVA(qint64 nOffset) {
+qint64 Binary_Script::OffsetToVA(qint64 nOffset)
+{
     return g_pBinary->offsetToAddress(&g_memoryMap, nOffset);
 }
 
-qint64 Binary_Script::OffsetToRVA(qint64 nOffset) {
+qint64 Binary_Script::OffsetToRVA(qint64 nOffset)
+{
     qint64 nResult = g_pBinary->offsetToAddress(&g_memoryMap, nOffset);
 
     if (nResult != -1) {
@@ -231,210 +263,262 @@ qint64 Binary_Script::OffsetToRVA(qint64 nOffset) {
     return nResult;
 }
 
-QString Binary_Script::getFileDirectory() {
+QString Binary_Script::getFileDirectory()
+{
     return g_sFileDirectory;
 }
 
-QString Binary_Script::getFileBaseName() {
+QString Binary_Script::getFileBaseName()
+{
     return g_sFileBaseName;
 }
 
-QString Binary_Script::getFileCompleteSuffix() {
+QString Binary_Script::getFileCompleteSuffix()
+{
     return g_sFileCompleteSuffix;
 }
 
-QString Binary_Script::getFileSuffix() {
+QString Binary_Script::getFileSuffix()
+{
     return g_sFileSuffix;
 }
 
-QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize) {
+QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize)
+{
     return g_pBinary->getSignature(nOffset, nSize);
 }
 
-double Binary_Script::calculateEntropy(qint64 nOffset, qint64 nSize) {
+double Binary_Script::calculateEntropy(qint64 nOffset, qint64 nSize)
+{
     return g_pBinary->getEntropy(nOffset, nSize, g_pPdStruct);
 }
 
-QString Binary_Script::calculateMD5(qint64 nOffset, qint64 nSize) {
+QString Binary_Script::calculateMD5(qint64 nOffset, qint64 nSize)
+{
     return g_pBinary->getHash(XBinary::HASH_MD5, nOffset, nSize, g_pPdStruct);
 }
 
-quint32 Binary_Script::calculateCRC32(qint64 nOffset, qint64 nSize) {
+quint32 Binary_Script::calculateCRC32(qint64 nOffset, qint64 nSize)
+{
     return g_pBinary->_getCRC32(nOffset, nSize, g_pPdStruct);
 }
 
-bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature) {
+bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, QString sSignature)
+{
     return g_pBinary->isSignatureInLoadSegmentPresent(&g_memoryMap, nNumber, sSignature, g_pPdStruct);
 }
 
-qint64 Binary_Script::getImageBase() {
+qint64 Binary_Script::getImageBase()
+{
     return g_memoryMap.nModuleAddress;
 }
 
-QString Binary_Script::upperCase(QString sString) {
+QString Binary_Script::upperCase(QString sString)
+{
     return sString.toUpper();
 }
 
-QString Binary_Script::lowerCase(QString sString) {
+QString Binary_Script::lowerCase(QString sString)
+{
     return sString.toLower();
 }
 
-bool Binary_Script::isPlainText() {
+bool Binary_Script::isPlainText()
+{
     return g_bIsPlainText;
 }
 
-bool Binary_Script::isUTF8Text() {
+bool Binary_Script::isUTF8Text()
+{
     return g_bIsUTF8Text;
 }
 
-bool Binary_Script::isUnicodeText() {
+bool Binary_Script::isUnicodeText()
+{
     return g_bIsUnicodeText;
 }
 
-bool Binary_Script::isText() {
+bool Binary_Script::isText()
+{
     return g_bIsPlainText | g_bIsUTF8Text | g_bIsUnicodeText;
 }
 
-QString Binary_Script::getHeaderString() {
+QString Binary_Script::getHeaderString()
+{
     return g_sHeaderString;
 }
 
-qint32 Binary_Script::getDisasmLength(qint64 nAddress) {
+qint32 Binary_Script::getDisasmLength(qint64 nAddress)
+{
     return XCapstone::getDisasmLength(g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress);
 }
 
-QString Binary_Script::getDisasmString(qint64 nAddress) {
+QString Binary_Script::getDisasmString(qint64 nAddress)
+{
     return XCapstone::disasm(g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress).sString.toUpper();
 }
 
-qint64 Binary_Script::getDisasmNextAddress(qint64 nAddress) {
+qint64 Binary_Script::getDisasmNextAddress(qint64 nAddress)
+{
     return XCapstone::getNextAddress(g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress);
 }
 
-bool Binary_Script::is16() {
+bool Binary_Script::is16()
+{
     return XBinary::is16(&g_memoryMap);
 }
 
-bool Binary_Script::is32() {
+bool Binary_Script::is32()
+{
     return XBinary::is32(&g_memoryMap);
 }
 
-bool Binary_Script::is64() {
+bool Binary_Script::is64()
+{
     return XBinary::is64(&g_memoryMap);
 }
 
-bool Binary_Script::isDeepScan() {
+bool Binary_Script::isDeepScan()
+{
     return g_pOptions->bIsDeepScan;
 }
 
-bool Binary_Script::isHeuristicScan() {
+bool Binary_Script::isHeuristicScan()
+{
     return g_pOptions->bIsHeuristicScan;
 }
 
-bool Binary_Script::isVerbose() {
+bool Binary_Script::isVerbose()
+{
     return g_pOptions->bIsVerbose;
 }
 
-quint8 Binary_Script::read_uint8(qint64 nOffset) {
+quint8 Binary_Script::read_uint8(qint64 nOffset)
+{
     return g_pBinary->read_uint8(nOffset);
 }
 
-qint8 Binary_Script::read_int8(qint64 nOffset) {
+qint8 Binary_Script::read_int8(qint64 nOffset)
+{
     return g_pBinary->read_int8(nOffset);
 }
 
-quint16 Binary_Script::read_uint16(qint64 nOffset, bool bIsBigEndian) {
+quint16 Binary_Script::read_uint16(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_uint16(nOffset, bIsBigEndian);
 }
 
-qint16 Binary_Script::read_int16(qint64 nOffset, bool bIsBigEndian) {
+qint16 Binary_Script::read_int16(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_int16(nOffset, bIsBigEndian);
 }
 
-quint32 Binary_Script::read_uint32(qint64 nOffset, bool bIsBigEndian) {
+quint32 Binary_Script::read_uint32(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_uint32(nOffset, bIsBigEndian);
 }
 
-qint32 Binary_Script::read_int32(qint64 nOffset, bool bIsBigEndian) {
+qint32 Binary_Script::read_int32(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_int32(nOffset, bIsBigEndian);
 }
 
-quint64 Binary_Script::read_uint64(qint64 nOffset, bool bIsBigEndian) {
+quint64 Binary_Script::read_uint64(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_uint64(nOffset, bIsBigEndian);
 }
 
-qint64 Binary_Script::read_int64(qint64 nOffset, bool bIsBigEndian) {
+qint64 Binary_Script::read_int64(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_int64(nOffset, bIsBigEndian);
 }
 
-QString Binary_Script::read_ansiString(qint64 nOffset, qint64 nMaxSize) {
+QString Binary_Script::read_ansiString(qint64 nOffset, qint64 nMaxSize)
+{
     return g_pBinary->read_ansiString(nOffset, nMaxSize);
 }
 
-QString Binary_Script::read_unicodeString(qint64 nOffset, qint64 nMaxSize) {
+QString Binary_Script::read_unicodeString(qint64 nOffset, qint64 nMaxSize)
+{
     return g_pBinary->read_unicodeString(nOffset, nMaxSize);
 }
 
-QString Binary_Script::read_utf8String(qint64 nOffset, qint64 nMaxSize) {
+QString Binary_Script::read_utf8String(qint64 nOffset, qint64 nMaxSize)
+{
     return g_pBinary->read_utf8String(nOffset, nMaxSize);
 }
 
-QString Binary_Script::read_ucsdString(qint64 nOffset) {
+QString Binary_Script::read_ucsdString(qint64 nOffset)
+{
     return g_pBinary->read_ucsdString(nOffset);
 }
 
-QString Binary_Script::read_codePageString(qint64 nOffset, qint64 nMaxByteSize, QString sCodePage) {
+QString Binary_Script::read_codePageString(qint64 nOffset, qint64 nMaxByteSize, QString sCodePage)
+{
     return g_pBinary->read_codePageString(nOffset, nMaxByteSize, sCodePage);
 }
 
-QString Binary_Script::bytesCountToString(quint64 nValue) {
+QString Binary_Script::bytesCountToString(quint64 nValue)
+{
     return g_pBinary->bytesCountToString(nValue);
 }
 
-qint64 Binary_Script::find_ansiString(qint64 nOffset, qint64 nSize, QString sString) {
+qint64 Binary_Script::find_ansiString(qint64 nOffset, qint64 nSize, QString sString)
+{
     return g_pBinary->find_ansiString(nOffset, nSize, sString);
 }
 
-qint64 Binary_Script::find_unicodeString(qint64 nOffset, qint64 nSize, QString sString) {
+qint64 Binary_Script::find_unicodeString(qint64 nOffset, qint64 nSize, QString sString)
+{
     return g_pBinary->find_unicodeString(nOffset, nSize, sString);
 }
 
-qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, QString sString) {
+qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, QString sString)
+{
     return g_pBinary->find_utf8String(nOffset, nSize, sString);
 }
 
-QString Binary_Script::read_UUID_bytes(qint64 nOffset) {
+QString Binary_Script::read_UUID_bytes(qint64 nOffset)
+{
     return g_pBinary->read_UUID_bytes(nOffset);
 }
 
-QString Binary_Script::read_UUID(qint64 nOffset, bool bIsBigEndian) {
+QString Binary_Script::read_UUID(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_UUID(nOffset, bIsBigEndian);
 }
 
-float Binary_Script::read_float(qint64 nOffset, bool bIsBigEndian) {
+float Binary_Script::read_float(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_float(nOffset, bIsBigEndian);
 }
 
-double Binary_Script::read_double(qint64 nOffset, bool bIsBigEndian) {
+double Binary_Script::read_double(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_double(nOffset, bIsBigEndian);
 }
 
-float Binary_Script::read_float16(qint64 nOffset, bool bIsBigEndian) {
+float Binary_Script::read_float16(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_float16(nOffset, bIsBigEndian);
 }
 
-float Binary_Script::read_float32(qint64 nOffset, bool bIsBigEndian) {
+float Binary_Script::read_float32(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_float(nOffset, bIsBigEndian);
 }
 
-double Binary_Script::read_float64(qint64 nOffset, bool bIsBigEndian) {
+double Binary_Script::read_float64(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_double(nOffset, bIsBigEndian);
 }
 
-quint32 Binary_Script::read_uint24(qint64 nOffset, bool bIsBigEndian) {
+quint32 Binary_Script::read_uint24(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_uint24(nOffset, bIsBigEndian);
 }
 
-qint32 Binary_Script::read_int24(qint64 nOffset, bool bIsBigEndian) {
+qint32 Binary_Script::read_int24(qint64 nOffset, bool bIsBigEndian)
+{
     return g_pBinary->read_int24(nOffset, bIsBigEndian);
 }

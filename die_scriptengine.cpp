@@ -22,7 +22,8 @@
 
 DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, XBinary::FT fileType, Binary_Script::OPTIONS *pOptions,
                                    XBinary::PDSTRUCT *pPdStruct)
-    : XScriptEngine() {
+    : XScriptEngine()
+{
     g_pSignaturesList = pSignaturesList;
     g_pPdStruct = pPdStruct;
 
@@ -122,14 +123,16 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     //    }
 }
 
-DiE_ScriptEngine::~DiE_ScriptEngine() {
+DiE_ScriptEngine::~DiE_ScriptEngine()
+{
     if (g_pBinary) delete g_pBinary;
     if (g_pExtra) delete g_pExtra;
     if (g_pBinaryScript) delete g_pBinaryScript;
     if (g_pExtraScript) delete g_pExtraScript;
 }
 
-bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString) {
+bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
+{
     bool bResult = true;
 
     if (value.isError()) {
@@ -142,16 +145,19 @@ bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString) {
     return bResult;
 }
 
-QList<DiE_ScriptEngine::RESULT> DiE_ScriptEngine::getListResult() {
+QList<DiE_ScriptEngine::RESULT> DiE_ScriptEngine::getListResult()
+{
     return g_listResult;
 }
 
-void DiE_ScriptEngine::clearListResult() {
+void DiE_ScriptEngine::clearListResult()
+{
     g_listResult.clear();
 }
 
 #ifdef QT_SCRIPT_LIB
-QScriptValue DiE_ScriptEngine::includeScript(QScriptContext *pContext, QScriptEngine *pEngine) {
+QScriptValue DiE_ScriptEngine::includeScript(QScriptContext *pContext, QScriptEngine *pEngine)
+{
     QScriptValue result;
 
     DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
@@ -168,7 +174,8 @@ QScriptValue DiE_ScriptEngine::includeScript(QScriptContext *pContext, QScriptEn
 }
 #endif
 #ifdef QT_SCRIPT_LIB
-QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEngine) {
+QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEngine)
+{
     QScriptValue result;
 
     DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
@@ -183,7 +190,8 @@ QScriptValue DiE_ScriptEngine::_log(QScriptContext *pContext, QScriptEngine *pEn
 }
 #endif
 #ifdef QT_SCRIPT_LIB
-QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext, QScriptEngine *pEngine) {
+QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext, QScriptEngine *pEngine)
+{
     QScriptValue result;
 
     DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
@@ -201,7 +209,8 @@ QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext, QScriptEngin
 }
 #endif
 
-void DiE_ScriptEngine::includeScriptSlot(QString sScript) {
+void DiE_ScriptEngine::includeScriptSlot(QString sScript)
+{
     // TODO error, cannot find signature
 
     qint32 nNumberOfSignatures = g_pSignaturesList->count();
@@ -218,11 +227,13 @@ void DiE_ScriptEngine::includeScriptSlot(QString sScript) {
     }
 }
 
-void DiE_ScriptEngine::_logSlot(QString sText) {
+void DiE_ScriptEngine::_logSlot(QString sText)
+{
     emit infoMessage(sText);
 }
 
-void DiE_ScriptEngine::_setResultSlot(QString sType, QString sName, QString sVersion, QString sOptions) {
+void DiE_ScriptEngine::_setResultSlot(QString sType, QString sName, QString sVersion, QString sOptions)
+{
     RESULT record = {};
     record.sType = sType;
     record.sName = sName;
@@ -232,7 +243,8 @@ void DiE_ScriptEngine::_setResultSlot(QString sType, QString sName, QString sVer
     g_listResult.append(record);
 }
 
-DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(QString sString, bool bShowType, bool bShowVersion, bool bShowOptions) {
+DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(QString sString, bool bShowType, bool bShowVersion, bool bShowOptions)
+{
     RESULT result = {};
 
     if (bShowType) {

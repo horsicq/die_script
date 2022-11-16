@@ -20,14 +20,17 @@
  */
 #include "global_script.h"
 
-global_script::global_script(QObject *parent) : QObject(parent) {
+global_script::global_script(QObject *parent) : QObject(parent)
+{
 }
 
-void global_script::includeScript(QString sScript) {
+void global_script::includeScript(QString sScript)
+{
     emit includeScriptSignal(sScript);
 }
 
-void global_script::_log(QString sText) {
+void global_script::_log(QString sText)
+{
     emit _logSignal(sText);
 }
 
@@ -41,6 +44,7 @@ void global_script::_log(QString sText) {
 //     return qMax(nValue1,nValue2);
 // }
 
-void global_script::_setResult(QString sType, QString sName, QString sVersion, QString sOptions) {
+void global_script::_setResult(QString sType, QString sName, QString sVersion, QString sOptions)
+{
     emit _setResultSignal(sType, sName, sVersion, sOptions);
 }

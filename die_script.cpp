@@ -20,7 +20,8 @@
  */
 #include "die_script.h"
 
-bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2) {
+bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2)
+{
     if ((sr1.sName == "_init") && (sr2.sName == "_init")) {
         return false;
     }
@@ -52,7 +53,8 @@ bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const Di
     return (sr1.sName < sr2.sName);
 }
 
-bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2) {
+bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2)
+{
     if ((sr1.sName == "_init") && (sr2.sName == "_init")) {
         return false;
     }
@@ -66,7 +68,8 @@ bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const Di
     return (sr1.sName < sr2.sName);
 }
 
-DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent) {
+DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
+{
     g_databaseType = DBT_UNKNOWN;
     g_pPdStruct = nullptr;
 #ifdef QT_SCRIPTTOOLS_LIB
@@ -74,7 +77,8 @@ DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent) {
 #endif
 }
 
-QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString sDatabasePath, XBinary::FT fileType) {
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString sDatabasePath, XBinary::FT fileType)
+{
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
 
     QDir dir(sDatabasePath);
@@ -105,7 +109,8 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(QString 
     return listResult;
 }
 
-QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix, XBinary::FT fileType) {
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix, XBinary::FT fileType)
+{
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
 
     qint32 nNumberOfRecords = pListRecords->count();
@@ -133,7 +138,8 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
 }
 
 XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult, QIODevice *pDevice, QString sFunction, XBinary::SCANID parentId, XBinary::FT fileType, OPTIONS *pOptions,
-                                     QString sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct) {
+                                     QString sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
+{
     XBinary::SCANID resultId = {};
 
     XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(fileType, pDevice);
@@ -354,8 +360,8 @@ XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult, QIODevice *pDevic
     return resultId;
 }
 
-bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,
-                              DiE_Script::SCAN_RESULT *pScanResult) {
+bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, DiE_Script::SCAN_RESULT *pScanResult)
+{
     bool bResult = false;
 
     QString sErrorString;
@@ -372,7 +378,8 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     return bResult;
 }
 
-bool DiE_Script::loadDatabase(QString sDatabasePath) {
+bool DiE_Script::loadDatabase(QString sDatabasePath)
+{
     // TODO Check if empty file
     this->g_sDatabasePath = sDatabasePath;
 
@@ -437,11 +444,13 @@ bool DiE_Script::loadDatabase(QString sDatabasePath) {
     return g_listSignatures.count();
 }
 
-QString DiE_Script::getDatabasePath() {
+QString DiE_Script::getDatabasePath()
+{
     return g_sDatabasePath;
 }
 
-QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates() {
+QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
+{
     QList<SIGNATURE_STATE> listResult;
 
     QList<XBinary::FT> listFT;
@@ -469,7 +478,8 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates() {
     return listResult;
 }
 
-qint32 DiE_Script::getNumberOfSignatures(XBinary::FT fileType) {
+qint32 DiE_Script::getNumberOfSignatures(XBinary::FT fileType)
+{
     qint32 nResult = 0;
 
     qint32 nNumberOfSignatures = g_listSignatures.count();
@@ -483,15 +493,18 @@ qint32 DiE_Script::getNumberOfSignatures(XBinary::FT fileType) {
     return nResult;
 }
 
-QList<DiE_ScriptEngine::SIGNATURE_RECORD> *DiE_Script::getSignatures() {
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> *DiE_Script::getSignatures()
+{
     return &g_listSignatures;
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) {
+DiE_Script::SCAN_RESULT DiE_Script::scanFile(QString sFileName, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+{
     return processFile(sFileName, pOptions, "detect", pPdStruct);
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::processFile(QString sFileName, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct) {
+DiE_Script::SCAN_RESULT DiE_Script::processFile(QString sFileName, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct)
+{
     SCAN_RESULT scanResult = {};
 
     QFile file;
@@ -507,7 +520,8 @@ DiE_Script::SCAN_RESULT DiE_Script::processFile(QString sFileName, OPTIONS *pOpt
     return scanResult;
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct) {
+DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct)
+{
     SCAN_RESULT scanResult = {};
 
     XBinary::SCANID parentId = {0};
@@ -520,7 +534,8 @@ DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *p
 }
 
 void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions, bool bInit,
-                         XBinary::PDSTRUCT *pPdStruct) {
+                         XBinary::PDSTRUCT *pPdStruct)
+{
     XBinary::PDSTRUCT pdStructEmpty = {};
 
     if (!pPdStruct) {
@@ -660,7 +675,8 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
     }
 }
 
-DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::getSignatureByFilePath(QString sSignatureFilePath) {
+DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::getSignatureByFilePath(QString sSignatureFilePath)
+{
     DiE_ScriptEngine::SIGNATURE_RECORD result = {};
 
     qint32 nNumberOfSignatures = g_listSignatures.count();
@@ -676,7 +692,8 @@ DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::getSignatureByFilePath(QString sS
     return result;
 }
 
-bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText) {
+bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText)
+{
     bool bResult = false;
 
     qint32 nNumberOfSignatures = g_listSignatures.count();
@@ -695,7 +712,8 @@ bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText) {
     return bResult;
 }
 
-void DiE_Script::scanDirectory() {
+void DiE_Script::scanDirectory()
+{
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
 
@@ -739,7 +757,8 @@ void DiE_Script::scanDirectory() {
     emit directoryScanCompleted(elapsedTimer.elapsed());
 }
 
-DiE_Script::STATS DiE_Script::getStats() {
+DiE_Script::STATS DiE_Script::getStats()
+{
     STATS result = {};
 
     qint32 nNumberOfSignatures = g_listSignatures.count();
@@ -757,11 +776,13 @@ DiE_Script::STATS DiE_Script::getStats() {
     return result;
 }
 
-DiE_Script::DBT DiE_Script::getDatabaseType() {
+DiE_Script::DBT DiE_Script::getDatabaseType()
+{
     return g_databaseType;
 }
 
-bool DiE_Script::isSignaturesPresent(XBinary::FT fileType) {
+bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
+{
     bool bResult = false;
 
     qint32 nNumberOfSignatures = g_listSignatures.count();
@@ -777,7 +798,8 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType) {
     return bResult;
 }
 
-QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult) {
+QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
+{
     QString sResult;
 
     qint32 nNumberOfErrors = pScanResult->listErrors.count();
@@ -789,13 +811,15 @@ QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult) {
     return sResult;
 }
 
-void DiE_Script::setProcessDirectory(QString sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct) {
+void DiE_Script::setProcessDirectory(QString sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct)
+{
     g_sDirectoryProcess = sDirectory;
     g_scanOptionsProcess = scanOptions;
     g_pPdStruct = pPdStruct;
 }
 
-QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStructs) {
+QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStructs)
+{
     QList<XBinary::SCANSTRUCT> listResult;
 
     qint32 nNumberOfRecords = pListScanStructs->count();
@@ -900,13 +924,15 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
 }
 
 #ifdef QT_SCRIPTTOOLS_LIB
-void DiE_Script::setDebugger(QScriptEngineDebugger *pDebugger) {
+void DiE_Script::setDebugger(QScriptEngineDebugger *pDebugger)
+{
     this->pDebugger = pDebugger;
 }
 #endif
 
 #ifdef QT_SCRIPTTOOLS_LIB
-void DiE_Script::removeDebugger() {
+void DiE_Script::removeDebugger()
+{
     this->pDebugger = nullptr;
 }
 #endif

@@ -20,7 +20,8 @@
  */
 #include "mach_script.h"
 
-MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pMACH, pOptions, pPdStruct) {
+MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pMACH, pOptions, pPdStruct)
+{
     this->g_pMACH = pMACH;
 
     g_listLibraryRecords = pMACH->getLibraryRecords();
@@ -35,37 +36,46 @@ MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPd
     sGeneralOptions = QString("%1%2").arg(XMACH::getHeaderFileTypesS().value(pMACH->getHeader_filetype())).arg(bIs64 ? ("64") : ("32"));
 }
 
-MACH_Script::~MACH_Script() {
+MACH_Script::~MACH_Script()
+{
 }
 
-bool MACH_Script::isLibraryPresent(QString sLibraryName) {
+bool MACH_Script::isLibraryPresent(QString sLibraryName)
+{
     return g_pMACH->isLibraryRecordNamePresent(sLibraryName, &g_listLibraryRecords);
 }
 
-quint32 MACH_Script::getNumberOfSections() {
+quint32 MACH_Script::getNumberOfSections()
+{
     return nNumberOfSection;
 }
 
-quint32 MACH_Script::getNumberOfSegments() {
+quint32 MACH_Script::getNumberOfSegments()
+{
     return nNumberOfSegments;
 }
 
-qint32 MACH_Script::getSectionNumber(QString sSectionName) {
+qint32 MACH_Script::getSectionNumber(QString sSectionName)
+{
     return g_pMACH->getSectionNumber(sSectionName, &listSectionRecords);
 }
 
-QString MACH_Script::getGeneralOptions() {
+QString MACH_Script::getGeneralOptions()
+{
     return sGeneralOptions;
 }
 
-quint32 MACH_Script::getLibraryCurrentVersion(QString sLibraryName) {
+quint32 MACH_Script::getLibraryCurrentVersion(QString sLibraryName)
+{
     return g_pMACH->getLibraryCurrentVersion(sLibraryName, &g_listLibraryRecords);
 }
 
-quint64 MACH_Script::getSectionFileOffset(quint32 nNumber) {
+quint64 MACH_Script::getSectionFileOffset(quint32 nNumber)
+{
     return g_pMACH->getSectionFileOffset(nNumber, &listSectionRecords);
 }
 
-quint64 MACH_Script::getSectionFileSize(quint32 nNumber) {
+quint64 MACH_Script::getSectionFileSize(quint32 nNumber)
+{
     return g_pMACH->getSectionFileSize(nNumber, &listSectionRecords);
 }
