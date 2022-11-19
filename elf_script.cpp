@@ -20,7 +20,8 @@
  */
 #include "elf_script.h"
 
-ELF_Script::ELF_Script(XELF *pELF, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pELF, pOptions, pPdStruct)
+ELF_Script::ELF_Script(XELF *pELF, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+    : Binary_Script(pELF, pOptions, pPdStruct)
 {
     this->g_pELF = pELF;
 

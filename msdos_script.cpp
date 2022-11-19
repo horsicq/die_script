@@ -20,7 +20,8 @@
  */
 #include "msdos_script.h"
 
-MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pMSDOS, pOptions, pPdStruct)
+MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+    : Binary_Script(pMSDOS, pOptions, pPdStruct)
 {
     this->pMSDOS = pMSDOS;
 
