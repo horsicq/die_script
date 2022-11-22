@@ -20,8 +20,7 @@
  */
 #include "die_scriptengine.h"
 
-DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, XBinary::FT fileType, Binary_Script::OPTIONS *pOptions,
-                                   XBinary::PDSTRUCT *pPdStruct)
+DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, XBinary::FT fileType, Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
     : XScriptEngine()
 {
     g_pSignaturesList = pSignaturesList;

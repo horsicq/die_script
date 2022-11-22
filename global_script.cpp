@@ -20,8 +20,7 @@
  */
 #include "global_script.h"
 
-global_script::global_script(QObject *parent)
-    : QObject(parent)
+global_script::global_script(QObject *parent) : QObject(parent)
 {
 }
 

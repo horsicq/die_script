@@ -20,8 +20,7 @@
  */
 #include "elf_script.h"
 
-ELF_Script::ELF_Script(XELF *pELF, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
-    : Binary_Script(pELF, pOptions, pPdStruct)
+ELF_Script::ELF_Script(XELF *pELF, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pELF, pOptions, pPdStruct)
 {
     this->g_pELF = pELF;
 
@@ -42,8 +41,7 @@ ELF_Script::ELF_Script(XELF *pELF, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStru
 
     g_listSectionRecords = pELF->getSectionRecords(&g_listSectionHeaders, bIs64, &g_baStringTable);
 
-    g_sGeneralOptions =
-        QString("%1 %2-%3").arg(XELF::getTypesS().value(g_elfHeader.e_type)).arg(XELF::getMachinesS().value(g_elfHeader.e_machine)).arg(bIs64 ? ("64") : ("32"));  // TODO Check
+    g_sGeneralOptions = QString("%1 %2-%3").arg(XELF::getTypesS().value(g_elfHeader.e_type)).arg(XELF::getMachinesS().value(g_elfHeader.e_machine)).arg(bIs64 ? ("64") : ("32"));  // TODO Check
 }
 
 ELF_Script::~ELF_Script()

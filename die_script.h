@@ -141,8 +141,7 @@ public:
     SCAN_RESULT scanFile(QString sFileName, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct = nullptr);
     SCAN_RESULT processFile(QString sFileName, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct = nullptr);
     SCAN_RESULT processDevice(QIODevice *pDevice, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct = nullptr);
-    void process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions, bool bInit,
-                 XBinary::PDSTRUCT *pPdStruct);
+    void process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions, bool bInit, XBinary::PDSTRUCT *pPdStruct);
     DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(QString sSignatureFilePath);
     bool updateSignature(QString sSignatureFilePath, QString sText);
     STATS getStats();
@@ -164,8 +163,8 @@ public slots:
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath, XBinary::FT fileType);
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix, XBinary::FT fileType);
-    XBinary::SCANID _process(SCAN_RESULT *pScanResult, QIODevice *pDevice, QString sFunction, XBinary::SCANID parentId, XBinary::FT fileType, OPTIONS *pOptions,
-                             QString sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
+    XBinary::SCANID _process(SCAN_RESULT *pScanResult, QIODevice *pDevice, QString sFunction, XBinary::SCANID parentId, XBinary::FT fileType, OPTIONS *pOptions, QString sSignatureFilePath,
+                             qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
     bool _handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, SCAN_RESULT *pScanResult);
 
 signals:
