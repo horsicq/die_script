@@ -465,17 +465,17 @@ QString Binary_Script::bytesCountToString(quint64 nValue)
 
 qint64 Binary_Script::find_ansiString(qint64 nOffset, qint64 nSize, QString sString)
 {
-    return g_pBinary->find_ansiString(nOffset, nSize, sString);
+    return g_pBinary->find_ansiString(nOffset, nSize, sString, g_pPdStruct);
 }
 
 qint64 Binary_Script::find_unicodeString(qint64 nOffset, qint64 nSize, QString sString)
 {
-    return g_pBinary->find_unicodeString(nOffset, nSize, sString);
+    return g_pBinary->find_unicodeString(nOffset, nSize, sString, g_pPdStruct);
 }
 
 qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, QString sString)
 {
-    return g_pBinary->find_utf8String(nOffset, nSize, sString);
+    return g_pBinary->find_utf8String(nOffset, nSize, sString, g_pPdStruct);
 }
 
 QString Binary_Script::read_UUID_bytes(qint64 nOffset)

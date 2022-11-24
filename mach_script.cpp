@@ -27,6 +27,7 @@ MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPd
     g_listLibraryRecords = pMACH->getLibraryRecords();
     listSectionRecords = pMACH->getSectionRecords();
     listCommandRecords = pMACH->getCommandRecords();
+    listSectionNameStrings = pMACH->getSectionNames(&listSectionRecords);
 
     nNumberOfSection = listSectionRecords.count();
     nNumberOfSegments = listSegmentRecords.count();
@@ -78,4 +79,9 @@ quint64 MACH_Script::getSectionFileOffset(quint32 nNumber)
 quint64 MACH_Script::getSectionFileSize(quint32 nNumber)
 {
     return g_pMACH->getSectionFileSize(nNumber, &listSectionRecords);
+}
+
+bool MACH_Script::isSectionNamePresent(QString sSectionName)
+{
+    return XBinary::isStringInListPresent(&listSectionNameStrings, sSectionName);
 }

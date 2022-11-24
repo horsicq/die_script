@@ -40,6 +40,7 @@ public slots:
     quint32 getLibraryCurrentVersion(QString sLibraryName);
     quint64 getSectionFileOffset(quint32 nNumber);
     quint64 getSectionFileSize(quint32 nNumber);
+    bool isSectionNamePresent(QString sSectionName);
 
 private:
     XMACH *g_pMACH;
@@ -48,6 +49,7 @@ private:
     QList<XMACH::SECTION_RECORD> listSectionRecords;
     QList<XMACH::COMMAND_RECORD> listCommandRecords;
     QList<XMACH::SEGMENT_RECORD> listSegmentRecords;
+    QList<QString> listSectionNameStrings;
     qint32 nNumberOfSection;
     qint32 nNumberOfSegments;
 };
