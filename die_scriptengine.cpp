@@ -48,8 +48,15 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     g_pExtra = 0;
     g_pExtraScript = 0;
 
-    g_pBinary = new XBinary(pDevice);                                     // TODO Check memory leak!
-    g_pBinaryScript = new Binary_Script(g_pBinary, pOptions, pPdStruct);  // TODO Check memory leak!
+    QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice,true);
+
+    if (fileTypes.contains(XBinary::FT_JPEG)) {
+        g_pBinary = new XJpeg(pDevice);
+    } else {
+        g_pBinary = new XBinary(pDevice);
+    }
+
+    g_pBinaryScript = new Binary_Script(g_pBinary, pOptions, pPdStruct);
     _addClass(g_pBinaryScript, "Binary");
 
     if (XBinary::checkFileType(XBinary::FT_COM, fileType)) {

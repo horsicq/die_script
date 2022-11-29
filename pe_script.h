@@ -103,9 +103,9 @@ private:
     qint32 g_nNumberOfSections;
     XPE::CLI_INFO g_cliInfo;
     QList<XPE::RESOURCE_RECORD> g_listResourceRecords;
-    qint32 nNumberOfResources;
-    QList<XPE_DEF::IMAGE_SECTION_HEADER> listSectionHeaders;
-    QList<XPE::SECTION_RECORD> listSectionRecords;
+    qint32 g_nNumberOfResources;
+    QList<XPE_DEF::IMAGE_SECTION_HEADER> g_listSectionHeaders;
+    QList<XPE::SECTION_RECORD> g_listSectionRecords;
     QList<QString> listSectionNameStrings;
     QList<XPE::IMPORT_HEADER> listImportHeaders;
     QList<XPE::IMPORT_RECORD> listImportRecords;

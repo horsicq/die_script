@@ -67,6 +67,14 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
         g_sHeaderString = pBinary->read_ansiString(0, qMin(g_nSize, (qint64)0x1000));
     }
 
+    g_bIsJpeg = false;
+
+    g_pJpeg = dynamic_cast<XJpeg *>(pBinary);
+
+    if (g_pJpeg) {
+        g_bIsJpeg = true;
+    }
+
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
 }
 
@@ -521,4 +529,31 @@ quint32 Binary_Script::read_uint24(qint64 nOffset, bool bIsBigEndian)
 qint32 Binary_Script::read_int24(qint64 nOffset, bool bIsBigEndian)
 {
     return g_pBinary->read_int24(nOffset, bIsBigEndian);
+}
+
+bool Binary_Script::isJpeg()
+{
+    return g_bIsJpeg;
+}
+
+QString Binary_Script::getJpegComment()
+{
+    QString sResult;
+
+    if (g_pJpeg) {
+        sResult = g_pJpeg->getComment();
+    }
+
+    return sResult;
+}
+
+QString Binary_Script::getJpegDqtMD5()
+{
+    QString sResult;
+
+    if (g_pJpeg) {
+        sResult = g_pJpeg->getDqtMD5();
+    }
+
+    return sResult;
 }

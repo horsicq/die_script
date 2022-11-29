@@ -26,16 +26,16 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
 
     g_nNumberOfSections = pPE->getFileHeader_NumberOfSections();
 
-    listSectionHeaders = pPE->getSectionHeaders();
-    listSectionRecords = pPE->getSectionRecords(&listSectionHeaders, pPE->isImage());
-    listSectionNameStrings = pPE->getSectionNames(&listSectionRecords);
+    g_listSectionHeaders = pPE->getSectionHeaders();
+    g_listSectionRecords = pPE->getSectionRecords(&g_listSectionHeaders, pPE->isImage());
+    listSectionNameStrings = pPE->getSectionNames(&g_listSectionRecords);
 
     g_cliInfo = pPE->getCliInfo(true, &g_memoryMap);
     g_listResourceRecords = pPE->getResources(&g_memoryMap);
 
     resourcesVersion = pPE->getResourcesVersion(&g_listResourceRecords);
 
-    nNumberOfResources = g_listResourceRecords.count();
+    g_nNumberOfResources = g_listResourceRecords.count();
 
     listImportHeaders = pPE->getImports(&g_memoryMap);
     listImportRecords = pPE->getImportRecords(&g_memoryMap);
@@ -98,32 +98,32 @@ QString PE_Script::getSectionName(quint32 nNumber)
 
 quint32 PE_Script::getSectionVirtualSize(quint32 nNumber)
 {
-    return pPE->getSection_VirtualSize(nNumber, &listSectionHeaders);
+    return pPE->getSection_VirtualSize(nNumber, &g_listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionVirtualAddress(quint32 nNumber)
 {
-    return pPE->getSection_VirtualAddress(nNumber, &listSectionHeaders);
+    return pPE->getSection_VirtualAddress(nNumber, &g_listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionFileSize(quint32 nNumber)
 {
-    return pPE->getSection_SizeOfRawData(nNumber, &listSectionHeaders);
+    return pPE->getSection_SizeOfRawData(nNumber, &g_listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionFileOffset(quint32 nNumber)
 {
-    return pPE->getSection_PointerToRawData(nNumber, &listSectionHeaders);
+    return pPE->getSection_PointerToRawData(nNumber, &g_listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionCharacteristics(quint32 nNumber)
 {
-    return pPE->getSection_Characteristics(nNumber, &listSectionHeaders);
+    return pPE->getSection_Characteristics(nNumber, &g_listSectionHeaders);
 }
 
 quint32 PE_Script::getNumberOfResources()
 {
-    return nNumberOfResources;
+    return g_nNumberOfResources;
 }
 
 bool PE_Script::isSectionNamePresent(QString sSectionName)

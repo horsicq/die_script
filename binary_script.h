@@ -22,6 +22,7 @@
 #define BINARY_SCRIPT_H
 
 #include "xbinary.h"
+#include "xjpeg.h"
 #include "xcapstone.h"
 
 class Binary_Script : public QObject {
@@ -129,6 +130,10 @@ public slots:
     quint32 read_uint24(qint64 nOffset, bool bIsBigEndian = false);
     qint32 read_int24(qint64 nOffset, bool bIsBigEndian = false);
 
+    bool isJpeg();
+    QString getJpegComment();
+    QString getJpegDqtMD5();
+
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
     qint64 g_nBaseAddress;
@@ -158,6 +163,8 @@ private:
     QString g_sFileBaseName;
     QString g_sFileCompleteSuffix;
     QString g_sFileSuffix;
+    bool g_bIsJpeg;
+    XJpeg *g_pJpeg;
 };
 
 #endif  // BINARY_SCRIPT_H
