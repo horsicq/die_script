@@ -846,8 +846,8 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
         // TODO more
         if ((_sType == "installer") || (_sType == "sfx")) {
             record.globalColor = Qt::blue;
-        } else if ((_sType == "protector") || (_sType == "apk obfuscator") || (_sType == "jar obfuscator") || (_sType == ".net obfuscator") || (_sType == ".net compressor") ||
-                   (_sType == "dongle protection") || (_sType == "joiner") || (_sType == "packer")) {
+        } else if ((_sType == "protector") || (_sType == "apk obfuscator") || (_sType == "jar obfuscator") || (_sType == ".net obfuscator") ||
+                   (_sType == ".net compressor") || (_sType == "dongle protection") || (_sType == "joiner") || (_sType == "packer")) {
             record.globalColor = Qt::red;
         } else if ((_sType == "pe tool") || (_sType == "apk tool")) {
             record.globalColor = Qt::green;
