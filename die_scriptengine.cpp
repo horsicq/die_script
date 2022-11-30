@@ -34,7 +34,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 #else
     connect(&g_globalScript, SIGNAL(includeScriptSignal(QString)), this, SLOT(includeScriptSlot(QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_setResultSignal(QString, QString, QString, QString)), this, SLOT(_setResultSlot(QString, QString, QString, QString)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_setResultSignal(QString, QString, QString, QString)), this, SLOT(_setResultSlot(QString, QString, QString, QString)),
+            Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&g_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
@@ -48,7 +49,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     g_pExtra = 0;
     g_pExtraScript = 0;
 
-    QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice,true);
+    QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
 
     if (fileTypes.contains(XBinary::FT_JPEG)) {
         g_pBinary = new XJpeg(pDevice);

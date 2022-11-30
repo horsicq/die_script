@@ -360,7 +360,8 @@ XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult, QIODevice *pDevic
     return resultId;
 }
 
-bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, DiE_Script::SCAN_RESULT *pScanResult)
+bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,
+                              DiE_Script::SCAN_RESULT *pScanResult)
 {
     bool bResult = false;
 
@@ -533,8 +534,8 @@ DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *p
     return scanResult;
 }
 
-void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions, bool bInit,
-                         XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions,
+                         bool bInit, XBinary::PDSTRUCT *pPdStruct)
 {
     XBinary::PDSTRUCT pdStructEmpty = {};
 
@@ -568,7 +569,8 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
     }
 
     if (pOptions->bAllTypesScan) {
-        if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) || stFT.contains(XBinary::FT_NE)) {
+        if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) ||
+            stFT.contains(XBinary::FT_NE)) {
             _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", 0, true, pPdStruct);
         }
     }
@@ -639,7 +641,7 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
                         qint64 nResourceOffset = listResources.at(i).nOffset;
                         qint64 nResourceSize = listResources.at(i).nSize;
 
-                        if(pe.checkOffsetSize(nResourceOffset,nResourceSize)) {
+                        if (pe.checkOffsetSize(nResourceOffset, nResourceSize)) {
                             QSet<XBinary::FT> stFT = XFormats::getFileTypes(pDevice, nResourceOffset, nResourceSize);
 
                             if (stFT.contains(XBinary::FT_MSDOS) || stFT.contains(XBinary::FT_NE) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) ||

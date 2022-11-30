@@ -22,8 +22,8 @@
 #define BINARY_SCRIPT_H
 
 #include "xbinary.h"
-#include "xjpeg.h"
 #include "xcapstone.h"
+#include "xjpeg.h"
 
 class Binary_Script : public QObject {
     Q_OBJECT
