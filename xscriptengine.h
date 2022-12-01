@@ -26,8 +26,6 @@
 #include <QScriptEngine>
 #else
 #include <QJSEngine>
-
-#include "global_script.h"
 #endif
 
 #ifdef QT_SCRIPT_LIB

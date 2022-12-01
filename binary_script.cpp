@@ -73,6 +73,7 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
 
     if (g_pJpeg) {
         g_bIsJpeg = true;
+        g_listJpegChunks = g_pJpeg->getChunks(pPdStruct);
     }
 
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
@@ -541,7 +542,7 @@ QString Binary_Script::getJpegComment()
     QString sResult;
 
     if (g_pJpeg) {
-        sResult = g_pJpeg->getComment();
+        sResult = g_pJpeg->getComment(&g_listJpegChunks);
     }
 
     return sResult;
@@ -552,8 +553,19 @@ QString Binary_Script::getJpegDqtMD5()
     QString sResult;
 
     if (g_pJpeg) {
-        sResult = g_pJpeg->getDqtMD5();
+        sResult = g_pJpeg->getDqtMD5(&g_listJpegChunks);
     }
 
     return sResult;
+}
+
+bool Binary_Script::isJpegChunkPresent(qint32 nID)
+{
+    bool bResult = false;
+
+    if (g_pJpeg) {
+        bResult = g_pJpeg->isChunkPresent(&g_listJpegChunks, (qint8)nID);
+    }
+
+    return bResult;
 }
