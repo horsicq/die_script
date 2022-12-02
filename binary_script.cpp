@@ -68,12 +68,16 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
     }
 
     g_bIsJpeg = false;
+    g_osJpegExif = {};
 
     g_pJpeg = dynamic_cast<XJpeg *>(pBinary);
 
     if (g_pJpeg) {
         g_bIsJpeg = true;
         g_listJpegChunks = g_pJpeg->getChunks(pPdStruct);
+        g_osJpegExif = g_pJpeg->getExif(&g_listJpegChunks);
+        g_listJpegExifChunks = g_pJpeg->getExifChunks(g_osJpegExif);
+        g_sJpegExifCameraName = g_pJpeg->getExifCameraName(g_osJpegExif,&g_listJpegExifChunks);
     }
 
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
@@ -568,4 +572,20 @@ bool Binary_Script::isJpegChunkPresent(qint32 nID)
     }
 
     return bResult;
+}
+
+bool Binary_Script::isJpegExifPresent()
+{
+    bool bResult = false;
+
+    if (g_pJpeg) {
+        bResult = g_pJpeg->isExifPresent(g_osJpegExif);
+    }
+
+    return bResult;
+}
+
+QString Binary_Script::getJpegExifCameraName()
+{
+    return g_sJpegExifCameraName;
 }

@@ -134,6 +134,8 @@ public slots:
     QString getJpegComment();
     QString getJpegDqtMD5();
     bool isJpegChunkPresent(qint32 nID);
+    bool isJpegExifPresent();
+    QString getJpegExifCameraName();
 
 protected:
     XBinary::_MEMORY_MAP g_memoryMap;
@@ -168,6 +170,9 @@ private:
     bool g_bIsJpeg;
     XJpeg *g_pJpeg;
     QList<XJpeg::CHUNK> g_listJpegChunks;
+    XBinary::OFFSETSIZE g_osJpegExif;
+    QList<XTiff::CHUNK> g_listJpegExifChunks;
+    QString g_sJpegExifCameraName;
 };
 
 #endif  // BINARY_SCRIPT_H
