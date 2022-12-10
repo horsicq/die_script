@@ -841,86 +841,8 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
         record.sInfo = pListScanStructs->at(i).sOptions;
         record.varInfo = pListScanStructs->at(i).sSignature;
 
-        QString _sType = record.sType.toLower();
-
-        // TODO more
-        if ((_sType == "installer") || (_sType == "sfx")) {
-            record.globalColor = Qt::blue;
-        } else if ((_sType == "protector") || (_sType == "apk obfuscator") || (_sType == "jar obfuscator") || (_sType == ".net obfuscator") ||
-                   (_sType == ".net compressor") || (_sType == "dongle protection") || (_sType == "joiner") || (_sType == "packer")) {
-            record.globalColor = Qt::red;
-        } else if ((_sType == "pe tool") || (_sType == "apk tool")) {
-            record.globalColor = Qt::green;
-        } else if ((_sType == "operation system") || (_sType == "virtual machine")) {
-            record.globalColor = Qt::darkYellow;
-        } else if (_sType == "signtool") {
-            record.globalColor = Qt::darkMagenta;
-        } else if (_sType == "language") {
-            record.globalColor = Qt::darkCyan;
-        } else {
-            record.globalColor = Qt::transparent;
-        }
-
-        if (_sType == "archive")
-            _sType = tr("Archive");
-        else if (_sType == "compiler")
-            _sType = tr("Compiler");
-        else if (_sType == "cryptor")
-            _sType = tr("Cryptor");
-        else if (_sType == "certificate")
-            _sType = tr("Certificate");
-        else if (_sType == "converter")
-            _sType = tr("Converter");
-        else if (_sType == "data")
-            _sType = tr("Data");
-        else if (_sType == "database")
-            _sType = tr("Database");
-        else if (_sType == "debug data")
-            _sType = tr("Debug data");
-        else if (_sType == "format")
-            _sType = tr("Format");
-        else if (_sType == "image")
-            _sType = tr("Image");
-        else if (_sType == "installer")
-            _sType = tr("Installer");
-        else if (_sType == "installer data")
-            _sType = tr("Installer data");
-        else if (_sType == "joiner")
-            _sType = tr("Joiner");
-        else if (_sType == "language")
-            _sType = tr("Language");
-        else if (_sType == "library")
-            _sType = tr("Library");
-        else if (_sType == "linker")
-            _sType = tr("Linker");
-        else if (_sType == "overlay")
-            _sType = tr("Overlay");
-        else if (_sType == "packer")
-            _sType = tr("Packer");
-        else if (_sType == "player")
-            _sType = tr("Player");
-        else if (_sType == "protection")
-            _sType = tr("Protection");
-        else if (_sType == "protector")
-            _sType = tr("Protector");
-        else if (_sType == "protector data")
-            _sType = tr("Protector data");
-        else if (_sType == "sfx")
-            _sType = QString("SFX");
-        else if (_sType == "source code")
-            _sType = tr("Source code");
-        else if (_sType == "stub")
-            _sType = tr("Stub");
-        else if (_sType == "tool")
-            _sType = tr("Tool");
-        else if (_sType == ".net compressor")
-            _sType = QString(".NET %1").arg(tr("compressor"));
-        else if (_sType == ".net obfuscator")
-            _sType = QString(".NET %1").arg(tr("obfuscator"));
-        else if (_sType == "dos extender")
-            _sType = QString("DOS %1").arg(tr("extender"));
-
-        record.sType = _sType;
+        record.globalColor = XFormats::typeToColor(record.sType);
+        record.sType = XFormats::translateType(record.sType);
 
         listResult.append(record);
     }
