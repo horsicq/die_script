@@ -77,7 +77,7 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
         g_listJpegChunks = g_pJpeg->getChunks(pPdStruct);
         g_osJpegExif = g_pJpeg->getExif(&g_listJpegChunks);
         g_listJpegExifChunks = g_pJpeg->getExifChunks(g_osJpegExif);
-        g_sJpegExifCameraName = g_pJpeg->getExifCameraName(g_osJpegExif,&g_listJpegExifChunks);
+        g_sJpegExifCameraName = g_pJpeg->getExifCameraName(g_osJpegExif, &g_listJpegExifChunks);
     }
 
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
