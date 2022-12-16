@@ -35,6 +35,7 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
     g_nOverlayOffset = pBinary->getOverlayOffset(&g_memoryMap);
     g_nOverlaySize = pBinary->getOverlaySize(&g_memoryMap);
     g_bIsOverlayPresent = pBinary->isOverlayPresent(&g_memoryMap);
+    g_bIsBigEndian =pBinary->isBigEndian();
 
     g_sHeaderSignature = pBinary->getSignature(0, 256);  // TODO const
     g_nHeaderSignatureSize = g_sHeaderSignature.size() / 2;
@@ -483,7 +484,7 @@ qint64 Binary_Script::find_ansiString(qint64 nOffset, qint64 nSize, QString sStr
 
 qint64 Binary_Script::find_unicodeString(qint64 nOffset, qint64 nSize, QString sString)
 {
-    return g_pBinary->find_unicodeString(nOffset, nSize, sString, g_pPdStruct);
+    return g_pBinary->find_unicodeString(nOffset, nSize, sString, g_bIsBigEndian, g_pPdStruct);
 }
 
 qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, QString sString)

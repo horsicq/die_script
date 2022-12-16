@@ -173,6 +173,7 @@ private:
     XBinary::OFFSETSIZE g_osJpegExif;
     QList<XTiff::CHUNK> g_listJpegExifChunks;
     QString g_sJpegExifCameraName;
+    bool g_bIsBigEndian;
 };
 
 #endif  // BINARY_SCRIPT_H
