@@ -35,7 +35,7 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
     g_nOverlayOffset = pBinary->getOverlayOffset(&g_memoryMap);
     g_nOverlaySize = pBinary->getOverlaySize(&g_memoryMap);
     g_bIsOverlayPresent = pBinary->isOverlayPresent(&g_memoryMap);
-    g_bIsBigEndian =pBinary->isBigEndian();
+    g_bIsBigEndian = pBinary->isBigEndian();
 
     g_sHeaderSignature = pBinary->getSignature(0, 256);  // TODO const
     g_nHeaderSignatureSize = g_sHeaderSignature.size() / 2;
