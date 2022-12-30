@@ -30,20 +30,20 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_listSectionRecords = pPE->getSectionRecords(&g_listSectionHeaders, pPE->isImage());
     listSectionNameStrings = pPE->getSectionNames(&g_listSectionRecords);
 
-    g_cliInfo = pPE->getCliInfo(true, &g_memoryMap);
-    g_listResourceRecords = pPE->getResources(&g_memoryMap);
+    g_cliInfo = pPE->getCliInfo(true, getMemoryMap());
+    g_listResourceRecords = pPE->getResources(getMemoryMap());
 
     resourcesVersion = pPE->getResourcesVersion(&g_listResourceRecords);
 
     g_nNumberOfResources = g_listResourceRecords.count();
 
-    listImportHeaders = pPE->getImports(&g_memoryMap);
-    listImportRecords = pPE->getImportRecords(&g_memoryMap);
+    listImportHeaders = pPE->getImports(getMemoryMap());
+    listImportRecords = pPE->getImportRecords(getMemoryMap());
 
     nNumberOfImports = listImportHeaders.count();
 
     bIsNETPresent = (pPE->isNETPresent()) && (g_cliInfo.bValid);
-    bool bIs64 = pPE->is64(&g_memoryMap);
+    bool bIs64 = pPE->is64(getMemoryMap());
     bIsDll = pPE->isDll();
     bIsDriver = pPE->isDriver();
     bIsConsole = pPE->isConsole();
@@ -53,12 +53,12 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     bIsImportPresent = pPE->isImportPresent();
     bIsResourcesPresent = pPE->isResourcesPresent();
 
-    nImportSection = pPE->getImportSection(&g_memoryMap);
-    nExportSection = pPE->getExportSection(&g_memoryMap);
-    nResourcesSection = pPE->getResourcesSection(&g_memoryMap);
-    nEntryPointSection = pPE->getEntryPointSection(&g_memoryMap);
-    nRelocsSection = pPE->getRelocsSection(&g_memoryMap);
-    nTLSSection = pPE->getTLSSection(&g_memoryMap);
+    nImportSection = pPE->getImportSection(getMemoryMap());
+    nExportSection = pPE->getExportSection(getMemoryMap());
+    nResourcesSection = pPE->getResourcesSection(getMemoryMap());
+    nEntryPointSection = pPE->getEntryPointSection(getMemoryMap());
+    nRelocsSection = pPE->getRelocsSection(getMemoryMap());
+    nTLSSection = pPE->getTLSSection(getMemoryMap());
 
     nMajorLinkerVersion = pPE->getOptionalHeader_MajorLinkerVersion();
     nMinorLinkerVersion = pPE->getOptionalHeader_MinorLinkerVersion();
@@ -198,12 +198,12 @@ QString PE_Script::getImportLibraryName(quint32 nNumber)
 
 bool PE_Script::isLibraryPresent(QString sLibraryName)
 {
-    return pPE->isImportLibraryPresentI(sLibraryName, &listImportHeaders);
+    return pPE->isImportLibraryPresentI(sLibraryName, &listImportHeaders); // TODO pdStruct
 }
 
 bool PE_Script::isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName)
 {
-    return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &listImportHeaders);
+    return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &listImportHeaders); // TODO pdStruct
 }
 
 QString PE_Script::getImportFunctionName(quint32 nImport, quint32 nFunctionNumber)
@@ -333,7 +333,7 @@ QString PE_Script::getNETVersion()
 
 bool PE_Script::compareEP_NET(QString sSignature, qint64 nOffset)
 {
-    return pPE->compareSignatureOnAddress(&g_memoryMap, sSignature, g_nBaseAddress + g_cliInfo.metaData.nEntryPoint + nOffset);
+    return pPE->compareSignatureOnAddress(getMemoryMap(), sSignature, getBaseAddress() + g_cliInfo.metaData.nEntryPoint + nOffset);
 }
 
 quint32 PE_Script::getSizeOfCode()

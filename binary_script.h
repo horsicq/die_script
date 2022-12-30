@@ -138,13 +138,16 @@ public slots:
     QString getJpegExifCameraName();
 
 protected:
-    XBinary::_MEMORY_MAP g_memoryMap;
-    qint64 g_nBaseAddress;
+    XBinary::_MEMORY_MAP *getMemoryMap();
+    XADDR getBaseAddress();
+    XBinary::PDSTRUCT *getPdStruct();
 
 private:
     XBinary *g_pBinary;
     OPTIONS *g_pOptions;
     XBinary::PDSTRUCT *g_pPdStruct;
+    XBinary::_MEMORY_MAP g_memoryMap;
+    XADDR g_nBaseAddress;
     csh g_disasmHandle;
     qint64 g_nSize;
     qint64 g_nEntryPointOffset;

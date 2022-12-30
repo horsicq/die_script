@@ -590,3 +590,18 @@ QString Binary_Script::getJpegExifCameraName()
 {
     return g_sJpegExifCameraName;
 }
+
+XBinary::_MEMORY_MAP *Binary_Script::getMemoryMap()
+{
+    return &g_memoryMap;
+}
+
+XADDR Binary_Script::getBaseAddress()
+{
+    return g_nBaseAddress;
+}
+
+XBinary::PDSTRUCT *Binary_Script::getPdStruct()
+{
+    return g_pPdStruct;
+}

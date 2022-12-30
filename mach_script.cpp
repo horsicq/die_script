@@ -32,7 +32,7 @@ MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPd
     nNumberOfSection = listSectionRecords.count();
     nNumberOfSegments = listSegmentRecords.count();
 
-    bool bIs64 = pMACH->is64(&g_memoryMap);
+    bool bIs64 = pMACH->is64(getMemoryMap());
 
     sGeneralOptions = QString("%1%2").arg(XMACH::getHeaderFileTypesS().value(pMACH->getHeader_filetype())).arg(bIs64 ? ("64") : ("32"));
 }

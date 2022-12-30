@@ -24,7 +24,7 @@ ELF_Script::ELF_Script(XELF *pELF, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStru
 {
     this->g_pELF = pELF;
 
-    bool bIs64 = pELF->is64(&g_memoryMap);
+    bool bIs64 = pELF->is64(getMemoryMap());
 
     g_elfHeader = pELF->getHdr();
 
@@ -40,6 +40,8 @@ ELF_Script::ELF_Script(XELF *pELF, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStru
     }
 
     g_listSectionRecords = pELF->getSectionRecords(&g_listSectionHeaders, bIs64, &g_baStringTable);
+    g_listTagStruct =pELF->getTagStructs(&g_listProgramHeaders, getMemoryMap());
+    g_listLibraryNames = pELF->getLibraries(getMemoryMap(), &g_listTagStruct);
 
     g_sGeneralOptions = QString("%1 %2-%3")
                             .arg(XELF::getTypesS().value(g_elfHeader.e_type))
@@ -53,7 +55,7 @@ ELF_Script::~ELF_Script()
 
 bool ELF_Script::isSectionNamePresent(QString sSectionName)
 {
-    return g_pELF->isSectionNamePresent(sSectionName, &g_listSectionRecords);
+    return g_pELF->isSectionNamePresent(sSectionName, &g_listSectionRecords); // TODO get pdStruct
 }
 
 quint32 ELF_Script::getNumberOfSections()
@@ -73,7 +75,7 @@ QString ELF_Script::getGeneralOptions()
 
 qint32 ELF_Script::getSectionNumber(QString sSectionName)
 {
-    return g_pELF->getSectionNumber(sSectionName, &g_listSectionRecords);
+    return g_pELF->getSectionNumber(sSectionName, &g_listSectionRecords); // TODO get pdStruct
 }
 
 quint16 ELF_Script::getElfHeader_type()
@@ -177,4 +179,9 @@ bool ELF_Script::isStringInTablePresent(QString sSectionName, QString sString)
 bool ELF_Script::isNotePresent(QString sNote)
 {
     return g_pELF->isNotePresent(&g_listNotes, sNote);
+}
+
+bool ELF_Script::isLibraryPresent(QString sLibraryName)
+{
+    return g_pELF->isStringInListPresent(&g_listLibraryNames, sLibraryName, getPdStruct());
 }

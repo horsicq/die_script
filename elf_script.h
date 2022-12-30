@@ -56,6 +56,7 @@ public slots:
     quint64 getSectionFileSize(quint32 nNumber);
     bool isStringInTablePresent(QString sSectionName, QString sString);
     bool isNotePresent(QString sNote);
+    bool isLibraryPresent(QString sLibraryName);
 
 private:
     XELF *g_pELF;
@@ -67,6 +68,8 @@ private:
     QList<XELF::NOTE> g_listNotes;
     QList<XELF::SECTION_RECORD> g_listSectionRecords;
     QString g_sGeneralOptions;
+    QList<QString> g_listLibraryNames;
+    QList<XELF::TAG_STRUCT> g_listTagStruct;
 };
 
 #endif  // ELF_SCRIPT_H
