@@ -27,7 +27,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_nNumberOfSections = pPE->getFileHeader_NumberOfSections();
 
     g_listSectionHeaders = pPE->getSectionHeaders();
-    g_listSectionRecords = pPE->getSectionRecords(&g_listSectionHeaders, pPE->isImage());
+    g_listSectionRecords = pPE->getSectionRecords(&g_listSectionHeaders);
     listSectionNameStrings = pPE->getSectionNames(&g_listSectionRecords);
 
     g_cliInfo = pPE->getCliInfo(true, getMemoryMap());
