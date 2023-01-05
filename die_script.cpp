@@ -628,7 +628,9 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
     }
 
     if (pOptions->bRecursiveScan) {
-        if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64)) {
+        if (stFT.contains(XBinary::FT_ZLIB)) {
+            // TODO
+        } else if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64)) {
             XPE pe(_pDevice);
 
             if (pe.isValid()) {
