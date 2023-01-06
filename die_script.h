@@ -99,7 +99,7 @@ public:
         bool bIsHeuristicScan;
         bool bIsVerbose;
         bool bAllTypesScan;
-        bool bRecursiveScan;
+        bool bIsRecursiveScan;
         bool bDebug;
         bool bShowType;
         bool bShowVersion;

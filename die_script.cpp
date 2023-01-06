@@ -627,9 +627,35 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
         pScanResult->listDebugRecords.append(_scanResultCOM.listDebugRecords);
     }
 
-    if (pOptions->bRecursiveScan) {
+    if (pOptions->bIsRecursiveScan) {
         if (stFT.contains(XBinary::FT_ZLIB)) {
             // TODO
+            XBinary::SCANID scanIdArchiveRecord = scanIdMain;
+            scanIdArchiveRecord.filePart = XBinary::FILEPART_ARCHIVERECORD;
+
+            QList<XArchive::RECORD> listRecords = XArchives::getRecords(_pDevice, -1, pPdStruct);
+
+            if (listRecords.count()) {
+                QTemporaryFile fileTemp;
+
+                if (fileTemp.open()) {
+                    QString sTempFileName = fileTemp.fileName();
+
+                    XArchive::RECORD record = listRecords.at(0);
+
+                    if (XArchives::decompressToFile(_pDevice, &record, sTempFileName, pPdStruct)) {
+                        QFile file;
+
+                        file.setFileName(sTempFileName);
+
+                        if (file.open(QIODevice::ReadOnly)) {
+                            process(&file, sFunction, pScanResult, 0, file.size(), scanIdArchiveRecord, pOptions, false, pPdStruct);
+
+                            file.close();
+                        }
+                    }
+                }
+            }
         } else if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64)) {
             XPE pe(_pDevice);
 
@@ -650,7 +676,6 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
                                 stFT.contains(XBinary::FT_PE) || stFT.contains(XBinary::FT_ELF) || stFT.contains(XBinary::FT_MACHO) || stFT.contains(XBinary::FT_DEX) ||
                                 stFT.contains(XBinary::FT_ARCHIVE)) {
                                 XBinary::SCANID scanIdResource = scanIdMain;
-
                                 scanIdResource.filePart = XBinary::FILEPART_RESOURCE;
                                 scanIdResource.sInfo = XBinary::valueToHexEx(nResourceOffset);
 
@@ -662,7 +687,6 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
 
                 if (pe.isOverlayPresent()) {
                     XBinary::SCANID scanIdOverlay = scanIdMain;
-
                     scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
 
                     process(_pDevice, sFunction, pScanResult, pe.getOverlayOffset(), pe.getOverlaySize(), scanIdOverlay, pOptions, false, pPdStruct);
