@@ -130,6 +130,11 @@ public slots:
     quint32 read_uint24(qint64 nOffset, bool bIsBigEndian = false);
     qint32 read_int24(qint64 nOffset, bool bIsBigEndian = false);
 
+    quint8 read_bcd_uint8(qint64 nOffset);
+    quint16 read_bcd_uint16(qint64 nOffset, bool bIsBigEndian = false);
+    quint16 read_bcd_uint32(qint64 nOffset, bool bIsBigEndian = false);
+    quint16 read_bcd_uint64(qint64 nOffset, bool bIsBigEndian = false);
+
     bool isJpeg();
     QString getJpegComment();
     QString getJpegDqtMD5();

@@ -563,6 +563,7 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
     }
 
     QSet<XBinary::FT> stFT = XFormats::getFileTypes(_pDevice, true);
+    QSet<XBinary::FT> stFTOriginal = stFT;
 
     if (pOptions->fileType != XBinary::FT_UNKNOWN) {
         XBinary::filterFileTypes(&stFT, pOptions->fileType);
@@ -628,7 +629,7 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
     }
 
     if (pOptions->bIsRecursiveScan) {
-        if (stFT.contains(XBinary::FT_ZLIB)) {
+        if (stFTOriginal.contains(XBinary::FT_ZLIB) || stFTOriginal.contains(XBinary::FT_LHA)) {
             // TODO
             XBinary::SCANID scanIdArchiveRecord = scanIdMain;
             scanIdArchiveRecord.filePart = XBinary::FILEPART_ARCHIVERECORD;

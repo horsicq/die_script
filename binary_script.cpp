@@ -537,6 +537,26 @@ qint32 Binary_Script::read_int24(qint64 nOffset, bool bIsBigEndian)
     return g_pBinary->read_int24(nOffset, bIsBigEndian);
 }
 
+quint8 Binary_Script::read_bcd_uint8(qint64 nOffset)
+{
+    return g_pBinary->read_bcd_uint8(nOffset);
+}
+
+quint16 Binary_Script::read_bcd_uint16(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_bcd_uint16(nOffset, bIsBigEndian);
+}
+
+quint16 Binary_Script::read_bcd_uint32(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_bcd_uint32(nOffset, bIsBigEndian);
+}
+
+quint16 Binary_Script::read_bcd_uint64(qint64 nOffset, bool bIsBigEndian)
+{
+    return g_pBinary->read_bcd_uint64(nOffset, bIsBigEndian);
+}
+
 bool Binary_Script::isJpeg()
 {
     return g_bIsJpeg;
