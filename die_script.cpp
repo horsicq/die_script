@@ -630,19 +630,21 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
 
     if (pOptions->bIsRecursiveScan) {
         if (stFTOriginal.contains(XBinary::FT_ZLIB) || stFTOriginal.contains(XBinary::FT_LHA)) {
-            // TODO
-            XBinary::SCANID scanIdArchiveRecord = scanIdMain;
-            scanIdArchiveRecord.filePart = XBinary::FILEPART_ARCHIVERECORD;
 
             QList<XArchive::RECORD> listRecords = XArchives::getRecords(_pDevice, -1, pPdStruct);
 
-            if (listRecords.count()) {
+            if (listRecords.count() == 1) {
                 QTemporaryFile fileTemp;
 
                 if (fileTemp.open()) {
                     QString sTempFileName = fileTemp.fileName();
 
                     XArchive::RECORD record = listRecords.at(0);
+
+                    // TODO
+                    XBinary::SCANID scanIdArchiveRecord = scanIdMain;
+                    scanIdArchiveRecord.filePart = XBinary::FILEPART_ARCHIVERECORD;
+                    scanIdArchiveRecord.sInfo = record.sFileName;
 
                     if (XArchives::decompressToFile(_pDevice, &record, sTempFileName, pPdStruct)) {
                         QFile file;
