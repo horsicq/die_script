@@ -198,12 +198,12 @@ QString PE_Script::getImportLibraryName(quint32 nNumber)
 
 bool PE_Script::isLibraryPresent(QString sLibraryName)
 {
-    return pPE->isImportLibraryPresentI(sLibraryName, &listImportHeaders); // TODO pdStruct
+    return pPE->isImportLibraryPresentI(sLibraryName, &listImportHeaders);  // TODO pdStruct
 }
 
 bool PE_Script::isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName)
 {
-    return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &listImportHeaders); // TODO pdStruct
+    return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &listImportHeaders);  // TODO pdStruct
 }
 
 QString PE_Script::getImportFunctionName(quint32 nImport, quint32 nFunctionNumber)
