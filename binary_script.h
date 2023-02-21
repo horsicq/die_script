@@ -142,6 +142,10 @@ public slots:
     bool isJpegExifPresent();
     QString getJpegExifCameraName();
 
+    QString getOperationSystemName();
+    QString getOperationSystemVersion();
+    QString getOperationSystemOptions();
+
 protected:
     XBinary::_MEMORY_MAP *getMemoryMap();
     XADDR getBaseAddress();
@@ -174,6 +178,7 @@ private:
     QString g_sFileBaseName;
     QString g_sFileCompleteSuffix;
     QString g_sFileSuffix;
+    XBinary::OSINFO g_osInfo;
     // JPEG
     bool g_bIsJpeg;
     XJpeg *g_pJpeg;

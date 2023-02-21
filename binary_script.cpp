@@ -81,6 +81,8 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
         g_sJpegExifCameraName = g_pJpeg->getExifCameraName(g_osJpegExif, &g_listJpegExifChunks);
     }
 
+    g_osInfo = pBinary->getOsInfo();
+
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
 }
 
@@ -609,6 +611,27 @@ bool Binary_Script::isJpegExifPresent()
 QString Binary_Script::getJpegExifCameraName()
 {
     return g_sJpegExifCameraName;
+}
+
+QString Binary_Script::getOperationSystemName()
+{
+    return XBinary::osNameIdToString(g_osInfo.osName);
+}
+
+QString Binary_Script::getOperationSystemVersion()
+{
+    return g_osInfo.sOsVersion;
+}
+
+QString Binary_Script::getOperationSystemOptions()
+{
+    QString sResult = QString("%1, %2, %3").arg(g_osInfo.sArch, XBinary::modeIdToString(g_osInfo.mode), g_osInfo.sType);
+
+    if (g_osInfo.bIsBigEndian) {
+        sResult.append(QString(", %1").arg(XBinary::endiannessToString(g_osInfo.bIsBigEndian)));
+    }
+
+    return sResult;
 }
 
 XBinary::_MEMORY_MAP *Binary_Script::getMemoryMap()
