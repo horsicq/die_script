@@ -630,7 +630,6 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
 
     if (pOptions->bIsRecursiveScan) {
         if (stFTOriginal.contains(XBinary::FT_ZLIB) || stFTOriginal.contains(XBinary::FT_LHA)) {
-
             QList<XArchive::RECORD> listRecords = XArchives::getRecords(_pDevice, -1, pPdStruct);
 
             if (listRecords.count() == 1) {

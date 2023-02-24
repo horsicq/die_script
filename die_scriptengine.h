@@ -33,10 +33,10 @@
 #include "ne_script.h"
 #include "pe_script.h"
 #include "xbinary.h"
-//#include "jar_script.h"
-//#include "apk_script.h"
-//#include "ipa_script.h"
-//#include "dex_script.h"
+// #include "jar_script.h"
+// #include "apk_script.h"
+// #include "ipa_script.h"
+// #include "dex_script.h"
 #include "xscriptengine.h"
 
 class DiE_ScriptEngine : public XScriptEngine {
