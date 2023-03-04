@@ -44,9 +44,9 @@ SOURCES += \
     include($$PWD/../Formats/scanitem.pri)
 }
 
-!contains(XCONFIG, xarchive) {
-    XCONFIG += xarchive
-    include($$PWD/../XArchive/xarchive.pri)
+!contains(XCONFIG, xarchives) {
+    XCONFIG += xarchives
+    include($$PWD/../XArchive/xarchives.pri)
 }
 
 contains(XCONFIG, use_capstone_x86) {

@@ -32,6 +32,7 @@
 #include "die_scriptengine.h"
 #include "scanitemmodel.h"
 #include "xformats.h"
+#include "xarchives.h"
 #include "xzip.h"
 #ifdef QT_SCRIPTTOOLS_LIB
 #include <QAction>
