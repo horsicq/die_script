@@ -28,7 +28,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
 
     g_listSectionHeaders = pPE->getSectionHeaders();
     g_listSectionRecords = pPE->getSectionRecords(&g_listSectionHeaders);
-    listSectionNameStrings = pPE->getSectionNames(&g_listSectionRecords);
+    g_listSectionNameStrings = pPE->getSectionNames(&g_listSectionRecords);
 
     g_cliInfo = pPE->getCliInfo(true, getMemoryMap());
     g_listResourceRecords = pPE->getResources(getMemoryMap());
@@ -93,7 +93,7 @@ quint16 PE_Script::getNumberOfSections()
 
 QString PE_Script::getSectionName(quint32 nNumber)
 {
-    return pPE->getSection_NameAsString(nNumber, &listSectionNameStrings);
+    return pPE->getSection_NameAsString(nNumber, &g_listSectionNameStrings);
 }
 
 quint32 PE_Script::getSectionVirtualSize(quint32 nNumber)
@@ -128,12 +128,12 @@ quint32 PE_Script::getNumberOfResources()
 
 bool PE_Script::isSectionNamePresent(QString sSectionName)
 {
-    return XBinary::isStringInListPresent(&listSectionNameStrings, sSectionName);
+    return XBinary::isStringInListPresent(&g_listSectionNameStrings, sSectionName);
 }
 
 bool PE_Script::isSectionNamePresentExp(QString sSectionName)
 {
-    return XBinary::isStringInListPresentExp(&listSectionNameStrings, sSectionName);
+    return XBinary::isStringInListPresentExp(&g_listSectionNameStrings, sSectionName);
 }
 
 bool PE_Script::isNET()
@@ -303,17 +303,17 @@ bool PE_Script::isSignedFile()
 
 QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
 {
-    return pPE->getStringCollision(&listSectionNameStrings, sString1, sString2);
+    return pPE->getStringCollision(&g_listSectionNameStrings, sString1, sString2);
 }
 
 qint32 PE_Script::getSectionNumber(QString sSectionName)
 {
-    return XBinary::getStringNumberFromList(&listSectionNameStrings, sSectionName);
+    return XBinary::getStringNumberFromList(&g_listSectionNameStrings, sSectionName);
 }
 
 qint32 PE_Script::getSectionNumberExp(QString sSectionName)
 {
-    return XBinary::getStringNumberFromListExp(&listSectionNameStrings, sSectionName);
+    return XBinary::getStringNumberFromListExp(&g_listSectionNameStrings, sSectionName);
 }
 
 bool PE_Script::isDll()
