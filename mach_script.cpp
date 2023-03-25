@@ -25,11 +25,11 @@ MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPd
     this->g_pMACH = pMACH;
 
     g_listLibraryRecords = pMACH->getLibraryRecords();
-    listSectionRecords = pMACH->getSectionRecords();
+    g_listSectionRecords = pMACH->getSectionRecords();
     listCommandRecords = pMACH->getCommandRecords();
-    listSectionNameStrings = pMACH->getSectionNames(&listSectionRecords);
+    listSectionNameStrings = pMACH->getSectionNames(&g_listSectionRecords);
 
-    nNumberOfSection = listSectionRecords.count();
+    nNumberOfSection = g_listSectionRecords.count();
     nNumberOfSegments = listSegmentRecords.count();
 
     bool bIs64 = pMACH->is64(getMemoryMap());
@@ -58,7 +58,7 @@ quint32 MACH_Script::getNumberOfSegments()
 
 qint32 MACH_Script::getSectionNumber(QString sSectionName)
 {
-    return g_pMACH->getSectionNumber(sSectionName, &listSectionRecords);
+    return g_pMACH->getSectionNumber(sSectionName, &g_listSectionRecords);
 }
 
 QString MACH_Script::getGeneralOptions()
@@ -73,12 +73,12 @@ quint32 MACH_Script::getLibraryCurrentVersion(QString sLibraryName)
 
 quint64 MACH_Script::getSectionFileOffset(quint32 nNumber)
 {
-    return g_pMACH->getSectionFileOffset(nNumber, &listSectionRecords);
+    return g_pMACH->getSectionFileOffset(nNumber, &g_listSectionRecords);
 }
 
 quint64 MACH_Script::getSectionFileSize(quint32 nNumber)
 {
-    return g_pMACH->getSectionFileSize(nNumber, &listSectionRecords);
+    return g_pMACH->getSectionFileSize(nNumber, &g_listSectionRecords);
 }
 
 bool MACH_Script::isSectionNamePresent(QString sSectionName)

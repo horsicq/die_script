@@ -46,7 +46,7 @@ private:
     XMACH *g_pMACH;
     QString sGeneralOptions;
     QList<XMACH::LIBRARY_RECORD> g_listLibraryRecords;
-    QList<XMACH::SECTION_RECORD> listSectionRecords;
+    QList<XMACH::SECTION_RECORD> g_listSectionRecords;
     QList<XMACH::COMMAND_RECORD> listCommandRecords;
     QList<XMACH::SEGMENT_RECORD> listSegmentRecords;
     QList<QString> listSectionNameStrings;
