@@ -22,7 +22,7 @@
 
 LX_Script::LX_Script(XLE *pLX, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : MSDOS_Script(pLX, pOptions, pPdStruct)
 {
-    this->pLX = pLX;
+    this->g_pLX = pLX;
 }
 
 LX_Script::~LX_Script()

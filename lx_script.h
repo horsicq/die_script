@@ -32,7 +32,7 @@ public:
     ~LX_Script();
 
 private:
-    XLE *pLX;
+    XLE *g_pLX;
 };
 
 #endif  // LX_SCRIPT_H
