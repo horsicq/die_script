@@ -26,7 +26,7 @@ MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPd
 
     g_listLibraryRecords = pMACH->getLibraryRecords();
     g_listSectionRecords = pMACH->getSectionRecords();
-    listCommandRecords = pMACH->getCommandRecords();
+    g_listCommandRecords = pMACH->getCommandRecords();
     listSectionNameStrings = pMACH->getSectionNames(&g_listSectionRecords);
 
     nNumberOfSection = g_listSectionRecords.count();
