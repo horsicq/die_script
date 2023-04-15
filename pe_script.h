@@ -108,7 +108,7 @@ private:
     QList<XPE::SECTION_RECORD> g_listSectionRecords;
     QList<QString> g_listSectionNameStrings;
     QList<XPE::IMPORT_HEADER> g_listImportHeaders;
-    QList<XPE::IMPORT_RECORD> listImportRecords;
+    QList<XPE::IMPORT_RECORD> g_listImportRecords;
     qint32 nNumberOfImports;
     XPE::RESOURCES_VERSION resourcesVersion;
     bool bIsNETPresent;
