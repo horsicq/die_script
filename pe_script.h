@@ -107,7 +107,7 @@ private:
     QList<XPE_DEF::IMAGE_SECTION_HEADER> g_listSectionHeaders;
     QList<XPE::SECTION_RECORD> g_listSectionRecords;
     QList<QString> g_listSectionNameStrings;
-    QList<XPE::IMPORT_HEADER> listImportHeaders;
+    QList<XPE::IMPORT_HEADER> g_listImportHeaders;
     QList<XPE::IMPORT_RECORD> listImportRecords;
     qint32 nNumberOfImports;
     XPE::RESOURCES_VERSION resourcesVersion;

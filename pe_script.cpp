@@ -37,10 +37,10 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
 
     g_nNumberOfResources = g_listResourceRecords.count();
 
-    listImportHeaders = pPE->getImports(getMemoryMap());
+    g_listImportHeaders = pPE->getImports(getMemoryMap());
     listImportRecords = pPE->getImportRecords(getMemoryMap());
 
-    nNumberOfImports = listImportHeaders.count();
+    nNumberOfImports = g_listImportHeaders.count();
 
     bIsNETPresent = (pPE->isNETPresent()) && (g_cliInfo.bValid);
     bool bIs64 = pPE->is64(getMemoryMap());
@@ -79,7 +79,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
 
     g_nImportHash64 = pPE->getImportHash64(&listImportRecords);
     g_nImportHash32 = pPE->getImportHash32(&listImportRecords);
-    g_listImportPositionHashes = pPE->getImportPositionHashes(&listImportHeaders);
+    g_listImportPositionHashes = pPE->getImportPositionHashes(&g_listImportHeaders);
 }
 
 PE_Script::~PE_Script()
@@ -193,22 +193,22 @@ qint32 PE_Script::getNumberOfImports()
 
 QString PE_Script::getImportLibraryName(quint32 nNumber)
 {
-    return pPE->getImportLibraryName(nNumber, &listImportHeaders);
+    return pPE->getImportLibraryName(nNumber, &g_listImportHeaders);
 }
 
 bool PE_Script::isLibraryPresent(QString sLibraryName)
 {
-    return pPE->isImportLibraryPresentI(sLibraryName, &listImportHeaders);  // TODO pdStruct
+    return pPE->isImportLibraryPresentI(sLibraryName, &g_listImportHeaders);  // TODO pdStruct
 }
 
 bool PE_Script::isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName)
 {
-    return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &listImportHeaders);  // TODO pdStruct
+    return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &g_listImportHeaders);  // TODO pdStruct
 }
 
 QString PE_Script::getImportFunctionName(quint32 nImport, quint32 nFunctionNumber)
 {
-    return pPE->getImportFunctionName(nImport, nFunctionNumber, &listImportHeaders);
+    return pPE->getImportFunctionName(nImport, nFunctionNumber, &g_listImportHeaders);
 }
 
 qint32 PE_Script::getImportSection()
@@ -263,7 +263,7 @@ QString PE_Script::getVersionStringInfo(QString sKey)
 
 qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
 {
-    return pPE->getNumberOfImportThunks(nNumber, &listImportHeaders);
+    return pPE->getNumberOfImportThunks(nNumber, &g_listImportHeaders);
 }
 
 qint64 PE_Script::getResourceNameOffset(QString sName)
