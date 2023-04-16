@@ -42,7 +42,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
 
     nNumberOfImports = g_listImportHeaders.count();
 
-    bIsNETPresent = (pPE->isNETPresent()) && (g_cliInfo.bValid);
+    g_bIsNETPresent = (pPE->isNETPresent()) && (g_cliInfo.bValid);
     bool bIs64 = pPE->is64(getMemoryMap());
     bIsDll = pPE->isDll();
     bIsDriver = pPE->isDriver();
@@ -138,7 +138,7 @@ bool PE_Script::isSectionNamePresentExp(QString sSectionName)
 
 bool PE_Script::isNET()
 {
-    return bIsNETPresent;
+    return g_bIsNETPresent;
 }
 
 bool PE_Script::isPEPlus()

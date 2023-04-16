@@ -111,7 +111,7 @@ private:
     QList<XPE::IMPORT_RECORD> g_listImportRecords;
     qint32 nNumberOfImports;
     XPE::RESOURCES_VERSION resourcesVersion;
-    bool bIsNETPresent;
+    bool g_bIsNETPresent;
     bool bIsDll;
     bool bIsDriver;
     bool bIsConsole;
