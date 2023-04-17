@@ -44,7 +44,7 @@ public slots:
 
 private:
     XMACH *g_pMACH;
-    QString sGeneralOptions;
+    QString g_sGeneralOptions;
     QList<XMACH::LIBRARY_RECORD> g_listLibraryRecords;
     QList<XMACH::SECTION_RECORD> g_listSectionRecords;
     QList<XMACH::COMMAND_RECORD> g_listCommandRecords;
