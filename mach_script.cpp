@@ -30,7 +30,7 @@ MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPd
     listSectionNameStrings = pMACH->getSectionNames(&g_listSectionRecords);
 
     nNumberOfSection = g_listSectionRecords.count();
-    nNumberOfSegments = listSegmentRecords.count();
+    nNumberOfSegments = g_listSegmentRecords.count();
 
     bool bIs64 = pMACH->is64(getMemoryMap());
 
