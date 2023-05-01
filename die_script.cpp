@@ -525,7 +525,7 @@ DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *p
 {
     SCAN_RESULT scanResult = {};
 
-    XBinary::SCANID parentId = {0};
+    XBinary::SCANID parentId = {};
     parentId.fileType = XBinary::FT_UNKNOWN;
     parentId.filePart = XBinary::FILEPART_HEADER;
 
