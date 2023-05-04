@@ -49,7 +49,7 @@ private:
     QList<XMACH::SECTION_RECORD> g_listSectionRecords;
     QList<XMACH::COMMAND_RECORD> g_listCommandRecords;
     QList<XMACH::SEGMENT_RECORD> g_listSegmentRecords;
-    QList<QString> listSectionNameStrings;
+    QList<QString> g_listSectionNameStrings;
     qint32 nNumberOfSection;
     qint32 nNumberOfSegments;
 };
