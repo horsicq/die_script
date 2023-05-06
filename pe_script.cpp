@@ -75,7 +75,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
 
     exportHeader = pPE->getExport();
 
-    listExportFunctionNameStrings = pPE->getExportFunctionsList(&exportHeader);
+    g_listExportFunctionNameStrings = pPE->getExportFunctionsList(&exportHeader);
 
     g_nImportHash64 = pPE->getImportHash64(&g_listImportRecords);
     g_nImportHash32 = pPE->getImportHash32(&g_listImportRecords);
@@ -126,14 +126,14 @@ quint32 PE_Script::getNumberOfResources()
     return g_nNumberOfResources;
 }
 
-bool PE_Script::isSectionNamePresent(QString sSectionName)
+bool PE_Script::isSectionNamePresent(const QString &sSectionName)
 {
-    return XBinary::isStringInListPresent(&g_listSectionNameStrings, sSectionName);
+    return XBinary::isStringInListPresent(&g_listSectionNameStrings, sSectionName, getPdStruct());
 }
 
 bool PE_Script::isSectionNamePresentExp(QString sSectionName)
 {
-    return XBinary::isStringInListPresentExp(&g_listSectionNameStrings, sSectionName);
+    return XBinary::isStringInListPresentExp(&g_listSectionNameStrings, sSectionName, getPdStruct());
 }
 
 bool PE_Script::isNET()
@@ -382,12 +382,12 @@ qint64 PE_Script::calculateSizeOfHeaders()
 
 bool PE_Script::isExportFunctionPresent(QString sFunctionName)
 {
-    return XBinary::isStringInListPresent(&listExportFunctionNameStrings, sFunctionName);
+    return XBinary::isStringInListPresent(&g_listExportFunctionNameStrings, sFunctionName);
 }
 
 bool PE_Script::isExportFunctionPresentExp(QString sFunctionName)
 {
-    return XBinary::isStringInListPresentExp(&listExportFunctionNameStrings, sFunctionName);
+    return XBinary::isStringInListPresentExp(&g_listExportFunctionNameStrings, sFunctionName);
 }
 
 bool PE_Script::isExportPresent()

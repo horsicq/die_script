@@ -40,7 +40,7 @@ public slots:
     quint32 getSectionFileOffset(quint32 nNumber);
     quint32 getSectionCharacteristics(quint32 nNumber);
     quint32 getNumberOfResources();
-    bool isSectionNamePresent(QString sSectionName);
+    bool isSectionNamePresent(const QString &sSectionName);
     bool isSectionNamePresentExp(QString sSectionName);
     bool isNET();
     bool isPEPlus();
@@ -136,7 +136,7 @@ private:
     QString sFileVersionMS;
     qint32 nCalculateSizeOfHeaders;
     XPE::EXPORT_HEADER exportHeader;
-    QList<QString> listExportFunctionNameStrings;
+    QList<QString> g_listExportFunctionNameStrings;
     quint64 g_nImportHash64;
     quint64 g_nImportHash32;
     QList<quint32> g_listImportPositionHashes;
