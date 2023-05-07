@@ -109,7 +109,7 @@ private:
     QList<QString> g_listSectionNameStrings;
     QList<XPE::IMPORT_HEADER> g_listImportHeaders;
     QList<XPE::IMPORT_RECORD> g_listImportRecords;
-    qint32 nNumberOfImports;
+    qint32 g_nNumberOfImports;
     XPE::RESOURCES_VERSION resourcesVersion;
     bool g_bIsNETPresent;
     bool bIsDll;

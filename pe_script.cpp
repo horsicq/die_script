@@ -40,7 +40,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_listImportHeaders = pPE->getImports(getMemoryMap());
     g_listImportRecords = pPE->getImportRecords(getMemoryMap());
 
-    nNumberOfImports = g_listImportHeaders.count();
+    g_nNumberOfImports = g_listImportHeaders.count();
 
     g_bIsNETPresent = (pPE->isNETPresent()) && (g_cliInfo.bValid);
     bool bIs64 = pPE->is64(getMemoryMap());
@@ -188,7 +188,7 @@ bool PE_Script::isNETUnicodeStringPresent(QString sString)
 
 qint32 PE_Script::getNumberOfImports()
 {
-    return nNumberOfImports;
+    return g_nNumberOfImports;
 }
 
 QString PE_Script::getImportLibraryName(quint32 nNumber)
