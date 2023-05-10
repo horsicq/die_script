@@ -110,7 +110,7 @@ private:
     QList<XPE::IMPORT_HEADER> g_listImportHeaders;
     QList<XPE::IMPORT_RECORD> g_listImportRecords;
     qint32 g_nNumberOfImports;
-    XPE::RESOURCES_VERSION resourcesVersion;
+    XPE::RESOURCES_VERSION g_resourcesVersion;
     bool g_bIsNETPresent;
     bool bIsDll;
     bool bIsDriver;

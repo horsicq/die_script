@@ -33,7 +33,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_cliInfo = pPE->getCliInfo(true, getMemoryMap());
     g_listResourceRecords = pPE->getResources(getMemoryMap());
 
-    resourcesVersion = pPE->getResourcesVersion(&g_listResourceRecords);
+    g_resourcesVersion = pPE->getResourcesVersion(&g_listResourceRecords);
 
     g_nNumberOfResources = g_listResourceRecords.count();
 
@@ -68,8 +68,8 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     sCompilerVersion = QString("%1.%2").arg(nMajorLinkerVersion).arg(nMinorLinkerVersion);
     sGeneralOptions = QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64 ? ("64") : ("32"));
 
-    sFileVersion = pPE->getFileVersion(&resourcesVersion);
-    sFileVersionMS = pPE->getFileVersionMS(&resourcesVersion);
+    sFileVersion = pPE->getFileVersion(&g_resourcesVersion);
+    sFileVersionMS = pPE->getFileVersionMS(&g_resourcesVersion);
 
     nCalculateSizeOfHeaders = pPE->calculateHeadersSize();
 
@@ -258,7 +258,7 @@ QString PE_Script::getManifest()
 
 QString PE_Script::getVersionStringInfo(QString sKey)
 {
-    return pPE->getResourcesVersionValue(sKey, &resourcesVersion);
+    return pPE->getResourcesVersionValue(sKey, &g_resourcesVersion);
 }
 
 qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
