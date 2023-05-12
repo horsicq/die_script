@@ -73,9 +73,9 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
 
     nCalculateSizeOfHeaders = pPE->calculateHeadersSize();
 
-    exportHeader = pPE->getExport();
+    g_exportHeader = pPE->getExport();
 
-    g_listExportFunctionNameStrings = pPE->getExportFunctionsList(&exportHeader);
+    g_listExportFunctionNameStrings = pPE->getExportFunctionsList(&g_exportHeader);
 
     g_nImportHash64 = pPE->getImportHash64(&g_listImportRecords);
     g_nImportHash32 = pPE->getImportHash32(&g_listImportRecords);
