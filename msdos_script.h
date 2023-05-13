@@ -44,7 +44,7 @@ public slots:
     bool isRichVersionPresent(quint32 nVersion);
 
 private:
-    XMSDOS *pMSDOS;
+    XMSDOS *g_pMSDOS;
     QList<XMSDOS::MS_RICH_RECORD> listRich;
     qint32 nNumberOfRichIDs;
     qint64 nDosStubOffset;

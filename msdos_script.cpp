@@ -22,7 +22,7 @@
 
 MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pMSDOS, pOptions, pPdStruct)
 {
-    this->pMSDOS = pMSDOS;
+    this->g_pMSDOS = pMSDOS;
 
     bIsLE = pMSDOS->isLE();
     bIsLX = pMSDOS->isLX();
@@ -102,7 +102,7 @@ qint32 MSDOS_Script::getNumberOfRichIDs()
 
 bool MSDOS_Script::isRichVersionPresent(quint32 nVersion)
 {
-    return pMSDOS->isRichVersionPresent(nVersion, &listRich);
+    return g_pMSDOS->isRichVersionPresent(nVersion, &listRich);
 }
 
 bool MSDOS_Script::isRichSignaturePresent()
