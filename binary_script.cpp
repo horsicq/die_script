@@ -96,7 +96,7 @@ qint64 Binary_Script::getSize()
     return g_nSize;
 }
 
-bool Binary_Script::compare(QString sSignature, qint64 nOffset)
+bool Binary_Script::compare(const QString &sSignature, qint64 nOffset)
 {
     bool bResult = false;
 
@@ -175,26 +175,36 @@ qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, QString sSigna
 {
     qint64 nResultSize = 0;
 
+    _fixOffsetAndSize(&nOffset, &nSize);
+
     return g_pBinary->find_signature(&g_memoryMap, nOffset, nSize, sSignature, &nResultSize, g_pPdStruct);
 }
 
 qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, QString sString)
 {
+    _fixOffsetAndSize(&nOffset, &nSize);
+
     return g_pBinary->find_ansiString(nOffset, nSize, sString, g_pPdStruct);
 }
 
 qint64 Binary_Script::findByte(qint64 nOffset, qint64 nSize, quint8 nValue)
 {
+    _fixOffsetAndSize(&nOffset, &nSize);
+
     return g_pBinary->find_uint8(nOffset, nSize, nValue, g_pPdStruct);
 }
 
 qint64 Binary_Script::findWord(qint64 nOffset, qint64 nSize, quint16 nValue)
 {
+    _fixOffsetAndSize(&nOffset, &nSize);
+
     return g_pBinary->find_uint16(nOffset, nSize, nValue, g_pPdStruct);
 }
 
 qint64 Binary_Script::findDword(qint64 nOffset, qint64 nSize, quint32 nValue)
 {
+    _fixOffsetAndSize(&nOffset, &nSize);
+
     return g_pBinary->find_uint32(nOffset, nSize, nValue, g_pPdStruct);
 }
 
@@ -632,6 +642,15 @@ QString Binary_Script::getOperationSystemOptions()
     }
 
     return sResult;
+}
+
+void Binary_Script::_fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize)
+{
+    if ((*pnOffset) < g_nSize) {
+        if ((*pnOffset) + (*pnSize) > g_nSize ) {
+            *pnSize = g_nSize - (*pnOffset);
+        }
+    }
 }
 
 XBinary::_MEMORY_MAP *Binary_Script::getMemoryMap()

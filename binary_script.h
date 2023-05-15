@@ -40,7 +40,7 @@ public:
 
 public slots:
     qint64 getSize();
-    bool compare(QString sSignature, qint64 nOffset = 0);
+    bool compare(const QString &sSignature, qint64 nOffset = 0);
     bool compareEP(QString sSignature, qint64 nOffset = 0);
     quint8 readByte(qint64 nOffset);
     qint8 readSByte(qint64 nOffset);
@@ -145,6 +145,9 @@ public slots:
     QString getOperationSystemName();
     QString getOperationSystemVersion();
     QString getOperationSystemOptions();
+
+private:
+    void _fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize);
 
 protected:
     XBinary::_MEMORY_MAP *getMemoryMap();
