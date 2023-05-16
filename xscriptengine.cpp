@@ -25,7 +25,7 @@ XScriptEngine::XScriptEngine()
 }
 
 #ifdef QT_SCRIPT_LIB
-void XScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, QString sFunctionName)
+void XScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, const QString &sFunctionName)
 {
     QScriptValue func = this->newFunction(function);
     this->globalObject().setProperty(sFunctionName, func);

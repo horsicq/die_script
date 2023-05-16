@@ -45,7 +45,7 @@ public:
 
 protected:
 #ifdef QT_SCRIPT_LIB
-    void _addFunction(FunctionSignature function, QString sFunctionName);
+    void _addFunction(FunctionSignature function, const QString &sFunctionName);
 #endif
     void _addClass(QObject *pClass, QString sClassName);
 
