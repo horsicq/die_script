@@ -647,7 +647,7 @@ QString Binary_Script::getOperationSystemOptions()
 void Binary_Script::_fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize)
 {
     if ((*pnOffset) < g_nSize) {
-        if ((*pnOffset) + (*pnSize) > g_nSize ) {
+        if ((*pnOffset) + (*pnSize) > g_nSize) {
             *pnSize = g_nSize - (*pnOffset);
         }
     }
