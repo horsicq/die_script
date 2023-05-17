@@ -41,7 +41,7 @@ public:
 public slots:
     qint64 getSize();
     bool compare(const QString &sSignature, qint64 nOffset = 0);
-    bool compareEP(QString sSignature, qint64 nOffset = 0);
+    bool compareEP(const QString &sSignature, qint64 nOffset = 0);
     quint8 readByte(qint64 nOffset);
     qint8 readSByte(qint64 nOffset);
     quint16 readWord(qint64 nOffset);

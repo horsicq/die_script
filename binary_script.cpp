@@ -111,7 +111,7 @@ bool Binary_Script::compare(const QString &sSignature, qint64 nOffset)
     return bResult;
 }
 
-bool Binary_Script::compareEP(QString sSignature, qint64 nOffset)
+bool Binary_Script::compareEP(const QString &sSignature, qint64 nOffset)
 {
     bool bResult = false;
 
