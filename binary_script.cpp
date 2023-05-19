@@ -171,7 +171,7 @@ QString Binary_Script::getString(qint64 nOffset, qint64 nMaxSize)
     return g_pBinary->read_ansiString(nOffset, nMaxSize);
 }
 
-qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, QString sSignature)
+qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, const QString &sSignature)
 {
     qint64 nResultSize = 0;
 
