@@ -131,7 +131,7 @@ bool PE_Script::isSectionNamePresent(const QString &sSectionName)
     return XBinary::isStringInListPresent(&g_listSectionNameStrings, sSectionName, getPdStruct());
 }
 
-bool PE_Script::isSectionNamePresentExp(QString sSectionName)
+bool PE_Script::isSectionNamePresentExp(const QString &sSectionName)
 {
     return XBinary::isStringInListPresentExp(&g_listSectionNameStrings, sSectionName, getPdStruct());
 }

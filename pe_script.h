@@ -41,7 +41,7 @@ public slots:
     quint32 getSectionCharacteristics(quint32 nNumber);
     quint32 getNumberOfResources();
     bool isSectionNamePresent(const QString &sSectionName);
-    bool isSectionNamePresentExp(QString sSectionName);
+    bool isSectionNamePresentExp(const QString &sSectionName);
     bool isNET();
     bool isPEPlus();
     virtual QString getGeneralOptions();
