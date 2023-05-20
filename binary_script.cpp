@@ -180,7 +180,7 @@ qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, const QString 
     return g_pBinary->find_signature(&g_memoryMap, nOffset, nSize, sSignature, &nResultSize, g_pPdStruct);
 }
 
-qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, QString sString)
+qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, const QString &sString)
 {
     _fixOffsetAndSize(&nOffset, &nSize);
 
