@@ -233,7 +233,7 @@ bool Binary_Script::isOverlayPresent()
     return g_bIsOverlayPresent;
 }
 
-bool Binary_Script::compareOverlay(QString sSignature, qint64 nOffset)
+bool Binary_Script::compareOverlay(const QString &sSignature, qint64 nOffset)
 {
     bool bResult = false;
 
