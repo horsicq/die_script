@@ -62,7 +62,7 @@ public slots:
     qint64 getAddressOfEntryPoint();
     bool isOverlayPresent();
     bool compareOverlay(const QString &sSignature, qint64 nOffset = 0);
-    bool isSignaturePresent(qint64 nOffset, qint64 nSize, QString sSignature);
+    bool isSignaturePresent(qint64 nOffset, qint64 nSize, const QString &sSignature);
     quint32 swapBytes(quint32 nValue);
     virtual QString getGeneralOptions();
     qint64 RVAToOffset(qint64 nRVA);
