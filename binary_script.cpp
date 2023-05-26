@@ -339,7 +339,7 @@ qint64 Binary_Script::getImageBase()
     return g_memoryMap.nModuleAddress;
 }
 
-QString Binary_Script::upperCase(QString sString)
+QString Binary_Script::upperCase(const QString &sString)
 {
     return sString.toUpper();
 }

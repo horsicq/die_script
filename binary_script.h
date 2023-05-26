@@ -79,7 +79,7 @@ public slots:
     quint32 calculateCRC32(qint64 nOffset, qint64 nSize);
     bool isSignatureInSectionPresent(quint32 nNumber, const QString &sSignature);
     qint64 getImageBase();
-    QString upperCase(QString sString);
+    QString upperCase(const QString &sString);
     QString lowerCase(QString sString);
     bool isPlainText();
     bool isUTF8Text();
