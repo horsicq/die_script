@@ -80,7 +80,7 @@ public slots:
     bool isSignatureInSectionPresent(quint32 nNumber, const QString &sSignature);
     qint64 getImageBase();
     QString upperCase(const QString &sString);
-    QString lowerCase(QString sString);
+    QString lowerCase(const QString &sString);
     bool isPlainText();
     bool isUTF8Text();
     bool isUnicodeText();

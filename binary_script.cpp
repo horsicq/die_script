@@ -344,7 +344,7 @@ QString Binary_Script::upperCase(const QString &sString)
     return sString.toUpper();
 }
 
-QString Binary_Script::lowerCase(QString sString)
+QString Binary_Script::lowerCase(const QString &sString)
 {
     return sString.toLower();
 }
