@@ -116,7 +116,7 @@ public slots:
 
     qint64 find_ansiString(qint64 nOffset, qint64 nSize, const QString &sString);
     qint64 find_unicodeString(qint64 nOffset, qint64 nSize, QString sString);
-    qint64 find_utf8String(qint64 nOffset, qint64 nSize, QString sString);
+    qint64 find_utf8String(qint64 nOffset, qint64 nSize, const QString &sString);
 
     QString read_UUID_bytes(qint64 nOffset);
     QString read_UUID(qint64 nOffset, bool bIsBigEndian = false);

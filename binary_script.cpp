@@ -499,7 +499,7 @@ qint64 Binary_Script::find_unicodeString(qint64 nOffset, qint64 nSize, QString s
     return g_pBinary->find_unicodeString(nOffset, nSize, sString, g_bIsBigEndian, g_pPdStruct);
 }
 
-qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, QString sString)
+qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, const QString &sString)
 {
     return g_pBinary->find_utf8String(nOffset, nSize, sString, g_pPdStruct);
 }
