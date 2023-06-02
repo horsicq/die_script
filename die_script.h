@@ -145,7 +145,7 @@ public:
     void process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions, bool bInit,
                  XBinary::PDSTRUCT *pPdStruct);
     DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(QString sSignatureFilePath);
-    bool updateSignature(QString sSignatureFilePath, QString sText);
+    bool updateSignature(const QString &sSignatureFilePath, QString sText);
     STATS getStats();
     DBT getDatabaseType();
     bool isSignaturesPresent(XBinary::FT fileType);

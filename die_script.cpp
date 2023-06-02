@@ -725,7 +725,7 @@ DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::getSignatureByFilePath(QString sS
     return result;
 }
 
-bool DiE_Script::updateSignature(QString sSignatureFilePath, QString sText)
+bool DiE_Script::updateSignature(const QString &sSignatureFilePath, QString sText)
 {
     bool bResult = false;
 
