@@ -133,7 +133,7 @@ public:
     };
 
     explicit DiE_Script(QObject *pParent = nullptr);
-    bool loadDatabase(QString sDatabasePath);
+    bool loadDatabase(const QString &sDatabasePath);
     QString getDatabasePath();
 
     QList<SIGNATURE_STATE> getSignatureStates();

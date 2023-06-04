@@ -379,7 +379,7 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     return bResult;
 }
 
-bool DiE_Script::loadDatabase(QString sDatabasePath)
+bool DiE_Script::loadDatabase(const QString &sDatabasePath)
 {
     // TODO Check if empty file
     this->g_sDatabasePath = sDatabasePath;
