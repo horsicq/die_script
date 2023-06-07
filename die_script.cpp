@@ -137,7 +137,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
     return listResult;
 }
 
-XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult, QIODevice *pDevice, QString sFunction, XBinary::SCANID parentId, XBinary::FT fileType, OPTIONS *pOptions,
+XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *pDevice, QString sDetectFunction, XBinary::SCANID parentId, XBinary::FT fileType, OPTIONS *pOptions,
                                      QString sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
 {
     XBinary::SCANID resultId = {};
@@ -262,12 +262,12 @@ XBinary::SCANID DiE_Script::_process(SCAN_RESULT *pScanResult, QIODevice *pDevic
                     pDebugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
                 }
 #endif
-                XSCRIPTVALUE _scriptValue = scriptEngine.globalObject().property(sFunction);
+                XSCRIPTVALUE _scriptValue = scriptEngine.globalObject().property(sDetectFunction);
 
                 if (_handleError(&scriptEngine, _scriptValue, &signatureRecord, pScanResult)) {
                     XSCRIPTVALUELIST valuelist;
 
-                    if (sFunction == "detect") {
+                    if (sDetectFunction == "detect") {
                         valuelist << pOptions->bShowType << pOptions->bShowVersion << pOptions->bShowOptions;
                     }
 
@@ -572,52 +572,52 @@ void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pSc
     if (pOptions->bAllTypesScan) {
         if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) ||
             stFT.contains(XBinary::FT_NE)) {
-            _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", 0, true, pPdStruct);
+            _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", 0, true, pPdStruct);
         }
     }
 
     XBinary::SCANID scanIdMain = {};
 
     if (stFT.contains(XBinary::FT_PE32)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_PE32, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_PE32, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_PE64)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_PE64, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_PE64, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_ELF32)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ELF32, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ELF32, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_ELF64)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ELF64, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ELF64, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MACHO32)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHO32, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHO32, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MACHO64)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHO64, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHO64, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_LX)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_LX, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_LX, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_LE)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_LE, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_LE, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_NE)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_NE, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_NE, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MSDOS)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_APK)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_APK, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_APK, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_IPA)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_IPA, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_IPA, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_JAR)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_JAR, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_JAR, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MACHOFAT)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHOFAT, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHOFAT, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_COM) && (stFT.size() == 1)) {
-        scanIdMain = _process(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", 0, true, pPdStruct);
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", 0, true, pPdStruct);
     } else {
         SCAN_RESULT _scanResultCOM = {};
 
         // TODO optomize COM -> 3 times
-        _process(&_scanResultCOM, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", 0, false, pPdStruct);
+        _processDetect(&_scanResultCOM, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", 0, false, pPdStruct);
 
         bool bAddUnknown = (_scanResultCOM.listRecords.count() == 0);
 
         SCAN_RESULT _scanResultBinary = {};
-        scanIdMain = _process(&_scanResultBinary, _pDevice, sFunction, parentId, XBinary::FT_BINARY, pOptions, "", 0, bAddUnknown, pPdStruct);
+        scanIdMain = _processDetect(&_scanResultBinary, _pDevice, sFunction, parentId, XBinary::FT_BINARY, pOptions, "", 0, bAddUnknown, pPdStruct);
 
         pScanResult->listRecords.append(_scanResultBinary.listRecords);
         pScanResult->listErrors.append(_scanResultBinary.listErrors);
@@ -725,7 +725,7 @@ DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::getSignatureByFilePath(QString sS
     return result;
 }
 
-bool DiE_Script::updateSignature(const QString &sSignatureFilePath, QString sText)
+bool DiE_Script::updateSignature(const QString &sSignatureFilePath, const QString &sText)
 {
     bool bResult = false;
 

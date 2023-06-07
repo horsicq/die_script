@@ -60,6 +60,7 @@ public:
 
     DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, XBinary::FT fileType, Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~DiE_ScriptEngine();
+
     bool handleError(XSCRIPTVALUE value, QString *psErrorString);
     QList<RESULT> getListResult();
     void clearListResult();

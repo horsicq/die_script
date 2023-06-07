@@ -145,7 +145,7 @@ public:
     void process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions, bool bInit,
                  XBinary::PDSTRUCT *pPdStruct);
     DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(QString sSignatureFilePath);
-    bool updateSignature(const QString &sSignatureFilePath, QString sText);
+    bool updateSignature(const QString &sSignatureFilePath, const QString &sText);
     STATS getStats();
     DBT getDatabaseType();
     bool isSignaturesPresent(XBinary::FT fileType);
@@ -165,7 +165,7 @@ public slots:
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath, XBinary::FT fileType);
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix, XBinary::FT fileType);
-    XBinary::SCANID _process(SCAN_RESULT *pScanResult, QIODevice *pDevice, QString sFunction, XBinary::SCANID parentId, XBinary::FT fileType, OPTIONS *pOptions,
+    XBinary::SCANID _processDetect(SCAN_RESULT *pScanResult, QIODevice *pDevice, QString sDetectFunction, XBinary::SCANID parentId, XBinary::FT fileType, OPTIONS *pOptions,
                              QString sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
     bool _handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, SCAN_RESULT *pScanResult);
 
