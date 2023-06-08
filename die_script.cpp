@@ -504,7 +504,7 @@ DiE_Script::SCAN_RESULT DiE_Script::scanFile(const QString &sFileName, OPTIONS *
     return processFile(sFileName, pOptions, "detect", pPdStruct);
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::processFile(QString sFileName, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct)
+DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct)
 {
     SCAN_RESULT scanResult = {};
 
@@ -745,7 +745,7 @@ bool DiE_Script::updateSignature(const QString &sSignatureFilePath, const QStrin
     return bResult;
 }
 
-void DiE_Script::scanDirectory()
+void DiE_Script::process()
 {
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
@@ -844,7 +844,7 @@ QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
     return sResult;
 }
 
-void DiE_Script::setProcessDirectory(QString sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::setData(QString sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     g_sDirectoryProcess = sDirectory;
     g_scanOptionsProcess = scanOptions;

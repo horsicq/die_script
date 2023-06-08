@@ -140,7 +140,7 @@ public:
     qint32 getNumberOfSignatures(XBinary::FT fileType);
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> *getSignatures();
     SCAN_RESULT scanFile(const QString &sFileName, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct = nullptr);
-    SCAN_RESULT processFile(QString sFileName, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct = nullptr);
+    SCAN_RESULT processFile(const QString &sFileName, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct = nullptr);
     SCAN_RESULT processDevice(QIODevice *pDevice, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct = nullptr);
     void process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions, bool bInit,
                  XBinary::PDSTRUCT *pPdStruct);
@@ -155,12 +155,12 @@ public:
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
 #endif
-    void setProcessDirectory(QString sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct);
+    void setData(QString sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct);
 
     static QList<XBinary::SCANSTRUCT> convert(QList<SCAN_STRUCT> *pListScanStructs);
 
 public slots:
-    void scanDirectory();
+    void process();
 
 private:
     static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(QString sDatabasePath, XBinary::FT fileType);
