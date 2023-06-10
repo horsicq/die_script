@@ -504,7 +504,7 @@ DiE_Script::SCAN_RESULT DiE_Script::scanFile(const QString &sFileName, OPTIONS *
     return processFile(sFileName, pOptions, "detect", pPdStruct);
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct)
+DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
 {
     SCAN_RESULT scanResult = {};
 
