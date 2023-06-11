@@ -155,7 +155,7 @@ public:
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
 #endif
-    void setData(QString sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct);
+    void setData(const QString &sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct);
 
     static QList<XBinary::SCANSTRUCT> convert(QList<SCAN_STRUCT> *pListScanStructs);
 
