@@ -521,7 +521,7 @@ DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTION
     return scanResult;
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *pOptions, QString sFunction, XBinary::PDSTRUCT *pPdStruct)
+DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
 {
     SCAN_RESULT scanResult = {};
 
