@@ -72,8 +72,10 @@ DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
 {
     g_databaseType = DBT_UNKNOWN;
     g_pPdStruct = nullptr;
+    g_pDeviceProcess = nullptr;
+    g_scanResultProcess = {};
 #ifdef QT_SCRIPTTOOLS_LIB
-    pDebugger = 0;
+    pDebugger = nullptr;
 #endif
 }
 
@@ -109,7 +111,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(const QS
     return listResult;
 }
 
-QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, QString sPrefix, XBinary::FT fileType)
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, const QString &sPrefix, XBinary::FT fileType)
 {
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
 
@@ -504,6 +506,11 @@ DiE_Script::SCAN_RESULT DiE_Script::scanFile(const QString &sFileName, OPTIONS *
     return processFile(sFileName, pOptions, "detect", pPdStruct);
 }
 
+DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+{
+    return processDevice(pDevice, pOptions, "detect", pPdStruct);
+}
+
 DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
 {
     SCAN_RESULT scanResult = {};
@@ -769,9 +776,9 @@ void DiE_Script::process()
 
             emit directoryScanFileStarted(sFileName);
 
-            SCAN_RESULT _scanResult = scanFile(sFileName, &g_scanOptionsProcess, g_pPdStruct);
+            g_scanResultProcess = scanFile(sFileName, &g_scanOptionsProcess, g_pPdStruct);
 
-            emit directoryScanResult(_scanResult);
+            emit directoryScanResult(g_scanResultProcess);
 
             ////            g_mutex.unlock();
 
@@ -785,9 +792,11 @@ void DiE_Script::process()
         }
 
         XBinary::setPdStructFinished(g_pPdStruct, _nFreeIndex);
+    } else if (g_pDeviceProcess) {
+        g_scanResultProcess = scanDevice(g_pDeviceProcess, &g_scanOptionsProcess, g_pPdStruct);
     }
 
-    emit directoryScanCompleted(elapsedTimer.elapsed());
+    emit scanCompleted(elapsedTimer.elapsed());
 }
 
 DiE_Script::STATS DiE_Script::getStats()
@@ -851,6 +860,13 @@ void DiE_Script::setData(const QString &sDirectory, OPTIONS scanOptions, XBinary
     g_pPdStruct = pPdStruct;
 }
 
+void DiE_Script::setData(QIODevice *pDevice, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct)
+{
+    g_pDeviceProcess = pDevice;
+    g_scanOptionsProcess = scanOptions;
+    g_pPdStruct = pPdStruct;
+}
+
 QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStructs)
 {
     QList<XBinary::SCANSTRUCT> listResult;
@@ -876,6 +892,11 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
     }
 
     return listResult;
+}
+
+DiE_Script::SCAN_RESULT DiE_Script::getScanResultProcess()
+{
+    return g_scanResultProcess;
 }
 
 #ifdef QT_SCRIPTTOOLS_LIB
