@@ -318,6 +318,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                             ssRecord.parentId = parentId;
 
                             ssRecord.sSignature = signatureRecord.sName;
+                            ssRecord.sSignatureFileName = signatureRecord.sFilePath;
                             ssRecord.sType = listDetects.at(j).sType;
                             ssRecord.sName = listDetects.at(j).sName;
                             ssRecord.sVersion = listDetects.at(j).sVersion;
@@ -541,7 +542,7 @@ DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *p
     return scanResult;
 }
 
-void DiE_Script::process(QIODevice *pDevice, QString sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions,
+void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions,
                          bool bInit, XBinary::PDSTRUCT *pPdStruct)
 {
     XBinary::PDSTRUCT pdStructEmpty = XBinary::createPdStruct();
@@ -884,6 +885,7 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStru
         record.sVersion = pListScanStructs->at(i).sVersion;
         record.sInfo = pListScanStructs->at(i).sOptions;
         record.varInfo = pListScanStructs->at(i).sSignature;
+        record.varInfo2 = pListScanStructs->at(i).sSignatureFileName;
 
         record.globalColor = XFormats::typeToColor(record.sType);
         record.sType = XFormats::translateType(record.sType);
