@@ -146,7 +146,7 @@ public:
     SCAN_RESULT processDevice(QIODevice *pDevice, OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct = nullptr);
     void process(QIODevice *pDevice, const QString &sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId, OPTIONS *pOptions, bool bInit,
                  XBinary::PDSTRUCT *pPdStruct);
-    DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(QString sSignatureFilePath);
+    DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(const QString &sSignatureFilePath);
     bool updateSignature(const QString &sSignatureFilePath, const QString &sText);
     STATS getStats();
     DBT getDatabaseType();
