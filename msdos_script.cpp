@@ -107,12 +107,12 @@ bool MSDOS_Script::isRichVersionPresent(quint32 nVersion)
 
 quint32 MSDOS_Script::getRichVersion(qint32 nPosition)
 {
-    return g_pMSDOS->getRichID(&listRich, nPosition);
+    return g_pMSDOS->getRichVersion(&listRich, nPosition);
 }
 
 quint32 MSDOS_Script::getRichID(qint32 nPosition)
 {
-    return g_pMSDOS->getRichVersion(&listRich, nPosition);
+    return g_pMSDOS->getRichID(&listRich, nPosition);
 }
 
 bool MSDOS_Script::isRichSignaturePresent()
