@@ -64,7 +64,7 @@ public:
     bool handleError(XSCRIPTVALUE value, QString *psErrorString);
     QList<RESULT> getListResult();
     void clearListResult();
-    static RESULT stringToResult(QString sString, bool bShowType, bool bShowVersion, bool bShowOptions);
+    static RESULT stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions);
 
 private:
 #ifdef QT_SCRIPT_LIB

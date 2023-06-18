@@ -251,16 +251,17 @@ void DiE_ScriptEngine::_setResultSlot(QString sType, QString sName, QString sVer
     g_listResult.append(record);
 }
 
-DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(QString sString, bool bShowType, bool bShowVersion, bool bShowOptions)
+DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)
 {
+    QString sStringTmp = sString;
     RESULT result = {};
 
     if (bShowType) {
-        result.sType = sString.section(": ", 0, 0);
-        sString = sString.section(": ", 1, -1);
+        result.sType = sStringTmp.section(": ", 0, 0);
+        sStringTmp = sStringTmp.section(": ", 1, -1);
     }
 
-    QString _sString = sString;
+    QString _sString = sStringTmp;
 
     if (bShowOptions) {
         if (_sString.count("[") == 1) {
