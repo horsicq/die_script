@@ -74,7 +74,7 @@ private:
 #endif
 
 private slots:
-    void includeScriptSlot(QString sScript);
+    void includeScriptSlot(const QString &sScript);
     void _logSlot(QString sText);
     void _setResultSlot(QString sType, QString sName, QString sVersion, QString sOptions);
 

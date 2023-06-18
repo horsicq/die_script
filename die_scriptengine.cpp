@@ -217,10 +217,9 @@ QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext, QScriptEngin
 }
 #endif
 
-void DiE_ScriptEngine::includeScriptSlot(QString sScript)
+void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
 {
     // TODO error, cannot find signature
-
     qint32 nNumberOfSignatures = g_pSignaturesList->count();
 
     for (qint32 i = 0; i < nNumberOfSignatures; i++) {
