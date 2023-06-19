@@ -115,6 +115,11 @@ quint32 MSDOS_Script::getRichID(qint32 nPosition)
     return g_pMSDOS->getRichID(&listRich, nPosition);
 }
 
+quint32 MSDOS_Script::getRichCount(qint32 nPosition)
+{
+    return g_pMSDOS->getRichCount(&listRich, nPosition);
+}
+
 bool MSDOS_Script::isRichSignaturePresent()
 {
     return bIisRichSignaturePresent;

@@ -44,7 +44,7 @@ void global_script::_log(QString sText)
 //     return qMax(nValue1,nValue2);
 // }
 
-void global_script::_setResult(QString sType, QString sName, QString sVersion, QString sOptions)
+void global_script::_setResult(const QString &sType, QString sName, QString sVersion, QString sOptions)
 {
     emit _setResultSignal(sType, sName, sVersion, sOptions);
 }

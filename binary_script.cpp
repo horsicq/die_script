@@ -82,6 +82,7 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
     }
 
     g_osInfo = pBinary->getOsInfo();
+    g_bIsSigned = pBinary->isSigned();
 
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
 }
@@ -642,6 +643,11 @@ QString Binary_Script::getOperationSystemOptions()
     }
 
     return sResult;
+}
+
+bool Binary_Script::isSigned()
+{
+    return g_bIsSigned;
 }
 
 void Binary_Script::_fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize)

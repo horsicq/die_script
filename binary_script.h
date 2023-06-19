@@ -145,6 +145,7 @@ public slots:
     QString getOperationSystemName();
     QString getOperationSystemVersion();
     QString getOperationSystemOptions();
+    bool isSigned();
 
 private:
     void _fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize);
@@ -190,6 +191,7 @@ private:
     QList<XTiff::CHUNK> g_listJpegExifChunks;
     QString g_sJpegExifCameraName;
     bool g_bIsBigEndian;
+    bool g_bIsSigned;
 };
 
 #endif  // BINARY_SCRIPT_H
