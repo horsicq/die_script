@@ -234,7 +234,7 @@ void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
     }
 }
 
-void DiE_ScriptEngine::_logSlot(QString sText)
+void DiE_ScriptEngine::_logSlot(const QString &sText)
 {
     emit infoMessage(sText);
 }
