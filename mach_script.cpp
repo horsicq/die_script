@@ -41,7 +41,7 @@ MACH_Script::~MACH_Script()
 {
 }
 
-bool MACH_Script::isLibraryPresent(QString sLibraryName)
+bool MACH_Script::isLibraryPresent(const QString &sLibraryName)
 {
     return g_pMACH->isLibraryRecordNamePresent(sLibraryName, &g_listLibraryRecords);
 }

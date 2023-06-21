@@ -32,7 +32,7 @@ public:
     ~MACH_Script();
 
 public slots:
-    bool isLibraryPresent(QString sLibraryName);
+    bool isLibraryPresent(const QString &sLibraryName);
     quint32 getNumberOfSections();
     quint32 getNumberOfSegments();
     qint32 getSectionNumber(QString sSectionName);
