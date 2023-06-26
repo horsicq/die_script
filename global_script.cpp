@@ -24,7 +24,7 @@ global_script::global_script(QObject *parent) : QObject(parent)
 {
 }
 
-void global_script::includeScript(QString sScript)
+void global_script::includeScript(const QString &sScript)
 {
     emit includeScriptSignal(sScript);
 }

@@ -31,7 +31,7 @@ public:
     explicit global_script(QObject *pParent = nullptr);
 
 public slots:
-    void includeScript(QString sScript);
+    void includeScript(const QString &sScript);
     void _log(QString sText);
     //    qint64 _min(qint64 nValue1,qint64 nValue2);
     //    qint64 _max(qint64 nValue1,qint64 nValue2);
