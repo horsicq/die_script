@@ -76,7 +76,7 @@ private:
 private slots:
     void includeScriptSlot(const QString &sScript);
     void _logSlot(const QString &sText);
-    void _setResultSlot(const QString &sType, const QString &sName, QString sVersion, QString sOptions);
+    void _setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, QString sOptions);
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;
