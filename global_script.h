@@ -35,7 +35,7 @@ public slots:
     void _log(QString sText);
     //    qint64 _min(qint64 nValue1,qint64 nValue2);
     //    qint64 _max(qint64 nValue1,qint64 nValue2);
-    void _setResult(const QString &sType, QString sName, QString sVersion, QString sOptions);
+    void _setResult(const QString &sType, const QString &sName, QString sVersion, QString sOptions);
 
 signals:
     void includeScriptSignal(QString sScript);
