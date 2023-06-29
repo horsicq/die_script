@@ -50,7 +50,7 @@ public slots:
     qint64 getResourceOffsetByNumber(quint32 nNumber);
     qint64 getResourceSizeByNumber(quint32 nNumber);
     quint32 getResourceTypeByNumber(quint32 nNumber);
-    bool isNETStringPresent(QString sString);
+    bool isNETStringPresent(const QString &sString);
     bool isNETUnicodeStringPresent(QString sString);
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);

@@ -176,7 +176,7 @@ quint32 PE_Script::getResourceTypeByNumber(quint32 nNumber)
     return pPE->getResourceTypeByNumber(nNumber, &g_listResourceRecords);
 }
 
-bool PE_Script::isNETStringPresent(QString sString)
+bool PE_Script::isNETStringPresent(const QString &sString)
 {
     return pPE->isNETAnsiStringPresent(sString, &g_cliInfo);
 }
