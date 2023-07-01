@@ -239,7 +239,7 @@ void DiE_ScriptEngine::_logSlot(const QString &sText)
     emit infoMessage(sText);
 }
 
-void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, QString sOptions)
+void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions)
 {
     RESULT record = {};
     record.sType = sType;
