@@ -69,7 +69,7 @@ public slots:
     QString getVersionStringInfo(QString sKey);
     qint32 getNumberOfImportThunks(quint32 nNumber);
     qint64 getResourceNameOffset(QString sName);
-    bool isResourceNamePresent(QString sName);
+    bool isResourceNamePresent(const QString &sName);
     bool isResourceGroupNamePresent(QString sName);
     bool isResourceGroupIdPresent(quint32 nID);
     QString getCompilerVersion();

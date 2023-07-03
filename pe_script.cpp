@@ -271,7 +271,7 @@ qint64 PE_Script::getResourceNameOffset(QString sName)
     return pPE->getResourceNameOffset(sName, &g_listResourceRecords);
 }
 
-bool PE_Script::isResourceNamePresent(QString sName)
+bool PE_Script::isResourceNamePresent(const QString &sName)
 {
     return pPE->isResourceNamePresent(sName, &g_listResourceRecords);
 }
