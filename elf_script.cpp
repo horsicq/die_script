@@ -53,7 +53,7 @@ ELF_Script::~ELF_Script()
 {
 }
 
-bool ELF_Script::isSectionNamePresent(QString sSectionName)
+bool ELF_Script::isSectionNamePresent(const QString &sSectionName)
 {
     return g_pELF->isSectionNamePresent(sSectionName, &g_listSectionRecords);  // TODO get pdStruct
 }

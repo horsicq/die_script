@@ -32,7 +32,7 @@ public:
     ~ELF_Script();
 
 public slots:
-    bool isSectionNamePresent(QString sSectionName);
+    bool isSectionNamePresent(const QString &sSectionName);
     quint32 getNumberOfSections();
     quint32 getNumberOfPrograms();
     virtual QString getGeneralOptions();
