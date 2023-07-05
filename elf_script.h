@@ -36,7 +36,7 @@ public slots:
     quint32 getNumberOfSections();
     quint32 getNumberOfPrograms();
     virtual QString getGeneralOptions();
-    qint32 getSectionNumber(QString sSectionName);
+    qint32 getSectionNumber(const QString &sSectionName);
     quint16 getElfHeader_type();
     quint16 getElfHeader_machine();
     quint32 getElfHeader_version();

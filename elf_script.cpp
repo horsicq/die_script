@@ -73,7 +73,7 @@ QString ELF_Script::getGeneralOptions()
     return g_sGeneralOptions;
 }
 
-qint32 ELF_Script::getSectionNumber(QString sSectionName)
+qint32 ELF_Script::getSectionNumber(const QString &sSectionName)
 {
     return g_pELF->getSectionNumber(sSectionName, &g_listSectionRecords);  // TODO get pdStruct
 }
