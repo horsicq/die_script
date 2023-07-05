@@ -181,7 +181,7 @@ bool PE_Script::isNETStringPresent(const QString &sString)
     return pPE->isNETAnsiStringPresent(sString, &g_cliInfo);
 }
 
-bool PE_Script::isNETUnicodeStringPresent(QString sString)
+bool PE_Script::isNETUnicodeStringPresent(const QString &sString)
 {
     return pPE->isNETUnicodeStringPresent(sString, &g_cliInfo);
 }
