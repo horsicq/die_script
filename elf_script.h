@@ -56,7 +56,7 @@ public slots:
     quint64 getSectionFileSize(quint32 nNumber);
     bool isStringInTablePresent(QString sSectionName, QString sString);
     bool isNotePresent(QString sNote);
-    bool isLibraryPresent(QString sLibraryName);
+    bool isLibraryPresent(const QString &sLibraryName);
 
 private:
     XELF *g_pELF;

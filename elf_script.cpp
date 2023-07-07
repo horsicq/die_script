@@ -181,7 +181,7 @@ bool ELF_Script::isNotePresent(QString sNote)
     return g_pELF->isNotePresent(&g_listNotes, sNote);
 }
 
-bool ELF_Script::isLibraryPresent(QString sLibraryName)
+bool ELF_Script::isLibraryPresent(const QString &sLibraryName)
 {
     return g_pELF->isStringInListPresent(&g_listLibraryNames, sLibraryName, getPdStruct());
 }
