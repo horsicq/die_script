@@ -163,7 +163,7 @@ quint64 ELF_Script::getSectionFileSize(quint32 nNumber)
     return g_pELF->getElf_Shdr_size(nNumber, &g_listSectionHeaders);
 }
 
-bool ELF_Script::isStringInTablePresent(QString sSectionName, QString sString)
+bool ELF_Script::isStringInTablePresent(const QString &sSectionName, QString sString)
 {
     bool bResult = false;
 
