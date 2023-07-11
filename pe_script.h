@@ -66,7 +66,7 @@ public slots:
     quint8 getMajorLinkerVersion();
     quint8 getMinorLinkerVersion();
     QString getManifest();
-    QString getVersionStringInfo(QString sKey);
+    QString getVersionStringInfo(const QString &sKey);
     qint32 getNumberOfImportThunks(quint32 nNumber);
     qint64 getResourceNameOffset(QString sName);
     bool isResourceNamePresent(const QString &sName);
@@ -112,7 +112,7 @@ private:
     qint32 g_nNumberOfImports;
     XPE::RESOURCES_VERSION g_resourcesVersion;
     bool g_bIsNETPresent;
-    bool bIsDll;
+    bool g_bIsDll;
     bool bIsDriver;
     bool bIsConsole;
     bool bIsSignPresent;

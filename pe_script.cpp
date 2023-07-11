@@ -44,7 +44,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
 
     g_bIsNETPresent = (pPE->isNETPresent()) && (g_cliInfo.bValid);
     bool bIs64 = pPE->is64(getMemoryMap());
-    bIsDll = pPE->isDll();
+    g_bIsDll = pPE->isDll();
     bIsDriver = pPE->isDriver();
     bIsConsole = pPE->isConsole();
     bIsSignPresent = pPE->isSignPresent();
@@ -256,7 +256,7 @@ QString PE_Script::getManifest()
     return pPE->getResourceManifest(&g_listResourceRecords);
 }
 
-QString PE_Script::getVersionStringInfo(QString sKey)
+QString PE_Script::getVersionStringInfo(const QString &sKey)
 {
     return pPE->getResourcesVersionValue(sKey, &g_resourcesVersion);
 }
@@ -318,7 +318,7 @@ qint32 PE_Script::getSectionNumberExp(QString sSectionName)
 
 bool PE_Script::isDll()
 {
-    return bIsDll;
+    return g_bIsDll;
 }
 
 bool PE_Script::isDriver()
