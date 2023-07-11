@@ -55,7 +55,7 @@ public slots:
     quint64 getSectionFileOffset(quint32 nNumber);
     quint64 getSectionFileSize(quint32 nNumber);
     bool isStringInTablePresent(const QString &sSectionName, const QString &sString);
-    bool isNotePresent(QString sNote);
+    bool isNotePresent(const QString &sNote);
     bool isLibraryPresent(const QString &sLibraryName);
 
 private:

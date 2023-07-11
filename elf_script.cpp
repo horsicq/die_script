@@ -176,7 +176,7 @@ bool ELF_Script::isStringInTablePresent(const QString &sSectionName, const QStri
     return bResult;
 }
 
-bool ELF_Script::isNotePresent(QString sNote)
+bool ELF_Script::isNotePresent(const QString &sNote)
 {
     return g_pELF->isNotePresent(&g_listNotes, sNote);
 }
