@@ -89,7 +89,7 @@ public slots:
     QString getFileVersionMS();
     qint64 calculateSizeOfHeaders();
     bool isExportFunctionPresent(QString sFunctionName);
-    bool isExportFunctionPresentExp(QString sFunctionName);
+    bool isExportFunctionPresentExp(const QString &sFunctionName);
     bool isExportPresent();
     bool isTLSPresent();
     bool isImportPresent();

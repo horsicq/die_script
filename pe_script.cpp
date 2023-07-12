@@ -385,7 +385,7 @@ bool PE_Script::isExportFunctionPresent(QString sFunctionName)
     return XBinary::isStringInListPresent(&g_listExportFunctionNameStrings, sFunctionName);
 }
 
-bool PE_Script::isExportFunctionPresentExp(QString sFunctionName)
+bool PE_Script::isExportFunctionPresentExp(const QString &sFunctionName)
 {
     return XBinary::isStringInListPresentExp(&g_listExportFunctionNameStrings, sFunctionName);
 }
