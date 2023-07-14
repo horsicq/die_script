@@ -196,7 +196,7 @@ QString PE_Script::getImportLibraryName(quint32 nNumber)
     return pPE->getImportLibraryName(nNumber, &g_listImportHeaders);
 }
 
-bool PE_Script::isLibraryPresent(QString sLibraryName)
+bool PE_Script::isLibraryPresent(const QString &sLibraryName)
 {
     return pPE->isImportLibraryPresentI(sLibraryName, &g_listImportHeaders);  // TODO pdStruct
 }

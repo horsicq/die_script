@@ -54,7 +54,7 @@ public slots:
     bool isNETUnicodeStringPresent(const QString &sString);
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
-    bool isLibraryPresent(QString sLibraryName);
+    bool isLibraryPresent(const QString &sLibraryName);
     bool isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName);
     QString getImportFunctionName(quint32 nImport, quint32 nFunctionNumber);
     qint32 getImportSection();
