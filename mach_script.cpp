@@ -56,7 +56,7 @@ quint32 MACH_Script::getNumberOfSegments()
     return nNumberOfSegments;
 }
 
-qint32 MACH_Script::getSectionNumber(QString sSectionName)
+qint32 MACH_Script::getSectionNumber(const QString &sSectionName)
 {
     return g_pMACH->getSectionNumber(sSectionName, &g_listSectionRecords);
 }
