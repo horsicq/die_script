@@ -276,7 +276,7 @@ bool PE_Script::isResourceNamePresent(const QString &sName)
     return pPE->isResourceNamePresent(sName, &g_listResourceRecords);
 }
 
-bool PE_Script::isResourceGroupNamePresent(QString sName)
+bool PE_Script::isResourceGroupNamePresent(const QString &sName)
 {
     return pPE->isResourceGroupNamePresent(sName, &g_listResourceRecords);
 }
