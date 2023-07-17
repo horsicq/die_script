@@ -66,7 +66,7 @@ QString MACH_Script::getGeneralOptions()
     return g_sGeneralOptions;
 }
 
-quint32 MACH_Script::getLibraryCurrentVersion(QString sLibraryName)
+quint32 MACH_Script::getLibraryCurrentVersion(const QString &sLibraryName)
 {
     return g_pMACH->getLibraryCurrentVersion(sLibraryName, &g_listLibraryRecords);
 }

@@ -37,7 +37,7 @@ public slots:
     quint32 getNumberOfSegments();
     qint32 getSectionNumber(const QString &sSectionName);
     virtual QString getGeneralOptions();
-    quint32 getLibraryCurrentVersion(QString sLibraryName);
+    quint32 getLibraryCurrentVersion(const QString &sLibraryName);
     quint64 getSectionFileOffset(quint32 nNumber);
     quint64 getSectionFileSize(quint32 nNumber);
     bool isSectionNamePresent(QString sSectionName);
