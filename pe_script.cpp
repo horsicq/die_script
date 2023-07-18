@@ -346,7 +346,7 @@ quint32 PE_Script::getSizeOfUninitializedData()
     return nSizeOfUninitializedData;
 }
 
-QString PE_Script::getPEFileVersion(QString sFileName)
+QString PE_Script::getPEFileVersion(const QString &sFileName)
 {
     QString sResult;
 

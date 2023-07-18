@@ -84,7 +84,7 @@ public slots:
     bool compareEP_NET(QString sSignature, qint64 nOffset = 0);
     quint32 getSizeOfCode();
     quint32 getSizeOfUninitializedData();
-    QString getPEFileVersion(QString sFileName);
+    QString getPEFileVersion(const QString &sFileName);
     QString getFileVersion();
     QString getFileVersionMS();
     qint64 calculateSizeOfHeaders();
