@@ -29,7 +29,7 @@ void global_script::includeScript(const QString &sScript)
     emit includeScriptSignal(sScript);
 }
 
-void global_script::_log(QString sText)
+void global_script::_log(const QString &sText)
 {
     emit _logSignal(sText);
 }
