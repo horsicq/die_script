@@ -32,7 +32,7 @@ void XScriptEngine::_addFunction(QScriptEngine::FunctionSignature function, cons
 }
 #endif
 
-void XScriptEngine::_addClass(QObject *pClass, QString sClassName)
+void XScriptEngine::_addClass(QObject *pClass, const QString &sClassName)
 {
     XSCRIPTVALUE objectWnd = this->newQObject(pClass);
     this->globalObject().setProperty(sClassName, objectWnd);
