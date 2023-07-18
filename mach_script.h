@@ -40,7 +40,7 @@ public slots:
     quint32 getLibraryCurrentVersion(const QString &sLibraryName);
     quint64 getSectionFileOffset(quint32 nNumber);
     quint64 getSectionFileSize(quint32 nNumber);
-    bool isSectionNamePresent(QString sSectionName);
+    bool isSectionNamePresent(const QString &sSectionName);
 
 private:
     XMACH *g_pMACH;

@@ -81,7 +81,7 @@ quint64 MACH_Script::getSectionFileSize(quint32 nNumber)
     return g_pMACH->getSectionFileSize(nNumber, &g_listSectionRecords);
 }
 
-bool MACH_Script::isSectionNamePresent(QString sSectionName)
+bool MACH_Script::isSectionNamePresent(const QString &sSectionName)
 {
     return XBinary::isStringInListPresent(&g_listSectionNameStrings, sSectionName);
 }
