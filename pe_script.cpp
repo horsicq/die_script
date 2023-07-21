@@ -45,7 +45,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_bIsNETPresent = (pPE->isNETPresent()) && (g_cliInfo.bValid);
     bool bIs64 = pPE->is64(getMemoryMap());
     g_bIsDll = pPE->isDll();
-    bIsDriver = pPE->isDriver();
+    g_bIsDriver = pPE->isDriver();
     bIsConsole = pPE->isConsole();
     bIsSignPresent = pPE->isSignPresent();
     bIsExportPresent = pPE->isExportPresent();
@@ -201,7 +201,7 @@ bool PE_Script::isLibraryPresent(const QString &sLibraryName)
     return pPE->isImportLibraryPresentI(sLibraryName, &g_listImportHeaders);  // TODO pdStruct
 }
 
-bool PE_Script::isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName)
+bool PE_Script::isLibraryFunctionPresent(const QString &sLibraryName, QString sFunctionName)
 {
     return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &g_listImportHeaders);  // TODO pdStruct
 }
@@ -266,7 +266,7 @@ qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
     return pPE->getNumberOfImportThunks(nNumber, &g_listImportHeaders);
 }
 
-qint64 PE_Script::getResourceNameOffset(QString sName)
+qint64 PE_Script::getResourceNameOffset(const QString &sName)
 {
     return pPE->getResourceNameOffset(sName, &g_listResourceRecords);
 }
@@ -323,7 +323,7 @@ bool PE_Script::isDll()
 
 bool PE_Script::isDriver()
 {
-    return bIsDriver;
+    return g_bIsDriver;
 }
 
 QString PE_Script::getNETVersion()

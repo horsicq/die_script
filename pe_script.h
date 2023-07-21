@@ -55,7 +55,7 @@ public slots:
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(const QString &sLibraryName);
-    bool isLibraryFunctionPresent(QString sLibraryName, QString sFunctionName);
+    bool isLibraryFunctionPresent(const QString &sLibraryName, QString sFunctionName);
     QString getImportFunctionName(quint32 nImport, quint32 nFunctionNumber);
     qint32 getImportSection();
     qint32 getExportSection();
@@ -68,7 +68,7 @@ public slots:
     QString getManifest();
     QString getVersionStringInfo(const QString &sKey);
     qint32 getNumberOfImportThunks(quint32 nNumber);
-    qint64 getResourceNameOffset(QString sName);
+    qint64 getResourceNameOffset(const QString &sName);
     bool isResourceNamePresent(const QString &sName);
     bool isResourceGroupNamePresent(const QString &sName);
     bool isResourceGroupIdPresent(quint32 nID);
@@ -113,7 +113,7 @@ private:
     XPE::RESOURCES_VERSION g_resourcesVersion;
     bool g_bIsNETPresent;
     bool g_bIsDll;
-    bool bIsDriver;
+    bool g_bIsDriver;
     bool bIsConsole;
     bool bIsSignPresent;
     bool bIsExportPresent;
