@@ -311,7 +311,7 @@ qint32 PE_Script::getSectionNumber(QString sSectionName)
     return XBinary::getStringNumberFromList(&g_listSectionNameStrings, sSectionName);
 }
 
-qint32 PE_Script::getSectionNumberExp(QString sSectionName)
+qint32 PE_Script::getSectionNumberExp(const QString &sSectionName)
 {
     return XBinary::getStringNumberFromListExp(&g_listSectionNameStrings, sSectionName);
 }

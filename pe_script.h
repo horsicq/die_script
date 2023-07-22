@@ -77,7 +77,7 @@ public slots:
     bool isSignedFile();
     QString getSectionNameCollision(QString sString1, QString sString2);  // mb TODO move to Binary
     qint32 getSectionNumber(QString sSectionName);
-    qint32 getSectionNumberExp(QString sSectionName);
+    qint32 getSectionNumberExp(const QString &sSectionName);
     bool isDll();
     bool isDriver();
     QString getNETVersion();
