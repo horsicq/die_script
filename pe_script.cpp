@@ -201,7 +201,7 @@ bool PE_Script::isLibraryPresent(const QString &sLibraryName)
     return pPE->isImportLibraryPresentI(sLibraryName, &g_listImportHeaders);  // TODO pdStruct
 }
 
-bool PE_Script::isLibraryFunctionPresent(const QString &sLibraryName, QString sFunctionName)
+bool PE_Script::isLibraryFunctionPresent(const QString &sLibraryName, const QString &sFunctionName)
 {
     return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &g_listImportHeaders);  // TODO pdStruct
 }
@@ -306,7 +306,7 @@ QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
     return pPE->getStringCollision(&g_listSectionNameStrings, sString1, sString2);
 }
 
-qint32 PE_Script::getSectionNumber(QString sSectionName)
+qint32 PE_Script::getSectionNumber(const QString &sSectionName)
 {
     return XBinary::getStringNumberFromList(&g_listSectionNameStrings, sSectionName);
 }

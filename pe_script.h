@@ -55,7 +55,7 @@ public slots:
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(const QString &sLibraryName);
-    bool isLibraryFunctionPresent(const QString &sLibraryName, QString sFunctionName);
+    bool isLibraryFunctionPresent(const QString &sLibraryName, const QString &sFunctionName);
     QString getImportFunctionName(quint32 nImport, quint32 nFunctionNumber);
     qint32 getImportSection();
     qint32 getExportSection();
@@ -76,7 +76,7 @@ public slots:
     bool isConsole();
     bool isSignedFile();
     QString getSectionNameCollision(QString sString1, QString sString2);  // mb TODO move to Binary
-    qint32 getSectionNumber(QString sSectionName);
+    qint32 getSectionNumber(const QString &sSectionName);
     qint32 getSectionNumberExp(const QString &sSectionName);
     bool isDll();
     bool isDriver();
