@@ -81,7 +81,7 @@ public slots:
     bool isDll();
     bool isDriver();
     QString getNETVersion();
-    bool compareEP_NET(QString sSignature, qint64 nOffset = 0);
+    bool compareEP_NET(const QString &sSignature, qint64 nOffset = 0);
     quint32 getSizeOfCode();
     quint32 getSizeOfUninitializedData();
     QString getPEFileVersion(const QString &sFileName);

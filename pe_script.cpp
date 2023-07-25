@@ -331,7 +331,7 @@ QString PE_Script::getNETVersion()
     return g_cliInfo.metaData.header.sVersion;
 }
 
-bool PE_Script::compareEP_NET(QString sSignature, qint64 nOffset)
+bool PE_Script::compareEP_NET(const QString &sSignature, qint64 nOffset)
 {
     return pPE->compareSignatureOnAddress(getMemoryMap(), sSignature, getBaseAddress() + g_cliInfo.metaData.nEntryPoint + nOffset);
 }
