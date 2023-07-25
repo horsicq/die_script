@@ -301,7 +301,7 @@ bool PE_Script::isSignedFile()
     return bIsSignPresent;
 }
 
-QString PE_Script::getSectionNameCollision(QString sString1, QString sString2)
+QString PE_Script::getSectionNameCollision(const QString &sString1, const QString &sString2)
 {
     return pPE->getStringCollision(&g_listSectionNameStrings, sString1, sString2);
 }
@@ -380,7 +380,7 @@ qint64 PE_Script::calculateSizeOfHeaders()
     return nCalculateSizeOfHeaders;
 }
 
-bool PE_Script::isExportFunctionPresent(QString sFunctionName)
+bool PE_Script::isExportFunctionPresent(const QString &sFunctionName)
 {
     return XBinary::isStringInListPresent(&g_listExportFunctionNameStrings, sFunctionName);
 }
