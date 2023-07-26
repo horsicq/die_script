@@ -46,7 +46,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     bool bIs64 = pPE->is64(getMemoryMap());
     g_bIsDll = pPE->isDll();
     g_bIsDriver = pPE->isDriver();
-    bIsConsole = pPE->isConsole();
+    g_bIsConsole = pPE->isConsole();
     bIsSignPresent = pPE->isSignPresent();
     bIsExportPresent = pPE->isExportPresent();
     bIsTLSPresent = pPE->isTLSPresent();
@@ -293,7 +293,7 @@ QString PE_Script::getCompilerVersion()
 
 bool PE_Script::isConsole()
 {
-    return bIsConsole;
+    return g_bIsConsole;
 }
 
 bool PE_Script::isSignedFile()

@@ -114,7 +114,7 @@ private:
     bool g_bIsNETPresent;
     bool g_bIsDll;
     bool g_bIsDriver;
-    bool bIsConsole;
+    bool g_bIsConsole;
     bool bIsSignPresent;
     bool bIsExportPresent;
     bool bIsTLSPresent;
