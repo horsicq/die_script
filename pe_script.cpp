@@ -71,7 +71,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     sFileVersion = pPE->getFileVersion(&g_resourcesVersion);
     sFileVersionMS = pPE->getFileVersionMS(&g_resourcesVersion);
 
-    nCalculateSizeOfHeaders = pPE->calculateHeadersSize();
+    g_nCalculateSizeOfHeaders = pPE->calculateHeadersSize();
 
     g_exportHeader = pPE->getExport();
 
@@ -377,7 +377,7 @@ QString PE_Script::getFileVersionMS()
 
 qint64 PE_Script::calculateSizeOfHeaders()
 {
-    return nCalculateSizeOfHeaders;
+    return g_nCalculateSizeOfHeaders;
 }
 
 bool PE_Script::isExportFunctionPresent(const QString &sFunctionName)

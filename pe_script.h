@@ -134,7 +134,7 @@ private:
     QString sCompilerVersion;
     QString sFileVersion;
     QString sFileVersionMS;
-    qint32 nCalculateSizeOfHeaders;
+    qint32 g_nCalculateSizeOfHeaders;
     XPE::EXPORT_HEADER g_exportHeader;
     QList<QString> g_listExportFunctionNameStrings;
     quint64 g_nImportHash64;
