@@ -133,7 +133,7 @@ private:
     quint32 nSizeOfUninitializedData;
     QString sCompilerVersion;
     QString sFileVersion;
-    QString sFileVersionMS;
+    QString g_sFileVersionMS;
     qint32 g_nCalculateSizeOfHeaders;
     XPE::EXPORT_HEADER g_exportHeader;
     QList<QString> g_listExportFunctionNameStrings;

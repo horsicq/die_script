@@ -26,10 +26,18 @@ bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const Di
         return false;
     }
 
+    if ((sr1.sName == "_fini") && (sr2.sName == "_fini")) {
+        return false;
+    }
+
     if (sr1.sName == "_init") {
         return true;
     } else if (sr2.sName == "_init") {
         return false;
+    } else if (sr1.sName == "_fini") {
+        return false;
+    } else if (sr2.sName == "_fini") {
+        return true;
     }
 
     qint32 nPos1 = sr1.sName.count(".");
@@ -59,10 +67,18 @@ bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const Di
         return false;
     }
 
+    if ((sr1.sName == "_fini") && (sr2.sName == "_fini")) {
+        return false;
+    }
+
     if (sr1.sName == "_init") {
         return true;
     } else if (sr2.sName == "_init") {
         return false;
+    } else if (sr1.sName == "_fini") {
+        return false;
+    } else if (sr2.sName == "_fini") {
+        return true;
     }
 
     return (sr1.sName < sr2.sName);
@@ -161,9 +177,14 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 
     DiE_ScriptEngine::SIGNATURE_RECORD srGlobalInit = {};
     DiE_ScriptEngine::SIGNATURE_RECORD srInit = {};
+    DiE_ScriptEngine::SIGNATURE_RECORD srGlobalFini = {};
+    DiE_ScriptEngine::SIGNATURE_RECORD srFini = {};
+
 
     bool bGlobalInit = false;
     bool bInit = false;
+    bool bGlobalFini = false;
+    bool bFini = false;
 
     for (qint32 i = 0; (i < nNumberOfSignatures) && (!(pPdStruct->bIsStop)); i++) {
         if (g_listSignatures.at(i).sName == "_init") {
@@ -176,10 +197,20 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                 srInit = g_listSignatures.at(i);
                 bInit = true;
             }
-
-            if (bGlobalInit && bInit) {
-                break;
+        } else if (g_listSignatures.at(i).sName == "_fini") {
+            if (g_listSignatures.at(i).fileType == XBinary::FT_UNKNOWN) {
+                srGlobalFini = g_listSignatures.at(i);
+                bGlobalFini = true;
             }
+
+            if (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType)) {
+                srFini = g_listSignatures.at(i);
+                bFini = true;
+            }
+        }
+
+        if (bGlobalInit && bInit && bGlobalFini && bFini) {
+            break;
         }
     }
 
@@ -215,7 +246,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     for (qint32 i = 0; (i < nNumberOfSignatures) && (!(pPdStruct->bIsStop)); i++) {
         bool bExec = false;
 
-        if ((g_listSignatures.at(i).sName != "_init") && (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
+        if ((g_listSignatures.at(i).sName != "_init") && (g_listSignatures.at(i).sName != "_fini") && (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
             bExec = true;
         }
 
@@ -346,6 +377,16 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 
         XBinary::setPdStructCurrentIncrement(pPdStruct, _nFreeIndex);
         XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, g_listSignatures.at(i).sName);
+    }
+
+    if (nNumberOfSignatures) {
+        if (bGlobalFini) {
+            _handleError(&scriptEngine, scriptEngine.evaluate(srGlobalFini.sText, srGlobalFini.sFilePath), &srGlobalFini, pScanResult);
+        }
+
+        if (bFini) {
+            _handleError(&scriptEngine, scriptEngine.evaluate(srFini.sText, srFini.sFilePath), &srFini, pScanResult);
+        }
     }
 
     if (bAddUnknown) {
@@ -490,7 +531,7 @@ qint32 DiE_Script::getNumberOfSignatures(XBinary::FT fileType)
     qint32 nNumberOfSignatures = g_listSignatures.count();
 
     for (qint32 i = 0; (i < nNumberOfSignatures); i++) {
-        if ((g_listSignatures.at(i).sName != "_init") && (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
+        if ((g_listSignatures.at(i).sName != "_init") && (g_listSignatures.at(i).sName != "_fini") && (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
             nResult++;
         }
     }
