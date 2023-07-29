@@ -180,7 +180,6 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     DiE_ScriptEngine::SIGNATURE_RECORD srGlobalFini = {};
     DiE_ScriptEngine::SIGNATURE_RECORD srFini = {};
 
-
     bool bGlobalInit = false;
     bool bInit = false;
     bool bGlobalFini = false;
@@ -246,7 +245,8 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     for (qint32 i = 0; (i < nNumberOfSignatures) && (!(pPdStruct->bIsStop)); i++) {
         bool bExec = false;
 
-        if ((g_listSignatures.at(i).sName != "_init") && (g_listSignatures.at(i).sName != "_fini") && (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
+        if ((g_listSignatures.at(i).sName != "_init") && (g_listSignatures.at(i).sName != "_fini") &&
+            (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
             bExec = true;
         }
 
@@ -531,7 +531,8 @@ qint32 DiE_Script::getNumberOfSignatures(XBinary::FT fileType)
     qint32 nNumberOfSignatures = g_listSignatures.count();
 
     for (qint32 i = 0; (i < nNumberOfSignatures); i++) {
-        if ((g_listSignatures.at(i).sName != "_init") && (g_listSignatures.at(i).sName != "_fini") && (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
+        if ((g_listSignatures.at(i).sName != "_init") && (g_listSignatures.at(i).sName != "_fini") &&
+            (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
             nResult++;
         }
     }
