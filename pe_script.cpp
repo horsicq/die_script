@@ -47,7 +47,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_bIsDll = pPE->isDll();
     g_bIsDriver = pPE->isDriver();
     g_bIsConsole = pPE->isConsole();
-    bIsSignPresent = pPE->isSignPresent();
+    g_bIsSignPresent = pPE->isSignPresent();
     bIsExportPresent = pPE->isExportPresent();
     bIsTLSPresent = pPE->isTLSPresent();
     bIsImportPresent = pPE->isImportPresent();
@@ -298,7 +298,7 @@ bool PE_Script::isConsole()
 
 bool PE_Script::isSignedFile()
 {
-    return bIsSignPresent;
+    return g_bIsSignPresent;
 }
 
 QString PE_Script::getSectionNameCollision(const QString &sString1, const QString &sString2)
@@ -351,7 +351,6 @@ QString PE_Script::getPEFileVersion(const QString &sFileName)
     QString sResult;
 
     QFile file;
-
     file.setFileName(sFileName);
 
     if (file.open(QIODevice::ReadOnly)) {

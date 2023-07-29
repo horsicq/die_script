@@ -30,7 +30,7 @@ MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPd
     g_listSectionNameStrings = pMACH->getSectionNames(&g_listSectionRecords);
 
     g_nNumberOfSection = g_listSectionRecords.count();
-    nNumberOfSegments = g_listSegmentRecords.count();
+    g_nNumberOfSegments = g_listSegmentRecords.count();
 
     bool bIs64 = pMACH->is64(getMemoryMap());
 
@@ -53,7 +53,7 @@ quint32 MACH_Script::getNumberOfSections()
 
 quint32 MACH_Script::getNumberOfSegments()
 {
-    return nNumberOfSegments;
+    return g_nNumberOfSegments;
 }
 
 qint32 MACH_Script::getSectionNumber(const QString &sSectionName)

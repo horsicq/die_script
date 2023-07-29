@@ -559,7 +559,6 @@ DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTION
     SCAN_RESULT scanResult = {};
 
     QFile file;
-
     file.setFileName(sFileName);
 
     if (file.open(QIODevice::ReadOnly)) {
@@ -697,7 +696,6 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
 
                     if (XArchives::decompressToFile(_pDevice, &record, sTempFileName, pPdStruct)) {
                         QFile file;
-
                         file.setFileName(sTempFileName);
 
                         if (file.open(QIODevice::ReadOnly)) {

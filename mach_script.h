@@ -51,7 +51,7 @@ private:
     QList<XMACH::SEGMENT_RECORD> g_listSegmentRecords;
     QList<QString> g_listSectionNameStrings;
     qint32 g_nNumberOfSection;
-    qint32 nNumberOfSegments;
+    qint32 g_nNumberOfSegments;
 };
 
 #endif  // MACH_SCRIPT_H
