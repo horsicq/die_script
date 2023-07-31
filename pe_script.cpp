@@ -53,7 +53,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     bIsImportPresent = pPE->isImportPresent();
     bIsResourcesPresent = pPE->isResourcesPresent();
 
-    nImportSection = pPE->getImportSection(getMemoryMap());
+    g_nImportSection = pPE->getImportSection(getMemoryMap());
     nExportSection = pPE->getExportSection(getMemoryMap());
     nResourcesSection = pPE->getResourcesSection(getMemoryMap());
     nEntryPointSection = pPE->getEntryPointSection(getMemoryMap());
@@ -213,7 +213,7 @@ QString PE_Script::getImportFunctionName(quint32 nImport, quint32 nFunctionNumbe
 
 qint32 PE_Script::getImportSection()
 {
-    return nImportSection;
+    return g_nImportSection;
 }
 
 qint32 PE_Script::getExportSection()
@@ -355,9 +355,7 @@ QString PE_Script::getPEFileVersion(const QString &sFileName)
 
     if (file.open(QIODevice::ReadOnly)) {
         XPE pe(&file);
-
         sResult = pe.getFileVersion();
-
         file.close();
     }
 

@@ -564,7 +564,6 @@ DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTION
 
     if (file.open(QIODevice::ReadOnly)) {
         scanResult = processDevice(&file, pOptions, sFunction, pPdStruct);
-
         file.close();
     }
 
@@ -701,7 +700,6 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
 
                         if (file.open(QIODevice::ReadOnly)) {
                             process(&file, sFunction, pScanResult, 0, file.size(), scanIdArchiveRecord, pOptions, false, pPdStruct);
-
                             file.close();
                         }
                     }

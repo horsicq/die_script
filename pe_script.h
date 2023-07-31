@@ -121,7 +121,7 @@ private:
     bool bIsImportPresent;
     bool bIsResourcesPresent;
     QString sGeneralOptions;
-    qint32 nImportSection;
+    qint32 g_nImportSection;
     qint32 nExportSection;
     qint32 nResourcesSection;
     qint32 nEntryPointSection;
