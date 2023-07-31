@@ -48,7 +48,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_bIsDriver = pPE->isDriver();
     g_bIsConsole = pPE->isConsole();
     g_bIsSignPresent = pPE->isSignPresent();
-    bIsExportPresent = pPE->isExportPresent();
+    g_bIsExportPresent = pPE->isExportPresent();
     bIsTLSPresent = pPE->isTLSPresent();
     bIsImportPresent = pPE->isImportPresent();
     bIsResourcesPresent = pPE->isResourcesPresent();
@@ -389,7 +389,7 @@ bool PE_Script::isExportFunctionPresentExp(const QString &sFunctionName)
 
 bool PE_Script::isExportPresent()
 {
-    return bIsExportPresent;
+    return g_bIsExportPresent;
 }
 
 bool PE_Script::isTLSPresent()

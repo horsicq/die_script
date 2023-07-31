@@ -116,7 +116,7 @@ private:
     bool g_bIsDriver;
     bool g_bIsConsole;
     bool g_bIsSignPresent;
-    bool bIsExportPresent;
+    bool g_bIsExportPresent;
     bool bIsTLSPresent;
     bool bIsImportPresent;
     bool bIsResourcesPresent;
