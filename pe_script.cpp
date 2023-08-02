@@ -62,7 +62,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
 
     nMajorLinkerVersion = pPE->getOptionalHeader_MajorLinkerVersion();
     nMinorLinkerVersion = pPE->getOptionalHeader_MinorLinkerVersion();
-    nSizeOfCode = pPE->getOptionalHeader_SizeOfCode();
+    g_nSizeOfCode = pPE->getOptionalHeader_SizeOfCode();
     nSizeOfUninitializedData = pPE->getOptionalHeader_SizeOfUninitializedData();
 
     sCompilerVersion = QString("%1.%2").arg(nMajorLinkerVersion).arg(nMinorLinkerVersion);
@@ -338,7 +338,7 @@ bool PE_Script::compareEP_NET(const QString &sSignature, qint64 nOffset)
 
 quint32 PE_Script::getSizeOfCode()
 {
-    return nSizeOfCode;
+    return g_nSizeOfCode;
 }
 
 quint32 PE_Script::getSizeOfUninitializedData()

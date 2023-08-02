@@ -129,7 +129,7 @@ private:
     qint32 nTLSSection;
     quint8 nMajorLinkerVersion;
     quint8 nMinorLinkerVersion;
-    quint32 nSizeOfCode;
+    quint32 g_nSizeOfCode;
     quint32 nSizeOfUninitializedData;
     QString sCompilerVersion;
     QString sFileVersion;
