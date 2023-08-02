@@ -49,7 +49,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_bIsConsole = pPE->isConsole();
     g_bIsSignPresent = pPE->isSignPresent();
     g_bIsExportPresent = pPE->isExportPresent();
-    bIsTLSPresent = pPE->isTLSPresent();
+    g_bIsTLSPresent = pPE->isTLSPresent();
     bIsImportPresent = pPE->isImportPresent();
     bIsResourcesPresent = pPE->isResourcesPresent();
 
@@ -394,7 +394,7 @@ bool PE_Script::isExportPresent()
 
 bool PE_Script::isTLSPresent()
 {
-    return bIsTLSPresent;
+    return g_bIsTLSPresent;
 }
 
 bool PE_Script::isImportPresent()

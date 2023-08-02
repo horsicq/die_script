@@ -71,12 +71,16 @@ private:
     static QScriptValue includeScript(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _log(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _setResult(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _isResultPresent(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _removeResult(QScriptContext *pContext, QScriptEngine *pEngine);
 #endif
 
 private slots:
     void includeScriptSlot(const QString &sScript);
     void _logSlot(const QString &sText);
     void _setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions);
+    void _isResultPresentSlot(bool *pResult, const QString &sType, const QString &sName);
+    void _removeResultSlot(const QString &sType, const QString &sName);
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;

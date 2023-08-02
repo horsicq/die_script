@@ -31,16 +31,22 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     _addFunction(includeScript, "includeScript");
     _addFunction(_log, "_log");
     _addFunction(_setResult, "_setResult");
+    _addFunction(_isResultPresent, "_isResultPresent");
+    _addFunction(_removeResult, "_removeResult");
 #else
     connect(&g_globalScript, SIGNAL(includeScriptSignal(QString)), this, SLOT(includeScriptSlot(QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_setResultSignal(QString, QString, QString, QString)), this, SLOT(_setResultSlot(QString, QString, QString, QString)),
             Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isResultPresentSignal(bool *, QString)), this, SLOT(_isResultPresentSlot(bool *, QString)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_removeResult(QString)), this, SLOT(_removeResult(QString)), Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&g_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
     globalObject().setProperty("_log", valueGlobalScript.property("_log"));
     globalObject().setProperty("_setResult", valueGlobalScript.property("_setResult"));
+    globalObject().setProperty("_isResultPresent", valueGlobalScript.property("_isResultPresent"));
+    globalObject().setProperty("_removeResult", valueGlobalScript.property("_removeResult"));
 #endif
 
     g_pBinary = 0;
@@ -216,6 +222,43 @@ QScriptValue DiE_ScriptEngine::_setResult(QScriptContext *pContext, QScriptEngin
     return result;
 }
 #endif
+#ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_isResultPresent(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        QString sType = pContext->argument(0).toString();
+        QString sName = pContext->argument(1).toString();
+        bool bResult = false;
+
+        pScriptEngine->_isResultPresentSlot(&bResult, sType, sName);
+
+        result = bResult;
+    }
+
+    return result;
+}
+#endif
+#ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_removeResult(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        QString sType = pContext->argument(0).toString();
+        QString sName = pContext->argument(1).toString();
+
+        pScriptEngine->_removeResultSlot(sType, sName);
+    }
+
+    return result;
+}
+#endif
 
 void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
 {
@@ -248,6 +291,17 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
     record.sOptions = sOptions;
 
     g_listResult.append(record);
+}
+
+void DiE_ScriptEngine::_isResultPresentSlot(bool *pResult, const QString &sType, const QString &sName)
+{
+    *pResult = false;
+    // TODO
+}
+
+void DiE_ScriptEngine::_removeResultSlot(const QString &sType, const QString &sName)
+{
+    // TODO
 }
 
 DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)

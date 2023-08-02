@@ -117,7 +117,7 @@ private:
     bool g_bIsConsole;
     bool g_bIsSignPresent;
     bool g_bIsExportPresent;
-    bool bIsTLSPresent;
+    bool g_bIsTLSPresent;
     bool bIsImportPresent;
     bool bIsResourcesPresent;
     QString sGeneralOptions;
