@@ -50,7 +50,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_bIsSignPresent = pPE->isSignPresent();
     g_bIsExportPresent = pPE->isExportPresent();
     g_bIsTLSPresent = pPE->isTLSPresent();
-    bIsImportPresent = pPE->isImportPresent();
+    g_bIsImportPresent = pPE->isImportPresent();
     bIsResourcesPresent = pPE->isResourcesPresent();
 
     g_nImportSection = pPE->getImportSection(getMemoryMap());
@@ -399,7 +399,7 @@ bool PE_Script::isTLSPresent()
 
 bool PE_Script::isImportPresent()
 {
-    return bIsImportPresent;
+    return g_bIsImportPresent;
 }
 
 bool PE_Script::isResourcesPresent()

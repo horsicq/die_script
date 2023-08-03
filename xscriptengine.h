@@ -50,8 +50,8 @@ protected:
     void _addClass(QObject *pClass, QString sClassName);
 
 signals:
-    void errorMessage(QString sErrorMessage);
-    void infoMessage(QString sInfoMessage);
+    void errorMessage(const QString &sErrorMessage);
+    void infoMessage(const QString &sInfoMessage);
 };
 
 #endif  // XSCRIPTENGINE_H

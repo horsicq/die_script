@@ -118,7 +118,7 @@ private:
     bool g_bIsSignPresent;
     bool g_bIsExportPresent;
     bool g_bIsTLSPresent;
-    bool bIsImportPresent;
+    bool g_bIsImportPresent;
     bool bIsResourcesPresent;
     QString sGeneralOptions;
     qint32 g_nImportSection;
