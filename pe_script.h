@@ -119,7 +119,7 @@ private:
     bool g_bIsExportPresent;
     bool g_bIsTLSPresent;
     bool g_bIsImportPresent;
-    bool bIsResourcesPresent;
+    bool g_bIsResourcesPresent;
     QString sGeneralOptions;
     qint32 g_nImportSection;
     qint32 nExportSection;

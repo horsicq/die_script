@@ -51,7 +51,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_bIsExportPresent = pPE->isExportPresent();
     g_bIsTLSPresent = pPE->isTLSPresent();
     g_bIsImportPresent = pPE->isImportPresent();
-    bIsResourcesPresent = pPE->isResourcesPresent();
+    g_bIsResourcesPresent = pPE->isResourcesPresent();
 
     g_nImportSection = pPE->getImportSection(getMemoryMap());
     nExportSection = pPE->getExportSection(getMemoryMap());
@@ -404,7 +404,7 @@ bool PE_Script::isImportPresent()
 
 bool PE_Script::isResourcesPresent()
 {
-    return bIsResourcesPresent;
+    return g_bIsResourcesPresent;
 }
 
 quint32 PE_Script::getImportHash32()
