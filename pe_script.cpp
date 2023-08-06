@@ -54,7 +54,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_bIsResourcesPresent = pPE->isResourcesPresent();
 
     g_nImportSection = pPE->getImportSection(getMemoryMap());
-    nExportSection = pPE->getExportSection(getMemoryMap());
+    g_nExportSection = pPE->getExportSection(getMemoryMap());
     nResourcesSection = pPE->getResourcesSection(getMemoryMap());
     nEntryPointSection = pPE->getEntryPointSection(getMemoryMap());
     nRelocsSection = pPE->getRelocsSection(getMemoryMap());
@@ -218,7 +218,7 @@ qint32 PE_Script::getImportSection()
 
 qint32 PE_Script::getExportSection()
 {
-    return nExportSection;
+    return g_nExportSection;
 }
 
 qint32 PE_Script::getResourceSection()
