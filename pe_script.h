@@ -123,7 +123,7 @@ private:
     QString sGeneralOptions;
     qint32 g_nImportSection;
     qint32 g_nExportSection;
-    qint32 nResourcesSection;
+    qint32 g_nResourcesSection;
     qint32 nEntryPointSection;
     qint32 nRelocsSection;
     qint32 nTLSSection;
