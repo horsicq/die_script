@@ -38,9 +38,9 @@ public slots:
     void _setResult(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions);
 
 signals:
-    void includeScriptSignal(QString sScript);
-    void _logSignal(QString sText);
-    void _setResultSignal(QString sType, QString sName, QString sVersion, QString sOptions);
+    void includeScriptSignal(const QString &sScript);
+    void _logSignal(const QString &sText);
+    void _setResultSignal(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions);
 };
 
 #endif  // GLOBAL_SCRIPT_H

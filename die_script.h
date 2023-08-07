@@ -176,10 +176,10 @@ private:
 
 signals:
     void scanCompleted(qint64 nTime);
-    void directoryScanFileStarted(QString sFileName);
-    void directoryScanResult(DiE_Script::SCAN_RESULT scanResult);
-    void errorMessage(QString sErrorMessage);
-    void infoMessage(QString sInfoMessage);
+    void directoryScanFileStarted(const QString &sFileName);
+    void directoryScanResult(const DiE_Script::SCAN_RESULT &scanResult);
+    void errorMessage(const QString &sErrorMessage);
+    void infoMessage(const QString &sInfoMessage);
 
 private:
     QString g_sDatabasePath;
