@@ -20,11 +20,12 @@
  */
 #include "die_scriptengine.h"
 
-DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, XBinary::FT fileType, Binary_Script::OPTIONS *pOptions,
+DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType, Binary_Script::OPTIONS *pOptions,
                                    XBinary::PDSTRUCT *pPdStruct)
     : XScriptEngine()
 {
     g_pSignaturesList = pSignaturesList;
+    g_pListScanStructs = pListScanStructs;
     g_pPdStruct = pPdStruct;
 
 #ifdef QT_SCRIPT_LIB
@@ -159,12 +160,12 @@ bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
     return bResult;
 }
 
-QList<DiE_ScriptEngine::RESULT> DiE_ScriptEngine::getListResult()
+QList<DiE_ScriptEngine::RESULT> DiE_ScriptEngine::getListLocalResult()
 {
     return g_listResult;
 }
 
-void DiE_ScriptEngine::clearListResult()
+void DiE_ScriptEngine::clearListLocalResult()
 {
     g_listResult.clear();
 }
@@ -296,12 +297,27 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
 void DiE_ScriptEngine::_isResultPresentSlot(bool *pResult, const QString &sType, const QString &sName)
 {
     *pResult = false;
-    // TODO
+
+    qint32 nNumberOfResults = g_pListScanStructs->count();
+
+    for (qint32 i = 0; i < nNumberOfResults; i++) {
+        if ((g_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) && (g_pListScanStructs->at(i).sName.toUpper() == sName.toUpper())) {
+            *pResult = true;
+            break;
+        }
+    }
 }
 
 void DiE_ScriptEngine::_removeResultSlot(const QString &sType, const QString &sName)
 {
-    // TODO
+    qint32 nNumberOfResults = g_pListScanStructs->count();
+
+    for (qint32 i = 0; i < nNumberOfResults; i++) {
+        if ((g_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) && (g_pListScanStructs->at(i).sName.toUpper() == sName.toUpper())) {
+            g_pListScanStructs->removeAt(i);
+            break;
+        }
+    }
 }
 
 DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)

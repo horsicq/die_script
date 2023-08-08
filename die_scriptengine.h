@@ -58,12 +58,40 @@ public:
         QString sOptions;
     };
 
-    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList, QIODevice *pDevice, XBinary::FT fileType, Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    //    struct SCAN_HEADER
+    //    {
+    //        XBinary::FT fileType;
+    //        QString sArch;
+    //        XBinary::MODE mode;
+    //        bool bIsBigEndian;
+    //        QString sType;
+    //        qint64 nSize;
+    //        qint64 nOffset;
+    //        XBinary::FILEPART filePart;
+    //    };
+
+    struct SCAN_STRUCT {
+        bool bIsHeuristic;
+        XBinary::SCANID id;
+        XBinary::SCANID parentId;
+        //        SCAN_HEADER scanHeader;
+        //        XBinary::FT fileType;
+        QString sFullString;
+        QString sType;
+        QString sResult;
+        QString sName;
+        QString sVersion;
+        QString sOptions;
+        QString sSignature;
+        QString sSignatureFileName;
+    };
+
+    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType, Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~DiE_ScriptEngine();
 
     bool handleError(XSCRIPTVALUE value, QString *psErrorString);
-    QList<RESULT> getListResult();
-    void clearListResult();
+    QList<RESULT> getListLocalResult();
+    void clearListLocalResult();
     static RESULT stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions);
 
 private:
@@ -84,6 +112,7 @@ private slots:
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;
+    QList<SCAN_STRUCT> *g_pListScanStructs;
     XBinary *g_pBinary;
     Binary_Script *g_pBinaryScript;
     XBinary *g_pExtra;

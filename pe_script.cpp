@@ -68,7 +68,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     sCompilerVersion = QString("%1.%2").arg(nMajorLinkerVersion).arg(nMinorLinkerVersion);
     sGeneralOptions = QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64 ? ("64") : ("32"));
 
-    sFileVersion = pPE->getFileVersion(&g_resourcesVersion);
+    g_sFileVersion = pPE->getFileVersion(&g_resourcesVersion);
     g_sFileVersionMS = pPE->getFileVersionMS(&g_resourcesVersion);
 
     g_nCalculateSizeOfHeaders = pPE->calculateHeadersSize();
@@ -364,7 +364,7 @@ QString PE_Script::getPEFileVersion(const QString &sFileName)
 
 QString PE_Script::getFileVersion()
 {
-    return sFileVersion;
+    return g_sFileVersion;
 }
 
 QString PE_Script::getFileVersionMS()

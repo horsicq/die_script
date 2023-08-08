@@ -46,34 +46,6 @@ class DiE_Script : public QObject {
     Q_OBJECT
 
 public:
-    //    struct SCAN_HEADER
-    //    {
-    //        XBinary::FT fileType;
-    //        QString sArch;
-    //        XBinary::MODE mode;
-    //        bool bIsBigEndian;
-    //        QString sType;
-    //        qint64 nSize;
-    //        qint64 nOffset;
-    //        XBinary::FILEPART filePart;
-    //    };
-
-    struct SCAN_STRUCT {
-        bool bIsHeuristic;
-        XBinary::SCANID id;
-        XBinary::SCANID parentId;
-        //        SCAN_HEADER scanHeader;
-        //        XBinary::FT fileType;
-        QString sFullString;
-        QString sType;
-        QString sResult;
-        QString sName;
-        QString sVersion;
-        QString sOptions;
-        QString sSignature;
-        QString sSignatureFileName;
-    };
-
     struct ERROR_RECORD {
         QString sScript;
         QString sErrorString;
@@ -90,7 +62,7 @@ public:
         qint64 nSize;
         //        XBinary::SCANID id;
         //        SCAN_HEADER scanHeader; // TODO set
-        QList<SCAN_STRUCT> listRecords;
+        QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
         QList<ERROR_RECORD> listErrors;
         QList<DEBUG_RECORD> listDebugRecords;
         //        bool bIsValidType;
@@ -160,7 +132,7 @@ public:
     void setData(const QString &sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct);
     void setData(QIODevice *pDevice, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct);
 
-    static QList<XBinary::SCANSTRUCT> convert(QList<SCAN_STRUCT> *pListScanStructs);
+    static QList<XBinary::SCANSTRUCT> convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
     SCAN_RESULT getScanResultProcess();
 
 public slots:

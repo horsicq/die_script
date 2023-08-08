@@ -218,7 +218,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     _options.bIsHeuristicScan = pOptions->bIsHeuristicScan;
     _options.bIsVerbose = pOptions->bIsVerbose;
 
-    DiE_ScriptEngine scriptEngine(&g_listSignatures, pDevice, fileType, &_options, pPdStruct);
+    DiE_ScriptEngine scriptEngine(&g_listSignatures, &(pScanResult->listRecords), pDevice, fileType, &_options, pPdStruct);
 
     connect(&scriptEngine, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
     connect(&scriptEngine, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
@@ -278,7 +278,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
         }
 
         if (bExec) {
-            scriptEngine.clearListResult();
+            scriptEngine.clearListLocalResult();
 
             DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord = g_listSignatures.at(i);
 
@@ -315,19 +315,15 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                         // TODO getResult
                         QString sResult = result.toString();
 
-                        QList<DiE_ScriptEngine::RESULT> listDetects = scriptEngine.getListResult();
+                        QList<DiE_ScriptEngine::RESULT> listLocalResult = scriptEngine.getListLocalResult();
+                        qint32 nNumberOfDetects = listLocalResult.count();
 
-                        if ((listDetects.count() == 0) && (sResult != "")) {
-                            listDetects.append(DiE_ScriptEngine::stringToResult(sResult, pOptions->bShowType, pOptions->bShowVersion, pOptions->bShowOptions));
-                            //                            SCAN_STRUCT ss=getScanStructFromString(scanResult.scanHeader,&signatureRecord,sResult,pOptions);
-
-                            //                            scanResult.listRecords.append(ss);
+                        if ((nNumberOfDetects == 0) && (sResult != "")) {
+                            listLocalResult.append(DiE_ScriptEngine::stringToResult(sResult, pOptions->bShowType, pOptions->bShowVersion, pOptions->bShowOptions));
                         }
 
-                        qint32 nNumberOfDetects = listDetects.count();
-
                         for (qint32 j = 0; j < nNumberOfDetects; j++) {
-                            SCAN_STRUCT ssRecord = {};
+                            DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
 
                             //                            if(baseId.fileType==XBinary::FT_BINARY)
                             //                            {
@@ -351,10 +347,10 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 
                             ssRecord.sSignature = signatureRecord.sName;
                             ssRecord.sSignatureFileName = signatureRecord.sFilePath;
-                            ssRecord.sType = listDetects.at(j).sType;
-                            ssRecord.sName = listDetects.at(j).sName;
-                            ssRecord.sVersion = listDetects.at(j).sVersion;
-                            ssRecord.sOptions = listDetects.at(j).sOptions;
+                            ssRecord.sType = listLocalResult.at(j).sType;
+                            ssRecord.sName = listLocalResult.at(j).sName;
+                            ssRecord.sVersion = listLocalResult.at(j).sVersion;
+                            ssRecord.sOptions = listLocalResult.at(j).sOptions;
                             ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
                             ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
 
@@ -391,7 +387,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 
     if (bAddUnknown) {
         if (pScanResult->listRecords.count() == 0) {
-            SCAN_STRUCT ssRecord = {};
+            DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
 
             ssRecord.id = resultId;
             ssRecord.parentId = parentId;
@@ -907,7 +903,7 @@ void DiE_Script::setData(QIODevice *pDevice, OPTIONS scanOptions, XBinary::PDSTR
     g_pPdStruct = pPdStruct;
 }
 
-QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<SCAN_STRUCT> *pListScanStructs)
+QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs)
 {
     QList<XBinary::SCANSTRUCT> listResult;
 
