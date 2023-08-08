@@ -66,7 +66,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     nSizeOfUninitializedData = pPE->getOptionalHeader_SizeOfUninitializedData();
 
     sCompilerVersion = QString("%1.%2").arg(nMajorLinkerVersion).arg(nMinorLinkerVersion);
-    sGeneralOptions = QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64 ? ("64") : ("32"));
+    g_sGeneralOptions = QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64 ? ("64") : ("32"));
 
     g_sFileVersion = pPE->getFileVersion(&g_resourcesVersion);
     g_sFileVersionMS = pPE->getFileVersionMS(&g_resourcesVersion);
@@ -148,7 +148,7 @@ bool PE_Script::isPEPlus()
 
 QString PE_Script::getGeneralOptions()
 {
-    return sGeneralOptions;
+    return g_sGeneralOptions;
 }
 
 quint32 PE_Script::getResourceIdByNumber(quint32 nNumber)
