@@ -243,6 +243,8 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfSignatures);
 
     for (qint32 i = 0; (i < nNumberOfSignatures) && (!(pPdStruct->bIsStop)); i++) {
+        XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, g_listSignatures.at(i).sName);
+
         bool bExec = false;
 
         if ((g_listSignatures.at(i).sName != "_init") && (g_listSignatures.at(i).sName != "_fini") &&
@@ -372,7 +374,6 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
         }
 
         XBinary::setPdStructCurrentIncrement(pPdStruct, _nFreeIndex);
-        XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, g_listSignatures.at(i).sName);
     }
 
     if (nNumberOfSignatures) {

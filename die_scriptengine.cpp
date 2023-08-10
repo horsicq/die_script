@@ -34,6 +34,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     _addFunction(_setResult, "_setResult");
     _addFunction(_isResultPresent, "_isResultPresent");
     _addFunction(_removeResult, "_removeResult");
+    _addFunction(_isStop, "_isStop");
 #else
     connect(&g_globalScript, SIGNAL(includeScriptSignal(QString)), this, SLOT(includeScriptSlot(QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
@@ -48,6 +49,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     globalObject().setProperty("_setResult", valueGlobalScript.property("_setResult"));
     globalObject().setProperty("_isResultPresent", valueGlobalScript.property("_isResultPresent"));
     globalObject().setProperty("_removeResult", valueGlobalScript.property("_removeResult"));
+    globalObject().setProperty("_isStop", valueGlobalScript.property("_isStop"));
 #endif
 
     g_pBinary = 0;
@@ -260,6 +262,24 @@ QScriptValue DiE_ScriptEngine::_removeResult(QScriptContext *pContext, QScriptEn
     return result;
 }
 #endif
+#ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_isStop(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        bool bResult = false;
+
+        pScriptEngine->_isStopSlot(&bResult);
+
+        result = bResult;
+    }
+
+    return result;
+}
+#endif
 
 void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
 {
@@ -318,6 +338,11 @@ void DiE_ScriptEngine::_removeResultSlot(const QString &sType, const QString &sN
             break;
         }
     }
+}
+
+void DiE_ScriptEngine::_isStopSlot(bool *pResult)
+{
+    *pResult = (g_pPdStruct->bIsStop);
 }
 
 DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)

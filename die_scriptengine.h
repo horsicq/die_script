@@ -101,6 +101,7 @@ private:
     static QScriptValue _setResult(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _isResultPresent(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _removeResult(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _isStop(QScriptContext *pContext, QScriptEngine *pEngine);
 #endif
 
 private slots:
@@ -109,6 +110,7 @@ private slots:
     void _setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions);
     void _isResultPresentSlot(bool *pResult, const QString &sType, const QString &sName);
     void _removeResultSlot(const QString &sType, const QString &sName);
+    void _isStopSlot(bool *pResult);
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;
