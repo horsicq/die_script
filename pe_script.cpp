@@ -57,7 +57,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_nExportSection = pPE->getExportSection(getMemoryMap());
     g_nResourcesSection = pPE->getResourcesSection(getMemoryMap());
     g_nEntryPointSection = pPE->getEntryPointSection(getMemoryMap());
-    nRelocsSection = pPE->getRelocsSection(getMemoryMap());
+    g_nRelocsSection = pPE->getRelocsSection(getMemoryMap());
     nTLSSection = pPE->getTLSSection(getMemoryMap());
 
     nMajorLinkerVersion = pPE->getOptionalHeader_MajorLinkerVersion();
@@ -233,7 +233,7 @@ qint32 PE_Script::getEntryPointSection()
 
 qint32 PE_Script::getRelocsSection()
 {
-    return nRelocsSection;
+    return g_nRelocsSection;
 }
 
 qint32 PE_Script::getTLSSection()
