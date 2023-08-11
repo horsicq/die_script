@@ -126,7 +126,7 @@ private:
     qint32 g_nResourcesSection;
     qint32 g_nEntryPointSection;
     qint32 g_nRelocsSection;
-    qint32 nTLSSection;
+    qint32 g_nTLSSection;
     quint8 nMajorLinkerVersion;
     quint8 nMinorLinkerVersion;
     quint32 g_nSizeOfCode;

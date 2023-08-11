@@ -58,7 +58,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_nResourcesSection = pPE->getResourcesSection(getMemoryMap());
     g_nEntryPointSection = pPE->getEntryPointSection(getMemoryMap());
     g_nRelocsSection = pPE->getRelocsSection(getMemoryMap());
-    nTLSSection = pPE->getTLSSection(getMemoryMap());
+    g_nTLSSection = pPE->getTLSSection(getMemoryMap());
 
     nMajorLinkerVersion = pPE->getOptionalHeader_MajorLinkerVersion();
     nMinorLinkerVersion = pPE->getOptionalHeader_MinorLinkerVersion();
@@ -238,7 +238,7 @@ qint32 PE_Script::getRelocsSection()
 
 qint32 PE_Script::getTLSSection()
 {
-    return nTLSSection;
+    return g_nTLSSection;
 }
 
 quint8 PE_Script::getMajorLinkerVersion()
