@@ -61,11 +61,11 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_nTLSSection = pPE->getTLSSection(getMemoryMap());
 
     g_nMajorLinkerVersion = pPE->getOptionalHeader_MajorLinkerVersion();
-    nMinorLinkerVersion = pPE->getOptionalHeader_MinorLinkerVersion();
+    g_nMinorLinkerVersion = pPE->getOptionalHeader_MinorLinkerVersion();
     g_nSizeOfCode = pPE->getOptionalHeader_SizeOfCode();
     nSizeOfUninitializedData = pPE->getOptionalHeader_SizeOfUninitializedData();
 
-    sCompilerVersion = QString("%1.%2").arg(g_nMajorLinkerVersion).arg(nMinorLinkerVersion);
+    sCompilerVersion = QString("%1.%2").arg(g_nMajorLinkerVersion).arg(g_nMinorLinkerVersion);
     g_sGeneralOptions = QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64 ? ("64") : ("32"));
 
     g_sFileVersion = pPE->getFileVersion(&g_resourcesVersion);
@@ -248,7 +248,7 @@ quint8 PE_Script::getMajorLinkerVersion()
 
 quint8 PE_Script::getMinorLinkerVersion()
 {
-    return nMinorLinkerVersion;
+    return g_nMinorLinkerVersion;
 }
 
 QString PE_Script::getManifest()

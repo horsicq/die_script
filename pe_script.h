@@ -128,7 +128,7 @@ private:
     qint32 g_nRelocsSection;
     qint32 g_nTLSSection;
     quint8 g_nMajorLinkerVersion;
-    quint8 nMinorLinkerVersion;
+    quint8 g_nMinorLinkerVersion;
     quint32 g_nSizeOfCode;
     quint32 nSizeOfUninitializedData;
     QString sCompilerVersion;
