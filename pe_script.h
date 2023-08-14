@@ -130,7 +130,7 @@ private:
     quint8 g_nMajorLinkerVersion;
     quint8 g_nMinorLinkerVersion;
     quint32 g_nSizeOfCode;
-    quint32 nSizeOfUninitializedData;
+    quint32 g_nSizeOfUninitializedData;
     QString sCompilerVersion;
     QString g_sFileVersion;
     QString g_sFileVersionMS;

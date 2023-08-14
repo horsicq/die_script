@@ -63,7 +63,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_nMajorLinkerVersion = pPE->getOptionalHeader_MajorLinkerVersion();
     g_nMinorLinkerVersion = pPE->getOptionalHeader_MinorLinkerVersion();
     g_nSizeOfCode = pPE->getOptionalHeader_SizeOfCode();
-    nSizeOfUninitializedData = pPE->getOptionalHeader_SizeOfUninitializedData();
+    g_nSizeOfUninitializedData = pPE->getOptionalHeader_SizeOfUninitializedData();
 
     sCompilerVersion = QString("%1.%2").arg(g_nMajorLinkerVersion).arg(g_nMinorLinkerVersion);
     g_sGeneralOptions = QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64 ? ("64") : ("32"));
@@ -343,7 +343,7 @@ quint32 PE_Script::getSizeOfCode()
 
 quint32 PE_Script::getSizeOfUninitializedData()
 {
-    return nSizeOfUninitializedData;
+    return g_nSizeOfUninitializedData;
 }
 
 QString PE_Script::getPEFileVersion(const QString &sFileName)
