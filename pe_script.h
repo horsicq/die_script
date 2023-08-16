@@ -131,7 +131,7 @@ private:
     quint8 g_nMinorLinkerVersion;
     quint32 g_nSizeOfCode;
     quint32 g_nSizeOfUninitializedData;
-    QString sCompilerVersion;
+    QString g_sCompilerVersion;
     QString g_sFileVersion;
     QString g_sFileVersionMS;
     qint32 g_nCalculateSizeOfHeaders;
