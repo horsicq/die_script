@@ -265,6 +265,8 @@ QScriptValue DiE_ScriptEngine::_removeResult(QScriptContext *pContext, QScriptEn
 #ifdef QT_SCRIPT_LIB
 QScriptValue DiE_ScriptEngine::_isStop(QScriptContext *pContext, QScriptEngine *pEngine)
 {
+    Q_UNUSED(pContext)
+
     QScriptValue result;
 
     DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
