@@ -890,7 +890,7 @@ QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
     return sResult;
 }
 
-void DiE_Script::setData(const QString &sDirectory, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::setData(const QString &sDirectory, const OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     g_sDirectoryProcess = sDirectory;
     g_scanOptionsProcess = scanOptions;
