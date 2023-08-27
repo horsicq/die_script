@@ -130,7 +130,7 @@ public:
     void removeDebugger();
 #endif
     void setData(const QString &sDirectory, const OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct);
-    void setData(QIODevice *pDevice, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct);
+    void setData(QIODevice *pDevice, const OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct);
 
     static QList<XBinary::SCANSTRUCT> convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
     SCAN_RESULT getScanResultProcess();

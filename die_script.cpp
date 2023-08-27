@@ -897,7 +897,7 @@ void DiE_Script::setData(const QString &sDirectory, const OPTIONS &scanOptions, 
     g_pPdStruct = pPdStruct;
 }
 
-void DiE_Script::setData(QIODevice *pDevice, OPTIONS scanOptions, XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::setData(QIODevice *pDevice, const OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     g_pDeviceProcess = pDevice;
     g_scanOptionsProcess = scanOptions;
