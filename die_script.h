@@ -158,7 +158,7 @@ private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> g_listSignatures;
     DBT g_databaseType;
 #ifdef QT_SCRIPTTOOLS_LIB
-    QScriptEngineDebugger *pDebugger;
+    QScriptEngineDebugger *g_pDebugger;
 #endif
     QString g_sDirectoryProcess;
     QIODevice *g_pDeviceProcess;

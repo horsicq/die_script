@@ -91,7 +91,7 @@ DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
     g_pDeviceProcess = nullptr;
     g_scanResultProcess = {};
 #ifdef QT_SCRIPTTOOLS_LIB
-    pDebugger = nullptr;
+    g_pDebugger = nullptr;
 #endif
 }
 
@@ -224,8 +224,8 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     connect(&scriptEngine, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
 
 #ifdef QT_SCRIPTTOOLS_LIB
-    if (pDebugger) {
-        pDebugger->attachTo(&scriptEngine);
+    if (g_pDebugger) {
+        g_pDebugger->attachTo(&scriptEngine);
     }
 #endif
 
@@ -294,8 +294,8 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 
             if (_handleError(&scriptEngine, script, &signatureRecord, pScanResult)) {
 #ifdef QT_SCRIPTTOOLS_LIB
-                if (pDebugger) {
-                    pDebugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
+                if (g_pDebugger) {
+                    g_pDebugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
                 }
 #endif
                 XSCRIPTVALUE _scriptValue = scriptEngine.globalObject().property(sDetectFunction);
@@ -940,13 +940,13 @@ DiE_Script::SCAN_RESULT DiE_Script::getScanResultProcess()
 #ifdef QT_SCRIPTTOOLS_LIB
 void DiE_Script::setDebugger(QScriptEngineDebugger *pDebugger)
 {
-    this->pDebugger = pDebugger;
+    this->g_pDebugger = pDebugger;
 }
 #endif
 
 #ifdef QT_SCRIPTTOOLS_LIB
 void DiE_Script::removeDebugger()
 {
-    this->pDebugger = nullptr;
+    this->g_pDebugger = nullptr;
 }
 #endif
