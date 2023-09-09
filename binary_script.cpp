@@ -387,7 +387,8 @@ QString Binary_Script::getDisasmString(qint64 nAddress)
 
 qint64 Binary_Script::getDisasmNextAddress(qint64 nAddress)
 {
-    return XCapstone::getNextAddress(XBinary::getDisasmFamily(&g_memoryMap), g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress);
+    return XCapstone::getNextAddress(XBinary::getDisasmFamily(&g_memoryMap), g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress),
+                                     nAddress);
 }
 
 bool Binary_Script::is16()
