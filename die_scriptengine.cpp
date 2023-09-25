@@ -33,6 +33,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     _addFunction(_log, "_log");
     _addFunction(_setResult, "_setResult");
     _addFunction(_isResultPresent, "_isResultPresent");
+    _addFunction(_getNumberOfResults, "_getNumberOfResults");
     _addFunction(_removeResult, "_removeResult");
     _addFunction(_isStop, "_isStop");
 #else
@@ -40,14 +41,17 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     connect(&g_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_setResultSignal(QString, QString, QString, QString)), this, SLOT(_setResultSlot(QString, QString, QString, QString)),
             Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isResultPresentSignal(bool *, QString)), this, SLOT(_isResultPresentSlot(bool *, QString)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_removeResult(QString)), this, SLOT(_removeResult(QString)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isResultPresentSignal(bool *, QString, QString)), this, SLOT(_isResultPresentSlot(bool *, QString, QString)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_getNumberOfResultsSignal(qint32 *, QString)), this, SLOT(_getNumberOfResultsSlot(qint32 *, QString)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_removeResultSignal(QString)), this, SLOT(_removeResultSlot(QString)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isStopSignal(bool *)), this, SLOT(_isStopSlot(bool *)), Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&g_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
     globalObject().setProperty("_log", valueGlobalScript.property("_log"));
     globalObject().setProperty("_setResult", valueGlobalScript.property("_setResult"));
     globalObject().setProperty("_isResultPresent", valueGlobalScript.property("_isResultPresent"));
+    globalObject().setProperty("_getNumberOfResults", valueGlobalScript.property("_getNumberOfResults"));
     globalObject().setProperty("_removeResult", valueGlobalScript.property("_removeResult"));
     globalObject().setProperty("_isStop", valueGlobalScript.property("_isStop"));
 #endif
@@ -246,6 +250,25 @@ QScriptValue DiE_ScriptEngine::_isResultPresent(QScriptContext *pContext, QScrip
 }
 #endif
 #ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_getNumberOfResults(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        QString sType = pContext->argument(0).toString();
+        qint32 nResult = 0;
+
+        pScriptEngine->_getNumberOfResultsSlot(&nResult, sType);
+
+        result = nResult;
+    }
+
+    return result;
+}
+#endif
+#ifdef QT_SCRIPT_LIB
 QScriptValue DiE_ScriptEngine::_removeResult(QScriptContext *pContext, QScriptEngine *pEngine)
 {
     QScriptValue result;
@@ -316,16 +339,29 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
     g_listResult.append(record);
 }
 
-void DiE_ScriptEngine::_isResultPresentSlot(bool *pResult, const QString &sType, const QString &sName)
+void DiE_ScriptEngine::_isResultPresentSlot(bool *pbResult, const QString &sType, const QString &sName)
 {
-    *pResult = false;
+    *pbResult = false;
 
     qint32 nNumberOfResults = g_pListScanStructs->count();
 
     for (qint32 i = 0; i < nNumberOfResults; i++) {
         if ((g_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) && (g_pListScanStructs->at(i).sName.toUpper() == sName.toUpper())) {
-            *pResult = true;
+            *pbResult = true;
             break;
+        }
+    }
+}
+
+void DiE_ScriptEngine::_getNumberOfResultsSlot(qint32 *pnResult, const QString &sType)
+{
+    *pnResult = 0;
+
+    qint32 nNumberOfResults = g_pListScanStructs->count();
+
+    for (qint32 i = 0; i < nNumberOfResults; i++) {
+        if ((g_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) || (sType == "")) {
+            (*pnResult)++;
         }
     }
 }

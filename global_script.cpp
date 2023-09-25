@@ -48,3 +48,32 @@ void global_script::_setResult(const QString &sType, const QString &sName, const
 {
     emit _setResultSignal(sType, sName, sVersion, sOptions);
 }
+
+bool global_script::_isResultPresent(const QString &sType, const QString &sName)
+{
+    bool bResult = false;
+    emit _isResultPresentSignal(&bResult, sType, sName);
+
+    return bResult;
+}
+
+qint32 global_script::_getNumberOfResults(const QString &sType)
+{
+    qint32 nResult = 0;
+    emit _getNumberOfResultsSignal(&nResult, sType);
+
+    return nResult;
+}
+
+void global_script::_removeResult(const QString &sType, const QString &sName)
+{
+    emit _removeResultSignal(sType, sName);
+}
+
+bool global_script::_isStop()
+{
+    bool bResult = false;
+    emit _isStopSignal(&bResult);
+
+    return bResult;
+}
