@@ -61,7 +61,7 @@ public slots:
 private:
     XELF *g_pELF;
     XELF_DEF::Elf_Ehdr g_elfHeader;
-    quint16 g_nStringTableSection;
+    quint32 g_nStringTableSection;
     QByteArray g_baStringTable;
     QList<XELF_DEF::Elf_Shdr> g_listSectionHeaders;
     QList<XELF_DEF::Elf_Phdr> g_listProgramHeaders;
