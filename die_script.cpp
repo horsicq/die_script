@@ -749,6 +749,8 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
 
     if (pScanTimer) {
         pScanResult->nScanTime = pScanTimer->elapsed();
+
+        delete pScanTimer;
     }
 }
 
