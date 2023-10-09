@@ -106,8 +106,7 @@ public:
     };
 
     explicit DiE_Script(QObject *pParent = nullptr);
-    bool loadDatabase(const QString &sDatabasePath);
-    QString getDatabasePath();
+    bool loadDatabase(const QString &sDatabasePath, bool bInit);
 
     QList<SIGNATURE_STATE> getSignatureStates();
     qint32 getNumberOfSignatures(XBinary::FT fileType);
@@ -154,7 +153,6 @@ signals:
     void infoMessage(const QString &sInfoMessage);
 
 private:
-    QString g_sDatabasePath;
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> g_listSignatures;
     DBT g_databaseType;
 #ifdef QT_SCRIPTTOOLS_LIB

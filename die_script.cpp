@@ -421,14 +421,13 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     return bResult;
 }
 
-bool DiE_Script::loadDatabase(const QString &sDatabasePath)
+bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit)
 {
-    // TODO Check if empty file
-    this->g_sDatabasePath = sDatabasePath;
-
     g_databaseType = DBT_UNKNOWN;
 
-    g_listSignatures.clear();
+    if (bInit) {
+        g_listSignatures.clear();
+    }
 
     QString _sDatabasePath = XBinary::convertPathName(sDatabasePath);
 
@@ -485,11 +484,6 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath)
     }
 
     return g_listSignatures.count();
-}
-
-QString DiE_Script::getDatabasePath()
-{
-    return g_sDatabasePath;
 }
 
 QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
