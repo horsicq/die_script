@@ -78,7 +78,7 @@ public slots:
     QString calculateMD5(qint64 nOffset, qint64 nSize);
     quint32 calculateCRC32(qint64 nOffset, qint64 nSize);
     bool isSignatureInSectionPresent(quint32 nNumber, const QString &sSignature);
-    qint64 getImageBase();
+    qint64 getImageBase(); // Check mb quint64
     QString upperCase(const QString &sString);
     QString lowerCase(const QString &sString);
     bool isPlainText();
@@ -125,10 +125,8 @@ public slots:
     float read_float16(qint64 nOffset, bool bIsBigEndian = false);
     float read_float32(qint64 nOffset, bool bIsBigEndian = false);
     double read_float64(qint64 nOffset, bool bIsBigEndian = false);
-
     quint32 read_uint24(qint64 nOffset, bool bIsBigEndian = false);
     qint32 read_int24(qint64 nOffset, bool bIsBigEndian = false);
-
     quint8 read_bcd_uint8(qint64 nOffset);
     quint16 read_bcd_uint16(qint64 nOffset, bool bIsBigEndian = false);
     quint16 read_bcd_uint32(qint64 nOffset, bool bIsBigEndian = false);
