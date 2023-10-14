@@ -78,7 +78,7 @@ public slots:
     QString calculateMD5(qint64 nOffset, qint64 nSize);
     quint32 calculateCRC32(qint64 nOffset, qint64 nSize);
     bool isSignatureInSectionPresent(quint32 nNumber, const QString &sSignature);
-    qint64 getImageBase(); // Check mb quint64
+    qint64 getImageBase();  // Check mb quint64
     QString upperCase(const QString &sString);
     QString lowerCase(const QString &sString);
     bool isPlainText();
