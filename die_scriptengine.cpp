@@ -315,7 +315,7 @@ void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
         if (g_pSignaturesList->at(i).fileType == XBinary::FT_UNKNOWN) {
             if (g_pSignaturesList->at(i).sName == sScript) {
                 // TODO error
-                evaluate(g_pSignaturesList->at(i).sText);
+                evaluate(g_pSignaturesList->at(i).sText, sScript);
 
                 break;
             }

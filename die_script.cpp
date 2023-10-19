@@ -247,8 +247,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 
         bool bExec = false;
 
-        if ((g_listSignatures.at(i).sName != "_init") && (g_listSignatures.at(i).sName != "_fini") &&
-            (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
+        if (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType)) {
             bExec = true;
         }
 
