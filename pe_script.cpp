@@ -141,6 +141,11 @@ bool PE_Script::isNET()
     return g_bIsNETPresent;
 }
 
+bool PE_Script::isNet()
+{
+    return g_bIsNETPresent;
+}
+
 bool PE_Script::isPEPlus()
 {
     return is64();
@@ -177,6 +182,11 @@ quint32 PE_Script::getResourceTypeByNumber(quint32 nNumber)
 }
 
 bool PE_Script::isNETStringPresent(const QString &sString)
+{
+    return pPE->isNETAnsiStringPresent(sString, &g_cliInfo);
+}
+
+bool PE_Script::isNetObjectPresent(const QString &sString)
 {
     return pPE->isNETAnsiStringPresent(sString, &g_cliInfo);
 }
