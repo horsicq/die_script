@@ -40,10 +40,8 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
     g_sHeaderSignature = pBinary->getSignature(0, 256);  // TODO const
     g_nHeaderSignatureSize = g_sHeaderSignature.size() / 2;
 
-    if (g_nEntryPointOffset > 0) {
-        g_sEntryPointSignature = pBinary->getSignature(g_nEntryPointOffset, 256);  // TODO const
-        g_nEntryPointSignatureSize = g_sEntryPointSignature.size();
-    }
+    g_sEntryPointSignature = pBinary->getSignature(g_nEntryPointOffset, 256);  // TODO const
+    g_nEntryPointSignatureSize = g_sEntryPointSignature.size();
 
     if (g_nOverlayOffset > 0) {
         g_sOverlaySignature = pBinary->getSignature(g_nOverlayOffset, 256);  // TODO const
