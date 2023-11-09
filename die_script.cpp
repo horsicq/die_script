@@ -604,8 +604,10 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
     QSet<XBinary::FT> stFT = XFormats::getFileTypes(_pDevice, true);
     QSet<XBinary::FT> stFTOriginal = stFT;
 
-    if (pOptions->fileType != XBinary::FT_UNKNOWN) {
-        XBinary::filterFileTypes(&stFT, pOptions->fileType);
+    if (bInit) {
+        if (pOptions->fileType != XBinary::FT_UNKNOWN) {
+            XBinary::filterFileTypes(&stFT, pOptions->fileType);
+        }
     }
 
     if (pOptions->bAllTypesScan) {
@@ -709,11 +711,11 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                         qint64 nResourceSize = listResources.at(i).nSize;
 
                         if (pe.checkOffsetSize(nResourceOffset, nResourceSize)) {
-                            QSet<XBinary::FT> stFT = XFormats::getFileTypes(pDevice, nResourceOffset, nResourceSize);
+                            QSet<XBinary::FT> _stFT = XFormats::getFileTypes(pDevice, nResourceOffset, nResourceSize);
 
-                            if (stFT.contains(XBinary::FT_MSDOS) || stFT.contains(XBinary::FT_NE) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) ||
-                                stFT.contains(XBinary::FT_PE) || stFT.contains(XBinary::FT_ELF) || stFT.contains(XBinary::FT_MACHO) || stFT.contains(XBinary::FT_DEX) ||
-                                stFT.contains(XBinary::FT_ARCHIVE)) {
+                            if (_stFT.contains(XBinary::FT_MSDOS) || _stFT.contains(XBinary::FT_NE) || _stFT.contains(XBinary::FT_LE) || _stFT.contains(XBinary::FT_LX) ||
+                                _stFT.contains(XBinary::FT_PE) || _stFT.contains(XBinary::FT_ELF) || _stFT.contains(XBinary::FT_MACHO) || _stFT.contains(XBinary::FT_DEX) ||
+                                _stFT.contains(XBinary::FT_ARCHIVE)) {
                                 XBinary::SCANID scanIdResource = scanIdMain;
                                 scanIdResource.filePart = XBinary::FILEPART_RESOURCE;
                                 scanIdResource.sInfo = XBinary::valueToHexEx(nResourceOffset);
