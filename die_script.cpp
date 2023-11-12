@@ -714,8 +714,8 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                             QSet<XBinary::FT> _stFT = XFormats::getFileTypes(pDevice, nResourceOffset, nResourceSize);
 
                             if (_stFT.contains(XBinary::FT_MSDOS) || _stFT.contains(XBinary::FT_NE) || _stFT.contains(XBinary::FT_LE) || _stFT.contains(XBinary::FT_LX) ||
-                                _stFT.contains(XBinary::FT_PE) || _stFT.contains(XBinary::FT_ELF) || _stFT.contains(XBinary::FT_MACHO) || _stFT.contains(XBinary::FT_DEX) ||
-                                _stFT.contains(XBinary::FT_ARCHIVE)) {
+                                _stFT.contains(XBinary::FT_PE) || _stFT.contains(XBinary::FT_ELF) || _stFT.contains(XBinary::FT_MACHO) ||
+                                _stFT.contains(XBinary::FT_DEX) || _stFT.contains(XBinary::FT_ARCHIVE)) {
                                 XBinary::SCANID scanIdResource = scanIdMain;
                                 scanIdResource.filePart = XBinary::FILEPART_RESOURCE;
                                 scanIdResource.sInfo = XBinary::valueToHexEx(nResourceOffset);
