@@ -196,6 +196,11 @@ bool PE_Script::isNETUnicodeStringPresent(const QString &sString)
     return pPE->isNETUnicodeStringPresent(sString, &g_cliInfo);
 }
 
+bool PE_Script::isNetUStringPresent(const QString &sString)
+{
+    return pPE->isNETUnicodeStringPresent(sString, &g_cliInfo);
+}
+
 qint32 PE_Script::getNumberOfImports()
 {
     return g_nNumberOfImports;
