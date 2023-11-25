@@ -483,8 +483,7 @@ qint32 DiE_Script::getNumberOfSignatures(XBinary::FT fileType)
     qint32 nNumberOfSignatures = g_listSignatures.count();
 
     for (qint32 i = 0; (i < nNumberOfSignatures); i++) {
-        if ((g_listSignatures.at(i).sName != "_init") &&
-            (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
+        if ((g_listSignatures.at(i).sName != "_init") && (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType))) {
             nResult++;
         }
     }
