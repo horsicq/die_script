@@ -161,8 +161,6 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 
     DiE_ScriptEngine::SIGNATURE_RECORD srGlobalInit = {};
     DiE_ScriptEngine::SIGNATURE_RECORD srInit = {};
-    DiE_ScriptEngine::SIGNATURE_RECORD srGlobalFini = {};
-    DiE_ScriptEngine::SIGNATURE_RECORD srFini = {};
 
     bool bGlobalInit = false;
     bool bInit = false;
