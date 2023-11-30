@@ -846,6 +846,19 @@ QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
     return sResult;
 }
 
+QList<QString> DiE_Script::getErrorsStringList(SCAN_RESULT *pScanResult)
+{
+    QList<QString> listResult;
+
+    qint32 nNumberOfErrors = pScanResult->listErrors.count();
+
+    for (qint32 i = 0; i < nNumberOfErrors; i++) {
+        listResult.append(QString("%1: %2").arg(pScanResult->listErrors.at(i).sScript, pScanResult->listErrors.at(i).sErrorString));
+    }
+
+    return listResult;
+}
+
 void DiE_Script::setData(const QString &sDirectory, const OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     g_sDirectoryProcess = sDirectory;

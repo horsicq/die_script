@@ -43,7 +43,7 @@ public slots:
     bool compare(const QString &sSignature, qint64 nOffset = 0);
     bool compareEP(const QString &sSignature, qint64 nOffset = 0);
     quint8 readByte(qint64 nOffset);
-    qint8 readSByte(qint64 nOffset);
+    qint16 readSByte(qint64 nOffset); // qint16 not qint8 js shows as char
     quint16 readWord(qint64 nOffset);
     qint16 readSWord(qint64 nOffset);
     quint32 readDword(qint64 nOffset);
@@ -98,7 +98,7 @@ public slots:
     bool isVerbose();
 
     quint8 read_uint8(qint64 nOffset);
-    qint8 read_int8(qint64 nOffset);
+    qint16 read_int8(qint64 nOffset); // qint16 not qint8 / qint8 qjs shows as char
     quint16 read_uint16(qint64 nOffset, bool bIsBigEndian = false);
     qint16 read_int16(qint64 nOffset, bool bIsBigEndian = false);
     quint32 read_uint32(qint64 nOffset, bool bIsBigEndian = false);
@@ -151,6 +151,10 @@ protected:
     XBinary::_MEMORY_MAP *getMemoryMap();
     XADDR getBaseAddress();
     XBinary::PDSTRUCT *getPdStruct();
+
+signals:
+    void errorMessage(const QString &sErrorMessage);
+    void infoMessage(const QString &sInfoMessage);
 
 private:
     XBinary *g_pBinary;

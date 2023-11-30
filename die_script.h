@@ -124,6 +124,7 @@ public:
     bool isSignaturesPresent(XBinary::FT fileType);
 
     static QString getErrorsString(SCAN_RESULT *pScanResult);
+    static QList<QString> getErrorsStringList(SCAN_RESULT *pScanResult);
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();

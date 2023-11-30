@@ -26,6 +26,9 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
     this->g_pPdStruct = pPdStruct;
     this->g_pOptions = pOptions;
 
+    connect(pBinary, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+    connect(pBinary, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+
     g_nSize = pBinary->getSize();
     g_memoryMap = pBinary->getMemoryMap();
     g_nBaseAddress = pBinary->getBaseAddress();
@@ -130,7 +133,7 @@ quint8 Binary_Script::readByte(qint64 nOffset)
     return g_pBinary->read_uint8(nOffset);
 }
 
-qint8 Binary_Script::readSByte(qint64 nOffset)
+qint16 Binary_Script::readSByte(qint64 nOffset)
 {
     return g_pBinary->read_int8(nOffset);
 }
@@ -172,11 +175,14 @@ QString Binary_Script::getString(qint64 nOffset, qint64 nMaxSize)
 
 qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, const QString &sSignature)
 {
+    qint64 nResult = -1;
     qint64 nResultSize = 0;
 
     _fixOffsetAndSize(&nOffset, &nSize);
 
-    return g_pBinary->find_signature(&g_memoryMap, nOffset, nSize, sSignature, &nResultSize, g_pPdStruct);
+    nResult = g_pBinary->find_signature(&g_memoryMap, nOffset, nSize, sSignature, &nResultSize, g_pPdStruct);
+
+    return nResult;
 }
 
 qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, const QString &sString)
@@ -424,7 +430,7 @@ quint8 Binary_Script::read_uint8(qint64 nOffset)
     return g_pBinary->read_uint8(nOffset);
 }
 
-qint8 Binary_Script::read_int8(qint64 nOffset)
+qint16 Binary_Script::read_int8(qint64 nOffset)
 {
     return g_pBinary->read_int8(nOffset);
 }
