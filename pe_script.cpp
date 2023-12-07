@@ -323,12 +323,12 @@ QString PE_Script::getSectionNameCollision(const QString &sString1, const QStrin
 
 qint32 PE_Script::getSectionNumber(const QString &sSectionName)
 {
-    return XBinary::getStringNumberFromList(&g_listSectionNameStrings, sSectionName);
+    return XBinary::getStringNumberFromList(&g_listSectionNameStrings, sSectionName, getPdStruct());
 }
 
 qint32 PE_Script::getSectionNumberExp(const QString &sSectionName)
 {
-    return XBinary::getStringNumberFromListExp(&g_listSectionNameStrings, sSectionName);
+    return XBinary::getStringNumberFromListExp(&g_listSectionNameStrings, sSectionName, getPdStruct());
 }
 
 bool PE_Script::isDll()
@@ -394,12 +394,12 @@ qint64 PE_Script::calculateSizeOfHeaders()
 
 bool PE_Script::isExportFunctionPresent(const QString &sFunctionName)
 {
-    return XBinary::isStringInListPresent(&g_listExportFunctionNameStrings, sFunctionName);
+    return XBinary::isStringInListPresent(&g_listExportFunctionNameStrings, sFunctionName, getPdStruct());
 }
 
 bool PE_Script::isExportFunctionPresentExp(const QString &sFunctionName)
 {
-    return XBinary::isStringInListPresentExp(&g_listExportFunctionNameStrings, sFunctionName);
+    return XBinary::isStringInListPresentExp(&g_listExportFunctionNameStrings, sFunctionName, getPdStruct());
 }
 
 bool PE_Script::isExportPresent()
