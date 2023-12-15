@@ -143,8 +143,13 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     //        g_pBinary=pDEX;
     //    }
 
-    connect(g_pBinaryScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-    connect(g_pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+    if (g_pBinaryScript) {
+        connect(g_pBinaryScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+    }
+
+    if (g_pExtraScript) {
+        connect(g_pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+    }
 }
 
 DiE_ScriptEngine::~DiE_ScriptEngine()
