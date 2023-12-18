@@ -145,7 +145,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 {
     XBinary::SCANID resultId = {};
 
-    XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(fileType, pDevice);
+    XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(fileType, XBinary::MAPMODE_UNKNOWN, pDevice);
 
     resultId.fileType = fileType;
     resultId.sUuid = XBinary::generateUUID();
