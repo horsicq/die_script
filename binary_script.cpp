@@ -30,7 +30,7 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
     connect(pBinary, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
 
     g_nSize = pBinary->getSize();
-    g_memoryMap = pBinary->getMemoryMap();
+    g_memoryMap = pBinary->getMemoryMap(XBinary::MAPMODE_UNKNOWN, pPdStruct);
     g_nBaseAddress = pBinary->getBaseAddress();
 
     g_nEntryPointOffset = pBinary->getEntryPointOffset(&g_memoryMap);
