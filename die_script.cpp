@@ -893,10 +893,13 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRU
         record.varInfo2 = pListScanStructs->at(i).sSignatureFileName;
 
         record.globalColor = XFormats::typeToColor(record.sType);
+        record.nPrio = XFormats::typeToPrio(record.sType);
         record.sType = XFormats::translateType(record.sType);
 
         listResult.append(record);
     }
+
+    XFormats::sortRecords(&listResult);
 
     return listResult;
 }
