@@ -119,7 +119,7 @@ bool Binary_Script::compareEP(const QString &sSignature, qint64 nOffset)
 
     qint32 nSignatureSize = sSignature.size();
 
-    if ((nSignatureSize + nOffset < g_nEntryPointSignatureSize) && (!sSignature.contains('$')) && (!sSignature.contains('#'))) {
+    if ((nSignatureSize + nOffset < g_nEntryPointSignatureSize) && (!sSignature.contains('$')) && (!sSignature.contains('#')) && (!sSignature.contains('+')) && (!sSignature.contains('*'))) {
         bResult = g_pBinary->compareSignatureStrings(g_sEntryPointSignature.mid(nOffset * 2, nSignatureSize * 2), sSignature);
     } else {
         bResult = g_pBinary->compareEntryPoint(&g_memoryMap, sSignature, nOffset);

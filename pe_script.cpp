@@ -211,9 +211,17 @@ QString PE_Script::getImportLibraryName(quint32 nNumber)
     return pPE->getImportLibraryName(nNumber, &g_listImportHeaders);
 }
 
-bool PE_Script::isLibraryPresent(const QString &sLibraryName)
+bool PE_Script::isLibraryPresent(const QString &sLibraryName, bool bCheckCase)
 {
-    return pPE->isImportLibraryPresentI(sLibraryName, &g_listImportHeaders);  // TODO pdStruct
+    bool bResult = false;
+
+    if (bCheckCase) {
+        bResult = pPE->isImportLibraryPresent(sLibraryName, &g_listImportHeaders);  // TODO pdStruct
+    } else {
+        bResult = pPE->isImportLibraryPresentI(sLibraryName, &g_listImportHeaders);  // TODO pdStruct
+    }
+
+    return bResult;
 }
 
 bool PE_Script::isLibraryFunctionPresent(const QString &sLibraryName, const QString &sFunctionName)
