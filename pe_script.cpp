@@ -201,6 +201,11 @@ bool PE_Script::isNetUStringPresent(const QString &sString)
     return pPE->isNETUnicodeStringPresent(sString, &g_cliInfo);
 }
 
+qint64 PE_Script::findSignatureInBlob_NET(const QString &sSignature)
+{
+
+}
+
 qint32 PE_Script::getNumberOfImports()
 {
     return g_nNumberOfImports;
