@@ -203,7 +203,12 @@ bool PE_Script::isNetUStringPresent(const QString &sString)
 
 qint64 PE_Script::findSignatureInBlob_NET(const QString &sSignature)
 {
+    return pPE->findSignatureInBlob_NET(sSignature, getMemoryMap(), getPdStruct());
+}
 
+bool PE_Script::isSignatureInBlob_NETPresent(const QString &sSignature)
+{
+    return pPE->isSignatureInBlob_NETPresent(sSignature, getMemoryMap(), getPdStruct());
 }
 
 qint32 PE_Script::getNumberOfImports()
