@@ -206,9 +206,9 @@ qint64 PE_Script::findSignatureInBlob_NET(const QString &sSignature)
     return pPE->findSignatureInBlob_NET(sSignature, getMemoryMap(), getPdStruct());
 }
 
-bool PE_Script::isSignatureInBlob_NETPresent(const QString &sSignature)
+bool PE_Script::isSignatureInBlobPresent_NET(const QString &sSignature)
 {
-    return pPE->isSignatureInBlob_NETPresent(sSignature, getMemoryMap(), getPdStruct());
+    return pPE->isSignatureInBlobPresent_NET(sSignature, getMemoryMap(), getPdStruct());
 }
 
 qint32 PE_Script::getNumberOfImports()

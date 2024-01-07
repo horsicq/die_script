@@ -56,7 +56,7 @@ public slots:
     bool isNETUnicodeStringPresent(const QString &sString);
     bool isNetUStringPresent(const QString &sString);
     qint64 findSignatureInBlob_NET(const QString &sSignature);
-    bool isSignatureInBlob_NETPresent(const QString &sSignature);
+    bool isSignatureInBlobPresent_NET(const QString &sSignature);
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(const QString &sLibraryName, bool bCheckCase = false);
