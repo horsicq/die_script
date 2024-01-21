@@ -22,9 +22,11 @@
 #define DIE_SCRIPT_H
 
 #include <QDir>
+#if (QT_VERSION_MAJOR > 4)  // TODO Check
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#endif
 #include <QSemaphore>
 #include <QTimer>
 #include <QXmlStreamWriter>

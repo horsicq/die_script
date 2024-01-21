@@ -70,7 +70,7 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
     }
 
     g_bIsJpeg = false;
-    g_osJpegExif = {};
+    g_osJpegExif = XBinary::OFFSETSIZE();
 
     g_pJpeg = dynamic_cast<XJpeg *>(pBinary);
 

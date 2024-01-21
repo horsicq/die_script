@@ -73,7 +73,7 @@ DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
     g_databaseType = DBT_UNKNOWN;
     g_pPdStruct = nullptr;
     g_pDeviceProcess = nullptr;
-    g_scanResultProcess = {};
+    g_scanResultProcess = SCAN_RESULT();
 #ifdef QT_SCRIPTTOOLS_LIB
     g_pDebugger = nullptr;
 #endif
