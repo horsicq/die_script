@@ -74,6 +74,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_nCalculateSizeOfHeaders = pPE->calculateHeadersSize();
 
     g_exportHeader = pPE->getExport();
+    g_nNumberOfExportFunctions = g_exportHeader.listPositions.count();
 
     g_listExportFunctionNameStrings = pPE->getExportFunctionsList(&g_exportHeader);
 
@@ -418,6 +419,11 @@ bool PE_Script::isExportFunctionPresent(const QString &sFunctionName)
 bool PE_Script::isExportFunctionPresentExp(const QString &sFunctionName)
 {
     return XBinary::isStringInListPresentExp(&g_listExportFunctionNameStrings, sFunctionName, getPdStruct());
+}
+
+qint32 PE_Script::getNumberOfExportFunctions()
+{
+    return g_nNumberOfExportFunctions;
 }
 
 bool PE_Script::isExportPresent()

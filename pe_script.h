@@ -95,6 +95,7 @@ public slots:
     qint64 calculateSizeOfHeaders();
     bool isExportFunctionPresent(const QString &sFunctionName);
     bool isExportFunctionPresentExp(const QString &sFunctionName);
+    qint32 getNumberOfExportFunctions();
     bool isExportPresent();
     bool isTLSPresent();
     bool isImportPresent();
@@ -102,7 +103,6 @@ public slots:
     quint32 getImportHash32();
     quint64 getImportHash64();
     bool isImportPositionHashPresent(qint32 nIndex, quint32 nHash);
-
 private:
     XPE *pPE;
     qint32 g_nNumberOfSections;
@@ -115,6 +115,7 @@ private:
     QList<XPE::IMPORT_HEADER> g_listImportHeaders;
     QList<XPE::IMPORT_RECORD> g_listImportRecords;
     qint32 g_nNumberOfImports;
+    qint32 g_nNumberOfExportFunctions;
     XPE::RESOURCES_VERSION g_resourcesVersion;
     bool g_bIsNETPresent;
     bool g_bIsDll;
