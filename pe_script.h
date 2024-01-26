@@ -103,6 +103,7 @@ public slots:
     quint32 getImportHash32();
     quint64 getImportHash64();
     bool isImportPositionHashPresent(qint32 nIndex, quint32 nHash);
+
 private:
     XPE *pPE;
     qint32 g_nNumberOfSections;
