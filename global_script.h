@@ -23,6 +23,7 @@
 
 // TODO rename to die_global_script
 #include <QObject>
+#include "xoptions.h"
 
 class global_script : public QObject {
     Q_OBJECT
@@ -40,6 +41,7 @@ public slots:
     qint32 _getNumberOfResults(const QString &sType);
     void _removeResult(const QString &sType, const QString &sName);
     bool _isStop();
+    void _codecs();
 
 signals:
     void includeScriptSignal(const QString &sScript);
@@ -49,6 +51,7 @@ signals:
     void _getNumberOfResultsSignal(qint32 *pnResult, const QString &sType);
     void _removeResultSignal(const QString &sType, const QString &sName);
     void _isStopSignal(bool *pResult);
+    void _codecsSignal();
 };
 
 #endif  // GLOBAL_SCRIPT_H
