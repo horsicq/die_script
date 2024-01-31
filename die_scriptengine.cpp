@@ -36,7 +36,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     _addFunction(_getNumberOfResults, "_getNumberOfResults");
     _addFunction(_removeResult, "_removeResult");
     _addFunction(_isStop, "_isStop");
-    _addFunction(_codecs, "_codecs");
+    _addFunction(_encodingList, "_encodingList");
 #else
     connect(&g_globalScript, SIGNAL(includeScriptSignal(QString)), this, SLOT(includeScriptSlot(QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
@@ -46,7 +46,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     connect(&g_globalScript, SIGNAL(_getNumberOfResultsSignal(qint32 *, QString)), this, SLOT(_getNumberOfResultsSlot(qint32 *, QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_removeResultSignal(QString)), this, SLOT(_removeResultSlot(QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_isStopSignal(bool *)), this, SLOT(_isStopSlot(bool *)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_codecsSignal()), this, SLOT(_codecsSlot()), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_encodingListSignal()), this, SLOT(_encodingListSlot()), Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&g_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
@@ -56,7 +56,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     globalObject().setProperty("_getNumberOfResults", valueGlobalScript.property("_getNumberOfResults"));
     globalObject().setProperty("_removeResult", valueGlobalScript.property("_removeResult"));
     globalObject().setProperty("_isStop", valueGlobalScript.property("_isStop"));
-    globalObject().setProperty("_codecs", valueGlobalScript.property("_codecs"));
+    globalObject().setProperty("_encodingList", valueGlobalScript.property("_encodingList"));
 #endif
 
     g_pBinary = 0;
@@ -317,7 +317,7 @@ QScriptValue DiE_ScriptEngine::_isStop(QScriptContext *pContext, QScriptEngine *
 }
 #endif
 #ifdef QT_SCRIPT_LIB
-QScriptValue DiE_ScriptEngine::_codecs(QScriptContext *pContext, QScriptEngine *pEngine)
+QScriptValue DiE_ScriptEngine::_encodingList(QScriptContext *pContext, QScriptEngine *pEngine)
 {
     Q_UNUSED(pContext)
 
@@ -328,7 +328,7 @@ QScriptValue DiE_ScriptEngine::_codecs(QScriptContext *pContext, QScriptEngine *
     if (pScriptEngine) {
         bool bResult = false;
 
-        pScriptEngine->_codecsSlot();
+        pScriptEngine->_encodingListSlot();
 
         result = bResult;
     }
@@ -414,7 +414,7 @@ void DiE_ScriptEngine::_isStopSlot(bool *pResult)
     *pResult = (g_pPdStruct->bIsStop);
 }
 
-void DiE_ScriptEngine::_codecsSlot()
+void DiE_ScriptEngine::_encodingListSlot()
 {
     QList<QString> listCodePages = XOptions::getCodePages(false);
 

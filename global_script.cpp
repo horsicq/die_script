@@ -77,7 +77,7 @@ bool global_script::_isStop()
     return bResult;
 }
 
-void global_script::_codecs()
+void global_script::_encodingList()
 {
-    emit _codecsSignal();
+    emit _encodingListSignal();
 }

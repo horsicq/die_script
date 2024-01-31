@@ -41,7 +41,7 @@ public slots:
     qint32 _getNumberOfResults(const QString &sType);
     void _removeResult(const QString &sType, const QString &sName);
     bool _isStop();
-    void _codecs();
+    void _encodingList();
 
 signals:
     void includeScriptSignal(const QString &sScript);
@@ -51,7 +51,7 @@ signals:
     void _getNumberOfResultsSignal(qint32 *pnResult, const QString &sType);
     void _removeResultSignal(const QString &sType, const QString &sName);
     void _isStopSignal(bool *pResult);
-    void _codecsSignal();
+    void _encodingListSignal();
 };
 
 #endif  // GLOBAL_SCRIPT_H

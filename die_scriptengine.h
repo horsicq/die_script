@@ -104,7 +104,7 @@ private:
     static QScriptValue _getNumberOfResults(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _removeResult(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _isStop(QScriptContext *pContext, QScriptEngine *pEngine);
-    static QScriptValue _codecs(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _encodingList(QScriptContext *pContext, QScriptEngine *pEngine);
 #endif
 
 private slots:
@@ -115,7 +115,7 @@ private slots:
     void _getNumberOfResultsSlot(qint32 *pnResult, const QString &sType);
     void _removeResultSlot(const QString &sType, const QString &sName);
     void _isStopSlot(bool *pResult);
-    void _codecsSlot();
+    void _encodingListSlot();
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;
