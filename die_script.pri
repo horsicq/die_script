@@ -59,6 +59,11 @@ SOURCES += \
     include($$PWD/../XArchive/xarchives.pri)
 }
 
+!contains(XCONFIG, xdex) {
+    XCONFIG += xdex
+    include($$PWD/../XDEX/xdex.pri)
+}
+
 !contains(XCONFIG, xoptions) {
     XCONFIG += xoptions
     include($$PWD/../Xoptions/xoptions.pri)
