@@ -404,6 +404,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit)
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "", XBinary::FT_UNKNOWN));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "Binary", XBinary::FT_BINARY));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "COM", XBinary::FT_COM));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "ZIP", XBinary::FT_ZIP));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "JAR", XBinary::FT_JAR));  // TODO -> Archive
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "APK", XBinary::FT_APK));  // TODO -> Archive
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "IPA", XBinary::FT_IPA));  // TODO -> Archive
@@ -425,6 +426,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit)
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath, XBinary::FT_UNKNOWN));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "Binary", XBinary::FT_BINARY));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "COM", XBinary::FT_COM));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ZIP", XBinary::FT_ZIP));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "JAR", XBinary::FT_JAR));  // TODO -> Archive
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "APK", XBinary::FT_APK));  // TODO -> Archive
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "IPA", XBinary::FT_IPA));  // TODO -> Archive
@@ -460,6 +462,11 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
     listFT.append(XBinary::FT_PE);
     listFT.append(XBinary::FT_ELF);
     listFT.append(XBinary::FT_MACHO);
+    listFT.append(XBinary::FT_ZIP);
+    listFT.append(XBinary::FT_JAR);
+    listFT.append(XBinary::FT_APK);
+    listFT.append(XBinary::FT_IPA);
+    listFT.append(XBinary::FT_DEX);
 
     qint32 nNumberOfFileTypes = listFT.count();
 
@@ -574,6 +581,14 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
             stFT.contains(XBinary::FT_NE)) {
             _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", 0, true, pPdStruct);
         }
+
+        if (stFT.contains(XBinary::FT_APK) || stFT.contains(XBinary::FT_IPA)) {
+            _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_JAR, pOptions, "", 0, true, pPdStruct);
+        }
+
+        if (stFT.contains(XBinary::FT_JAR)) {
+            _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ZIP, pOptions, "", 0, true, pPdStruct);
+        }
     }
 
     XBinary::SCANID scanIdMain = {};
@@ -604,6 +619,8 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_IPA, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_JAR)) {
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_JAR, pOptions, "", 0, true, pPdStruct);
+    } else if (stFT.contains(XBinary::FT_ZIP)) {
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ZIP, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MACHOFAT)) {
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHOFAT, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_COM) && (stFT.size() == 1)) {

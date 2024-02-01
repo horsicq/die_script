@@ -33,10 +33,11 @@
 #include "ne_script.h"
 #include "pe_script.h"
 #include "xbinary.h"
-// #include "jar_script.h"
-// #include "apk_script.h"
-// #include "ipa_script.h"
-// #include "dex_script.h"
+#include "zip_script.h"
+#include "jar_script.h"
+#include "apk_script.h"
+#include "ipa_script.h"
+#include "dex_script.h"
 #include "xscriptengine.h"
 
 class DiE_ScriptEngine : public XScriptEngine {
@@ -120,10 +121,8 @@ private slots:
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;
     QList<SCAN_STRUCT> *g_pListScanStructs;
-    XBinary *g_pBinary;
-    Binary_Script *g_pBinaryScript;
-    XBinary *g_pExtra;
-    Binary_Script *g_pExtraScript;
+    QList<XBinary *> g_listBinaries;
+    QList<Binary_Script *> g_listBinaryScripts;
     XBinary::PDSTRUCT *g_pPdStruct;
 
     QList<RESULT> g_listResult;

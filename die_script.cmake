@@ -6,6 +6,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../XArchive/xarchives.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../Formats/xformats.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../Formats/scanitem.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XCapstone/xcapstone.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../XOptions/xoptions.cmake)
 
 set(DIE_SCRIPT_SOURCES
     ${XDEX_SOURCES}
@@ -14,6 +15,7 @@ set(DIE_SCRIPT_SOURCES
     ${XFORMATS_SOURCES}
     ${XCAPSTONE_SOURCES}
     ${SCANITEM_SOURCES}
+    ${XOPTIONS_SOURCES}
     ${CMAKE_CURRENT_LIST_DIR}/binary_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/com_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/die_script.cpp
@@ -27,4 +29,9 @@ set(DIE_SCRIPT_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/ne_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pe_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xscriptengine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/zip_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/jar_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/apk_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/ipa_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dex_script.cpp
 )
