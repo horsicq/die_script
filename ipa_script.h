@@ -21,6 +21,7 @@
 #ifndef IPA_SCRIPT_H
 #define IPA_SCRIPT_H
 
+#include "xipa.h"
 #include "jar_script.h"
 
 class IPA_Script : public JAR_Script {

@@ -167,8 +167,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     }
     else if(XBinary::checkFileType(XBinary::FT_JAR,fileType))
     {
-       XZip *pZIP=new XZip(pDevice);
-       JAR_Script *pExtraScript=new JAR_Script(pZIP, pOptions, pPdStruct);
+       XJAR *pJAR=new XJAR(pDevice);
+       JAR_Script *pExtraScript=new JAR_Script(pJAR, pOptions, pPdStruct);
 
        if (pExtraScript) {
            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -178,8 +178,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     }
     else if(XBinary::checkFileType(XBinary::FT_APK,fileType))
     {
-       XZip *pZIP=new XZip(pDevice);
-       APK_Script *pExtraScript=new APK_Script(pZIP, pOptions, pPdStruct);
+       XAPK *pAPK=new XAPK(pDevice);
+       APK_Script *pExtraScript=new APK_Script(pAPK, pOptions, pPdStruct);
 
        if (pExtraScript) {
            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -189,8 +189,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     }
     else if(XBinary::checkFileType(XBinary::FT_IPA,fileType))
     {
-       XZip *pZIP=new XZip(pDevice);
-       IPA_Script *pExtraScript=new IPA_Script(pZIP, pOptions, pPdStruct);
+       XIPA *pIPA=new XIPA(pDevice);
+       IPA_Script *pExtraScript=new IPA_Script(pIPA, pOptions, pPdStruct);
 
        if (pExtraScript) {
            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -209,6 +209,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
        _addClass(pExtraScript,"DEX");
     }
+
+    // TODO APKS
 }
 
 DiE_ScriptEngine::~DiE_ScriptEngine()

@@ -151,7 +151,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     resultId.sUuid = XBinary::generateUUID();
     resultId.sArch = memoryMap.sArch;
     resultId.mode = memoryMap.mode;
-    resultId.bIsBigEndian = memoryMap.bIsBigEndian;
+    resultId.endian = memoryMap.endian;
     resultId.sType = memoryMap.sType;
     resultId.nOffset = nOffset;
     resultId.nSize = pDevice->size();

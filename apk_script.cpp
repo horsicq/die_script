@@ -20,9 +20,9 @@
  */
 #include "apk_script.h"
 
-APK_Script::APK_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : JAR_Script(pZip, pOptions, pPdStruct)
+APK_Script::APK_Script(XAPK *pAPK, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : JAR_Script(pAPK, pOptions, pPdStruct)
 {
-    this->g_pZip = pZip;
+    this->g_pAPK = pAPK;
 }
 
 APK_Script::~APK_Script()

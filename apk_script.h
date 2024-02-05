@@ -21,17 +21,18 @@
 #ifndef APK_SCRIPT_H
 #define APK_SCRIPT_H
 
+#include "xapk.h"
 #include "jar_script.h"
 
 class APK_Script : public JAR_Script {
     Q_OBJECT
 
 public:
-    explicit APK_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit APK_Script(XAPK *pAPK, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~APK_Script();
 
 private:
-    XZip *g_pZip;
+    XAPK *g_pAPK;
 };
 
 #endif  // APK_SCRIPT_H

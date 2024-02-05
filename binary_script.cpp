@@ -646,8 +646,8 @@ QString Binary_Script::getOperationSystemOptions()
 {
     QString sResult = QString("%1, %2, %3").arg(g_osInfo.sArch, XBinary::modeIdToString(g_osInfo.mode), g_osInfo.sType);
 
-    if (g_osInfo.bIsBigEndian) {
-        sResult.append(QString(", %1").arg(XBinary::endiannessToString(g_osInfo.bIsBigEndian)));
+    if (g_osInfo.endian == XBinary::ENDIAN_BIG) {
+        sResult.append(QString(", %1").arg(XBinary::endiannessToString(XBinary::ENDIAN_BIG)));
     }
 
     return sResult;
