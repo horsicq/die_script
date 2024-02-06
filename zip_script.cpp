@@ -28,3 +28,8 @@ ZIP_Script::ZIP_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStru
 ZIP_Script::~ZIP_Script()
 {
 }
+
+bool ZIP_Script::isArchiveRecordPresent(const QString &sArchiveRecord)
+{
+    return XArchive::isArchiveRecordPresent(sArchiveRecord, getArchiveRecords(), getPdStruct());
+}

@@ -24,6 +24,7 @@
 #include "xbinary.h"
 #include "xcapstone.h"
 #include "xjpeg.h"
+#include "xzip.h"
 
 class Binary_Script : public QObject {
     Q_OBJECT
@@ -150,6 +151,7 @@ protected:
     XBinary::_MEMORY_MAP *getMemoryMap();
     XADDR getBaseAddress();
     XBinary::PDSTRUCT *getPdStruct();
+    QList<XArchive::RECORD> *getArchiveRecords();
 
 signals:
     void errorMessage(const QString &sErrorMessage);
@@ -190,6 +192,8 @@ private:
     XBinary::OFFSETSIZE g_osJpegExif;
     QList<XTiff::CHUNK> g_listJpegExifChunks;
     QString g_sJpegExifCameraName;
+    XZip *g_pZip;
+    QList<XArchive::RECORD> g_listArchiveRecords;
     bool g_bIsBigEndian;
     bool g_bIsSigned;
 };

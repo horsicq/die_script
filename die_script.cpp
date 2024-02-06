@@ -567,7 +567,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
         _pDevice = pSd;
     }
 
-    QSet<XBinary::FT> stFT = XFormats::getFileTypes(_pDevice, true);
+    QSet<XBinary::FT> stFT = XFormats::getFileTypes(_pDevice, true, pPdStruct);
     QSet<XBinary::FT> stFTOriginal = stFT;
 
     if (bInit) {

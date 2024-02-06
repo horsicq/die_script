@@ -31,6 +31,9 @@ public:
     explicit ZIP_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~ZIP_Script();
 
+public slots:
+    bool isArchiveRecordPresent(const QString &sArchiveRecord);
+
 private:
     XZip *g_pZip;
 };

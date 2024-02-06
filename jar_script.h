@@ -30,8 +30,13 @@ public:
     explicit JAR_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~JAR_Script();
 
+public slots:
+    QString getManifest();
+    QString getManifestRecord(const QString &sRecord);
+
 private:
     XZip *g_pZip;
+    QString g_sManifest;
 };
 
 #endif  // JAR_SCRIPT_H
