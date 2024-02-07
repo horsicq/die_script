@@ -136,6 +136,7 @@ public:
 
     static QList<XBinary::SCANSTRUCT> convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
     SCAN_RESULT getScanResultProcess();
+    static bool isScanable(const QSet<XBinary::FT> &stFT);
 
 public slots:
     void process();

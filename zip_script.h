@@ -22,7 +22,7 @@
 #define ZIP_SCRIPT_H
 
 #include "binary_script.h"
-#include "xzip.h"
+#include "xarchives.h"
 
 class ZIP_Script : public Binary_Script {
     Q_OBJECT

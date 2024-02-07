@@ -198,7 +198,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
        _addClass(pExtraScript,"IPA");
     }
-    if(XBinary::checkFileType(XBinary::FT_DEX,fileType))
+    else if(XBinary::checkFileType(XBinary::FT_DEX,fileType))
     {
        XDEX *pDEX=new XDEX(pDevice);
        DEX_Script *pExtraScript=new DEX_Script(pDEX, pOptions, pPdStruct);

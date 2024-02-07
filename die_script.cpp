@@ -430,7 +430,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit)
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "JAR", XBinary::FT_JAR));  // TODO -> Archive
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "APK", XBinary::FT_APK));  // TODO -> Archive
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "IPA", XBinary::FT_IPA));  // TODO -> Archive
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEX", XBinary::FT_IPA));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEX", XBinary::FT_DEX));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MSDOS", XBinary::FT_MSDOS));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LE", XBinary::FT_LE));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LX", XBinary::FT_LX));  // TODO Check
@@ -621,6 +621,8 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_JAR, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_ZIP)) {
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ZIP, pOptions, "", 0, true, pPdStruct);
+    } else if (stFT.contains(XBinary::FT_DEX)) {
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_DEX, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MACHOFAT)) {
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHOFAT, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_COM) && (stFT.size() == 1)) {
@@ -646,7 +648,65 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
     }
 
     if (pOptions->bIsRecursiveScan) {
-        if (stFTOriginal.contains(XBinary::FT_ZLIB) || stFTOriginal.contains(XBinary::FT_LHA)) {
+        if (stFTOriginal.contains(XBinary::FT_ZIP)) {
+            XZip xzip(pDevice);
+
+            if (xzip.isValid(pPdStruct)) {
+                QList<XArchive::RECORD> listRecords = xzip.getRecords(20000, pPdStruct);
+
+                qint32 nNumberOfResources = listRecords.count();
+
+                qint32 _nFreeIndex = XBinary::getFreeIndex(pPdStruct);
+                XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfResources);
+
+                for (qint32 i = 0; (i < nNumberOfResources) && (!(pPdStruct->bIsStop)); i++) {
+                    QByteArray baRecordData = xzip.decompress(&(listRecords.at(i)), true, pPdStruct);
+
+                    QSet<XBinary::FT> _stFT = XFormats::getFileTypes(&baRecordData, true);
+
+                    if (isScanable(_stFT)) {
+                        XBinary::SCANID scanIdResource = scanIdMain;
+                        scanIdResource.filePart = XBinary::FILEPART_ARCHIVERECORD;
+                        scanIdResource.sInfo = listRecords.at(i).sFileName;
+
+                        qint64 _nUncompressedSize = listRecords.at(i).nUncompressedSize;
+                        qint64 _nRecordDataSize = baRecordData.size();
+
+                        if (_nUncompressedSize > _nRecordDataSize) {
+                            QTemporaryFile fileTemp;
+
+                            if (fileTemp.open()) {
+                                QString sTempFileName = fileTemp.fileName();
+
+                                if (xzip.decompressToFile(&(listRecords.at(i)), sTempFileName, pPdStruct)) {
+                                    QFile file;
+                                    file.setFileName(sTempFileName);
+
+                                    if (file.open(QIODevice::ReadOnly)) {
+                                        process(&file, sFunction, pScanResult, 0, file.size(), scanIdResource, pOptions, false, pPdStruct);
+                                        file.close();
+                                    }
+                                }
+                            }
+                        } else {
+                            QBuffer buffer(&baRecordData);
+
+                            if (buffer.open(QIODevice::ReadOnly)) {
+                                process(&buffer, sFunction, pScanResult, 0, buffer.size(), scanIdResource, pOptions, false, pPdStruct);
+
+                                buffer.close();
+                            }
+                        }
+                    }
+
+                    XBinary::setPdStructCurrentIncrement(pPdStruct, _nFreeIndex);
+                    XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, listRecords.at(i).sFileName);
+                }
+
+                XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
+            }
+
+        } else if (stFTOriginal.contains(XBinary::FT_ZLIB) || stFTOriginal.contains(XBinary::FT_LHA)) {
             QList<XArchive::RECORD> listRecords = XArchives::getRecords(_pDevice, -1, pPdStruct);
 
             if (listRecords.count() == 1) {
@@ -682,6 +742,9 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
 
                     qint32 nNumberOfResources = listResources.count();
 
+                    qint32 _nFreeIndex = XBinary::getFreeIndex(pPdStruct);
+                    XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfResources);
+
                     for (qint32 i = 0; (i < nNumberOfResources) && (!(pPdStruct->bIsStop)); i++) {
                         qint64 nResourceOffset = listResources.at(i).nOffset;
                         qint64 nResourceSize = listResources.at(i).nSize;
@@ -689,9 +752,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                         if (pe.checkOffsetSize(nResourceOffset, nResourceSize)) {
                             QSet<XBinary::FT> _stFT = XFormats::getFileTypes(pDevice, nResourceOffset, nResourceSize);
 
-                            if (_stFT.contains(XBinary::FT_MSDOS) || _stFT.contains(XBinary::FT_NE) || _stFT.contains(XBinary::FT_LE) || _stFT.contains(XBinary::FT_LX) ||
-                                _stFT.contains(XBinary::FT_PE) || _stFT.contains(XBinary::FT_ELF) || _stFT.contains(XBinary::FT_MACHO) ||
-                                _stFT.contains(XBinary::FT_DEX) || _stFT.contains(XBinary::FT_ARCHIVE)) {
+                            if (isScanable(_stFT)) {
                                 XBinary::SCANID scanIdResource = scanIdMain;
                                 scanIdResource.filePart = XBinary::FILEPART_RESOURCE;
                                 scanIdResource.sInfo = XBinary::valueToHexEx(nResourceOffset);
@@ -699,7 +760,11 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                                 process(_pDevice, sFunction, pScanResult, nResourceOffset, nResourceSize, scanIdResource, pOptions, false, pPdStruct);
                             }
                         }
+
+                        XBinary::setPdStructCurrentIncrement(pPdStruct, _nFreeIndex);
                     }
+
+                    XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
                 }
 
                 if (pe.isOverlayPresent()) {
@@ -924,6 +989,13 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRU
 DiE_Script::SCAN_RESULT DiE_Script::getScanResultProcess()
 {
     return g_scanResultProcess;
+}
+
+bool DiE_Script::isScanable(const QSet<XBinary::FT> &stFT)
+{
+    return (stFT.contains(XBinary::FT_MSDOS) || stFT.contains(XBinary::FT_NE) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) ||
+                                    stFT.contains(XBinary::FT_PE) || stFT.contains(XBinary::FT_ELF) || stFT.contains(XBinary::FT_MACHO) ||
+                                    stFT.contains(XBinary::FT_DEX) || stFT.contains(XBinary::FT_ARCHIVE));
 }
 
 #ifdef QT_SCRIPTTOOLS_LIB

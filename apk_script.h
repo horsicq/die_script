@@ -21,8 +21,8 @@
 #ifndef APK_SCRIPT_H
 #define APK_SCRIPT_H
 
-#include "xapk.h"
 #include "jar_script.h"
+#include "xandroidbinary.h"
 
 class APK_Script : public JAR_Script {
     Q_OBJECT
@@ -31,8 +31,13 @@ public:
     explicit APK_Script(XAPK *pAPK, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~APK_Script();
 
+public slots:
+    QString getAndroidManifest();
+    QString getAndroidManifestRecord(const QString &sRecord);
+
 private:
     XAPK *g_pAPK;
+    QString g_sAndroidManifest;
 };
 
 #endif  // APK_SCRIPT_H
