@@ -153,61 +153,51 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "MSDOS");
-    }
-    else if(XBinary::checkFileType(XBinary::FT_ZIP,fileType))
-    {
-       XZip *pZIP=new XZip(pDevice);
-       ZIP_Script *pExtraScript=new ZIP_Script(pZIP, pOptions, pPdStruct);
+    } else if (XBinary::checkFileType(XBinary::FT_ZIP, fileType)) {
+        XZip *pZIP = new XZip(pDevice);
+        ZIP_Script *pExtraScript = new ZIP_Script(pZIP, pOptions, pPdStruct);
 
-       if (pExtraScript) {
-           connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-       }
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+        }
 
-       _addClass(pExtraScript,"ZIP");
-    }
-    else if(XBinary::checkFileType(XBinary::FT_JAR,fileType))
-    {
-       XJAR *pJAR=new XJAR(pDevice);
-       JAR_Script *pExtraScript=new JAR_Script(pJAR, pOptions, pPdStruct);
+        _addClass(pExtraScript, "ZIP");
+    } else if (XBinary::checkFileType(XBinary::FT_JAR, fileType)) {
+        XJAR *pJAR = new XJAR(pDevice);
+        JAR_Script *pExtraScript = new JAR_Script(pJAR, pOptions, pPdStruct);
 
-       if (pExtraScript) {
-           connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-       }
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+        }
 
-       _addClass(pExtraScript,"JAR");
-    }
-    else if(XBinary::checkFileType(XBinary::FT_APK,fileType))
-    {
-       XAPK *pAPK=new XAPK(pDevice);
-       APK_Script *pExtraScript=new APK_Script(pAPK, pOptions, pPdStruct);
+        _addClass(pExtraScript, "JAR");
+    } else if (XBinary::checkFileType(XBinary::FT_APK, fileType)) {
+        XAPK *pAPK = new XAPK(pDevice);
+        APK_Script *pExtraScript = new APK_Script(pAPK, pOptions, pPdStruct);
 
-       if (pExtraScript) {
-           connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-       }
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+        }
 
-       _addClass(pExtraScript,"APK");
-    }
-    else if(XBinary::checkFileType(XBinary::FT_IPA,fileType))
-    {
-       XIPA *pIPA=new XIPA(pDevice);
-       IPA_Script *pExtraScript=new IPA_Script(pIPA, pOptions, pPdStruct);
+        _addClass(pExtraScript, "APK");
+    } else if (XBinary::checkFileType(XBinary::FT_IPA, fileType)) {
+        XIPA *pIPA = new XIPA(pDevice);
+        IPA_Script *pExtraScript = new IPA_Script(pIPA, pOptions, pPdStruct);
 
-       if (pExtraScript) {
-           connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-       }
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+        }
 
-       _addClass(pExtraScript,"IPA");
-    }
-    else if(XBinary::checkFileType(XBinary::FT_DEX,fileType))
-    {
-       XDEX *pDEX=new XDEX(pDevice);
-       DEX_Script *pExtraScript=new DEX_Script(pDEX, pOptions, pPdStruct);
+        _addClass(pExtraScript, "IPA");
+    } else if (XBinary::checkFileType(XBinary::FT_DEX, fileType)) {
+        XDEX *pDEX = new XDEX(pDevice);
+        DEX_Script *pExtraScript = new DEX_Script(pDEX, pOptions, pPdStruct);
 
-       if (pExtraScript) {
-           connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-       }
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+        }
 
-       _addClass(pExtraScript,"DEX");
+        _addClass(pExtraScript, "DEX");
     }
 
     // TODO APKS

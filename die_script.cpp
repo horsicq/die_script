@@ -994,8 +994,8 @@ DiE_Script::SCAN_RESULT DiE_Script::getScanResultProcess()
 bool DiE_Script::isScanable(const QSet<XBinary::FT> &stFT)
 {
     return (stFT.contains(XBinary::FT_MSDOS) || stFT.contains(XBinary::FT_NE) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) ||
-                                    stFT.contains(XBinary::FT_PE) || stFT.contains(XBinary::FT_ELF) || stFT.contains(XBinary::FT_MACHO) ||
-                                    stFT.contains(XBinary::FT_DEX) || stFT.contains(XBinary::FT_ARCHIVE));
+            stFT.contains(XBinary::FT_PE) || stFT.contains(XBinary::FT_ELF) || stFT.contains(XBinary::FT_MACHO) || stFT.contains(XBinary::FT_DEX) ||
+            stFT.contains(XBinary::FT_ARCHIVE));
 }
 
 #ifdef QT_SCRIPTTOOLS_LIB
