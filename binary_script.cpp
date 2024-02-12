@@ -112,7 +112,7 @@ bool Binary_Script::compare(const QString &sSignature, qint64 nOffset)
 
     qint32 nSignatureSize = sSignature.size();
 
-    if ((nSignatureSize + nOffset < g_nEntryPointSignatureSize) && (!sSignature.contains('$')) && (!sSignature.contains('#')) && (!sSignature.contains('+')) &&
+    if ((nSignatureSize + nOffset < g_nHeaderSignatureSize) && (!sSignature.contains('$')) && (!sSignature.contains('#')) && (!sSignature.contains('+')) &&
         (!sSignature.contains('%')) && (!sSignature.contains('*'))) {
         bResult = g_pBinary->compareSignatureStrings(g_sHeaderSignature.mid(nOffset * 2, nSignatureSize * 2), sSignature);
     } else {
@@ -254,7 +254,7 @@ bool Binary_Script::compareOverlay(const QString &sSignature, qint64 nOffset)
 
     qint32 nSignatureSize = sSignature.size();
 
-    if ((nSignatureSize + nOffset < g_nEntryPointSignatureSize) && (!sSignature.contains('$')) && (!sSignature.contains('#')) && (!sSignature.contains('+')) &&
+    if ((nSignatureSize + nOffset < g_nOverlaySignatureSize) && (!sSignature.contains('$')) && (!sSignature.contains('#')) && (!sSignature.contains('+')) &&
         (!sSignature.contains('%')) && (!sSignature.contains('*'))) {
         bResult = g_pBinary->compareSignatureStrings(g_sOverlaySignature.mid(nOffset * 2, nSignatureSize * 2), sSignature);
     } else {
