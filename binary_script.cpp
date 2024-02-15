@@ -397,7 +397,8 @@ qint32 Binary_Script::getDisasmLength(qint64 nAddress)
 
 QString Binary_Script::getDisasmString(qint64 nAddress)
 {
-    return XCapstone::disasm(g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress).sString.toUpper();
+    qint64 nOffset = XBinary::addressToOffset(&g_memoryMap, nAddress);
+    return XCapstone::disasm(g_disasmHandle, g_pBinary->getDevice(), nOffset, nAddress).sString.toUpper();
 }
 
 qint64 Binary_Script::getDisasmNextAddress(qint64 nAddress)

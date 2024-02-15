@@ -976,6 +976,7 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRU
 
         record.globalColor = XFormats::typeToColor(record.sType);
         record.nPrio = XFormats::typeToPrio(record.sType);
+        record.bIsProtection = XFormats::isProtection(record.sType);
         record.sType = XFormats::translateType(record.sType);
 
         listResult.append(record);
