@@ -66,7 +66,7 @@ SOURCES += \
 
 !contains(XCONFIG, xoptions) {
     XCONFIG += xoptions
-    include($$PWD/../Xoptions/xoptions.pri)
+    include($$PWD/../XOptions/xoptions.pri)
 }
 
 contains(XCONFIG, use_capstone_x86) {
