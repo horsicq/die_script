@@ -20,9 +20,9 @@
  */
 #include "ipa_script.h"
 
-IPA_Script::IPA_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : JAR_Script(pZip, pOptions, pPdStruct)
+IPA_Script::IPA_Script(XIPA *pIPA, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : JAR_Script(pIPA, pOptions, pPdStruct)
 {
-    this->g_pZip = pZip;
+    this->g_pIPA = pIPA;
 }
 
 IPA_Script::~IPA_Script()

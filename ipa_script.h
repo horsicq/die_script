@@ -28,11 +28,11 @@ class IPA_Script : public JAR_Script {
     Q_OBJECT
 
 public:
-    explicit IPA_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit IPA_Script(XIPA *pIPA, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~IPA_Script();
 
 private:
-    XZip *g_pZip;
+    XIPA *g_pIPA;
 };
 
 #endif  // IPA_SCRIPT_H
