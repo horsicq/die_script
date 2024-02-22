@@ -475,6 +475,7 @@ void DiE_ScriptEngine::_isStopSlot(bool *pResult)
 
 void DiE_ScriptEngine::_encodingListSlot()
 {
+#if (QT_VERSION_MAJOR < 6) || defined(QT_CORE5COMPAT_LIB)
     QList<QString> listCodePages = XOptions::getCodePages(false);
 
     qint32 nNumberOfCodePages = listCodePages.count();
@@ -482,6 +483,7 @@ void DiE_ScriptEngine::_encodingListSlot()
     for (qint32 i = 0; i < nNumberOfCodePages; i++) {
         emit infoMessage(listCodePages.at(i));
     }
+#endif
 }
 
 DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)
