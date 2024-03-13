@@ -706,7 +706,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                 XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
             }
 
-        } else if (stFTOriginal.contains(XBinary::FT_ZLIB) || stFTOriginal.contains(XBinary::FT_LHA)) {
+        } else if (stFTOriginal.contains(XBinary::FT_ZLIB) || stFTOriginal.contains(XBinary::FT_LHA) || stFTOriginal.contains(XBinary::FT_GZIP)) {
             QList<XArchive::RECORD> listRecords = XArchives::getRecords(_pDevice, -1, pPdStruct);
 
             if (listRecords.count() == 1) {
