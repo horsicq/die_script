@@ -129,7 +129,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
 
             record.fileType = fileType;
             record.sName = fi.fileName();
-            record.sText = pZip->decompress(&zipRecord, false, nullptr);
+            record.sText = pZip->decompress(&zipRecord, nullptr);
             record.sFilePath = zipRecord.sFileName;
             record.bReadOnly = true;
 
@@ -660,7 +660,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                 XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfResources);
 
                 for (qint32 i = 0; (i < nNumberOfResources) && (!(pPdStruct->bIsStop)); i++) {
-                    QByteArray baRecordData = xzip.decompress(&(listRecords.at(i)), true, pPdStruct);
+                    QByteArray baRecordData = xzip.decompress(&(listRecords.at(i)), pPdStruct, 0, 0x200);
 
                     QSet<XBinary::FT> _stFT = XFormats::getFileTypes(&baRecordData, true);
 
