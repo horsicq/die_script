@@ -227,9 +227,9 @@ bool PE_Script::isLibraryPresent(const QString &sLibraryName, bool bCheckCase)
     bool bResult = false;
 
     if (bCheckCase) {
-        bResult = pPE->isImportLibraryPresent(sLibraryName, &g_listImportHeaders);  // TODO pdStruct
+        bResult = pPE->isImportLibraryPresent(sLibraryName, &g_listImportHeaders, getPdStruct());
     } else {
-        bResult = pPE->isImportLibraryPresentI(sLibraryName, &g_listImportHeaders);  // TODO pdStruct
+        bResult = pPE->isImportLibraryPresentI(sLibraryName, &g_listImportHeaders, getPdStruct());
     }
 
     return bResult;
@@ -237,7 +237,12 @@ bool PE_Script::isLibraryPresent(const QString &sLibraryName, bool bCheckCase)
 
 bool PE_Script::isLibraryFunctionPresent(const QString &sLibraryName, const QString &sFunctionName)
 {
-    return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &g_listImportHeaders);  // TODO pdStruct
+    return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &g_listImportHeaders, getPdStruct());
+}
+
+bool PE_Script::isFunctionPresent(const QString &sFunctionName)
+{
+    return pPE->isFunctionPresent(sFunctionName, &g_listImportHeaders, getPdStruct());
 }
 
 QString PE_Script::getImportFunctionName(quint32 nImport, quint32 nFunctionNumber)
