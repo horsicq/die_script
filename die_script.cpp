@@ -416,6 +416,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit)
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "PE", XBinary::FT_PE));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "ELF", XBinary::FT_ELF));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "MACH", XBinary::FT_MACHO));
+                g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "NPM", XBinary::FT_NPM));
 
                 g_databaseType = DBT_COMPRESSED;
             }
@@ -438,6 +439,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit)
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "PE", XBinary::FT_PE));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ELF", XBinary::FT_ELF));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MACH", XBinary::FT_MACHO));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NPM", XBinary::FT_NPM));
 
         g_databaseType = DBT_FOLDER;
     } else {
@@ -467,6 +469,7 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
     listFT.append(XBinary::FT_APK);
     listFT.append(XBinary::FT_IPA);
     listFT.append(XBinary::FT_DEX);
+    listFT.append(XBinary::FT_NPM);
 
     qint32 nNumberOfFileTypes = listFT.count();
 
@@ -623,6 +626,8 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ZIP, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_DEX)) {
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_DEX, pOptions, "", 0, true, pPdStruct);
+    } else if (stFT.contains(XBinary::FT_NPM)) {
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_NPM, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MACHOFAT)) {
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHOFAT, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_COM) && (stFT.size() == 1)) {

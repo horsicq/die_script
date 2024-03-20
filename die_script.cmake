@@ -52,4 +52,6 @@ set(DIE_SCRIPT_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/ipa_script.h
     ${CMAKE_CURRENT_LIST_DIR}/dex_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dex_script.h
+    ${CMAKE_CURRENT_LIST_DIR}/npm_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/npm_script.h
 )

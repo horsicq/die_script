@@ -38,6 +38,7 @@
 #include "apk_script.h"
 #include "ipa_script.h"
 #include "dex_script.h"
+#include "npm_script.h"
 #include "xscriptengine.h"
 
 class DiE_ScriptEngine : public XScriptEngine {

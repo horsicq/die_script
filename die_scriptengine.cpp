@@ -189,6 +189,15 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "IPA");
+    } else if (XBinary::checkFileType(XBinary::FT_NPM, fileType)) {
+        XNPM *pNPNM = new XNPM(pDevice);
+        NPM_Script *pExtraScript = new NPM_Script(pNPNM, pOptions, pPdStruct);
+
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+        }
+
+        _addClass(pExtraScript, "NPM");
     } else if (XBinary::checkFileType(XBinary::FT_DEX, fileType)) {
         XDEX *pDEX = new XDEX(pDevice);
         DEX_Script *pExtraScript = new DEX_Script(pDEX, pOptions, pPdStruct);
