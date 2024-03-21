@@ -71,15 +71,18 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
     g_listBinaries.append(pBinary);
 
+    Util_script *pUtilScript = new Util_script;
+    _addClass(pUtilScript, "Util");
+    g_listScriptClasses.append(pUtilScript);
+
     Binary_Script *pBinaryScript = new Binary_Script(pBinary, pOptions, pPdStruct);
 
     if (pBinaryScript) {
         connect(pBinaryScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
     }
 
-    g_listBinaryScripts.append(pBinaryScript);
-
     _addClass(pBinaryScript, "Binary");
+    g_listScriptClasses.append(pBinaryScript);
 
     if (XBinary::checkFileType(XBinary::FT_COM, fileType)) {
         XCOM *pCOM = new XCOM(pDevice);
@@ -90,6 +93,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "COM");
+        g_listBinaries.append(pCOM);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_PE, fileType)) {
         XPE *pPE = new XPE(pDevice);
         PE_Script *pExtraScript = new PE_Script(pPE, pOptions, pPdStruct);
@@ -99,6 +104,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "PE");
+        g_listBinaries.append(pPE);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_ELF, fileType)) {
         XELF *pELF = new XELF(pDevice);
         ELF_Script *pExtraScript = new ELF_Script(pELF, pOptions, pPdStruct);
@@ -108,6 +115,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "ELF");
+        g_listBinaries.append(pELF);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_MACHO, fileType)) {
         XMACH *pMACH = new XMACH(pDevice);
         MACH_Script *pExtraScript = new MACH_Script(pMACH, pOptions, pPdStruct);
@@ -117,6 +126,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "MACH");
+        g_listBinaries.append(pMACH);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_NE, fileType)) {
         XNE *pNE = new XNE(pDevice);
         NE_Script *pExtraScript = new NE_Script(pNE, pOptions, pPdStruct);
@@ -126,6 +137,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "NE");
+        g_listBinaries.append(pNE);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_LE, fileType)) {
         XLE *pLE = new XLE(pDevice);
         LE_Script *pExtraScript = new LE_Script(pLE, pOptions, pPdStruct);
@@ -135,6 +148,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "LE");
+        g_listBinaries.append(pLE);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_LX, fileType)) {
         XLE *pLE = new XLE(pDevice);
         LX_Script *pExtraScript = new LX_Script(pLE, pOptions, pPdStruct);
@@ -144,6 +159,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "LX");
+        g_listBinaries.append(pLE);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_MSDOS, fileType)) {
         XMSDOS *pXMSDOS = new XMSDOS(pDevice);
         MSDOS_Script *pExtraScript = new MSDOS_Script(pXMSDOS, pOptions, pPdStruct);
@@ -153,6 +170,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "MSDOS");
+        g_listBinaries.append(pXMSDOS);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_ZIP, fileType)) {
         XZip *pZIP = new XZip(pDevice);
         ZIP_Script *pExtraScript = new ZIP_Script(pZIP, pOptions, pPdStruct);
@@ -162,6 +181,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "ZIP");
+        g_listBinaries.append(pZIP);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_JAR, fileType)) {
         XJAR *pJAR = new XJAR(pDevice);
         JAR_Script *pExtraScript = new JAR_Script(pJAR, pOptions, pPdStruct);
@@ -171,6 +192,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "JAR");
+        g_listBinaries.append(pJAR);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_APK, fileType)) {
         XAPK *pAPK = new XAPK(pDevice);
         APK_Script *pExtraScript = new APK_Script(pAPK, pOptions, pPdStruct);
@@ -180,6 +203,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "APK");
+        g_listBinaries.append(pAPK);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_IPA, fileType)) {
         XIPA *pIPA = new XIPA(pDevice);
         IPA_Script *pExtraScript = new IPA_Script(pIPA, pOptions, pPdStruct);
@@ -189,6 +214,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "IPA");
+        g_listBinaries.append(pIPA);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_NPM, fileType)) {
         XNPM *pNPNM = new XNPM(pDevice);
         NPM_Script *pExtraScript = new NPM_Script(pNPNM, pOptions, pPdStruct);
@@ -198,6 +225,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "NPM");
+        g_listBinaries.append(pNPNM);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_DEX, fileType)) {
         XDEX *pDEX = new XDEX(pDevice);
         DEX_Script *pExtraScript = new DEX_Script(pDEX, pOptions, pPdStruct);
@@ -207,6 +236,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         _addClass(pExtraScript, "DEX");
+        g_listBinaries.append(pDEX);
+        g_listScriptClasses.append(pExtraScript);
     }
 
     // TODO APKS
@@ -223,10 +254,10 @@ DiE_ScriptEngine::~DiE_ScriptEngine()
     }
 
     {
-        qint32 nNumberOfRecords = g_listBinaryScripts.count();
+        qint32 nNumberOfRecords = g_listScriptClasses.count();
 
         for (qint32 i = 0; i < nNumberOfRecords; i++) {
-            delete g_listBinaryScripts.at(i);
+            delete g_listScriptClasses.at(i);
         }
     }
 }

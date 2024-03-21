@@ -39,6 +39,7 @@
 #include "ipa_script.h"
 #include "dex_script.h"
 #include "npm_script.h"
+#include "util_script.h"
 #include "xscriptengine.h"
 
 class DiE_ScriptEngine : public XScriptEngine {
@@ -123,7 +124,7 @@ private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;
     QList<SCAN_STRUCT> *g_pListScanStructs;
     QList<XBinary *> g_listBinaries;
-    QList<Binary_Script *> g_listBinaryScripts;
+    QList<QObject *> g_listScriptClasses;
     XBinary::PDSTRUCT *g_pPdStruct;
 
     QList<RESULT> g_listResult;

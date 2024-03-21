@@ -22,6 +22,7 @@ HEADERS += \
     $$PWD/ne_script.h \
     $$PWD/pe_script.h \
     $$PWD/npm_script.h \
+    $$PWD/util_script.h \
     $$PWD/xscriptengine.h \
     $$PWD/zip_script.h
 
@@ -43,6 +44,7 @@ SOURCES += \
     $$PWD/ne_script.cpp \
     $$PWD/pe_script.cpp \
     $$PWD/npm_script.cpp \
+    $$PWD/util_script.cpp \
     $$PWD/xscriptengine.cpp \
     $$PWD/zip_script.cpp
 
