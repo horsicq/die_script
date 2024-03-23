@@ -20,10 +20,8 @@
  */
 #include "util_script.h"
 
-Util_script::Util_script(QObject *pParent)
-    : QObject(pParent)
+Util_script::Util_script(QObject *pParent) : QObject(pParent)
 {
-
 }
 
 quint64 Util_script::shlu64(quint64 nValue, quint64 nShift)

@@ -81,5 +81,3 @@ void global_script::_encodingList()
 {
     emit _encodingListSignal();
 }
-
-

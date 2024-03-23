@@ -23,8 +23,7 @@
 
 #include <QObject>
 
-class Util_script : public QObject
-{
+class Util_script : public QObject {
     Q_OBJECT
 public:
     explicit Util_script(QObject *pParent = nullptr);
@@ -36,4 +35,4 @@ public slots:
     qint64 shr64(qint64 nValue, qint64 nShift);
 };
 
-#endif // UTIL_SCRIPT_H
+#endif  // UTIL_SCRIPT_H
