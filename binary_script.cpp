@@ -345,6 +345,11 @@ quint32 Binary_Script::calculateCRC32(qint64 nOffset, qint64 nSize)
     return g_pBinary->_getCRC32(nOffset, nSize, g_pPdStruct);
 }
 
+quint16 Binary_Script::crc16(qint64 nOffset, qint64 nSize, quint16 nInit)
+{
+    return g_pBinary->_getCRC16(nOffset, nSize, nInit, g_pPdStruct);
+}
+
 bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, const QString &sSignature)
 {
     return g_pBinary->isSignatureInLoadSegmentPresent(&g_memoryMap, nNumber, sSignature, g_pPdStruct);

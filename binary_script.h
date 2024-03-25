@@ -78,6 +78,7 @@ public slots:
     double calculateEntropy(qint64 nOffset, qint64 nSize);
     QString calculateMD5(qint64 nOffset, qint64 nSize);
     quint32 calculateCRC32(qint64 nOffset, qint64 nSize);
+    quint16 crc16(qint64 nOffset, qint64 nSize, quint16 nInit = 0);
     bool isSignatureInSectionPresent(quint32 nNumber, const QString &sSignature);
     qint64 getImageBase();  // Check mb quint64
     QString upperCase(const QString &sString);
