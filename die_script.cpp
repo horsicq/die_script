@@ -143,6 +143,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
 XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, XBinary::SCANID parentId, XBinary::FT fileType,
                                            OPTIONS *pOptions, const QString &sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
 {
+    QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
     XBinary::SCANID resultId = {};
 
     XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(fileType, XBinary::MAPMODE_UNKNOWN, pDevice);
@@ -188,7 +189,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     _options.bIsHeuristicScan = pOptions->bIsHeuristicScan;
     _options.bIsVerbose = pOptions->bIsVerbose;
 
-    DiE_ScriptEngine scriptEngine(&g_listSignatures, &(pScanResult->listRecords), pDevice, fileType, &_options, pPdStruct);
+    DiE_ScriptEngine scriptEngine(&g_listSignatures, &listRecords, pDevice, fileType, &_options, pPdStruct);
 
     connect(&scriptEngine, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
     connect(&scriptEngine, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
@@ -325,7 +326,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                             ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
                             ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
 
-                            pScanResult->listRecords.append(ssRecord);
+                            listRecords.append(ssRecord);
                         }
                     }
                 }
@@ -346,15 +347,19 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     }
 
     if (bAddUnknown) {
-        if (pScanResult->listRecords.count() == 0) {
+        if (listRecords.count() == 0) {
             DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
 
             ssRecord.id = resultId;
             ssRecord.parentId = parentId;
 
-            pScanResult->listRecords.append(ssRecord);
+            listRecords.append(ssRecord);
         }
     }
+
+    QList<XBinary::SCANSTRUCT> listScanStruct = convert(&listRecords);
+
+    pScanResult->listRecords.append(listScanStruct);
 
     XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
 

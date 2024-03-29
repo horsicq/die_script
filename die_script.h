@@ -64,7 +64,7 @@ public:
         qint64 nSize;
         //        XBinary::SCANID id;
         //        SCAN_HEADER scanHeader; // TODO set
-        QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
+        QList<XBinary::SCANSTRUCT> listRecords;
         QList<ERROR_RECORD> listErrors;
         QList<DEBUG_RECORD> listDebugRecords;
         //        bool bIsValidType;
