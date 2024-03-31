@@ -983,6 +983,7 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRU
         record.sInfo = pListScanStructs->at(i).sOptions;
         record.varInfo = pListScanStructs->at(i).sSignature;
         record.varInfo2 = pListScanStructs->at(i).sSignatureFileName;
+        record.sResult = pListScanStructs->at(i).sResult;
 
         record.globalColor = XFormats::typeToColor(record.sType);
         record.nPrio = XFormats::typeToPrio(record.sType);
