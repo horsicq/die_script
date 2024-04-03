@@ -79,6 +79,9 @@ public slots:
     QString calculateMD5(qint64 nOffset, qint64 nSize);
     quint32 calculateCRC32(qint64 nOffset, qint64 nSize);
     quint16 crc16(qint64 nOffset, qint64 nSize, quint16 nInit = 0);
+    quint32 crc32(qint64 nOffset, qint64 nSize, quint32 nInit = 0);
+    quint32 adler32(qint64 nOffset, qint64 nSize);
+
     bool isSignatureInSectionPresent(quint32 nNumber, const QString &sSignature);
     qint64 getImageBase();  // Check mb quint64
     QString upperCase(const QString &sString);
