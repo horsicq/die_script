@@ -80,7 +80,7 @@ public slots:
     bool isResourceGroupIdPresent(quint32 nID);
     QString getCompilerVersion();
     bool isConsole();
-    bool isSignedFile(); // TODO mb move to XBinary
+    bool isSignedFile();  // TODO mb move to XBinary
     QString getSectionNameCollision(const QString &sString1, const QString &sString2);
     qint32 getSectionNumber(const QString &sSectionName);
     qint32 getSectionNumberExp(const QString &sSectionName);

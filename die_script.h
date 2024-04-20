@@ -109,7 +109,7 @@ public:
     };
 
     explicit DiE_Script(QObject *pParent = nullptr);
-    bool loadDatabase(const QString &sDatabasePath, bool bInit); // TODO PDSTRUCT
+    bool loadDatabase(const QString &sDatabasePath, bool bInit);  // TODO PDSTRUCT
 
     QList<SIGNATURE_STATE> getSignatureStates();
     qint32 getNumberOfSignatures(XBinary::FT fileType);
