@@ -438,18 +438,25 @@ QScriptValue DiE_ScriptEngine::_encodingList(QScriptContext *pContext, QScriptEn
 
 void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
 {
-    // TODO error, cannot find signature
+    bool bSuccess = false;
+
     qint32 nNumberOfSignatures = g_pSignaturesList->count();
 
     for (qint32 i = 0; i < nNumberOfSignatures; i++) {
         if (g_pSignaturesList->at(i).fileType == XBinary::FT_UNKNOWN) {
-            if (g_pSignaturesList->at(i).sName == sScript) {
+            if (g_pSignaturesList->at(i).sName.toUpper() == sScript.toUpper()) {
                 // TODO error
                 evaluate(g_pSignaturesList->at(i).sText, sScript);
+
+                bSuccess = true;
 
                 break;
             }
         }
+    }
+
+    if (!bSuccess) {
+        emit errorMessage(QString("%1: %2").arg(tr("Cannot find"), sScript));
     }
 }
 
