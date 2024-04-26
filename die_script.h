@@ -40,6 +40,8 @@
 #include <QAction>
 #include <QScriptEngineDebugger>
 #endif
+#include <QtConcurrent>
+#include <QFutureWatcher>
 
 bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2);
 bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2);
@@ -109,7 +111,7 @@ public:
     };
 
     explicit DiE_Script(QObject *pParent = nullptr);
-    bool loadDatabase(const QString &sDatabasePath, bool bInit);  // TODO PDSTRUCT
+    bool loadDatabase(const QString &sDatabasePath, bool bInit, XBinary::PDSTRUCT *pPdStruct = nullptr);
 
     QList<SIGNATURE_STATE> getSignatureStates();
     qint32 getNumberOfSignatures(XBinary::FT fileType);
@@ -143,8 +145,9 @@ public slots:
     void process();
 
 private:
-    static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(const QString &sDatabasePath, XBinary::FT fileType);
-    static QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, const QString &sPrefix,
+    DiE_ScriptEngine::SIGNATURE_RECORD _loadSignatureRecord(const QFileInfo &fileInfo, XBinary::FT fileType);
+    QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(const QString &sDatabasePath, XBinary::FT fileType, XBinary::PDSTRUCT *pPdStruct);
+    QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, const QString &sPrefix,
                                                                           XBinary::FT fileType);
     XBinary::SCANID _processDetect(SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, XBinary::SCANID parentId, XBinary::FT fileType,
                                    OPTIONS *pOptions, const QString &sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);

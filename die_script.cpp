@@ -79,7 +79,19 @@ DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
 #endif
 }
 
-QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(const QString &sDatabasePath, XBinary::FT fileType)
+DiE_ScriptEngine::SIGNATURE_RECORD DiE_Script::_loadSignatureRecord(const QFileInfo &fileInfo, XBinary::FT fileType)
+{
+    DiE_ScriptEngine::SIGNATURE_RECORD result = {};
+
+    result.fileType = fileType;
+    result.sName = fileInfo.fileName();
+    result.sText = XBinary::readFile(fileInfo.absoluteFilePath());
+    result.sFilePath = fileInfo.absoluteFilePath();
+
+    return result;
+}
+
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(const QString &sDatabasePath, XBinary::FT fileType, XBinary::PDSTRUCT *pPdStruct)
 {
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
 
@@ -89,18 +101,12 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(const QS
 
     qint32 nNumberOfFiles = eil.count();
 
-    for (qint32 i = 0; i < nNumberOfFiles; i++) {
+    for (qint32 i = 0; (i < nNumberOfFiles) && (!(pPdStruct->bIsStop)); i++) {
         if (eil.at(i).isFile()) {
             QString sSuffix = eil.at(i).suffix().toLower();
 
             if ((sSuffix == "sg") || (sSuffix == "")) {
-                DiE_ScriptEngine::SIGNATURE_RECORD record = {};
-
-                record.fileType = fileType;
-                record.sName = eil.at(i).fileName();
-                record.sText = XBinary::readFile(eil.at(i).absoluteFilePath());
-                record.sFilePath = eil.at(i).absoluteFilePath();
-
+                DiE_ScriptEngine::SIGNATURE_RECORD record = _loadSignatureRecord(eil.at(i), fileType);
                 listResult.append(record);
             }
         }
@@ -214,22 +220,24 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfSignatures);
 
     for (qint32 i = 0; (i < nNumberOfSignatures) && (!(pPdStruct->bIsStop)); i++) {
-        XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, g_listSignatures.at(i).sName);
+        DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord = g_listSignatures.at(i);
+
+        XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, signatureRecord.sName);
 
         bool bExec = false;
 
-        if (XBinary::checkFileType(g_listSignatures.at(i).fileType, fileType)) {
+        if (XBinary::checkFileType(signatureRecord.fileType, fileType)) {
             bExec = true;
         }
 
         if (pOptions->sSignatureName != "") {
-            if (pOptions->sSignatureName != g_listSignatures.at(i).sName) {
+            if (pOptions->sSignatureName != signatureRecord.sName) {
                 bExec = false;
             }
         }
 
         if (!pOptions->bIsDeepScan) {
-            QString sPrefix = g_listSignatures.at(i).sName.section(".", 0, 0).toUpper();
+            QString sPrefix = signatureRecord.sName.section(".", 0, 0).toUpper();
 
             if ((sPrefix == "DS") || (sPrefix == "EP")) {
                 bExec = false;
@@ -237,7 +245,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
         }
 
         if (!pOptions->bIsHeuristicScan) {
-            QString sPrefix = g_listSignatures.at(i).sName.section(".", 0, 0).toUpper();
+            QString sPrefix = signatureRecord.sName.section(".", 0, 0).toUpper();
 
             if (sPrefix == "HEUR") {
                 bExec = false;
@@ -246,18 +254,17 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 
         if (sSignatureFilePath != "")  // TODO Check!
         {
-            bExec = (sSignatureFilePath == g_listSignatures.at(i).sFilePath);
+            bExec = (sSignatureFilePath == signatureRecord.sFilePath);
         }
 
         if (bExec) {
             scriptEngine.clearListLocalResult();
 
-            DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord = g_listSignatures.at(i);
-
-            QElapsedTimer scanTimer;
+            QElapsedTimer *pElapsedTimer = nullptr;;
 
             if (pOptions->bDebug) {
-                scanTimer.start();
+                pElapsedTimer = new QElapsedTimer;
+                pElapsedTimer->start();
             }
 
             XSCRIPTVALUE script = scriptEngine.evaluate(signatureRecord.sText, signatureRecord.sFilePath);
@@ -297,22 +304,6 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                         for (qint32 j = 0; j < nNumberOfDetects; j++) {
                             DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
 
-                            //                            if(baseId.fileType==XBinary::FT_BINARY)
-                            //                            {
-                            //                                QString sPrefix=signatureRecord.sName.section(".",0,0).toUpper();
-
-                            //                                if(sPrefix=="COM")
-                            //                                {
-                            //                                    baseId.fileType=XBinary::FT_COM;
-                            //                                    baseId.sArch="8086";
-                            //                                    baseId.sType="EXE";
-                            //                                }
-                            //                                else if(sPrefix=="TEXT") // mb TODO not set if COM
-                            //                                {
-                            //                                    baseId.fileType=XBinary::FT_TEXT;
-                            //                                }
-                            //                            }
-
                             // TODO IDs
                             ssRecord.id = resultId;
                             ssRecord.parentId = parentId;
@@ -335,7 +326,13 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
             if (pOptions->bDebug) {
                 DEBUG_RECORD debugRecord = {};
                 debugRecord.sScript = signatureRecord.sName;
-                debugRecord.nElapsedTime = scanTimer.elapsed();
+
+                if (pElapsedTimer) {
+                    debugRecord.nElapsedTime = pElapsedTimer->elapsed();
+
+                    delete pElapsedTimer;
+                }
+
 #ifdef QT_DEBUG
                 qDebug("%s: %lld msec", debugRecord.sScript.toLatin1().data(), debugRecord.nElapsedTime);
 #endif
@@ -385,8 +382,18 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     return bResult;
 }
 
-bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit)
+bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit, XBinary::PDSTRUCT *pPdStruct)
 {
+#ifdef QT_DEBUG
+    QElapsedTimer *pElapsedTimer = new QElapsedTimer;
+    pElapsedTimer->start();
+#endif
+    XBinary::PDSTRUCT pdStructEmpty = XBinary::createPdStruct();
+
+    if (!pPdStruct) {
+        pPdStruct = &pdStructEmpty;
+    }
+
     g_databaseType = DBT_UNKNOWN;
 
     if (bInit) {
@@ -429,27 +436,31 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit)
             file.close();
         }
     } else if (XBinary::isDirectoryExists(_sDatabasePath)) {
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath, XBinary::FT_UNKNOWN));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "Binary", XBinary::FT_BINARY));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "COM", XBinary::FT_COM));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ZIP", XBinary::FT_ZIP));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "JAR", XBinary::FT_JAR));  // TODO -> Archive
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "APK", XBinary::FT_APK));  // TODO -> Archive
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "IPA", XBinary::FT_IPA));  // TODO -> Archive
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEX", XBinary::FT_DEX));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MSDOS", XBinary::FT_MSDOS));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LE", XBinary::FT_LE));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LX", XBinary::FT_LX));  // TODO Check
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NE", XBinary::FT_NE));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "PE", XBinary::FT_PE));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ELF", XBinary::FT_ELF));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MACH", XBinary::FT_MACHO));
-        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NPM", XBinary::FT_NPM));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath, XBinary::FT_UNKNOWN, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "Binary", XBinary::FT_BINARY, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "COM", XBinary::FT_COM, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ZIP", XBinary::FT_ZIP, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "JAR", XBinary::FT_JAR, pPdStruct));  // TODO -> Archive
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "APK", XBinary::FT_APK, pPdStruct));  // TODO -> Archive
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "IPA", XBinary::FT_IPA, pPdStruct));  // TODO -> Archive
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEX", XBinary::FT_DEX, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MSDOS", XBinary::FT_MSDOS, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LE", XBinary::FT_LE, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LX", XBinary::FT_LX, pPdStruct));  // TODO Check
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NE", XBinary::FT_NE, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "PE", XBinary::FT_PE, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ELF", XBinary::FT_ELF, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MACH", XBinary::FT_MACHO, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NPM", XBinary::FT_NPM, pPdStruct));
 
         g_databaseType = DBT_FOLDER;
     } else {
         emit errorMessage(QString("%1: %2").arg(tr("Cannot load database"), sDatabasePath));
     }
+
+#ifdef QT_DEBUG
+    qDebug("DiE_Script::loadDatabase: %d ms", pElapsedTimer->elapsed());
+#endif
 
     return g_listSignatures.count();
 }

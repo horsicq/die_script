@@ -1,3 +1,5 @@
+QT       += concurrent
+
 lessThan(QT_MAJOR_VERSION, 6): QT += script
 greaterThan(QT_MAJOR_VERSION, 5): QT += qml
 
