@@ -34,6 +34,7 @@ public:
         bool bIsDeepScan;
         bool bIsHeuristicScan;
         bool bIsVerbose;
+        bool bIsProfiling;
     };
 
     explicit Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
@@ -101,6 +102,7 @@ public slots:
     bool isDeepScan();
     bool isHeuristicScan();
     bool isVerbose();
+    bool isProfiling();
 
     quint8 read_uint8(qint64 nOffset);
     qint16 read_int8(qint64 nOffset);  // qint16 not qint8 / qint8 qjs shows as char
@@ -150,6 +152,8 @@ public slots:
 
 private:
     void _fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize);
+    QElapsedTimer *startProfiling();
+    void finishProfiling(QElapsedTimer *pElapsedTimer, QString sInfo);
 
 protected:
     XBinary::_MEMORY_MAP *getMemoryMap();
@@ -159,6 +163,7 @@ protected:
 
 signals:
     void errorMessage(const QString &sErrorMessage);
+    void warningMessage(const QString &sWarningMessage);
     void infoMessage(const QString &sInfoMessage);
 
 private:

@@ -186,41 +186,88 @@ QString Binary_Script::getString(qint64 nOffset, qint64 nMaxSize)
 qint64 Binary_Script::findSignature(qint64 nOffset, qint64 nSize, const QString &sSignature)
 {
     qint64 nResult = -1;
+
+    QElapsedTimer *pTimer = startProfiling();
+
     qint64 nResultSize = 0;
 
     _fixOffsetAndSize(&nOffset, &nSize);
 
     nResult = g_pBinary->find_signature(&g_memoryMap, nOffset, nSize, sSignature, &nResultSize, g_pPdStruct);
 
+    if (pTimer) {
+        finishProfiling(pTimer, QString("find_signature[%1]: %2 %3").arg(sSignature, XBinary::valueToHexEx(nOffset), XBinary::valueToHexEx(nSize)));
+    }
+
     return nResult;
 }
 
 qint64 Binary_Script::findString(qint64 nOffset, qint64 nSize, const QString &sString)
 {
+    qint64 nResult = -1;
+
+    QElapsedTimer *pTimer = startProfiling();
+
     _fixOffsetAndSize(&nOffset, &nSize);
 
-    return g_pBinary->find_ansiString(nOffset, nSize, sString, g_pPdStruct);
+    nResult = g_pBinary->find_ansiString(nOffset, nSize, sString, g_pPdStruct);
+
+    if (pTimer) {
+        finishProfiling(pTimer, QString("findString[%1]: %2 %3").arg(sString, XBinary::valueToHexEx(nOffset), XBinary::valueToHexEx(nSize)));
+    }
+
+    return nResult;
 }
 
 qint64 Binary_Script::findByte(qint64 nOffset, qint64 nSize, quint8 nValue)
 {
+    qint64 nResult = -1;
+
+    QElapsedTimer *pTimer = startProfiling();
+
     _fixOffsetAndSize(&nOffset, &nSize);
 
-    return g_pBinary->find_uint8(nOffset, nSize, nValue, g_pPdStruct);
+    nResult = g_pBinary->find_uint8(nOffset, nSize, nValue, g_pPdStruct);
+
+    if (pTimer) {
+        finishProfiling(pTimer, QString("findByte[%1]: %2 %3").arg(XBinary::valueToHex(nValue), XBinary::valueToHexEx(nOffset), XBinary::valueToHexEx(nSize)));
+    }
+
+    return nResult;
 }
 
 qint64 Binary_Script::findWord(qint64 nOffset, qint64 nSize, quint16 nValue)
 {
+    qint64 nResult = -1;
+
+    QElapsedTimer *pTimer = startProfiling();
+
     _fixOffsetAndSize(&nOffset, &nSize);
 
-    return g_pBinary->find_uint16(nOffset, nSize, nValue, g_pPdStruct);
+    nResult = g_pBinary->find_uint16(nOffset, nSize, nValue, g_pPdStruct);
+
+    if (pTimer) {
+        finishProfiling(pTimer, QString("findWord[%1]: %2 %3").arg(XBinary::valueToHex(nValue), XBinary::valueToHexEx(nOffset), XBinary::valueToHexEx(nSize)));
+    }
+
+    return nResult;
 }
 
 qint64 Binary_Script::findDword(qint64 nOffset, qint64 nSize, quint32 nValue)
 {
+    qint64 nResult = -1;
+
+    QElapsedTimer *pTimer = startProfiling();
+
     _fixOffsetAndSize(&nOffset, &nSize);
 
-    return g_pBinary->find_uint32(nOffset, nSize, nValue, g_pPdStruct);
+    nResult = g_pBinary->find_uint32(nOffset, nSize, nValue, g_pPdStruct);
+
+    if (pTimer) {
+        finishProfiling(pTimer, QString("findDword[%1]: %2 %3").arg(XBinary::valueToHex(nValue), XBinary::valueToHexEx(nOffset), XBinary::valueToHexEx(nSize)));
+    }
+
+    return nResult;
 }
 
 qint64 Binary_Script::getEntryPointOffset()
@@ -266,7 +313,17 @@ bool Binary_Script::compareOverlay(const QString &sSignature, qint64 nOffset)
 
 bool Binary_Script::isSignaturePresent(qint64 nOffset, qint64 nSize, const QString &sSignature)
 {
-    return g_pBinary->isSignaturePresent(&g_memoryMap, nOffset, nSize, sSignature, g_pPdStruct);
+    bool bResult = false;
+
+    QElapsedTimer *pTimer = startProfiling();
+
+    bResult = g_pBinary->isSignaturePresent(&g_memoryMap, nOffset, nSize, sSignature, g_pPdStruct);
+
+    if (pTimer) {
+        finishProfiling(pTimer, QString("isSignaturePresent[%1]: %2 %3").arg(sSignature, XBinary::valueToHexEx(nOffset), XBinary::valueToHexEx(nSize)));
+    }
+
+    return bResult;
 }
 
 quint32 Binary_Script::swapBytes(quint32 nValue)
@@ -362,7 +419,17 @@ quint32 Binary_Script::adler32(qint64 nOffset, qint64 nSize)
 
 bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, const QString &sSignature)
 {
-    return g_pBinary->isSignatureInLoadSegmentPresent(&g_memoryMap, nNumber, sSignature, g_pPdStruct);
+    bool bResult = false;
+
+    QElapsedTimer *pTimer = startProfiling();
+
+    bResult = g_pBinary->isSignatureInLoadSegmentPresent(&g_memoryMap, nNumber, sSignature, g_pPdStruct);
+
+    if (pTimer) {
+        finishProfiling(pTimer, QString("isSignatureInSectionPresent[%1]: %2 ").arg(sSignature, QString::number(nNumber)));
+    }
+
+    return bResult;
 }
 
 qint64 Binary_Script::getImageBase()
@@ -452,6 +519,11 @@ bool Binary_Script::isVerbose()
     return g_pOptions->bIsVerbose;
 }
 
+bool Binary_Script::isProfiling()
+{
+    return g_pOptions->bIsProfiling;
+}
+
 quint8 Binary_Script::read_uint8(qint64 nOffset)
 {
     return g_pBinary->read_uint8(nOffset);
@@ -524,17 +596,29 @@ QString Binary_Script::bytesCountToString(quint64 nValue)
 
 qint64 Binary_Script::find_ansiString(qint64 nOffset, qint64 nSize, const QString &sString)
 {
-    return g_pBinary->find_ansiString(nOffset, nSize, sString, g_pPdStruct);
+    qint64 nResult = -1;
+
+    nResult = g_pBinary->find_ansiString(nOffset, nSize, sString, g_pPdStruct);
+
+    return nResult;
 }
 
 qint64 Binary_Script::find_unicodeString(qint64 nOffset, qint64 nSize, const QString &sString)
 {
-    return g_pBinary->find_unicodeString(nOffset, nSize, sString, g_bIsBigEndian, g_pPdStruct);
+    qint64 nResult = -1;
+
+    nResult = g_pBinary->find_unicodeString(nOffset, nSize, sString, g_bIsBigEndian, g_pPdStruct);
+
+    return nResult;
 }
 
 qint64 Binary_Script::find_utf8String(qint64 nOffset, qint64 nSize, const QString &sString)
 {
-    return g_pBinary->find_utf8String(nOffset, nSize, sString, g_pPdStruct);
+    qint64 nResult = -1;
+
+    nResult = g_pBinary->find_utf8String(nOffset, nSize, sString, g_pPdStruct);
+
+    return nResult;
 }
 
 QString Binary_Script::read_UUID_bytes(qint64 nOffset)
@@ -691,6 +775,28 @@ void Binary_Script::_fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize)
         if ((*pnOffset) + (*pnSize) > g_nSize) {
             *pnSize = g_nSize - (*pnOffset);
         }
+    }
+}
+
+QElapsedTimer *Binary_Script::startProfiling()
+{
+    QElapsedTimer *pResult = nullptr;
+
+    if (g_pOptions->bIsProfiling) {
+        pResult = new QElapsedTimer;
+        pResult->start();
+    }
+
+    return pResult;
+}
+
+void Binary_Script::finishProfiling(QElapsedTimer *pElapsedTimer, QString sInfo)
+{
+    if (g_pOptions->bIsProfiling) {
+        qint64 nElapsed = pElapsedTimer->elapsed();
+        delete pElapsedTimer;
+
+        emit warningMessage(QString("%1 [%2 ms]").arg(sInfo, QString::number(nElapsed)));
     }
 }
 

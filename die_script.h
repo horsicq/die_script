@@ -77,8 +77,9 @@ public:
         bool bIsHeuristicScan;
         bool bIsVerbose;
         bool bAllTypesScan;
+        bool bIsProfiling;
         bool bIsRecursiveScan;
-        bool bDebug;
+        bool bShowScanTime;
         bool bShowType;
         bool bShowVersion;
         bool bShowOptions;
@@ -129,7 +130,7 @@ public:
     bool isSignaturesPresent(XBinary::FT fileType);
 
     static QString getErrorsString(SCAN_RESULT *pScanResult);
-    static QList<QString> getErrorsStringList(SCAN_RESULT *pScanResult);
+    static QList<QString> getErrorsAndWarningsStringList(SCAN_RESULT *pScanResult);
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
@@ -158,6 +159,7 @@ signals:
     void directoryScanFileStarted(const QString &sFileName);
     void directoryScanResult(const DiE_Script::SCAN_RESULT &scanResult);
     void errorMessage(const QString &sErrorMessage);
+    void warningMessage(const QString &sWarningMessage);
     void infoMessage(const QString &sInfoMessage);
 
 private:

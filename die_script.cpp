@@ -194,10 +194,12 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     _options.bIsDeepScan = pOptions->bIsDeepScan;
     _options.bIsHeuristicScan = pOptions->bIsHeuristicScan;
     _options.bIsVerbose = pOptions->bIsVerbose;
+    _options.bIsProfiling = pOptions->bIsProfiling;
 
     DiE_ScriptEngine scriptEngine(&g_listSignatures, &listRecords, pDevice, fileType, &_options, pPdStruct);
 
     connect(&scriptEngine, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+    connect(&scriptEngine, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
     connect(&scriptEngine, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
 
 #ifdef QT_SCRIPTTOOLS_LIB
@@ -260,9 +262,13 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
         if (bExec) {
             scriptEngine.clearListLocalResult();
 
-            QElapsedTimer *pElapsedTimer = nullptr;;
+            if (pOptions->bIsProfiling) {
+                emit warningMessage(QString("%1").arg(signatureRecord.sName));
+            }
 
-            if (pOptions->bDebug) {
+            QElapsedTimer *pElapsedTimer = nullptr;
+
+            if ((pOptions->bShowScanTime) || (pOptions->bIsProfiling)) {
                 pElapsedTimer = new QElapsedTimer;
                 pElapsedTimer->start();
             }
@@ -323,20 +329,24 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                 }
             }
 
-            if (pOptions->bDebug) {
-                DEBUG_RECORD debugRecord = {};
-                debugRecord.sScript = signatureRecord.sName;
+            if (pElapsedTimer) {
+                qint64 nElapsedTime = pElapsedTimer->elapsed();
+                delete pElapsedTimer;
 
-                if (pElapsedTimer) {
-                    debugRecord.nElapsedTime = pElapsedTimer->elapsed();
+                if (pOptions->bShowScanTime) {
+                    DEBUG_RECORD debugRecord = {};
+                    debugRecord.sScript = signatureRecord.sName;
+                    debugRecord.nElapsedTime = nElapsedTime;
 
-                    delete pElapsedTimer;
+    #ifdef QT_DEBUG
+                    qDebug("%s: %lld msec", debugRecord.sScript.toLatin1().data(), debugRecord.nElapsedTime);
+    #endif
+                    pScanResult->listDebugRecords.append(debugRecord);
                 }
 
-#ifdef QT_DEBUG
-                qDebug("%s: %lld msec", debugRecord.sScript.toLatin1().data(), debugRecord.nElapsedTime);
-#endif
-                pScanResult->listDebugRecords.append(debugRecord);
+                if (pOptions->bIsProfiling) {
+                    emit warningMessage(QString("%1: [%2 ms]").arg(signatureRecord.sName, QString::number(nElapsedTime)));
+                }
             }
         }
 
@@ -959,7 +969,7 @@ QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
     return sResult;
 }
 
-QList<QString> DiE_Script::getErrorsStringList(SCAN_RESULT *pScanResult)
+QList<QString> DiE_Script::getErrorsAndWarningsStringList(SCAN_RESULT *pScanResult)
 {
     QList<QString> listResult;
 
