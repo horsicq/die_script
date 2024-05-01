@@ -338,9 +338,9 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                     debugRecord.sScript = signatureRecord.sName;
                     debugRecord.nElapsedTime = nElapsedTime;
 
-    #ifdef QT_DEBUG
+#ifdef QT_DEBUG
                     qDebug("%s: %lld msec", debugRecord.sScript.toLatin1().data(), debugRecord.nElapsedTime);
-    #endif
+#endif
                     pScanResult->listDebugRecords.append(debugRecord);
                 }
 
