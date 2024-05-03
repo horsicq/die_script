@@ -20,7 +20,7 @@
  */
 #include "zip_script.h"
 
-ZIP_Script::ZIP_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pZip, pOptions, pPdStruct)
+ZIP_Script::ZIP_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Archive_Script(pZip, pOptions, pPdStruct)
 {
     this->g_pZip = pZip;
 }
@@ -29,7 +29,4 @@ ZIP_Script::~ZIP_Script()
 {
 }
 
-bool ZIP_Script::isArchiveRecordPresent(const QString &sArchiveRecord)
-{
-    return XArchive::isArchiveRecordPresent(sArchiveRecord, getArchiveRecords(), getPdStruct());
-}
+

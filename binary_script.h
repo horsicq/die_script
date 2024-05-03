@@ -201,8 +201,6 @@ private:
     XBinary::OFFSETSIZE g_osJpegExif;
     QList<XTiff::CHUNK> g_listJpegExifChunks;
     QString g_sJpegExifCameraName;
-    XZip *g_pZip;
-    QList<XArchive::RECORD> g_listArchiveRecords;
     bool g_bIsBigEndian;
     bool g_bIsSigned;
 };

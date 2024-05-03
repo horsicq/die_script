@@ -190,6 +190,26 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         _addClass(pExtraScript, "MSDOS");
         g_listBinaries.append(pXMSDOS);
         g_listScriptClasses.append(pExtraScript);
+    } else if (XBinary::checkFileType(XBinary::FT_ARCHIVE, fileType)) {
+        Archive_Script *pExtraScript = nullptr;
+
+        QSet<XBinary::FT>  fileTypes = XBinary::getFileTypes(pDevice, true);
+
+        if (fileTypes.contains(XBinary::FT_ZIP)) {
+            XZip *pZIP = new XZip(pDevice);
+            pExtraScript = new Archive_Script(pZIP, pOptions, pPdStruct);
+            g_listBinaries.append(pZIP);
+        }
+
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
+            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+        }
+
+        _addClass(pExtraScript, "Archive");
+
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_ZIP, fileType)) {
         XZip *pZIP = new XZip(pDevice);
         ZIP_Script *pExtraScript = new ZIP_Script(pZIP, pOptions, pPdStruct);

@@ -33,6 +33,7 @@
 #include "ne_script.h"
 #include "pe_script.h"
 #include "xbinary.h"
+#include "archive_script.h"
 #include "zip_script.h"
 #include "jar_script.h"
 #include "apk_script.h"

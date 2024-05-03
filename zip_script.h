@@ -21,18 +21,15 @@
 #ifndef ZIP_SCRIPT_H
 #define ZIP_SCRIPT_H
 
-#include "binary_script.h"
+#include "archive_script.h"
 #include "xarchives.h"
 
-class ZIP_Script : public Binary_Script {
+class ZIP_Script : public Archive_Script {
     Q_OBJECT
 
 public:
     explicit ZIP_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~ZIP_Script();
-
-public slots:
-    bool isArchiveRecordPresent(const QString &sArchiveRecord);
 
 private:
     XZip *g_pZip;

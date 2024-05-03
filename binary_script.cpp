@@ -82,15 +82,6 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
         g_sJpegExifCameraName = g_pJpeg->getExifCameraName(g_osJpegExif, &g_listJpegExifChunks);
     }
 
-    g_pZip = dynamic_cast<XZip *>(pBinary);
-
-    if (g_pZip) {
-        g_listArchiveRecords = g_pZip->getRecords(20000, pPdStruct);
-        g_osInfo = g_pZip->getOsInfo(&g_listArchiveRecords, pPdStruct);
-    } else {
-        g_osInfo = pBinary->getOsInfo();
-    }
-
     g_bIsSigned = pBinary->isSigned();
 
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
@@ -813,9 +804,4 @@ XADDR Binary_Script::getBaseAddress()
 XBinary::PDSTRUCT *Binary_Script::getPdStruct()
 {
     return g_pPdStruct;
-}
-
-QList<XArchive::RECORD> *Binary_Script::getArchiveRecords()
-{
-    return &g_listArchiveRecords;
 }
