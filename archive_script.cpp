@@ -40,4 +40,3 @@ QList<XArchive::RECORD> *Archive_Script::getArchiveRecords()
 {
     return &g_listArchiveRecords;
 }
-

@@ -24,8 +24,7 @@
 #include "xarchives.h"
 #include "binary_script.h"
 
-class Archive_Script : public Binary_Script
-{
+class Archive_Script : public Binary_Script {
     Q_OBJECT
 public:
     explicit Archive_Script(XArchive *pArchive, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
@@ -41,4 +40,4 @@ private:
     QList<XArchive::RECORD> g_listArchiveRecords;
 };
 
-#endif // ARCHIVE_SCRIPT_H
+#endif  // ARCHIVE_SCRIPT_H

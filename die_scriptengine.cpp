@@ -193,7 +193,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     } else if (XBinary::checkFileType(XBinary::FT_ARCHIVE, fileType)) {
         Archive_Script *pExtraScript = nullptr;
 
-        QSet<XBinary::FT>  fileTypes = XBinary::getFileTypes(pDevice, true);
+        QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
 
         if (fileTypes.contains(XBinary::FT_ZIP)) {
             XZip *pZIP = new XZip(pDevice);

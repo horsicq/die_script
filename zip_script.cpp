@@ -28,5 +28,3 @@ ZIP_Script::ZIP_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStru
 ZIP_Script::~ZIP_Script()
 {
 }
-
-

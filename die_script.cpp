@@ -441,7 +441,6 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit, XBinary:
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "ELF", XBinary::FT_ELF));
                 g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, "MACH", XBinary::FT_MACHO));
 
-
                 g_databaseType = DBT_COMPRESSED;
             }
 
@@ -465,7 +464,6 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit, XBinary:
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "PE", XBinary::FT_PE, pPdStruct));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ELF", XBinary::FT_ELF, pPdStruct));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MACH", XBinary::FT_MACHO, pPdStruct));
-
 
         g_databaseType = DBT_FOLDER;
     } else {
