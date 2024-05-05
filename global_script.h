@@ -22,7 +22,6 @@
 #define GLOBAL_SCRIPT_H
 
 // TODO rename to die_global_script
-#include <QObject>
 #include "xoptions.h"
 
 class global_script : public QObject {
