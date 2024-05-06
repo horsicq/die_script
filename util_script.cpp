@@ -47,3 +47,29 @@ qint64 Util_script::shr64(qint64 nValue, qint64 nShift)
     qint64 nResult = nValue >> nShift;
     return nResult;
 }
+
+quint64 Util_script::divu64(quint64 nDividend, quint64 nDivisor)
+{
+    quint64 nResult = 0;
+
+    if (nDivisor) {
+        nResult = nDividend/nDivisor;
+    } else {
+        nResult = -1;
+    }
+
+    return nResult;
+}
+
+qint64 Util_script::div64(qint64 nDividend, qint64 nDivisor)
+{
+    qint64 nResult = 0;
+
+    if (nDivisor) {
+        nResult = nDividend/nDivisor;
+    } else {
+        nResult = -1;
+    }
+
+    return nResult;
+}

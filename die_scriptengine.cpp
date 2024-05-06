@@ -558,7 +558,8 @@ void DiE_ScriptEngine::_removeResultSlot(const QString &sType, const QString &sN
     qint32 nNumberOfResults = g_pListScanStructs->count();
 
     for (qint32 i = 0; i < nNumberOfResults; i++) {
-        if ((g_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) && (g_pListScanStructs->at(i).sName.toUpper() == sName.toUpper())) {
+        if (    (g_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) &&
+                ((g_pListScanStructs->at(i).sName.toUpper() == sName.toUpper()) || (g_pListScanStructs->at(i).sName == ""))) {
             g_pListScanStructs->removeAt(i);
             break;
         }

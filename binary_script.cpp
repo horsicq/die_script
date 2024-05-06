@@ -83,6 +83,7 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
     }
 
     g_bIsSigned = pBinary->isSigned();
+    g_osInfo = pBinary->getOsInfo();
 
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
 }

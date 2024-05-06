@@ -128,7 +128,7 @@ private:
     QList<QObject *> g_listScriptClasses;
     XBinary::PDSTRUCT *g_pPdStruct;
 
-    QList<RESULT> g_listResult;
+    QList<RESULT> g_listResult; // TODO remove
 #ifndef QT_SCRIPT_LIB
     global_script g_globalScript;
 #endif
