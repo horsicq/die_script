@@ -146,7 +146,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
     return listResult;
 }
 
-XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, XBinary::SCANID parentId, XBinary::FT fileType,
+XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, const XBinary::SCANID &parentId, XBinary::FT fileType,
                                            OPTIONS *pOptions, const QString &sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
 {
     QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
@@ -260,8 +260,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
         }
 
         if (bExec) {
-            scriptEngine.clearListLocalResult();
-
+            // scriptEngine.clearListLocalResult();
             if (pOptions->bIsProfiling) {
                 emit warningMessage(QString("%1").arg(signatureRecord.sName));
             }
@@ -273,7 +272,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                 pElapsedTimer->start();
             }
 
-            XSCRIPTVALUE script = scriptEngine.evaluate(signatureRecord.sText, signatureRecord.sFilePath);
+            XSCRIPTVALUE script = scriptEngine.evaluateEx(parentId, resultId, signatureRecord.sText, signatureRecord.sFilePath);
 
             if (_handleError(&scriptEngine, script, &signatureRecord, pScanResult)) {
 #ifdef QT_SCRIPTTOOLS_LIB
@@ -297,34 +296,34 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 #endif
 
                     if (_handleError(&scriptEngine, result, &signatureRecord, pScanResult)) {
-                        // TODO getResult
-                        QString sResult = result.toString();
+                        // // TODO getResult
+                        // QString sResult = result.toString();
 
-                        QList<DiE_ScriptEngine::RESULT> listLocalResult = scriptEngine.getListLocalResult();
-                        qint32 nNumberOfDetects = listLocalResult.count();
+                        // QList<DiE_ScriptEngine::RESULT> listLocalResult = scriptEngine.getListLocalResult();
+                        // qint32 nNumberOfDetects = listLocalResult.count();
 
-                        if ((nNumberOfDetects == 0) && (sResult != "")) {
-                            listLocalResult.append(DiE_ScriptEngine::stringToResult(sResult, pOptions->bShowType, pOptions->bShowVersion, pOptions->bShowOptions));
-                        }
+                        // if ((nNumberOfDetects == 0) && (sResult != "")) {
+                        //     listLocalResult.append(DiE_ScriptEngine::stringToResult(sResult, pOptions->bShowType, pOptions->bShowVersion, pOptions->bShowOptions));
+                        // }
 
-                        for (qint32 j = 0; j < nNumberOfDetects; j++) {
-                            DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
+                        // for (qint32 j = 0; j < nNumberOfDetects; j++) {
+                        //     DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
 
-                            // TODO IDs
-                            ssRecord.id = resultId;
-                            ssRecord.parentId = parentId;
+                        //     // TODO IDs
+                        //     ssRecord.id = resultId;
+                        //     ssRecord.parentId = parentId;
 
-                            ssRecord.sSignature = signatureRecord.sName;
-                            ssRecord.sSignatureFileName = signatureRecord.sFilePath;
-                            ssRecord.sType = listLocalResult.at(j).sType;
-                            ssRecord.sName = listLocalResult.at(j).sName;
-                            ssRecord.sVersion = listLocalResult.at(j).sVersion;
-                            ssRecord.sOptions = listLocalResult.at(j).sOptions;
-                            ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
-                            ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
+                        //     ssRecord.sSignature = signatureRecord.sName;
+                        //     ssRecord.sSignatureFileName = signatureRecord.sFilePath;
+                        //     ssRecord.sType = listLocalResult.at(j).sType;
+                        //     ssRecord.sName = listLocalResult.at(j).sName;
+                        //     ssRecord.sVersion = listLocalResult.at(j).sVersion;
+                        //     ssRecord.sOptions = listLocalResult.at(j).sOptions;
+                        //     ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
+                        //     ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
 
-                            listRecords.append(ssRecord);
-                        }
+                        //     listRecords.append(ssRecord);
+                        // }
                     }
                 }
             }

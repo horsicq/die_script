@@ -95,9 +95,10 @@ public:
     ~DiE_ScriptEngine();
 
     bool handleError(XSCRIPTVALUE value, QString *psErrorString);
-    QList<RESULT> getListLocalResult();
-    void clearListLocalResult();
-    static RESULT stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions);
+    // QList<RESULT> getListLocalResult();
+    // void clearListLocalResult();
+    // static RESULT stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions);
+    XSCRIPTVALUE evaluateEx(const XBinary::SCANID &parentId, const XBinary::SCANID &resultId, const QString &sProgram, const QString &sFileName);
 
 private:
 #ifdef QT_SCRIPT_LIB
@@ -128,7 +129,12 @@ private:
     QList<QObject *> g_listScriptClasses;
     XBinary::PDSTRUCT *g_pPdStruct;
 
-    QList<RESULT> g_listResult; // TODO remove
+    XBinary::SCANID g_parentId;
+    XBinary::SCANID g_resultId; // TODO rename
+    QString g_sProgram; // TODO rename
+    QString g_sFileName; // TODO rename
+
+    // QList<RESULT> g_listResult; // TODO remove
 #ifndef QT_SCRIPT_LIB
     global_script g_globalScript;
 #endif

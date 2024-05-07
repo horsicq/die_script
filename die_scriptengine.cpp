@@ -24,6 +24,9 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
                                    XBinary::FT fileType, Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
     : XScriptEngine()
 {
+    g_parentId = {};
+    g_resultId = {};
+
     g_pSignaturesList = pSignaturesList;
     g_pListScanStructs = pListScanStructs;
     g_pPdStruct = pPdStruct;
@@ -326,15 +329,25 @@ bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
     return bResult;
 }
 
-QList<DiE_ScriptEngine::RESULT> DiE_ScriptEngine::getListLocalResult()
+XSCRIPTVALUE DiE_ScriptEngine::evaluateEx(const XBinary::SCANID &parentId, const XBinary::SCANID &resultId, const QString &sProgram, const QString &sFileName)
 {
-    return g_listResult;
+    g_parentId = parentId;
+    g_resultId = resultId;
+    g_sProgram = sProgram;
+    g_sFileName = sFileName;
+
+    return evaluate(sProgram, sFileName);
 }
 
-void DiE_ScriptEngine::clearListLocalResult()
-{
-    g_listResult.clear();
-}
+// QList<DiE_ScriptEngine::RESULT> DiE_ScriptEngine::getListLocalResult()
+// {
+//     return g_listResult;
+// }
+
+// void DiE_ScriptEngine::clearListLocalResult()
+// {
+//     g_listResult.clear();
+// }
 
 #ifdef QT_SCRIPT_LIB
 QScriptValue DiE_ScriptEngine::includeScript(QScriptContext *pContext, QScriptEngine *pEngine)
@@ -517,13 +530,31 @@ void DiE_ScriptEngine::_logSlot(const QString &sText)
 
 void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions)
 {
-    RESULT record = {};
-    record.sType = sType;
-    record.sName = sName;
-    record.sVersion = sVersion;
-    record.sOptions = sOptions;
+    // RESULT record = {};
+    // record.sType = sType;
+    // record.sName = sName;
+    // record.sVersion = sVersion;
+    // record.sOptions = sOptions;
 
-    g_listResult.append(record);
+    // g_listResult.append(record);
+
+    DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
+
+    // TODO IDs
+    ssRecord.id = g_resultId;
+    ssRecord.parentId = g_parentId;
+
+    ssRecord.sSignature = g_sProgram;
+    ssRecord.sSignatureFileName = g_sFileName;
+
+    ssRecord.sType = sType;
+    ssRecord.sName = sName;
+    ssRecord.sVersion = sVersion;
+    ssRecord.sOptions = sOptions;
+    ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
+    ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
+
+    g_pListScanStructs->append(ssRecord);
 }
 
 void DiE_ScriptEngine::_isResultPresentSlot(bool *pbResult, const QString &sType, const QString &sName)
@@ -584,32 +615,32 @@ void DiE_ScriptEngine::_encodingListSlot()
 #endif
 }
 
-DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)
-{
-    QString sStringTmp = sString;
-    RESULT result = {};
+// DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)
+// {
+//     QString sStringTmp = sString;
+//     RESULT result = {};
 
-    if (bShowType) {
-        result.sType = sStringTmp.section(": ", 0, 0);
-        sStringTmp = sStringTmp.section(": ", 1, -1);
-    }
+//     if (bShowType) {
+//         result.sType = sStringTmp.section(": ", 0, 0);
+//         sStringTmp = sStringTmp.section(": ", 1, -1);
+//     }
 
-    QString _sString = sStringTmp;
+//     QString _sString = sStringTmp;
 
-    if (bShowOptions) {
-        if (_sString.count("[") == 1) {
-            result.sName = _sString.section("[", 0, 0);
-            result.sOptions = _sString.section("[", 1, -1).section("]", 0, 0);
-            _sString = _sString.section("[", 0, 0);
-        }
-    }
+//     if (bShowOptions) {
+//         if (_sString.count("[") == 1) {
+//             result.sName = _sString.section("[", 0, 0);
+//             result.sOptions = _sString.section("[", 1, -1).section("]", 0, 0);
+//             _sString = _sString.section("[", 0, 0);
+//         }
+//     }
 
-    if (bShowVersion) {
-        if (_sString.count("(") == 1) {
-            result.sVersion = _sString.section("(", 1, -1).section(")", 0, 0);
-            result.sName = _sString.section("(", 0, 0);
-        }
-    }
+//     if (bShowVersion) {
+//         if (_sString.count("(") == 1) {
+//             result.sVersion = _sString.section("(", 1, -1).section(")", 0, 0);
+//             result.sName = _sString.section("(", 0, 0);
+//         }
+//     }
 
-    return result;
-}
+//     return result;
+// }
