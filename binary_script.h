@@ -150,6 +150,61 @@ public slots:
     QString getOperationSystemOptions();
     bool isSigned();
 
+    // alliases
+    quint8 U8(qint64 nOffset);
+    qint16 I8(qint64 nOffset);  // qint16 not qint8 / qint8 qjs shows as char
+    quint16 U16(qint64 nOffset, bool bIsBigEndian = false);
+    qint16 I16(qint64 nOffset, bool bIsBigEndian = false);
+    quint16 U24(qint64 nOffset, bool bIsBigEndian = false);
+    qint16 I24(qint64 nOffset, bool bIsBigEndian = false);
+    quint32 U32(qint64 nOffset, bool bIsBigEndian = false);
+    qint32 I32(qint64 nOffset, bool bIsBigEndian = false);
+    quint64 U64(qint64 nOffset, bool bIsBigEndian = false);
+    qint64 I64(qint64 nOffset, bool bIsBigEndian = false);
+    float F16(qint64 nOffset, bool bIsBigEndian = false);
+    float F32(qint64 nOffset, bool bIsBigEndian = false);
+    double F64(qint64 nOffset, bool bIsBigEndian = false);
+
+    QString SA(qint64 nOffset, qint64 nMaxSize = 50);
+    QString SU16(qint64 nOffset, qint64 nMaxSize = 50);
+    QString SU8(qint64 nOffset, qint64 nMaxSize = 50);
+    QString UCSD(qint64 nOffset);
+    QString SC(qint64 nOffset, qint64 nMaxByteSize = 256, const QString &sCodePage = "System");
+
+    qint64 Sz();
+    qint64 fSig(qint64 nOffset, qint64 nSize, const QString &sSignature);
+    qint64 fStr(qint64 nOffset, qint64 nSize, const QString &sString);
+    bool c(const QString &sSignature, qint64 nOffset = 0);
+
+    // function X.U8(a) { return File.read_uint8(a) }
+    // function X.I8(a) { return File.read_int8(a) }
+
+    // function X.U16(a,b) { return File.read_uint16(a,b) }
+    // function X.I16(a,b) { return File.read_int16(a,b) }
+    // function X.F16(a,b) { return File.read_float16(a,b) }
+
+    // function X.U24(a,b) { return File.read_uint24(a,b) }
+    // function X.I24(a,b) { return File.read_int24(a,b) }
+
+    // function X.U32(a,b) { return File.read_uint32(a,b) }
+    // function X.I32(a,b) { return File.read_int32(a,b) }
+    // function X.F32(a,b) { return File.read_float32(a,b) }
+
+    // function X.U64(a,b) { return File.read_uint64(a,b) }
+    // function X.I64(a,b) { return File.read_int64(a,b) }
+    // function X.F64(a,b) { return File.read_float64(a,b) }
+
+    // function X.SA(a,b) { return File.read_ansiString(a,b) }
+    // function X.SC(a,b,c) { return File.read_codePageString(a,b,c) }
+    // function X.UСSD(a,b) { return File.read_ucsdString(a,b) }
+    // function X.SU8(a,b,c) { return File.read_utf8String(a,b,c) }
+    // function X.SU16(a,b,c) { return File.read_unicodeString(a,b,c) }
+
+    // function X.Sz() { return File.getSize() }
+    // function X.fSig(a,b,c) { return File.findSignature(a,b,c) }
+    // function X.fStr(a,b,c) { return File.findString(a,b,c) }
+    // function X.c(a,b) { return File.compare(a,b) }
+
 private:
     void _fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize);
     QElapsedTimer *startProfiling();

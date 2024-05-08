@@ -761,6 +761,116 @@ bool Binary_Script::isSigned()
     return g_bIsSigned;
 }
 
+quint8 Binary_Script::U8(qint64 nOffset)
+{
+    return read_uint8(nOffset);
+}
+
+qint16 Binary_Script::I8(qint64 nOffset)
+{
+    return read_int8(nOffset);
+}
+
+quint16 Binary_Script::U16(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_uint16(nOffset, bIsBigEndian);
+}
+
+qint16 Binary_Script::I16(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_int16(nOffset, bIsBigEndian);
+}
+
+quint16 Binary_Script::U24(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_uint24(nOffset, bIsBigEndian);
+}
+
+qint16 Binary_Script::I24(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_int24(nOffset, bIsBigEndian);
+}
+
+quint32 Binary_Script::U32(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_uint32(nOffset, bIsBigEndian);
+}
+
+qint32 Binary_Script::I32(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_int32(nOffset, bIsBigEndian);
+}
+
+quint64 Binary_Script::U64(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_uint64(nOffset, bIsBigEndian);
+}
+
+qint64 Binary_Script::I64(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_int64(nOffset, bIsBigEndian);
+}
+
+float Binary_Script::F16(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_float16(nOffset, bIsBigEndian);
+}
+
+float Binary_Script::F32(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_float32(nOffset, bIsBigEndian);
+}
+
+double Binary_Script::F64(qint64 nOffset, bool bIsBigEndian)
+{
+    return read_float64(nOffset, bIsBigEndian);
+}
+
+QString Binary_Script::SA(qint64 nOffset, qint64 nMaxSize)
+{
+   return read_ansiString(nOffset, nMaxSize);
+}
+
+QString Binary_Script::SU16(qint64 nOffset, qint64 nMaxSize)
+{
+    return read_unicodeString(nOffset, nMaxSize);
+}
+
+QString Binary_Script::SU8(qint64 nOffset, qint64 nMaxSize)
+{
+    return read_utf8String(nOffset, nMaxSize);
+}
+
+QString Binary_Script::UCSD(qint64 nOffset)
+{
+    return read_ucsdString(nOffset);
+}
+
+QString Binary_Script::SC(qint64 nOffset, qint64 nMaxByteSize, const QString &sCodePage)
+{
+    return read_codePageString(nOffset, nMaxByteSize, sCodePage);
+}
+
+qint64 Binary_Script::Sz()
+{
+    return getSize();
+}
+
+qint64 Binary_Script::fSig(qint64 nOffset, qint64 nSize, const QString &sSignature)
+{
+    return findSignature(nOffset, nSize, sSignature);
+}
+
+qint64 Binary_Script::fStr(qint64 nOffset, qint64 nSize, const QString &sString)
+{
+    return findString(nOffset, nSize, sString);
+}
+
+bool Binary_Script::c(const QString &sSignature, qint64 nOffset)
+{
+    return compare(sSignature, nOffset);
+}
+
 void Binary_Script::_fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize)
 {
     if ((*pnOffset) < g_nSize) {
