@@ -36,6 +36,11 @@ bool Archive_Script::isArchiveRecordPresent(const QString &sArchiveRecord)
     return XArchive::isArchiveRecordPresent(sArchiveRecord, &g_listArchiveRecords, getPdStruct());
 }
 
+bool Archive_Script::isArchiveRecordPresentExp(const QString &sArchiveRecord)
+{
+    return XArchive::isArchiveRecordPresentExp(sArchiveRecord, &g_listArchiveRecords, getPdStruct());
+}
+
 QList<XArchive::RECORD> *Archive_Script::getArchiveRecords()
 {
     return &g_listArchiveRecords;

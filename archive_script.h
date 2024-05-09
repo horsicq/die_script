@@ -31,6 +31,7 @@ public:
 
 public slots:
     bool isArchiveRecordPresent(const QString &sArchiveRecord);
+    bool isArchiveRecordPresentExp(const QString &sArchiveRecord);
 
 protected:
     QList<XArchive::RECORD> *getArchiveRecords();
