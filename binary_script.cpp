@@ -828,7 +828,7 @@ double Binary_Script::F64(qint64 nOffset, bool bIsBigEndian)
 
 QString Binary_Script::SA(qint64 nOffset, qint64 nMaxSize)
 {
-   return read_ansiString(nOffset, nMaxSize);
+    return read_ansiString(nOffset, nMaxSize);
 }
 
 QString Binary_Script::SU16(qint64 nOffset, qint64 nMaxSize)

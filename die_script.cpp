@@ -146,8 +146,9 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
     return listResult;
 }
 
-XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, const XBinary::SCANID &parentId, XBinary::FT fileType,
-                                           OPTIONS *pOptions, const QString &sSignatureFilePath, qint64 nOffset, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
+XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, const XBinary::SCANID &parentId,
+                                           XBinary::FT fileType, OPTIONS *pOptions, const QString &sSignatureFilePath, qint64 nOffset, bool bAddUnknown,
+                                           XBinary::PDSTRUCT *pPdStruct)
 {
     QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
     XBinary::SCANID resultId = {};
@@ -742,43 +743,43 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
 
             XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
 
-        // } else if (stFTOriginal.contains(XBinary::FT_ZLIB) || stFTOriginal.contains(XBinary::FT_LHA) || stFTOriginal.contains(XBinary::FT_GZIP)) {
-        //     XBinary::FT _fileType = XBinary::FT_UNKNOWN;
+            // } else if (stFTOriginal.contains(XBinary::FT_ZLIB) || stFTOriginal.contains(XBinary::FT_LHA) || stFTOriginal.contains(XBinary::FT_GZIP)) {
+            //     XBinary::FT _fileType = XBinary::FT_UNKNOWN;
 
-        //     if (stFTOriginal.contains(XBinary::FT_ZLIB)) {
-        //         _fileType = XBinary::FT_ZLIB;
-        //     } else if (stFTOriginal.contains(XBinary::FT_LHA)) {
-        //         _fileType = XBinary::FT_LHA;
-        //     } else if (stFTOriginal.contains(XBinary::FT_GZIP)) {
-        //         _fileType = XBinary::FT_GZIP;
-        //     }
+            //     if (stFTOriginal.contains(XBinary::FT_ZLIB)) {
+            //         _fileType = XBinary::FT_ZLIB;
+            //     } else if (stFTOriginal.contains(XBinary::FT_LHA)) {
+            //         _fileType = XBinary::FT_LHA;
+            //     } else if (stFTOriginal.contains(XBinary::FT_GZIP)) {
+            //         _fileType = XBinary::FT_GZIP;
+            //     }
 
-        //     QList<XArchive::RECORD> listRecords = XArchives::getRecords(_pDevice, _fileType, -1, pPdStruct);
+            //     QList<XArchive::RECORD> listRecords = XArchives::getRecords(_pDevice, _fileType, -1, pPdStruct);
 
-        //     if (listRecords.count() == 1) {
-        //         QTemporaryFile fileTemp;
+            //     if (listRecords.count() == 1) {
+            //         QTemporaryFile fileTemp;
 
-        //         if (fileTemp.open()) {
-        //             QString sTempFileName = fileTemp.fileName();
+            //         if (fileTemp.open()) {
+            //             QString sTempFileName = fileTemp.fileName();
 
-        //             XArchive::RECORD record = listRecords.at(0);
+            //             XArchive::RECORD record = listRecords.at(0);
 
-        //             // TODO
-        //             XBinary::SCANID scanIdArchiveRecord = scanIdMain;
-        //             scanIdArchiveRecord.filePart = XBinary::FILEPART_ARCHIVERECORD;
-        //             scanIdArchiveRecord.sInfo = record.sFileName;
+            //             // TODO
+            //             XBinary::SCANID scanIdArchiveRecord = scanIdMain;
+            //             scanIdArchiveRecord.filePart = XBinary::FILEPART_ARCHIVERECORD;
+            //             scanIdArchiveRecord.sInfo = record.sFileName;
 
-        //             if (XArchives::decompressToFile(_pDevice, &record, sTempFileName, pPdStruct)) {
-        //                 QFile file;
-        //                 file.setFileName(sTempFileName);
+            //             if (XArchives::decompressToFile(_pDevice, &record, sTempFileName, pPdStruct)) {
+            //                 QFile file;
+            //                 file.setFileName(sTempFileName);
 
-        //                 if (file.open(QIODevice::ReadOnly)) {
-        //                     process(&file, sFunction, pScanResult, 0, file.size(), scanIdArchiveRecord, pOptions, false, pPdStruct);
-        //                     file.close();
-        //                 }
-        //             }
-        //         }
-        //     }
+            //                 if (file.open(QIODevice::ReadOnly)) {
+            //                     process(&file, sFunction, pScanResult, 0, file.size(), scanIdArchiveRecord, pOptions, false, pPdStruct);
+            //                     file.close();
+            //                 }
+            //             }
+            //         }
+            //     }
         } else if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64)) {
             XPE pe(_pDevice);
 

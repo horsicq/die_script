@@ -130,9 +130,9 @@ private:
     XBinary::PDSTRUCT *g_pPdStruct;
 
     XBinary::SCANID g_parentId;
-    XBinary::SCANID g_resultId; // TODO rename
-    QString g_sProgram; // TODO rename
-    QString g_sFileName; // TODO rename
+    XBinary::SCANID g_resultId;  // TODO rename
+    QString g_sProgram;          // TODO rename
+    QString g_sFileName;         // TODO rename
 
     // QList<RESULT> g_listResult; // TODO remove
 #ifndef QT_SCRIPT_LIB
