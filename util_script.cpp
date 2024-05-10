@@ -73,3 +73,11 @@ qint64 Util_script::div64(qint64 nDividend, qint64 nDivisor)
 
     return nResult;
 }
+
+QString Util_script::secondsToTimeStr(qint32 nValue)
+{
+    QTime _dt = QTime(0, 0);
+    _dt = _dt.addSecs(nValue);
+    QString sResult = _dt.toString();
+    return sResult;
+}
