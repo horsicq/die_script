@@ -24,10 +24,13 @@ Archive_Script::Archive_Script(XArchive *pArchive, OPTIONS *pOptions, XBinary::P
 {
     g_pArchive = pArchive;
 
-    XZip *pZip = dynamic_cast<XZip *>(g_pArchive);
-
-    if (pZip) {
-        g_listArchiveRecords = pZip->getRecords(20000, pPdStruct);
+    {
+        XZip *_pArchive = dynamic_cast<XZip *>(g_pArchive);
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct);
+    }
+    {
+        XTGZ *_pArchive = dynamic_cast<XTGZ *>(g_pArchive);
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct);
     }
 }
 

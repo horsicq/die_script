@@ -98,7 +98,7 @@ public:
     // QList<RESULT> getListLocalResult();
     // void clearListLocalResult();
     // static RESULT stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions);
-    XSCRIPTVALUE evaluateEx(const XBinary::SCANID &parentId, const XBinary::SCANID &resultId, const QString &sProgram, const QString &sFileName);
+    XSCRIPTVALUE evaluateEx(const XBinary::SCANID &parentId, const XBinary::SCANID &resultId, const QString &sProgram, const QString &sName, const QString &sFileName);
 
 private:
 #ifdef QT_SCRIPT_LIB
@@ -131,7 +131,7 @@ private:
 
     XBinary::SCANID g_parentId;
     XBinary::SCANID g_resultId;  // TODO rename
-    QString g_sProgram;          // TODO rename
+    QString g_sName;          // TODO rename
     QString g_sFileName;         // TODO rename
 
     // QList<RESULT> g_listResult; // TODO remove

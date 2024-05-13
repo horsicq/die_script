@@ -21,18 +21,26 @@
 #ifndef NPM_SCRIPT_H
 #define NPM_SCRIPT_H
 
-#include "binary_script.h"
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include "archive_script.h"
 #include "xnpm.h"
 
-class NPM_Script : public Binary_Script {
+class NPM_Script : public Archive_Script {
     Q_OBJECT
 
 public:
     explicit NPM_Script(XNPM *pNpm, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~NPM_Script();
 
+public slots:
+    QString getPackageJson();
+    QString getPackageJsonRecord(const QString &sRecord);
+
 private:
     XNPM *g_pNpm;
+    QString g_sPackageJson;
 };
 
 #endif  // NPM_SCRIPT_H

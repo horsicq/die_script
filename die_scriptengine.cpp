@@ -199,10 +199,15 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
 
         if (fileTypes.contains(XBinary::FT_ZIP)) {
-            XZip *pZIP = new XZip(pDevice);
-            pExtraScript = new Archive_Script(pZIP, pOptions, pPdStruct);
-            g_listBinaries.append(pZIP);
+            XZip *_pArchive = new XZip(pDevice);
+            pExtraScript = new Archive_Script(_pArchive, pOptions, pPdStruct);
+            g_listBinaries.append(_pArchive);
+        } else if (fileTypes.contains(XBinary::FT_TARGZ)) {
+            XTGZ *_pArchive = new XTGZ(pDevice);
+            pExtraScript = new Archive_Script(_pArchive, pOptions, pPdStruct);
+            g_listBinaries.append(_pArchive);
         }
+        // TODO more
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -329,11 +334,11 @@ bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
     return bResult;
 }
 
-XSCRIPTVALUE DiE_ScriptEngine::evaluateEx(const XBinary::SCANID &parentId, const XBinary::SCANID &resultId, const QString &sProgram, const QString &sFileName)
+XSCRIPTVALUE DiE_ScriptEngine::evaluateEx(const XBinary::SCANID &parentId, const XBinary::SCANID &resultId, const QString &sProgram, const QString &sName, const QString &sFileName)
 {
     g_parentId = parentId;
     g_resultId = resultId;
-    g_sProgram = sProgram;
+    g_sName = sName;
     g_sFileName = sFileName;
 
     return evaluate(sProgram, sFileName);
@@ -544,7 +549,7 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
     ssRecord.id = g_resultId;
     ssRecord.parentId = g_parentId;
 
-    ssRecord.sSignature = g_sProgram;
+    ssRecord.sSignature = g_sName;
     ssRecord.sSignatureFileName = g_sFileName;
 
     ssRecord.sType = sType;

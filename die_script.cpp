@@ -273,7 +273,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                 pElapsedTimer->start();
             }
 
-            XSCRIPTVALUE script = scriptEngine.evaluateEx(parentId, resultId, signatureRecord.sText, signatureRecord.sFilePath);
+            XSCRIPTVALUE script = scriptEngine.evaluateEx(parentId, resultId, signatureRecord.sText, signatureRecord.sName, signatureRecord.sFilePath);
 
             if (_handleError(&scriptEngine, script, &signatureRecord, pScanResult)) {
 #ifdef QT_SCRIPTTOOLS_LIB
@@ -660,10 +660,11 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHOFAT, pOptions, "", 0, true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_COM) && (stFT.size() == 1)) {
         scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", 0, true, pPdStruct);
+    } else if (stFT.contains(XBinary::FT_ARCHIVE) && (stFT.size() == 1)) {
+        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ARCHIVE, pOptions, "", 0, true, pPdStruct);
     } else {
         SCAN_RESULT _scanResultCOM = {};
 
-        // TODO optimize COM -> 3 times
         _processDetect(&_scanResultCOM, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", 0, false, pPdStruct);
 
         bool bAddUnknown = (_scanResultCOM.listRecords.count() == 0);
