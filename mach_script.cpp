@@ -29,8 +29,9 @@ MACH_Script::MACH_Script(XMACH *pMACH, OPTIONS *pOptions, XBinary::PDSTRUCT *pPd
     g_listCommandRecords = pMACH->getCommandRecords();
     g_listSectionNameStrings = pMACH->getSectionNames(&g_listSectionRecords);
 
-    g_nNumberOfSection = g_listSectionRecords.count();
+    g_nNumberOfSections = g_listSectionRecords.count();
     g_nNumberOfSegments = g_listSegmentRecords.count();
+    g_nNumberOfCommands = g_listCommandRecords.count();
 
     bool bIs64 = pMACH->is64(getMemoryMap());
 
@@ -48,7 +49,7 @@ bool MACH_Script::isLibraryPresent(const QString &sLibraryName)
 
 quint32 MACH_Script::getNumberOfSections()
 {
-    return g_nNumberOfSection;
+    return g_nNumberOfSections;
 }
 
 quint32 MACH_Script::getNumberOfSegments()
@@ -84,4 +85,14 @@ quint64 MACH_Script::getSectionFileSize(quint32 nNumber)
 bool MACH_Script::isSectionNamePresent(const QString &sSectionName)
 {
     return XBinary::isStringInListPresent(&g_listSectionNameStrings, sSectionName);
+}
+
+quint32 MACH_Script::getNumberOfCommands()
+{
+    return g_nNumberOfCommands;
+}
+
+quint32 MACH_Script::getCommandId(quint32 nNumber)
+{
+    return g_pMACH->getCommandId(nNumber, &g_listCommandRecords);
 }

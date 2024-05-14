@@ -41,6 +41,8 @@ public slots:
     quint64 getSectionFileOffset(quint32 nNumber);
     quint64 getSectionFileSize(quint32 nNumber);
     bool isSectionNamePresent(const QString &sSectionName);
+    quint32 getNumberOfCommands();
+    quint32 getCommandId(quint32 nNumber);
 
 private:
     XMACH *g_pMACH;
@@ -50,8 +52,9 @@ private:
     QList<XMACH::COMMAND_RECORD> g_listCommandRecords;
     QList<XMACH::SEGMENT_RECORD> g_listSegmentRecords;
     QList<QString> g_listSectionNameStrings;
-    qint32 g_nNumberOfSection;
+    qint32 g_nNumberOfSections;
     qint32 g_nNumberOfSegments;
+    qint32 g_nNumberOfCommands;
 };
 
 #endif  // MACH_SCRIPT_H
