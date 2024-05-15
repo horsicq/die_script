@@ -105,6 +105,9 @@ public slots:
     quint64 getImportHash64();
     bool isImportPositionHashPresent(qint32 nIndex, quint32 nHash);
 
+    quint64 getImageFileHeader(QString sString);
+    quint64 getImageOptionalHeader(QString sString);
+
 private:
     XPE *pPE;
     qint32 g_nNumberOfSections;
@@ -120,6 +123,7 @@ private:
     qint32 g_nNumberOfExportFunctions;
     XPE::RESOURCES_VERSION g_resourcesVersion;
     bool g_bIsNETPresent;
+    bool g_bIs64;
     bool g_bIsDll;
     bool g_bIsDriver;
     bool g_bIsConsole;
@@ -148,6 +152,9 @@ private:
     quint64 g_nImportHash64;
     quint64 g_nImportHash32;
     QList<quint32> g_listImportPositionHashes;
+    XPE_DEF::IMAGE_FILE_HEADER g_imageFileHeader;
+    XPE_DEF::IMAGE_OPTIONAL_HEADER32 g_imageOptionalHeader32;
+    XPE_DEF::IMAGE_OPTIONAL_HEADER64 g_imageOptionalHeader64;
 };
 
 #endif  // PE_SCRIPT_H

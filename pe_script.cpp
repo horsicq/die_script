@@ -43,7 +43,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_nNumberOfImports = g_listImportHeaders.count();
 
     g_bIsNETPresent = (pPE->isNETPresent()) && (g_cliInfo.bValid);
-    bool bIs64 = pPE->is64(getMemoryMap());
+    g_bIs64 = pPE->is64(getMemoryMap());
     g_bIsDll = pPE->isDll();
     g_bIsDriver = pPE->isDriver();
     g_bIsConsole = pPE->isConsole();
@@ -66,7 +66,7 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_nSizeOfUninitializedData = pPE->getOptionalHeader_SizeOfUninitializedData();
 
     g_sCompilerVersion = QString("%1.%2").arg(g_nMajorLinkerVersion).arg(g_nMinorLinkerVersion);
-    g_sGeneralOptions = QString("%1%2").arg(pPE->getTypeAsString()).arg(bIs64 ? ("64") : ("32"));
+    g_sGeneralOptions = QString("%1%2").arg(pPE->getTypeAsString()).arg(g_bIs64 ? ("64") : ("32"));
 
     g_sFileVersion = pPE->getFileVersion(&g_resourcesVersion);
     g_sFileVersionMS = pPE->getFileVersionMS(&g_resourcesVersion);
@@ -81,6 +81,16 @@ PE_Script::PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) 
     g_nImportHash64 = pPE->getImportHash64(&g_listImportRecords);
     g_nImportHash32 = pPE->getImportHash32(&g_listImportRecords);
     g_listImportPositionHashes = pPE->getImportPositionHashes(&g_listImportHeaders);
+
+    g_imageFileHeader = pPE->getFileHeader();
+    g_imageOptionalHeader32 = {};
+    g_imageOptionalHeader64 = {};
+
+    if (!g_bIs64) {
+        g_imageOptionalHeader32 = pPE->getOptionalHeader32();
+    } else {
+        g_imageOptionalHeader64 = pPE->getOptionalHeader64();
+    }
 }
 
 PE_Script::~PE_Script()
@@ -464,4 +474,18 @@ quint64 PE_Script::getImportHash64()
 bool PE_Script::isImportPositionHashPresent(qint32 nIndex, quint32 nHash)
 {
     return XPE::isImportPositionHashPresent(&g_listImportPositionHashes, nIndex, nHash);
+}
+
+quint64 PE_Script::getImageFileHeader(QString sString)
+{
+    return pPE->getImageFileHeader(&g_imageFileHeader, sString);
+}
+
+quint64 PE_Script::getImageOptionalHeader(QString sString)
+{
+    if (!g_bIs64) {
+        return pPE->getImageOptionalHeader32(&g_imageOptionalHeader32, sString);
+    } else {
+        return pPE->getImageOptionalHeader64(&g_imageOptionalHeader64, sString);
+    }
 }

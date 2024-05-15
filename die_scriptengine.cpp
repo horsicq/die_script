@@ -206,6 +206,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             XTGZ *_pArchive = new XTGZ(pDevice);
             pExtraScript = new Archive_Script(_pArchive, pOptions, pPdStruct);
             g_listBinaries.append(_pArchive);
+        } else if (fileTypes.contains(XBinary::FT_MACHOFAT)) {
+            XMACHOFat *_pArchive = new XMACHOFat(pDevice);
+            pExtraScript = new Archive_Script(_pArchive, pOptions, pPdStruct);
+            g_listBinaries.append(_pArchive);
         }
         // TODO more
 
