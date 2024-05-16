@@ -131,7 +131,7 @@ private:
 
     XBinary::SCANID g_parentId;
     XBinary::SCANID g_resultId;  // TODO rename
-    QString g_sName;          // TODO rename
+    QString g_sName;             // TODO rename
     QString g_sFileName;         // TODO rename
 
     // QList<RESULT> g_listResult; // TODO remove

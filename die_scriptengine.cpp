@@ -338,7 +338,8 @@ bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
     return bResult;
 }
 
-XSCRIPTVALUE DiE_ScriptEngine::evaluateEx(const XBinary::SCANID &parentId, const XBinary::SCANID &resultId, const QString &sProgram, const QString &sName, const QString &sFileName)
+XSCRIPTVALUE DiE_ScriptEngine::evaluateEx(const XBinary::SCANID &parentId, const XBinary::SCANID &resultId, const QString &sProgram, const QString &sName,
+                                          const QString &sFileName)
 {
     g_parentId = parentId;
     g_resultId = resultId;
