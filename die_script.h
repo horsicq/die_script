@@ -161,9 +161,17 @@ signals:
     void warningMessage(const QString &sWarningMessage);
     void infoMessage(const QString &sInfoMessage);
 
+private slots:
+    void _errorMessage(const QString &sErrorMessage);
+    void _warningMessage(const QString &sWarningMessage);
+    void _infoMessage(const QString &sInfoMessage);
+
 private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> g_listSignatures;
     DBT g_databaseType;
+    bool g_bIsErrorLogEnable;
+    bool g_bIsWarningLogEnable;
+    bool g_bIsInfoLogEnable;
 #ifdef QT_SCRIPTTOOLS_LIB
     QScriptEngineDebugger *g_pDebugger;
 #endif

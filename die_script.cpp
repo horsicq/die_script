@@ -71,6 +71,9 @@ bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const Di
 DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
 {
     g_databaseType = DBT_UNKNOWN;
+    g_bIsErrorLogEnable = true;
+    g_bIsWarningLogEnable = true;
+    g_bIsInfoLogEnable = true;
     g_pPdStruct = nullptr;
     g_pDeviceProcess = nullptr;
     g_scanResultProcess = SCAN_RESULT();
@@ -150,6 +153,22 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                                            XBinary::FT fileType, OPTIONS *pOptions, const QString &sSignatureFilePath, qint64 nOffset, bool bAddUnknown,
                                            XBinary::PDSTRUCT *pPdStruct)
 {
+
+    g_bIsErrorLogEnable = true;
+    g_bIsWarningLogEnable = false;
+    g_bIsInfoLogEnable = false;
+
+    if ((pOptions->bResultAsCSV) || (pOptions->bResultAsJSON) || (pOptions->bResultAsTSV) || (pOptions->bResultAsXML)) {
+        g_bIsErrorLogEnable = false;
+        g_bIsWarningLogEnable = false;
+        g_bIsInfoLogEnable = false;
+    }
+
+    if (pOptions->bIsProfiling) {
+        g_bIsInfoLogEnable = true;
+        g_bIsWarningLogEnable = true;
+    }
+
     QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
     XBinary::SCANID resultId = {};
 
@@ -199,9 +218,9 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 
     DiE_ScriptEngine scriptEngine(&g_listSignatures, &listRecords, pDevice, fileType, &_options, pPdStruct);
 
-    connect(&scriptEngine, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-    connect(&scriptEngine, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-    connect(&scriptEngine, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+    connect(&scriptEngine, SIGNAL(errorMessage(QString)), this, SLOT(_errorMessage(QString)));
+    connect(&scriptEngine, SIGNAL(warningMessage(QString)), this, SLOT(_warningMessage(QString)));
+    connect(&scriptEngine, SIGNAL(infoMessage(QString)), this, SLOT(_infoMessage(QString)));
 
 #ifdef QT_SCRIPTTOOLS_LIB
     if (g_pDebugger) {
@@ -392,6 +411,27 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     return bResult;
 }
 
+void DiE_Script::_errorMessage(const QString &sErrorMessage)
+{
+    if (g_bIsErrorLogEnable) {
+        emit errorMessage(sErrorMessage);
+    }
+}
+
+void DiE_Script::_warningMessage(const QString &sWarningMessage)
+{
+    if (g_bIsWarningLogEnable) {
+        emit warningMessage(sWarningMessage);
+    }
+}
+
+void DiE_Script::_infoMessage(const QString &sInfoMessage)
+{
+    if (g_bIsInfoLogEnable) {
+        emit infoMessage(sInfoMessage);
+    }
+}
+
 bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit, XBinary::PDSTRUCT *pPdStruct)
 {
 #ifdef QT_DEBUG
@@ -467,7 +507,13 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit, XBinary:
 
         g_databaseType = DBT_FOLDER;
     } else {
-        emit errorMessage(QString("%1: %2").arg(tr("Cannot load database"), sDatabasePath));
+        QString sErrorString = QString("%1: %2").arg(tr("Cannot load database"), sDatabasePath);
+
+        if (bInit) {
+            _errorMessage(sErrorString);
+        } else {
+            _warningMessage(sErrorString);
+        }
     }
 
 #ifdef QT_DEBUG

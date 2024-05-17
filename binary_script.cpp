@@ -781,12 +781,12 @@ qint16 Binary_Script::I16(qint64 nOffset, bool bIsBigEndian)
     return read_int16(nOffset, bIsBigEndian);
 }
 
-quint16 Binary_Script::U24(qint64 nOffset, bool bIsBigEndian)
+quint32 Binary_Script::U24(qint64 nOffset, bool bIsBigEndian)
 {
     return read_uint24(nOffset, bIsBigEndian);
 }
 
-qint16 Binary_Script::I24(qint64 nOffset, bool bIsBigEndian)
+qint32 Binary_Script::I24(qint64 nOffset, bool bIsBigEndian)
 {
     return read_int24(nOffset, bIsBigEndian);
 }

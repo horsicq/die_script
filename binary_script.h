@@ -155,8 +155,8 @@ public slots:
     qint16 I8(qint64 nOffset);  // qint16 not qint8 / qint8 qjs shows as char
     quint16 U16(qint64 nOffset, bool bIsBigEndian = false);
     qint16 I16(qint64 nOffset, bool bIsBigEndian = false);
-    quint16 U24(qint64 nOffset, bool bIsBigEndian = false);
-    qint16 I24(qint64 nOffset, bool bIsBigEndian = false);
+    quint32 U24(qint64 nOffset, bool bIsBigEndian = false);
+    qint32 I24(qint64 nOffset, bool bIsBigEndian = false);
     quint32 U32(qint64 nOffset, bool bIsBigEndian = false);
     qint32 I32(qint64 nOffset, bool bIsBigEndian = false);
     quint64 U64(qint64 nOffset, bool bIsBigEndian = false);
