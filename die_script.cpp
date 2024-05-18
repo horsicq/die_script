@@ -153,7 +153,6 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                                            XBinary::FT fileType, OPTIONS *pOptions, const QString &sSignatureFilePath, qint64 nOffset, bool bAddUnknown,
                                            XBinary::PDSTRUCT *pPdStruct)
 {
-
     g_bIsErrorLogEnable = true;
     g_bIsWarningLogEnable = false;
     g_bIsInfoLogEnable = false;
