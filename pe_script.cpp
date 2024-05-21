@@ -476,12 +476,12 @@ bool PE_Script::isImportPositionHashPresent(qint32 nIndex, quint32 nHash)
     return XPE::isImportPositionHashPresent(&g_listImportPositionHashes, nIndex, nHash);
 }
 
-quint64 PE_Script::getImageFileHeader(QString sString)
+quint64 PE_Script::getImageFileHeader(const QString &sString)
 {
     return pPE->getImageFileHeader(&g_imageFileHeader, sString);
 }
 
-quint64 PE_Script::getImageOptionalHeader(QString sString)
+quint64 PE_Script::getImageOptionalHeader(const QString &sString)
 {
     if (!g_bIs64) {
         return pPE->getImageOptionalHeader32(&g_imageOptionalHeader32, sString);

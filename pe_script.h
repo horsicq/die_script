@@ -105,8 +105,8 @@ public slots:
     quint64 getImportHash64();
     bool isImportPositionHashPresent(qint32 nIndex, quint32 nHash);
 
-    quint64 getImageFileHeader(QString sString);
-    quint64 getImageOptionalHeader(QString sString);
+    quint64 getImageFileHeader(const QString &sString);
+    quint64 getImageOptionalHeader(const QString &sString);
 
 private:
     XPE *pPE;

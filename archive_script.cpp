@@ -32,6 +32,10 @@ Archive_Script::Archive_Script(XArchive *pArchive, OPTIONS *pOptions, XBinary::P
         XTGZ *_pArchive = dynamic_cast<XTGZ *>(g_pArchive);
         if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct);
     }
+    {
+        XTAR *_pArchive = dynamic_cast<XTAR *>(g_pArchive);
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct);
+    }
 }
 
 bool Archive_Script::isArchiveRecordPresent(const QString &sArchiveRecord)
