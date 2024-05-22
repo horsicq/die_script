@@ -381,7 +381,7 @@ QString Binary_Script::getSignature(qint64 nOffset, qint64 nSize)
 
 double Binary_Script::calculateEntropy(qint64 nOffset, qint64 nSize)
 {
-    return g_pBinary->getEntropy(nOffset, nSize, g_pPdStruct);
+    return g_pBinary->getBinaryStatus(XBinary::BSTATUS_ENTROPY, nOffset, nSize, g_pPdStruct);
 }
 
 QString Binary_Script::calculateMD5(qint64 nOffset, qint64 nSize)
@@ -759,6 +759,11 @@ QString Binary_Script::getOperationSystemOptions()
 bool Binary_Script::isSigned()
 {
     return g_bIsSigned;
+}
+
+QString Binary_Script::cleanString(const QString &sString)
+{
+    return XBinary::cleanString(sString);
 }
 
 quint8 Binary_Script::U8(qint64 nOffset)

@@ -149,6 +149,7 @@ public slots:
     QString getOperationSystemVersion();
     QString getOperationSystemOptions();
     bool isSigned();
+    QString cleanString(const QString &sString);
 
     // alliases
     quint8 U8(qint64 nOffset);
