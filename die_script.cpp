@@ -727,106 +727,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
     }
 
     if (pOptions->bIsRecursiveScan) {
-        if (stFTOriginal.contains(XBinary::FT_ARCHIVE)) {
-            XBinary::FT _fileType = XBinary::_getPrefFileType(&stFT);
-            QList<XArchive::RECORD> listRecords = XArchives::getRecords(pDevice, _fileType, 20000, pPdStruct);
-
-            qint32 nNumberOfResources = listRecords.count();
-
-            bool bScanAll = false;
-
-            if (((_fileType == XBinary::FT_ZLIB) || (_fileType == XBinary::FT_LHA) || (_fileType == XBinary::FT_GZIP)) && (nNumberOfResources == 1)) {
-                bScanAll = true;
-            }
-
-            qint32 _nFreeIndex = XBinary::getFreeIndex(pPdStruct);
-            XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfResources);
-
-            for (qint32 i = 0; (i < nNumberOfResources) && (!(pPdStruct->bIsStop)); i++) {
-                XArchive::RECORD _record = listRecords.at(i);
-                QByteArray baRecordData = XArchives::decompress(pDevice, &_record, pPdStruct, 0, 0x200);
-
-                QSet<XBinary::FT> _stFT = XFormats::getFileTypes(&baRecordData, true);
-
-                if (bScanAll || isScanable(_stFT)) {
-                    XBinary::SCANID scanIdResource = scanIdMain;
-                    scanIdResource.filePart = XBinary::FILEPART_ARCHIVERECORD;
-                    scanIdResource.sInfo = listRecords.at(i).sFileName;
-
-                    qint64 _nUncompressedSize = listRecords.at(i).nUncompressedSize;
-                    qint64 _nRecordDataSize = baRecordData.size();
-
-                    if (_nUncompressedSize > _nRecordDataSize) {
-                        QTemporaryFile fileTemp;
-
-                        if (fileTemp.open()) {
-                            QString sTempFileName = fileTemp.fileName();
-
-                            if (XArchives::decompressToFile(pDevice, &_record, sTempFileName, pPdStruct)) {
-                                QFile file;
-                                file.setFileName(sTempFileName);
-
-                                if (file.open(QIODevice::ReadOnly)) {
-                                    process(&file, sFunction, pScanResult, 0, file.size(), scanIdResource, pOptions, false, pPdStruct);
-                                    file.close();
-                                }
-                            }
-                        }
-                    } else {
-                        QBuffer buffer(&baRecordData);
-
-                        if (buffer.open(QIODevice::ReadOnly)) {
-                            process(&buffer, sFunction, pScanResult, 0, buffer.size(), scanIdResource, pOptions, false, pPdStruct);
-
-                            buffer.close();
-                        }
-                    }
-                }
-
-                XBinary::setPdStructCurrentIncrement(pPdStruct, _nFreeIndex);
-                XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, listRecords.at(i).sFileName);
-            }
-
-            XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
-
-            // } else if (stFTOriginal.contains(XBinary::FT_ZLIB) || stFTOriginal.contains(XBinary::FT_LHA) || stFTOriginal.contains(XBinary::FT_GZIP)) {
-            //     XBinary::FT _fileType = XBinary::FT_UNKNOWN;
-
-            //     if (stFTOriginal.contains(XBinary::FT_ZLIB)) {
-            //         _fileType = XBinary::FT_ZLIB;
-            //     } else if (stFTOriginal.contains(XBinary::FT_LHA)) {
-            //         _fileType = XBinary::FT_LHA;
-            //     } else if (stFTOriginal.contains(XBinary::FT_GZIP)) {
-            //         _fileType = XBinary::FT_GZIP;
-            //     }
-
-            //     QList<XArchive::RECORD> listRecords = XArchives::getRecords(_pDevice, _fileType, -1, pPdStruct);
-
-            //     if (listRecords.count() == 1) {
-            //         QTemporaryFile fileTemp;
-
-            //         if (fileTemp.open()) {
-            //             QString sTempFileName = fileTemp.fileName();
-
-            //             XArchive::RECORD record = listRecords.at(0);
-
-            //             // TODO
-            //             XBinary::SCANID scanIdArchiveRecord = scanIdMain;
-            //             scanIdArchiveRecord.filePart = XBinary::FILEPART_ARCHIVERECORD;
-            //             scanIdArchiveRecord.sInfo = record.sFileName;
-
-            //             if (XArchives::decompressToFile(_pDevice, &record, sTempFileName, pPdStruct)) {
-            //                 QFile file;
-            //                 file.setFileName(sTempFileName);
-
-            //                 if (file.open(QIODevice::ReadOnly)) {
-            //                     process(&file, sFunction, pScanResult, 0, file.size(), scanIdArchiveRecord, pOptions, false, pPdStruct);
-            //                     file.close();
-            //                 }
-            //             }
-            //         }
-            //     }
-        } else if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64)) {
+        if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64)) {
             XPE pe(_pDevice);
 
             if (pe.isValid()) {
@@ -843,7 +744,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                         qint64 nResourceSize = listResources.at(i).nSize;
 
                         if (pe.checkOffsetSize(nResourceOffset, nResourceSize)) {
-                            QSet<XBinary::FT> _stFT = XFormats::getFileTypes(pDevice, nResourceOffset, nResourceSize);
+                            QSet<XBinary::FT> _stFT = XFormats::getFileTypes(_pDevice, nResourceOffset, nResourceSize);
 
                             if (isScanable(_stFT)) {
                                 XBinary::SCANID scanIdResource = scanIdMain;
@@ -866,6 +767,107 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
 
                     process(_pDevice, sFunction, pScanResult, pe.getOverlayOffset(), pe.getOverlaySize(), scanIdOverlay, pOptions, false, pPdStruct);
                 }
+            }
+        } else {
+            QList<XArchive::RECORD> listRecords;
+            XBinary::FT _fileType = XBinary::FT_UNKNOWN;
+
+            if (stFTOriginal.contains(XBinary::FT_ARCHIVE)) {
+                _fileType = XBinary::_getPrefFileType(&stFT);
+                listRecords = XArchives::getRecords(_pDevice, _fileType, 20000, pPdStruct);
+            } else {
+                if (pOptions->bIsDeepScan) {
+                    XExtractor::OPTIONS options = {};
+                    options.bHeuristicScan = true;
+                    options.fileType = XBinary::FT_BINARY;
+                    options.listFileTypes.append(XBinary::FT_PE);
+                    options.listFileTypes.append(XBinary::FT_ELF);
+                    options.listFileTypes.append(XBinary::FT_MACHO);
+                    options.listFileTypes.append(XBinary::FT_PDF);
+                    options.listFileTypes.append(XBinary::FT_ZIP);
+                    options.listFileTypes.append(XBinary::FT_RAR);
+                    options.listFileTypes.append(XBinary::FT_GZIP);
+                    options.listFileTypes.append(XBinary::FT_ZLIB);
+                    options.listFileTypes.append(XBinary::FT_7Z);
+                    options.listFileTypes.append(XBinary::FT_CAB);
+
+                    QList<XExtractor::RECORD> listExtractRecords = XExtractor::scanDevice(_pDevice, options, pPdStruct);
+                    qint32 nNumberOfExtractRecords = listExtractRecords.count();
+
+                    for (qint32 i = 0;  (i < nNumberOfExtractRecords) && (!(pPdStruct->bIsStop)); i++) {
+                         XBinary::SCANID scanIdRegion = scanIdMain;
+                         scanIdRegion.filePart = XBinary::FILEPART_REGION;
+
+                         process(_pDevice, sFunction, pScanResult, listExtractRecords.at(i).nOffset, listExtractRecords.at(i).nSize, scanIdRegion, pOptions, false, pPdStruct);
+                    }
+                }
+            }
+
+            if (listRecords.count()) {
+                qint32 nNumberOfResources = listRecords.count();
+
+                bool bScanAll = false;
+                bool bShowFileName = true;
+
+                if (((_fileType == XBinary::FT_ZLIB) || (_fileType == XBinary::FT_LHA) || (_fileType == XBinary::FT_GZIP)) && (nNumberOfResources == 1)) {
+                    bScanAll = true;
+                    bShowFileName = false;
+                }
+
+                qint32 _nFreeIndex = XBinary::getFreeIndex(pPdStruct);
+                XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfResources);
+
+                for (qint32 i = 0; (i < nNumberOfResources) && (!(pPdStruct->bIsStop)); i++) {
+                    XArchive::RECORD _record = listRecords.at(i);
+                    QByteArray baRecordData = XArchives::decompress(_pDevice, &_record, pPdStruct, 0, 0x200);
+
+                    QSet<XBinary::FT> _stFT = XFormats::getFileTypes(&baRecordData, true);
+
+                    if (bScanAll || isScanable(_stFT)) {
+                        XBinary::SCANID scanIdResource = scanIdMain;
+                        scanIdResource.filePart = XBinary::FILEPART_ARCHIVERECORD;
+
+                        if (bShowFileName) {
+                            scanIdResource.sInfo = listRecords.at(i).sFileName;
+                        }
+
+                        qint64 _nUncompressedSize = listRecords.at(i).nUncompressedSize;
+                        qint64 _nRecordDataSize = baRecordData.size();
+
+                        if (_nUncompressedSize && _nRecordDataSize) {
+                            if (_nUncompressedSize > _nRecordDataSize) {
+                                QTemporaryFile fileTemp;
+
+                                if (fileTemp.open()) {
+                                    QString sTempFileName = fileTemp.fileName();
+
+                                    if (XArchives::decompressToFile(_pDevice, &_record, sTempFileName, pPdStruct)) {
+                                        QFile file;
+                                        file.setFileName(sTempFileName);
+
+                                        if (file.open(QIODevice::ReadOnly)) {
+                                            process(&file, sFunction, pScanResult, 0, file.size(), scanIdResource, pOptions, false, pPdStruct);
+                                            file.close();
+                                        }
+                                    }
+                                }
+                            } else {
+                                QBuffer buffer(&baRecordData);
+
+                                if (buffer.open(QIODevice::ReadOnly)) {
+                                    process(&buffer, sFunction, pScanResult, 0, buffer.size(), scanIdResource, pOptions, false, pPdStruct);
+
+                                    buffer.close();
+                                }
+                            }
+                        }
+                    }
+
+                    XBinary::setPdStructCurrentIncrement(pPdStruct, _nFreeIndex);
+                    XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, listRecords.at(i).sFileName);
+                }
+
+                XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
             }
         }
     }

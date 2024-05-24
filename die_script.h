@@ -36,6 +36,7 @@
 #include "xformats.h"
 #include "xarchives.h"
 #include "xzip.h"
+#include "xextractor.h"
 #ifdef QT_SCRIPTTOOLS_LIB
 #include <QAction>
 #include <QScriptEngineDebugger>

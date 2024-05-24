@@ -77,6 +77,11 @@ SOURCES += \
     include($$PWD/../XOptions/xoptions.pri)
 }
 
+!contains(XCONFIG, xextractor) {
+    XCONFIG += xextractor
+    include($$PWD/../XExtractor/xextractor.pri)
+}
+
 contains(XCONFIG, use_capstone_x86) {
     !contains(XCONFIG, xcapstone_x86) {
         XCONFIG += xcapstone_x86

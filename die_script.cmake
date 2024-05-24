@@ -7,6 +7,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../Formats/xformats.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../Formats/scanitem.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XCapstone/xcapstone.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XOptions/xoptions.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../XExtractor/xextractor.cmake)
 
 set(DIE_SCRIPT_SOURCES
     ${XDEX_SOURCES}
@@ -16,6 +17,7 @@ set(DIE_SCRIPT_SOURCES
     ${XCAPSTONE_SOURCES}
     ${SCANITEM_SOURCES}
     ${XOPTIONS_SOURCES}
+    ${XEXTRACTOR_SOURCES}
     ${CMAKE_CURRENT_LIST_DIR}/archive_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/archive_script.h
     ${CMAKE_CURRENT_LIST_DIR}/binary_script.cpp
