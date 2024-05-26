@@ -124,7 +124,7 @@ bool Binary_Script::compareEP(const QString &sSignature, qint64 nOffset)
         (!sSignature.contains('%')) && (!sSignature.contains('*'))) {
         bResult = g_pBinary->compareSignatureStrings(g_sEntryPointSignature.mid(nOffset * 2, nSignatureSize * 2), sSignature);
     } else {
-        bResult = g_pBinary->compareEntryPoint(&g_memoryMap, sSignature, nOffset); // TODO g_pPdStruct
+        bResult = g_pBinary->compareEntryPoint(&g_memoryMap, sSignature, nOffset);  // TODO g_pPdStruct
     }
 
     return bResult;

@@ -794,12 +794,13 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                     QList<XExtractor::RECORD> listExtractRecords = XExtractor::scanDevice(_pDevice, options, pPdStruct);
                     qint32 nNumberOfExtractRecords = listExtractRecords.count();
 
-                    for (qint32 i = 0;  (i < nNumberOfExtractRecords) && (!(pPdStruct->bIsStop)); i++) {
+                    for (qint32 i = 0; (i < nNumberOfExtractRecords) && (!(pPdStruct->bIsStop)); i++) {
                         if (listExtractRecords.at(i).nOffset != 0) {
                             XBinary::SCANID scanIdRegion = scanIdMain;
                             scanIdRegion.filePart = XBinary::FILEPART_REGION;
 
-                            process(_pDevice, sFunction, pScanResult, listExtractRecords.at(i).nOffset, listExtractRecords.at(i).nSize, scanIdRegion, pOptions, false, pPdStruct);
+                            process(_pDevice, sFunction, pScanResult, listExtractRecords.at(i).nOffset, listExtractRecords.at(i).nSize, scanIdRegion, pOptions, false,
+                                    pPdStruct);
                         }
                     }
                 }
