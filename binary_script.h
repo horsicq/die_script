@@ -21,10 +21,8 @@
 #ifndef BINARY_SCRIPT_H
 #define BINARY_SCRIPT_H
 
-#include "xbinary.h"
+#include "xformats.h"
 #include "xcapstone.h"
-#include "xjpeg.h"
-#include "xzip.h"
 
 class Binary_Script : public QObject {
     Q_OBJECT
@@ -150,6 +148,12 @@ public slots:
     QString getOperationSystemOptions();
     bool isSigned();
     QString cleanString(const QString &sString);
+    qint64 startTiming();
+    qint64 endTiming(qint64 nHandle, const QString &sInfo);
+
+    qint64 detectZLIB(qint64 nOffset, qint64 nSize);
+    qint64 detectGZIP(qint64 nOffset, qint64 nSize);
+    qint64 detectZIP(qint64 nOffset, qint64 nSize);
 
     // alliases
     quint8 U8(qint64 nOffset);
@@ -208,8 +212,8 @@ public slots:
 
 private:
     void _fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize);
-    QElapsedTimer *startProfiling();
-    void finishProfiling(QElapsedTimer *pElapsedTimer, QString sInfo);
+    QElapsedTimer *_startProfiling();
+    void _finishProfiling(QElapsedTimer *pElapsedTimer, QString sInfo);
 
 protected:
     XBinary::_MEMORY_MAP *getMemoryMap();
@@ -259,6 +263,8 @@ private:
     QString g_sJpegExifCameraName;
     bool g_bIsBigEndian;
     bool g_bIsSigned;
+
+    QMap<quint32, QElapsedTimer *> g_mapProfiling;
 };
 
 #endif  // BINARY_SCRIPT_H
