@@ -213,7 +213,7 @@ public slots:
 private:
     void _fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize);
     QElapsedTimer *_startProfiling();
-    void _finishProfiling(QElapsedTimer *pElapsedTimer, QString sInfo);
+    void _finishProfiling(QElapsedTimer *pElapsedTimer, const QString &sInfo);
 
 protected:
     XBinary::_MEMORY_MAP *getMemoryMap();

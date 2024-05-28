@@ -897,7 +897,7 @@ QElapsedTimer *Binary_Script::_startProfiling()
     return pResult;
 }
 
-void Binary_Script::_finishProfiling(QElapsedTimer *pElapsedTimer, QString sInfo)
+void Binary_Script::_finishProfiling(QElapsedTimer *pElapsedTimer, const QString &sInfo)
 {
     if (g_pOptions->bIsProfiling) {
         qint64 nElapsed = pElapsedTimer->elapsed();
