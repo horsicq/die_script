@@ -824,20 +824,20 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
             }
 
             if (listRecords.count()) {
-                qint32 nNumberOfResources = listRecords.count();
+                qint32 nNumberOfRecords = listRecords.count();
 
                 bool bScanAll = false;
                 bool bShowFileName = true;
 
-                if (((_fileType == XBinary::FT_ZLIB) || (_fileType == XBinary::FT_LHA) || (_fileType == XBinary::FT_GZIP)) && (nNumberOfResources == 1)) {
+                if (((_fileType == XBinary::FT_ZLIB) || (_fileType == XBinary::FT_LHA) || (_fileType == XBinary::FT_GZIP)) && (nNumberOfRecords == 1)) {
                     bScanAll = true;
                     bShowFileName = false;
                 }
 
                 qint32 _nFreeIndex = XBinary::getFreeIndex(pPdStruct);
-                XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfResources);
+                XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfRecords);
 
-                for (qint32 i = 0; (i < nNumberOfResources) && (!(pPdStruct->bIsStop)); i++) {
+                for (qint32 i = 0; (i < nNumberOfRecords) && (!(pPdStruct->bIsStop)); i++) {
                     XArchive::RECORD _record = listRecords.at(i);
                     QByteArray baRecordData = XArchives::decompress(_pDevice, &_record, pPdStruct, 0, 0x200);
 
