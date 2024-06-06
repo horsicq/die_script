@@ -798,8 +798,8 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                     options.listFileTypes.append(XBinary::FT_PDF);
                     options.listFileTypes.append(XBinary::FT_ZIP);
                     options.listFileTypes.append(XBinary::FT_RAR);
-                    options.listFileTypes.append(XBinary::FT_GZIP);
-                    options.listFileTypes.append(XBinary::FT_ZLIB);
+                    // options.listFileTypes.append(XBinary::FT_GZIP);
+                    // options.listFileTypes.append(XBinary::FT_ZLIB);
                     options.listFileTypes.append(XBinary::FT_7Z);
                     options.listFileTypes.append(XBinary::FT_CAB);
 
