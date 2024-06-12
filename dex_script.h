@@ -31,8 +31,19 @@ public:
     explicit DEX_Script(XDEX *pDex, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~DEX_Script();
 
+public slots:
+    bool isStringPoolSorted();
+    bool isOverlayPresent();
+    bool isDexStringPresent(const QString &sString);
+    bool isDexItemStringPresent(const QString &sItemString);
+
 private:
     XDEX *g_pDex;
+    QList<XDEX_DEF::MAP_ITEM> g_listItems;
+    bool g_bIsStringPoolSorted;
+    bool g_bIsOverlayPresent;
+    QList<QString> g_listStrings;
+    QList<QString> g_listItemStrings;
 };
 
 #endif  // DEX_SCRIPT_H
