@@ -33,7 +33,6 @@ DEX_Script::DEX_Script(XDEX *pDex, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStru
 
 DEX_Script::~DEX_Script()
 {
-
 }
 
 bool DEX_Script::isStringPoolSorted()
