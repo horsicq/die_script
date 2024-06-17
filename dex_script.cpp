@@ -26,7 +26,7 @@ DEX_Script::DEX_Script(XDEX *pDex, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStru
 
     g_listItems = pDex->getMapItems(pPdStruct);
     g_bIsStringPoolSorted = pDex->isStringPoolSorted(&g_listItems, pPdStruct);
-    g_bIsOverlayPresent = pDex->isOverlayPresent(getMemoryMap());
+    g_bIsOverlayPresent = pDex->isOverlayPresent(getMemoryMap(), pPdStruct);
     g_listStrings = pDex->getStrings(&g_listItems, pPdStruct);
     g_listItemStrings = pDex->getTypeItemStrings(&g_listItems, &g_listStrings, pPdStruct);
 }

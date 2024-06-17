@@ -496,6 +496,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit, XBinary:
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "APK", XBinary::FT_APK, pPdStruct));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "IPA", XBinary::FT_IPA, pPdStruct));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NPM", XBinary::FT_NPM, pPdStruct));
+        g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEB", XBinary::FT_NPM, pPdStruct));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEX", XBinary::FT_DEX, pPdStruct));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MSDOS", XBinary::FT_MSDOS, pPdStruct));
         g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LE", XBinary::FT_LE, pPdStruct));
@@ -585,7 +586,39 @@ DiE_Script::SCAN_RESULT DiE_Script::scanFile(const QString &sFileName, OPTIONS *
 
 DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
 {
-    return processDevice(pDevice, pOptions, "detect", pPdStruct);
+    DiE_Script::SCAN_RESULT result = {};
+
+    qint64 nSize = pDevice->size();
+
+    bool bMemory = false;
+    QString sFileName;
+
+    if (nSize <= 0x10000) {
+
+        QFile *pFile = dynamic_cast<QFile *>(pDevice);
+
+        if (pFile) {
+            sFileName = pFile->fileName();
+            bMemory = true;
+        }
+    }
+
+    if (bMemory) {
+        char *pBuffer = new char[nSize];
+
+        XBinary::readFile(sFileName, pBuffer, nSize, pPdStruct);
+        QByteArray baData(pBuffer, nSize);
+
+        QBuffer buffer(&baData);
+
+        result = processDevice(&buffer, pOptions, "detect", pPdStruct);
+
+        delete [] pBuffer;
+    } else {
+        result = processDevice(pDevice, pOptions, "detect", pPdStruct);
+    }
+
+    return result;
 }
 
 DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
@@ -769,16 +802,34 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                     XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
                 }
 
-                if (pe.isOverlayPresent()) {
+                if (pe.isOverlayPresent(&memoryMap, pPdStruct)) {
                     XBinary::SCANID scanIdOverlay = scanIdMain;
                     scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
-                    scanIdOverlay.nOffset = pe.getOverlayOffset(&memoryMap);
-                    scanIdOverlay.nSize = pe.getOverlaySize(&memoryMap);
+                    scanIdOverlay.nOffset = pe.getOverlayOffset(&memoryMap, pPdStruct);
+                    scanIdOverlay.nSize = pe.getOverlaySize(&memoryMap, pPdStruct);
 
                     OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
-                    process(_pDevice, sFunction, pScanResult, pe.getOverlayOffset(), pe.getOverlaySize(), scanIdOverlay, &_options, false, pPdStruct);
+                    process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
+                }
+            }
+        } else if (stFT.contains(XBinary::FT_ELF32) || stFT.contains(XBinary::FT_ELF64)) {
+            XELF elf(_pDevice);
+
+            if (elf.isValid()) {
+                XBinary::_MEMORY_MAP memoryMap = elf.getMemoryMap(XBinary::MAPMODE_SEGMENTS, pPdStruct);
+
+                if (elf.isOverlayPresent(&memoryMap, pPdStruct)) {
+                    XBinary::SCANID scanIdOverlay = scanIdMain;
+                    scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
+                    scanIdOverlay.nOffset = elf.getOverlayOffset(&memoryMap, pPdStruct);
+                    scanIdOverlay.nSize = elf.getOverlaySize(&memoryMap, pPdStruct);
+
+                    OPTIONS _options = *pOptions;
+                    _options.fileType = XBinary::FT_UNKNOWN;
+
+                    process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
                 }
             }
         } else {
@@ -807,7 +858,12 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                     QList<XExtractor::RECORD> listExtractRecords = XExtractor::scanDevice(_pDevice, options, pPdStruct);
                     qint32 nNumberOfExtractRecords = listExtractRecords.count();
 
+                    qint32 _nFreeIndex = XBinary::getFreeIndex(pPdStruct);
+                    XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfExtractRecords);
+
                     for (qint32 i = 0; (i < nNumberOfExtractRecords) && (!(pPdStruct->bIsStop)); i++) {
+                        XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, listExtractRecords.at(i).sString);
+
                         if (listExtractRecords.at(i).nOffset != 0) {
                             XBinary::SCANID scanIdRegion = scanIdMain;
                             scanIdRegion.filePart = XBinary::FILEPART_REGION;
@@ -820,7 +876,10 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                             process(_pDevice, sFunction, pScanResult, listExtractRecords.at(i).nOffset, listExtractRecords.at(i).nSize, scanIdRegion, &_options, false,
                                     pPdStruct);
                         }
+                        XBinary::setPdStructCurrent(pPdStruct, _nFreeIndex, i);
                     }
+
+                    XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
                 }
             }
 

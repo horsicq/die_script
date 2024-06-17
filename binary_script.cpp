@@ -35,9 +35,9 @@ Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTR
 
     g_nEntryPointOffset = pBinary->getEntryPointOffset(&g_memoryMap);
     g_nEntryPointAddress = pBinary->getEntryPointAddress(&g_memoryMap);
-    g_nOverlayOffset = pBinary->getOverlayOffset(&g_memoryMap);
-    g_nOverlaySize = pBinary->getOverlaySize(&g_memoryMap);
-    g_bIsOverlayPresent = pBinary->isOverlayPresent(&g_memoryMap);
+    g_nOverlayOffset = pBinary->getOverlayOffset(&g_memoryMap, pPdStruct);
+    g_nOverlaySize = pBinary->getOverlaySize(&g_memoryMap, pPdStruct);
+    g_bIsOverlayPresent = pBinary->isOverlayPresent(&g_memoryMap, pPdStruct);
     g_bIsBigEndian = pBinary->isBigEndian();
 
     g_sHeaderSignature = pBinary->getSignature(0, 256);  // TODO const
@@ -297,7 +297,7 @@ bool Binary_Script::compareOverlay(const QString &sSignature, qint64 nOffset)
         (!sSignature.contains('%')) && (!sSignature.contains('*'))) {
         bResult = g_pBinary->compareSignatureStrings(g_sOverlaySignature.mid(nOffset * 2, nSignatureSize * 2), sSignature);
     } else {
-        bResult = g_pBinary->compareOverlay(&g_memoryMap, sSignature, nOffset);
+        bResult = g_pBinary->compareOverlay(&g_memoryMap, sSignature, nOffset, g_pPdStruct);
     }
 
     return bResult;
