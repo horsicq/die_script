@@ -80,6 +80,7 @@ public:
         bool bAllTypesScan;
         bool bIsProfiling;
         bool bIsRecursiveScan;
+        qint64 nBufferSize;
         bool bShowScanTime;
         bool bShowType;
         bool bShowVersion;

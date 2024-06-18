@@ -356,9 +356,9 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                     debugRecord.sScript = signatureRecord.sName;
                     debugRecord.nElapsedTime = nElapsedTime;
 
-#ifdef QT_DEBUG
-                    qDebug("%s: %lld msec", debugRecord.sScript.toLatin1().data(), debugRecord.nElapsedTime);
-#endif
+// #ifdef QT_DEBUG
+//                     qDebug("%s: %lld msec", debugRecord.sScript.toLatin1().data(), debugRecord.nElapsedTime);
+// #endif
                     pScanResult->listDebugRecords.append(debugRecord);
                 }
 
@@ -586,7 +586,7 @@ DiE_Script::SCAN_RESULT DiE_Script::scanFile(const QString &sFileName, OPTIONS *
 
 DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
 {
-    return processDevice(pDevice, pOptions, "detect", pPdStruct);;
+    return processDevice(pDevice, pOptions, "detect", pPdStruct);
 }
 
 DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
@@ -611,43 +611,7 @@ DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *p
     parentId.filePart = XBinary::FILEPART_HEADER;
 
     DiE_Script::SCAN_RESULT result = {};
-
-    qint64 nSize = pDevice->size();
-
-    bool bMemory = false;
-    QString sFileName;
-
-    if (nSize <= 2000000) {
-
-        QFile *pFile = dynamic_cast<QFile *>(pDevice);
-
-        if (pFile) {
-            sFileName = pFile->fileName();
-            bMemory = true;
-        }
-    }
-
-    if (bMemory) {
-        char *pBuffer = new char[nSize];
-
-        XBinary::readFile(sFileName, pBuffer, nSize, pPdStruct);
-
-        {
-            QBuffer buffer;
-
-            buffer.setData(pBuffer, nSize);
-
-            if (buffer.open(QIODevice::ReadOnly)) {
-                process(&buffer, sFunction, &result, 0, pDevice->size(), parentId, pOptions, true, pPdStruct);
-
-                buffer.close();
-            }
-        }
-
-        delete [] pBuffer;
-    } else {
-        process(pDevice, sFunction, &result, 0, pDevice->size(), parentId, pOptions, true, pPdStruct);
-    }
+    process(pDevice, sFunction, &result, 0, pDevice->size(), parentId, pOptions, true, pPdStruct);
 
     return result;
 }
@@ -671,6 +635,8 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
 
     QIODevice *_pDevice = nullptr;
     SubDevice *pSd = nullptr;
+    char *pBuffer = nullptr;
+    QBuffer *bufDevice = nullptr;
 
     if ((nOffset == 0) && (pDevice->size() == nSize)) {
         _pDevice = pDevice;
@@ -678,6 +644,36 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
         pSd = new SubDevice(pDevice, nOffset, nSize);
         pSd->open(QIODevice::ReadOnly);
         _pDevice = pSd;
+    }
+
+    bool bMemory = false;
+
+    if (pOptions->nBufferSize) {
+        if (nSize <= pOptions->nBufferSize) {
+            QBuffer *pBuffer = dynamic_cast<QBuffer *>(_pDevice);
+
+            if (!pBuffer) {
+                bMemory = true;
+            }
+        }
+    }
+
+    // 450
+    // 380
+    // 360
+    // 323986
+
+    if (bMemory) {
+        pBuffer = new char[nSize];
+
+        XBinary::read_array(_pDevice, 0, pBuffer, nSize, pPdStruct);
+
+        bufDevice = new QBuffer;
+
+        bufDevice->setData(pBuffer, nSize);
+        bufDevice->open(QIODevice::ReadOnly);
+
+        _pDevice = bufDevice;
     }
 
     QSet<XBinary::FT> stFT = XFormats::getFileTypes(_pDevice, true, pPdStruct);
@@ -923,18 +919,44 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
 
                         if (_nUncompressedSize && _nRecordDataSize) {
                             if (_nUncompressedSize > _nRecordDataSize) {
-                                QTemporaryFile fileTemp;
 
-                                if (fileTemp.open()) {
-                                    QString sTempFileName = fileTemp.fileName();
+                                bool _bMemory = false;
 
-                                    if (XArchives::decompressToFile(_pDevice, &_record, sTempFileName, pPdStruct)) {
-                                        QFile file;
-                                        file.setFileName(sTempFileName);
+                                if (pOptions->nBufferSize) {
+                                    if (_nUncompressedSize <= pOptions->nBufferSize) {
+                                        _bMemory = true;
+                                    }
+                                }
 
-                                        if (file.open(QIODevice::ReadOnly)) {
-                                            process(&file, sFunction, pScanResult, 0, file.size(), scanIdArchiveRecord, &_options, false, pPdStruct);
-                                            file.close();
+                                if (_bMemory) {
+                                    char *pArchBuffer = new char[_nUncompressedSize];
+
+                                    QBuffer buffer;
+                                    buffer.setData(pArchBuffer, _nUncompressedSize);
+
+                                    if (buffer.open(QIODevice::ReadWrite)) {
+                                        if (XArchives::decompressToDevice(_pDevice, &_record, &buffer, pPdStruct)) {
+                                            process(&buffer, sFunction, pScanResult, 0, buffer.size(), scanIdArchiveRecord, &_options, false, pPdStruct);
+                                        }
+
+                                        buffer.close();
+                                    }
+
+                                    delete [] pArchBuffer;
+                                } else {
+                                    QTemporaryFile fileTemp;
+
+                                    if (fileTemp.open()) {
+                                        QString sTempFileName = fileTemp.fileName();
+
+                                        if (XArchives::decompressToFile(_pDevice, &_record, sTempFileName, pPdStruct)) {
+                                            QFile file;
+                                            file.setFileName(sTempFileName);
+
+                                            if (file.open(QIODevice::ReadOnly)) {
+                                                process(&file, sFunction, pScanResult, 0, file.size(), scanIdArchiveRecord, &_options, false, pPdStruct);
+                                                file.close();
+                                            }
                                         }
                                     }
                                 }
@@ -957,6 +979,15 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                 XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
             }
         }
+    }
+
+    if (bufDevice) {
+        bufDevice->close();
+        delete bufDevice;
+    }
+
+    if (pBuffer) {
+        delete [] pBuffer;
     }
 
     if (pSd) {
