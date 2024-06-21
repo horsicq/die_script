@@ -441,6 +441,11 @@ qint32 PE_Script::getNumberOfExportFunctions()
     return g_nNumberOfExportFunctions;
 }
 
+QString PE_Script::getExportFunctionName(quint32 nNumber)
+{
+    return pPE->getStringByIndex(&g_listExportFunctionNameStrings, nNumber, -1);
+}
+
 bool PE_Script::isExportPresent()
 {
     return g_bIsExportPresent;
