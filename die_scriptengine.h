@@ -90,6 +90,11 @@ public:
         QString sSignatureFileName;
     };
 
+    struct BLRECORD {
+        QString sType;
+        QString sName;
+    };
+
     DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType,
                      Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~DiE_ScriptEngine();
@@ -133,6 +138,8 @@ private:
     XBinary::SCANID g_resultId;  // TODO rename
     QString g_sName;             // TODO rename
     QString g_sFileName;         // TODO rename
+
+    QList<BLRECORD> g_listBLRecords;
 
     // QList<RESULT> g_listResult; // TODO remove
 #ifndef QT_SCRIPT_LIB

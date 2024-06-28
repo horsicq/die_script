@@ -548,23 +548,37 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
 
     // g_listResult.append(record);
 
-    DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
+    bool bAdd = true;
 
-    // TODO IDs
-    ssRecord.id = g_resultId;
-    ssRecord.parentId = g_parentId;
+    qint32 nNumberOfResults = g_listBLRecords.count();
 
-    ssRecord.sSignature = g_sName;
-    ssRecord.sSignatureFileName = g_sFileName;
+    for (qint32 i = 0; i < nNumberOfResults; i++) {
+        if ((g_listBLRecords.at(i).sType.toUpper() == sType.toUpper()) &&
+            ((g_listBLRecords.at(i).sName.toUpper() == sName.toUpper()) || (g_listBLRecords.at(i).sName == ""))) {
+            bAdd = false;
+            break;
+        }
+    }
 
-    ssRecord.sType = sType;
-    ssRecord.sName = sName;
-    ssRecord.sVersion = sVersion;
-    ssRecord.sOptions = sOptions;
-    ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
-    ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
+    if (bAdd) {
+        DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
 
-    g_pListScanStructs->append(ssRecord);
+        // TODO IDs
+        ssRecord.id = g_resultId;
+        ssRecord.parentId = g_parentId;
+
+        ssRecord.sSignature = g_sName;
+        ssRecord.sSignatureFileName = g_sFileName;
+
+        ssRecord.sType = sType;
+        ssRecord.sName = sName;
+        ssRecord.sVersion = sVersion;
+        ssRecord.sOptions = sOptions;
+        ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
+        ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
+
+        g_pListScanStructs->append(ssRecord);
+    }
 }
 
 void DiE_ScriptEngine::_isResultPresentSlot(bool *pbResult, const QString &sType, const QString &sName)
@@ -596,6 +610,12 @@ void DiE_ScriptEngine::_getNumberOfResultsSlot(qint32 *pnResult, const QString &
 
 void DiE_ScriptEngine::_removeResultSlot(const QString &sType, const QString &sName)
 {
+    BLRECORD blRecord;
+    blRecord.sType = sType;
+    blRecord.sName = sName;
+
+    g_listBLRecords.append(blRecord);
+
     qint32 nNumberOfResults = g_pListScanStructs->count();
 
     for (qint32 i = 0; i < nNumberOfResults; i++) {
