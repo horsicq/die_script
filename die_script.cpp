@@ -356,9 +356,9 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                     debugRecord.sScript = signatureRecord.sName;
                     debugRecord.nElapsedTime = nElapsedTime;
 
-// #ifdef QT_DEBUG
-//                     qDebug("%s: %lld msec", debugRecord.sScript.toLatin1().data(), debugRecord.nElapsedTime);
-// #endif
+                    // #ifdef QT_DEBUG
+                    //                     qDebug("%s: %lld msec", debugRecord.sScript.toLatin1().data(), debugRecord.nElapsedTime);
+                    // #endif
                     pScanResult->listDebugRecords.append(debugRecord);
                 }
 
@@ -919,7 +919,6 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
 
                         if (_nUncompressedSize && _nRecordDataSize) {
                             if (_nUncompressedSize > _nRecordDataSize) {
-
                                 bool _bMemory = false;
 
                                 if (pOptions->nBufferSize) {
@@ -942,7 +941,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                                         buffer.close();
                                     }
 
-                                    delete [] pArchBuffer;
+                                    delete[] pArchBuffer;
                                 } else {
                                     QTemporaryFile fileTemp;
 
@@ -987,7 +986,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
     }
 
     if (pBuffer) {
-        delete [] pBuffer;
+        delete[] pBuffer;
     }
 
     if (pSd) {
