@@ -831,6 +831,60 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
                 }
             }
+        } else if (stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX)) {
+            XLE le(_pDevice);
+
+            if (le.isValid()) {
+                XBinary::_MEMORY_MAP memoryMap = le.getMemoryMap(XBinary::MAPMODE_UNKNOWN, pPdStruct);
+
+                if (le.isOverlayPresent(&memoryMap, pPdStruct)) {
+                    XBinary::SCANID scanIdOverlay = scanIdMain;
+                    scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
+                    scanIdOverlay.nOffset = le.getOverlayOffset(&memoryMap, pPdStruct);
+                    scanIdOverlay.nSize = le.getOverlaySize(&memoryMap, pPdStruct);
+
+                    OPTIONS _options = *pOptions;
+                    _options.fileType = XBinary::FT_UNKNOWN;
+
+                    process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
+                }
+            }
+        } else if (stFT.contains(XBinary::FT_NE)) {
+            XNE ne(_pDevice);
+
+            if (ne.isValid()) {
+                XBinary::_MEMORY_MAP memoryMap = ne.getMemoryMap(XBinary::MAPMODE_UNKNOWN, pPdStruct);
+
+                if (ne.isOverlayPresent(&memoryMap, pPdStruct)) {
+                    XBinary::SCANID scanIdOverlay = scanIdMain;
+                    scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
+                    scanIdOverlay.nOffset = ne.getOverlayOffset(&memoryMap, pPdStruct);
+                    scanIdOverlay.nSize = ne.getOverlaySize(&memoryMap, pPdStruct);
+
+                    OPTIONS _options = *pOptions;
+                    _options.fileType = XBinary::FT_UNKNOWN;
+
+                    process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
+                }
+            }
+        } else if (stFT.contains(XBinary::FT_MSDOS)) {
+            XMSDOS msdos(_pDevice);
+
+            if (msdos.isValid()) {
+                XBinary::_MEMORY_MAP memoryMap = msdos.getMemoryMap(XBinary::MAPMODE_UNKNOWN, pPdStruct);
+
+                if (msdos.isOverlayPresent(&memoryMap, pPdStruct)) {
+                    XBinary::SCANID scanIdOverlay = scanIdMain;
+                    scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
+                    scanIdOverlay.nOffset = msdos.getOverlayOffset(&memoryMap, pPdStruct);
+                    scanIdOverlay.nSize = msdos.getOverlaySize(&memoryMap, pPdStruct);
+
+                    OPTIONS _options = *pOptions;
+                    _options.fileType = XBinary::FT_UNKNOWN;
+
+                    process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
+                }
+            }
         } else {
             QList<XArchive::RECORD> listRecords;
             XBinary::FT _fileType = XBinary::FT_UNKNOWN;
