@@ -36,9 +36,9 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, OPTIONS *pOptions, XBinary::PDSTRUCT 
         bIisRichSignaturePresent = pMSDOS->isRichSignaturePresent();
 
         if (bIisRichSignaturePresent) {
-            listRich = pMSDOS->getRichSignatureRecords();
+            g_listRich = pMSDOS->getRichSignatureRecords();
 
-            nNumberOfRichIDs = listRich.count();
+            nNumberOfRichIDs = g_listRich.count();
         }
     }
 
@@ -102,22 +102,22 @@ qint32 MSDOS_Script::getNumberOfRichIDs()
 
 bool MSDOS_Script::isRichVersionPresent(quint32 nVersion)
 {
-    return g_pMSDOS->isRichVersionPresent(nVersion, &listRich);
+    return g_pMSDOS->isRichVersionPresent(nVersion, &g_listRich);
 }
 
 quint32 MSDOS_Script::getRichVersion(qint32 nPosition)
 {
-    return g_pMSDOS->getRichVersion(&listRich, nPosition);
+    return g_pMSDOS->getRichVersion(&g_listRich, nPosition);
 }
 
 quint32 MSDOS_Script::getRichID(qint32 nPosition)
 {
-    return g_pMSDOS->getRichID(&listRich, nPosition);
+    return g_pMSDOS->getRichID(&g_listRich, nPosition);
 }
 
 quint32 MSDOS_Script::getRichCount(qint32 nPosition)
 {
-    return g_pMSDOS->getRichCount(&listRich, nPosition);
+    return g_pMSDOS->getRichCount(&g_listRich, nPosition);
 }
 
 bool MSDOS_Script::isRichSignaturePresent()

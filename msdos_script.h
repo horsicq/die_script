@@ -48,7 +48,7 @@ public slots:
 
 private:
     XMSDOS *g_pMSDOS;
-    QList<XMSDOS::MS_RICH_RECORD> listRich;
+    QList<XMSDOS::MS_RICH_RECORD> g_listRich;
     qint32 nNumberOfRichIDs;
     qint64 nDosStubOffset;
     qint64 nDosStubSize;
