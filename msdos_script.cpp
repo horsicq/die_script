@@ -29,7 +29,7 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, OPTIONS *pOptions, XBinary::PDSTRUCT 
     bIsNE = pMSDOS->isNE();
     bIsPE = pMSDOS->isPE();
 
-    nNumberOfRichIDs = 0;
+    g_nNumberOfRichIDs = 0;
     bIisRichSignaturePresent = false;
 
     if (bIsLE || bIsPE) {
@@ -38,7 +38,7 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, OPTIONS *pOptions, XBinary::PDSTRUCT 
         if (bIisRichSignaturePresent) {
             g_listRich = pMSDOS->getRichSignatureRecords();
 
-            nNumberOfRichIDs = g_listRich.count();
+            g_nNumberOfRichIDs = g_listRich.count();
         }
     }
 
@@ -97,7 +97,7 @@ bool MSDOS_Script::isDosStubPresent()
 
 qint32 MSDOS_Script::getNumberOfRichIDs()
 {
-    return nNumberOfRichIDs;
+    return g_nNumberOfRichIDs;
 }
 
 bool MSDOS_Script::isRichVersionPresent(quint32 nVersion)
