@@ -80,9 +80,9 @@ public:
         XBinary::SCANID parentId;
         //        SCAN_HEADER scanHeader;
         //        XBinary::FT fileType;
-        QString sFullString;
+        // QString sFullString;
         QString sType;
-        QString sResult;
+        // QString sResult;
         QString sName;
         QString sVersion;
         QString sOptions;

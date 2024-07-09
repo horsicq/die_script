@@ -574,8 +574,8 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
         ssRecord.sName = sName;
         ssRecord.sVersion = sVersion;
         ssRecord.sOptions = sOptions;
-        ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
-        ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
+        // ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
+        // ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
 
         g_pListScanStructs->append(ssRecord);
     }

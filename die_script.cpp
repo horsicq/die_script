@@ -76,7 +76,7 @@ DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
     g_bIsInfoLogEnable = true;
     g_pPdStruct = nullptr;
     g_pDeviceProcess = nullptr;
-    g_scanResultProcess = SCAN_RESULT();
+    g_scanResultProcess = XBinary::SCAN_RESULT();
 #ifdef QT_SCRIPTTOOLS_LIB
     g_pDebugger = nullptr;
 #endif
@@ -149,9 +149,9 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
     return listResult;
 }
 
-XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, const XBinary::SCANID &parentId,
-                                           XBinary::FT fileType, OPTIONS *pOptions, const QString &sSignatureFilePath, qint64 nOffset, bool bAddUnknown,
-                                           XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::_processDetect(XBinary::SCANID *pScanID, XBinary::SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, const XBinary::SCANID &parentId,
+                                XBinary::FT fileType, XBinary::SCAN_OPTIONS *pOptions, const QString &sSignatureFilePath, bool bAddUnknown,
+                                XBinary::PDSTRUCT *pPdStruct)
 {
     g_bIsErrorLogEnable = true;
     g_bIsWarningLogEnable = false;
@@ -171,7 +171,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
     XBinary::SCANID resultId = {};
 
-    XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(fileType, XBinary::MAPMODE_UNKNOWN, pDevice);
+    XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(fileType, XBinary::MAPMODE_UNKNOWN, pDevice, false, -1, pPdStruct);
 
     resultId.fileType = fileType;
     resultId.sUuid = XBinary::generateUUID();
@@ -179,7 +179,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
     resultId.mode = memoryMap.mode;
     resultId.endian = memoryMap.endian;
     resultId.sType = memoryMap.sType;
-    resultId.nOffset = nOffset;
+    resultId.nOffset = XIODevice::getInitLocation(pDevice);
     resultId.nSize = pDevice->size();
     resultId.filePart = XBinary::FILEPART_HEADER;
 
@@ -352,7 +352,7 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
                 delete pElapsedTimer;
 
                 if (pOptions->bShowScanTime) {
-                    DEBUG_RECORD debugRecord = {};
+                    XBinary::DEBUG_RECORD debugRecord = {};
                     debugRecord.sScript = signatureRecord.sName;
                     debugRecord.nElapsedTime = nElapsedTime;
 
@@ -388,11 +388,13 @@ XBinary::SCANID DiE_Script::_processDetect(SCAN_RESULT *pScanResult, QIODevice *
 
     XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
 
-    return resultId;
+    if (pScanID) {
+        *pScanID = resultId;
+    }
 }
 
 bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,
-                              DiE_Script::SCAN_RESULT *pScanResult)
+                              XBinary::SCAN_RESULT *pScanResult)
 {
     bool bResult = false;
 
@@ -400,7 +402,7 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     if (pScriptEngine->handleError(scriptValue, &sErrorString)) {
         bResult = true;
     } else {
-        ERROR_RECORD errorRecord = {};
+        XBinary::ERROR_RECORD errorRecord = {};
         errorRecord.sScript = pSignatureRecord->sName;
         errorRecord.sErrorString = sErrorString;
 
@@ -579,19 +581,19 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> *DiE_Script::getSignatures()
     return &g_listSignatures;
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::scanFile(const QString &sFileName, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+XBinary::SCAN_RESULT DiE_Script::scanFile(const QString &sFileName, XBinary::SCAN_OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     return processFile(sFileName, pOptions, "detect", pPdStruct);
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+XBinary::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice, XBinary::SCAN_OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     return processDevice(pDevice, pOptions, "detect", pPdStruct);
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
+XBinary::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, XBinary::SCAN_OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
 {
-    SCAN_RESULT scanResult = {};
+    XBinary::SCAN_RESULT scanResult = {};
 
     QFile file;
     file.setFileName(sFileName);
@@ -604,20 +606,20 @@ DiE_Script::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, OPTION
     return scanResult;
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
+XBinary::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, XBinary::SCAN_OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
 {
     XBinary::SCANID parentId = {};
     parentId.fileType = XBinary::FT_UNKNOWN;
     parentId.filePart = XBinary::FILEPART_HEADER;
 
-    DiE_Script::SCAN_RESULT result = {};
+    XBinary::SCAN_RESULT result = {};
     process(pDevice, sFunction, &result, 0, pDevice->size(), parentId, pOptions, true, pPdStruct);
 
     return result;
 }
 
-void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId,
-                         OPTIONS *pOptions, bool bInit, XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId,
+                         XBinary::SCAN_OPTIONS *pOptions, bool bInit, XBinary::PDSTRUCT *pPdStruct)
 {
     XBinary::PDSTRUCT pdStructEmpty = XBinary::createPdStruct();
 
@@ -658,11 +660,6 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
         }
     }
 
-    // 450
-    // 380
-    // 360
-    // 323986
-
     if (bMemory) {
         pBuffer = new char[nSize];
 
@@ -686,69 +683,70 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
     }
 
     if (pOptions->bAllTypesScan) {
+
         if (stFT.contains(XBinary::FT_PE32) || stFT.contains(XBinary::FT_PE64) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) ||
             stFT.contains(XBinary::FT_NE)) {
-            _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", 0, true, pPdStruct);
+            _processDetect(0, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", true, pPdStruct);
         }
 
         if (stFT.contains(XBinary::FT_APK) || stFT.contains(XBinary::FT_IPA)) {
-            _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_JAR, pOptions, "", 0, true, pPdStruct);
+            _processDetect(0, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_JAR, pOptions, "", true, pPdStruct);
         }
 
         if (stFT.contains(XBinary::FT_JAR)) {
-            _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ZIP, pOptions, "", 0, true, pPdStruct);
+            _processDetect(0, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ZIP, pOptions, "", true, pPdStruct);
         }
     }
 
     XBinary::SCANID scanIdMain = {};
 
     if (stFT.contains(XBinary::FT_PE32)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_PE32, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_PE32, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_PE64)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_PE64, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_PE64, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_ELF32)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ELF32, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ELF32, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_ELF64)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ELF64, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ELF64, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MACHO32)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHO32, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHO32, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MACHO64)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHO64, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHO64, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_LX)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_LX, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_LX, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_LE)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_LE, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_LE, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_NE)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_NE, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_NE, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MSDOS)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MSDOS, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_APK)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_APK, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_APK, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_IPA)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_IPA, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_IPA, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_JAR)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_JAR, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_JAR, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_ZIP)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ZIP, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ZIP, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_DEX)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_DEX, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_DEX, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_NPM)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_NPM, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_NPM, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_MACHOFAT)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHOFAT, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_MACHOFAT, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_COM) && (stFT.size() == 1)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", true, pPdStruct);
     } else if (stFT.contains(XBinary::FT_ARCHIVE) && (stFT.size() == 1)) {
-        scanIdMain = _processDetect(pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ARCHIVE, pOptions, "", 0, true, pPdStruct);
+        _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ARCHIVE, pOptions, "", true, pPdStruct);
     } else {
-        SCAN_RESULT _scanResultCOM = {};
+        XBinary::SCAN_RESULT _scanResultCOM = {};
 
-        _processDetect(&_scanResultCOM, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", 0, false, pPdStruct);
+        _processDetect(&scanIdMain, &_scanResultCOM, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", false, pPdStruct);
 
         bool bAddUnknown = (_scanResultCOM.listRecords.count() == 0);
 
-        SCAN_RESULT _scanResultBinary = {};
-        scanIdMain = _processDetect(&_scanResultBinary, _pDevice, sFunction, parentId, XBinary::FT_BINARY, pOptions, "", 0, bAddUnknown, pPdStruct);
+        XBinary::SCAN_RESULT _scanResultBinary = {};
+        _processDetect(&scanIdMain, &_scanResultBinary, _pDevice, sFunction, parentId, XBinary::FT_BINARY, pOptions, "", bAddUnknown, pPdStruct);
 
         pScanResult->listRecords.append(_scanResultBinary.listRecords);
         pScanResult->listErrors.append(_scanResultBinary.listErrors);
@@ -788,7 +786,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                                 scanIdResource.nOffset = nResourceOffset;
                                 scanIdResource.nSize = nResourceSize;
 
-                                OPTIONS _options = *pOptions;
+                                XBinary::SCAN_OPTIONS _options = *pOptions;
                                 _options.fileType = XBinary::FT_UNKNOWN;
 
                                 process(_pDevice, sFunction, pScanResult, nResourceOffset, nResourceSize, scanIdResource, &_options, false, pPdStruct);
@@ -807,7 +805,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                     scanIdOverlay.nOffset = pe.getOverlayOffset(&memoryMap, pPdStruct);
                     scanIdOverlay.nSize = pe.getOverlaySize(&memoryMap, pPdStruct);
 
-                    OPTIONS _options = *pOptions;
+                    XBinary::SCAN_OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
@@ -825,7 +823,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                     scanIdOverlay.nOffset = elf.getOverlayOffset(&memoryMap, pPdStruct);
                     scanIdOverlay.nSize = elf.getOverlaySize(&memoryMap, pPdStruct);
 
-                    OPTIONS _options = *pOptions;
+                    XBinary::SCAN_OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
@@ -843,7 +841,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                     scanIdOverlay.nOffset = le.getOverlayOffset(&memoryMap, pPdStruct);
                     scanIdOverlay.nSize = le.getOverlaySize(&memoryMap, pPdStruct);
 
-                    OPTIONS _options = *pOptions;
+                    XBinary::SCAN_OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
@@ -861,7 +859,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                     scanIdOverlay.nOffset = ne.getOverlayOffset(&memoryMap, pPdStruct);
                     scanIdOverlay.nSize = ne.getOverlaySize(&memoryMap, pPdStruct);
 
-                    OPTIONS _options = *pOptions;
+                    XBinary::SCAN_OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
@@ -879,7 +877,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                     scanIdOverlay.nOffset = msdos.getOverlayOffset(&memoryMap, pPdStruct);
                     scanIdOverlay.nSize = msdos.getOverlaySize(&memoryMap, pPdStruct);
 
-                    OPTIONS _options = *pOptions;
+                    XBinary::SCAN_OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
@@ -923,7 +921,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                             scanIdRegion.nOffset = listExtractRecords.at(i).nOffset;
                             scanIdRegion.nSize = listExtractRecords.at(i).nSize;
 
-                            OPTIONS _options = *pOptions;
+                            XBinary::SCAN_OPTIONS _options = *pOptions;
                             _options.fileType = XBinary::FT_UNKNOWN;
 
                             process(_pDevice, sFunction, pScanResult, listExtractRecords.at(i).nOffset, listExtractRecords.at(i).nSize, scanIdRegion, &_options, false,
@@ -961,7 +959,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, SCAN_RESU
                         scanIdArchiveRecord.filePart = XBinary::FILEPART_ARCHIVERECORD;
                         scanIdArchiveRecord.fileType = XBinary::FT_ARCHIVE;
 
-                        OPTIONS _options = *pOptions;
+                        XBinary::SCAN_OPTIONS _options = *pOptions;
                         _options.fileType = XBinary::FT_UNKNOWN;
 
                         if (bShowFileName) {
@@ -1181,7 +1179,7 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
     return bResult;
 }
 
-QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
+QString DiE_Script::getErrorsString(XBinary::SCAN_RESULT *pScanResult)
 {
     QString sResult;
 
@@ -1194,7 +1192,7 @@ QString DiE_Script::getErrorsString(DiE_Script::SCAN_RESULT *pScanResult)
     return sResult;
 }
 
-QList<QString> DiE_Script::getErrorsAndWarningsStringList(SCAN_RESULT *pScanResult)
+QList<QString> DiE_Script::getErrorsAndWarningsStringList(XBinary::SCAN_RESULT *pScanResult)
 {
     QList<QString> listResult;
 
@@ -1207,14 +1205,14 @@ QList<QString> DiE_Script::getErrorsAndWarningsStringList(SCAN_RESULT *pScanResu
     return listResult;
 }
 
-void DiE_Script::setData(const QString &sDirectory, const OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::setData(const QString &sDirectory, const XBinary::SCAN_OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     g_sDirectoryProcess = sDirectory;
     g_scanOptionsProcess = scanOptions;
     g_pPdStruct = pPdStruct;
 }
 
-void DiE_Script::setData(QIODevice *pDevice, const OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::setData(QIODevice *pDevice, const XBinary::SCAN_OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     g_pDeviceProcess = pDevice;
     g_scanOptionsProcess = scanOptions;
@@ -1239,7 +1237,7 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRU
         record.sInfo = pListScanStructs->at(i).sOptions;
         record.varInfo = pListScanStructs->at(i).sSignature;
         record.varInfo2 = pListScanStructs->at(i).sSignatureFileName;
-        record.sResult = pListScanStructs->at(i).sResult;
+        // record.sResult = pListScanStructs->at(i).sResult;
 
         record.globalColor = XFormats::typeToColor(record.sType);
         record.nPrio = XFormats::typeToPrio(record.sType);
@@ -1254,7 +1252,7 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRU
     return listResult;
 }
 
-DiE_Script::SCAN_RESULT DiE_Script::getScanResultProcess()
+XBinary::SCAN_RESULT DiE_Script::getScanResultProcess()
 {
     return g_scanResultProcess;
 }
