@@ -68,7 +68,7 @@ bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const Di
     return (sr1.sName < sr2.sName);
 }
 
-DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
+DiE_Script::DiE_Script(QObject *pParent) : XScanEngine(pParent)
 {
     g_databaseType = DBT_UNKNOWN;
     g_bIsErrorLogEnable = true;
@@ -76,7 +76,7 @@ DiE_Script::DiE_Script(QObject *pParent) : QObject(pParent)
     g_bIsInfoLogEnable = true;
     g_pPdStruct = nullptr;
     g_pDeviceProcess = nullptr;
-    g_scanResultProcess = XBinary::SCAN_RESULT();
+    g_scanResultProcess = XScanEngine::SCAN_RESULT();
 #ifdef QT_SCRIPTTOOLS_LIB
     g_pDebugger = nullptr;
 #endif
@@ -149,8 +149,8 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
     return listResult;
 }
 
-void DiE_Script::_processDetect(XBinary::SCANID *pScanID, XBinary::SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, const XBinary::SCANID &parentId,
-                                XBinary::FT fileType, XBinary::SCAN_OPTIONS *pOptions, const QString &sSignatureFilePath, bool bAddUnknown,
+void DiE_Script::_processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, const SCANID &parentId,
+                                XBinary::FT fileType, XScanEngine::SCAN_OPTIONS *pOptions, const QString &sSignatureFilePath, bool bAddUnknown,
                                 XBinary::PDSTRUCT *pPdStruct)
 {
     g_bIsErrorLogEnable = true;
@@ -169,7 +169,7 @@ void DiE_Script::_processDetect(XBinary::SCANID *pScanID, XBinary::SCAN_RESULT *
     }
 
     QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
-    XBinary::SCANID resultId = {};
+    XScanEngine::SCANID resultId = {};
 
     XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(fileType, XBinary::MAPMODE_UNKNOWN, pDevice, false, -1, pPdStruct);
 
@@ -352,7 +352,7 @@ void DiE_Script::_processDetect(XBinary::SCANID *pScanID, XBinary::SCAN_RESULT *
                 delete pElapsedTimer;
 
                 if (pOptions->bShowScanTime) {
-                    XBinary::DEBUG_RECORD debugRecord = {};
+                    XScanEngine::DEBUG_RECORD debugRecord = {};
                     debugRecord.sScript = signatureRecord.sName;
                     debugRecord.nElapsedTime = nElapsedTime;
 
@@ -382,7 +382,7 @@ void DiE_Script::_processDetect(XBinary::SCANID *pScanID, XBinary::SCAN_RESULT *
         }
     }
 
-    QList<XBinary::SCANSTRUCT> listScanStruct = convert(&listRecords);
+    QList<XScanEngine::SCANSTRUCT> listScanStruct = convert(&listRecords);
 
     pScanResult->listRecords.append(listScanStruct);
 
@@ -394,7 +394,7 @@ void DiE_Script::_processDetect(XBinary::SCANID *pScanID, XBinary::SCAN_RESULT *
 }
 
 bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,
-                              XBinary::SCAN_RESULT *pScanResult)
+                              XScanEngine::SCAN_RESULT *pScanResult)
 {
     bool bResult = false;
 
@@ -402,7 +402,7 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     if (pScriptEngine->handleError(scriptValue, &sErrorString)) {
         bResult = true;
     } else {
-        XBinary::ERROR_RECORD errorRecord = {};
+        XScanEngine::ERROR_RECORD errorRecord = {};
         errorRecord.sScript = pSignatureRecord->sName;
         errorRecord.sErrorString = sErrorString;
 
@@ -410,6 +410,11 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     }
 
     return bResult;
+}
+
+void DiE_Script::_processDetect(SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType, SCAN_OPTIONS *pOptions, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
+{
+    // TODO
 }
 
 void DiE_Script::_errorMessage(const QString &sErrorMessage)
@@ -581,19 +586,19 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> *DiE_Script::getSignatures()
     return &g_listSignatures;
 }
 
-XBinary::SCAN_RESULT DiE_Script::scanFile(const QString &sFileName, XBinary::SCAN_OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+XScanEngine::SCAN_RESULT DiE_Script::scanFile(const QString &sFileName, XScanEngine::SCAN_OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     return processFile(sFileName, pOptions, "detect", pPdStruct);
 }
 
-XBinary::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice, XBinary::SCAN_OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+XScanEngine::SCAN_RESULT DiE_Script::scanDevice(QIODevice *pDevice, XScanEngine::SCAN_OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     return processDevice(pDevice, pOptions, "detect", pPdStruct);
 }
 
-XBinary::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, XBinary::SCAN_OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
+XScanEngine::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, XScanEngine::SCAN_OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
 {
-    XBinary::SCAN_RESULT scanResult = {};
+    XScanEngine::SCAN_RESULT scanResult = {};
 
     QFile file;
     file.setFileName(sFileName);
@@ -606,20 +611,20 @@ XBinary::SCAN_RESULT DiE_Script::processFile(const QString &sFileName, XBinary::
     return scanResult;
 }
 
-XBinary::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, XBinary::SCAN_OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
+XScanEngine::SCAN_RESULT DiE_Script::processDevice(QIODevice *pDevice, XScanEngine::SCAN_OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct)
 {
-    XBinary::SCANID parentId = {};
+    XScanEngine::SCANID parentId = {};
     parentId.fileType = XBinary::FT_UNKNOWN;
     parentId.filePart = XBinary::FILEPART_HEADER;
 
-    XBinary::SCAN_RESULT result = {};
+    XScanEngine::SCAN_RESULT result = {};
     process(pDevice, sFunction, &result, 0, pDevice->size(), parentId, pOptions, true, pPdStruct);
 
     return result;
 }
 
-void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XBinary::SCANID parentId,
-                         XBinary::SCAN_OPTIONS *pOptions, bool bInit, XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XScanEngine::SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XScanEngine::SCANID parentId,
+                         XScanEngine::SCAN_OPTIONS *pOptions, bool bInit, XBinary::PDSTRUCT *pPdStruct)
 {
     XBinary::PDSTRUCT pdStructEmpty = XBinary::createPdStruct();
 
@@ -698,7 +703,7 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::
         }
     }
 
-    XBinary::SCANID scanIdMain = {};
+    XScanEngine::SCANID scanIdMain = {};
 
     if (stFT.contains(XBinary::FT_PE32)) {
         _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_PE32, pOptions, "", true, pPdStruct);
@@ -739,13 +744,13 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::
     } else if (stFT.contains(XBinary::FT_ARCHIVE) && (stFT.size() == 1)) {
         _processDetect(&scanIdMain, pScanResult, _pDevice, sFunction, parentId, XBinary::FT_ARCHIVE, pOptions, "", true, pPdStruct);
     } else {
-        XBinary::SCAN_RESULT _scanResultCOM = {};
+        XScanEngine::SCAN_RESULT _scanResultCOM = {};
 
         _processDetect(&scanIdMain, &_scanResultCOM, _pDevice, sFunction, parentId, XBinary::FT_COM, pOptions, "", false, pPdStruct);
 
         bool bAddUnknown = (_scanResultCOM.listRecords.count() == 0);
 
-        XBinary::SCAN_RESULT _scanResultBinary = {};
+        XScanEngine::SCAN_RESULT _scanResultBinary = {};
         _processDetect(&scanIdMain, &_scanResultBinary, _pDevice, sFunction, parentId, XBinary::FT_BINARY, pOptions, "", bAddUnknown, pPdStruct);
 
         pScanResult->listRecords.append(_scanResultBinary.listRecords);
@@ -780,13 +785,13 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::
                             QSet<XBinary::FT> _stFT = XFormats::getFileTypes(_pDevice, nResourceOffset, nResourceSize);
 
                             if (isScanable(_stFT)) {
-                                XBinary::SCANID scanIdResource = scanIdMain;
+                                XScanEngine::SCANID scanIdResource = scanIdMain;
                                 scanIdResource.filePart = XBinary::FILEPART_RESOURCE;
                                 scanIdResource.sInfo = XBinary::valueToHexEx(nResourceOffset);
                                 scanIdResource.nOffset = nResourceOffset;
                                 scanIdResource.nSize = nResourceSize;
 
-                                XBinary::SCAN_OPTIONS _options = *pOptions;
+                                XScanEngine::SCAN_OPTIONS _options = *pOptions;
                                 _options.fileType = XBinary::FT_UNKNOWN;
 
                                 process(_pDevice, sFunction, pScanResult, nResourceOffset, nResourceSize, scanIdResource, &_options, false, pPdStruct);
@@ -800,12 +805,12 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::
                 }
 
                 if (pe.isOverlayPresent(&memoryMap, pPdStruct)) {
-                    XBinary::SCANID scanIdOverlay = scanIdMain;
+                    XScanEngine::SCANID scanIdOverlay = scanIdMain;
                     scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
                     scanIdOverlay.nOffset = pe.getOverlayOffset(&memoryMap, pPdStruct);
                     scanIdOverlay.nSize = pe.getOverlaySize(&memoryMap, pPdStruct);
 
-                    XBinary::SCAN_OPTIONS _options = *pOptions;
+                    XScanEngine::SCAN_OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
@@ -818,12 +823,12 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::
                 XBinary::_MEMORY_MAP memoryMap = elf.getMemoryMap(XBinary::MAPMODE_SEGMENTS, pPdStruct);
 
                 if (elf.isOverlayPresent(&memoryMap, pPdStruct)) {
-                    XBinary::SCANID scanIdOverlay = scanIdMain;
+                    XScanEngine::SCANID scanIdOverlay = scanIdMain;
                     scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
                     scanIdOverlay.nOffset = elf.getOverlayOffset(&memoryMap, pPdStruct);
                     scanIdOverlay.nSize = elf.getOverlaySize(&memoryMap, pPdStruct);
 
-                    XBinary::SCAN_OPTIONS _options = *pOptions;
+                    XScanEngine::SCAN_OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
@@ -836,12 +841,12 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::
                 XBinary::_MEMORY_MAP memoryMap = le.getMemoryMap(XBinary::MAPMODE_UNKNOWN, pPdStruct);
 
                 if (le.isOverlayPresent(&memoryMap, pPdStruct)) {
-                    XBinary::SCANID scanIdOverlay = scanIdMain;
+                    XScanEngine::SCANID scanIdOverlay = scanIdMain;
                     scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
                     scanIdOverlay.nOffset = le.getOverlayOffset(&memoryMap, pPdStruct);
                     scanIdOverlay.nSize = le.getOverlaySize(&memoryMap, pPdStruct);
 
-                    XBinary::SCAN_OPTIONS _options = *pOptions;
+                    XScanEngine::SCAN_OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
@@ -854,12 +859,12 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::
                 XBinary::_MEMORY_MAP memoryMap = ne.getMemoryMap(XBinary::MAPMODE_UNKNOWN, pPdStruct);
 
                 if (ne.isOverlayPresent(&memoryMap, pPdStruct)) {
-                    XBinary::SCANID scanIdOverlay = scanIdMain;
+                    XScanEngine::SCANID scanIdOverlay = scanIdMain;
                     scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
                     scanIdOverlay.nOffset = ne.getOverlayOffset(&memoryMap, pPdStruct);
                     scanIdOverlay.nSize = ne.getOverlaySize(&memoryMap, pPdStruct);
 
-                    XBinary::SCAN_OPTIONS _options = *pOptions;
+                    XScanEngine::SCAN_OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
@@ -872,12 +877,12 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::
                 XBinary::_MEMORY_MAP memoryMap = msdos.getMemoryMap(XBinary::MAPMODE_UNKNOWN, pPdStruct);
 
                 if (msdos.isOverlayPresent(&memoryMap, pPdStruct)) {
-                    XBinary::SCANID scanIdOverlay = scanIdMain;
+                    XScanEngine::SCANID scanIdOverlay = scanIdMain;
                     scanIdOverlay.filePart = XBinary::FILEPART_OVERLAY;
                     scanIdOverlay.nOffset = msdos.getOverlayOffset(&memoryMap, pPdStruct);
                     scanIdOverlay.nSize = msdos.getOverlaySize(&memoryMap, pPdStruct);
 
-                    XBinary::SCAN_OPTIONS _options = *pOptions;
+                    XScanEngine::SCAN_OPTIONS _options = *pOptions;
                     _options.fileType = XBinary::FT_UNKNOWN;
 
                     process(_pDevice, sFunction, pScanResult, scanIdOverlay.nOffset, scanIdOverlay.nSize, scanIdOverlay, &_options, false, pPdStruct);
@@ -916,12 +921,12 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::
                         XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, listExtractRecords.at(i).sString);
 
                         if (listExtractRecords.at(i).nOffset != 0) {
-                            XBinary::SCANID scanIdRegion = scanIdMain;
+                            XScanEngine::SCANID scanIdRegion = scanIdMain;
                             scanIdRegion.filePart = XBinary::FILEPART_REGION;
                             scanIdRegion.nOffset = listExtractRecords.at(i).nOffset;
                             scanIdRegion.nSize = listExtractRecords.at(i).nSize;
 
-                            XBinary::SCAN_OPTIONS _options = *pOptions;
+                            XScanEngine::SCAN_OPTIONS _options = *pOptions;
                             _options.fileType = XBinary::FT_UNKNOWN;
 
                             process(_pDevice, sFunction, pScanResult, listExtractRecords.at(i).nOffset, listExtractRecords.at(i).nSize, scanIdRegion, &_options, false,
@@ -955,11 +960,11 @@ void DiE_Script::process(QIODevice *pDevice, const QString &sFunction, XBinary::
                     QSet<XBinary::FT> _stFT = XFormats::getFileTypes(&baRecordData, true);
 
                     if (bScanAll || isScanable(_stFT)) {
-                        XBinary::SCANID scanIdArchiveRecord = scanIdMain;
+                        XScanEngine::SCANID scanIdArchiveRecord = scanIdMain;
                         scanIdArchiveRecord.filePart = XBinary::FILEPART_ARCHIVERECORD;
                         scanIdArchiveRecord.fileType = XBinary::FT_ARCHIVE;
 
-                        XBinary::SCAN_OPTIONS _options = *pOptions;
+                        XScanEngine::SCAN_OPTIONS _options = *pOptions;
                         _options.fileType = XBinary::FT_UNKNOWN;
 
                         if (bShowFileName) {
@@ -1179,7 +1184,7 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
     return bResult;
 }
 
-QString DiE_Script::getErrorsString(XBinary::SCAN_RESULT *pScanResult)
+QString DiE_Script::getErrorsString(XScanEngine::SCAN_RESULT *pScanResult)
 {
     QString sResult;
 
@@ -1192,7 +1197,7 @@ QString DiE_Script::getErrorsString(XBinary::SCAN_RESULT *pScanResult)
     return sResult;
 }
 
-QList<QString> DiE_Script::getErrorsAndWarningsStringList(XBinary::SCAN_RESULT *pScanResult)
+QList<QString> DiE_Script::getErrorsAndWarningsStringList(XScanEngine::SCAN_RESULT *pScanResult)
 {
     QList<QString> listResult;
 
@@ -1205,28 +1210,28 @@ QList<QString> DiE_Script::getErrorsAndWarningsStringList(XBinary::SCAN_RESULT *
     return listResult;
 }
 
-void DiE_Script::setData(const QString &sDirectory, const XBinary::SCAN_OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::setData(const QString &sDirectory, const XScanEngine::SCAN_OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     g_sDirectoryProcess = sDirectory;
     g_scanOptionsProcess = scanOptions;
     g_pPdStruct = pPdStruct;
 }
 
-void DiE_Script::setData(QIODevice *pDevice, const XBinary::SCAN_OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
+void DiE_Script::setData(QIODevice *pDevice, const XScanEngine::SCAN_OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     g_pDeviceProcess = pDevice;
     g_scanOptionsProcess = scanOptions;
     g_pPdStruct = pPdStruct;
 }
 
-QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs)
+QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs)
 {
-    QList<XBinary::SCANSTRUCT> listResult;
+    QList<XScanEngine::SCANSTRUCT> listResult;
 
     qint32 nNumberOfRecords = pListScanStructs->count();
 
     for (qint32 i = 0; i < nNumberOfRecords; i++) {
-        XBinary::SCANSTRUCT record = {};
+        XScanEngine::SCANSTRUCT record = {};
 
         record.bIsHeuristic = pListScanStructs->at(i).bIsHeuristic;
         record.id = pListScanStructs->at(i).id;
@@ -1239,29 +1244,22 @@ QList<XBinary::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRU
         record.varInfo2 = pListScanStructs->at(i).sSignatureFileName;
         // record.sResult = pListScanStructs->at(i).sResult;
 
-        record.globalColor = XFormats::typeToColor(record.sType);
-        record.nPrio = XFormats::typeToPrio(record.sType);
-        record.bIsProtection = XFormats::isProtection(record.sType);
-        record.sType = XFormats::translateType(record.sType);
+        record.globalColor = typeToColor(record.sType);
+        record.nPrio = typeToPrio(record.sType);
+        record.bIsProtection = isProtection(record.sType);
+        record.sType = translateType(record.sType);
 
         listResult.append(record);
     }
 
-    XFormats::sortRecords(&listResult);
+    sortRecords(&listResult);
 
     return listResult;
 }
 
-XBinary::SCAN_RESULT DiE_Script::getScanResultProcess()
+XScanEngine::SCAN_RESULT DiE_Script::getScanResultProcess()
 {
     return g_scanResultProcess;
-}
-
-bool DiE_Script::isScanable(const QSet<XBinary::FT> &stFT)
-{
-    return (stFT.contains(XBinary::FT_MSDOS) || stFT.contains(XBinary::FT_NE) || stFT.contains(XBinary::FT_LE) || stFT.contains(XBinary::FT_LX) ||
-            stFT.contains(XBinary::FT_PE) || stFT.contains(XBinary::FT_ELF) || stFT.contains(XBinary::FT_MACHO) || stFT.contains(XBinary::FT_DEX) ||
-            stFT.contains(XBinary::FT_ARCHIVE));
 }
 
 #ifdef QT_SCRIPTTOOLS_LIB

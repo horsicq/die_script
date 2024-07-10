@@ -52,34 +52,9 @@ SOURCES += \
     $$PWD/xscriptengine.cpp \
     $$PWD/zip_script.cpp
 
-!contains(XCONFIG, xformats) {
-    XCONFIG += xformats
-    include($$PWD/../Formats/xformats.pri)
-}
-
-!contains(XCONFIG, scanitem) {
-    XCONFIG += scanitem
-    include($$PWD/../Formats/scanitem.pri)
-}
-
-!contains(XCONFIG, xarchives) {
-    XCONFIG += xarchives
-    include($$PWD/../XArchive/xarchives.pri)
-}
-
-!contains(XCONFIG, xdex) {
-    XCONFIG += xdex
-    include($$PWD/../XDEX/xdex.pri)
-}
-
-!contains(XCONFIG, xoptions) {
-    XCONFIG += xoptions
-    include($$PWD/../XOptions/xoptions.pri)
-}
-
-!contains(XCONFIG, xextractor) {
-    XCONFIG += xextractor
-    include($$PWD/../XExtractor/xextractor.pri)
+!contains(XCONFIG, xscanengine) {
+    XCONFIG += xscanengine
+    include($$PWD/../XScanEngine/xscanengine.pri)
 }
 
 contains(XCONFIG, use_capstone_x86) {

@@ -42,6 +42,7 @@
 #include "npm_script.h"
 #include "util_script.h"
 #include "xscriptengine.h"
+#include "xscanengine.h"
 
 class DiE_ScriptEngine : public XScriptEngine {
     Q_OBJECT
@@ -76,8 +77,8 @@ public:
 
     struct SCAN_STRUCT {
         bool bIsHeuristic;
-        XBinary::SCANID id;
-        XBinary::SCANID parentId;
+        XScanEngine::SCANID id;
+        XScanEngine::SCANID parentId;
         //        SCAN_HEADER scanHeader;
         //        XBinary::FT fileType;
         // QString sFullString;
@@ -103,7 +104,7 @@ public:
     // QList<RESULT> getListLocalResult();
     // void clearListLocalResult();
     // static RESULT stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions);
-    XSCRIPTVALUE evaluateEx(const XBinary::SCANID &parentId, const XBinary::SCANID &resultId, const QString &sProgram, const QString &sName, const QString &sFileName);
+    XSCRIPTVALUE evaluateEx(const XScanEngine::SCANID &parentId, const XScanEngine::SCANID &resultId, const QString &sProgram, const QString &sName, const QString &sFileName);
 
 private:
 #ifdef QT_SCRIPT_LIB
@@ -134,8 +135,8 @@ private:
     QList<QObject *> g_listScriptClasses;
     XBinary::PDSTRUCT *g_pPdStruct;
 
-    XBinary::SCANID g_parentId;
-    XBinary::SCANID g_resultId;  // TODO rename
+    XScanEngine::SCANID g_parentId;
+    XScanEngine::SCANID g_resultId;  // TODO rename
     QString g_sName;             // TODO rename
     QString g_sFileName;         // TODO rename
 

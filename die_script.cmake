@@ -1,23 +1,11 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
-include(${CMAKE_CURRENT_LIST_DIR}/../XDEX/xdex.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/../XPDF/xpdf.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/../XArchive/xarchives.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/../Formats/xformats.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/../Formats/scanitem.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../XCapstone/xcapstone.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/../XOptions/xoptions.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/../XExtractor/xextractor.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../XScanEngine/xscanengine.cmake)
 
 set(DIE_SCRIPT_SOURCES
-    ${XDEX_SOURCES}
-    ${XPDF_SOURCES}
-    ${XARCHIVES_SOURCES}
-    ${XFORMATS_SOURCES}
     ${XCAPSTONE_SOURCES}
-    ${SCANITEM_SOURCES}
-    ${XOPTIONS_SOURCES}
-    ${XEXTRACTOR_SOURCES}
+    ${XSCANENGINE_SOURCES}
     ${CMAKE_CURRENT_LIST_DIR}/archive_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/archive_script.h
     ${CMAKE_CURRENT_LIST_DIR}/binary_script.cpp
