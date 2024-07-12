@@ -57,14 +57,6 @@ public:
     qint32 getNumberOfSignatures(XBinary::FT fileType);
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> *getSignatures();
 
-    // TODO move to XScanEngine
-    XScanEngine::SCAN_RESULT scanFile(const QString &sFileName, XScanEngine::SCAN_OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct = nullptr);
-    XScanEngine::SCAN_RESULT scanDevice(QIODevice *pDevice, XScanEngine::SCAN_OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct = nullptr);
-    XScanEngine::SCAN_RESULT processFile(const QString &sFileName, XScanEngine::SCAN_OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct = nullptr);
-    XScanEngine::SCAN_RESULT processDevice(QIODevice *pDevice, XScanEngine::SCAN_OPTIONS *pOptions, const QString &sFunction, XBinary::PDSTRUCT *pPdStruct = nullptr);
-
-    void process(QIODevice *pDevice, const QString &sFunction, XScanEngine::SCAN_RESULT *pScanResult, qint64 nOffset, qint64 nSize, XScanEngine::SCANID parentId, XScanEngine::SCAN_OPTIONS *pOptions,
-                 bool bInit, XBinary::PDSTRUCT *pPdStruct);
     DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(const QString &sSignatureFilePath);
     bool updateSignature(const QString &sSignatureFilePath, const QString &sText);
     STATS getStats();
@@ -77,34 +69,19 @@ public:
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
 #endif
-    void setData(const QString &sDirectory, const XScanEngine::SCAN_OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct);
-    void setData(QIODevice *pDevice, const XScanEngine::SCAN_OPTIONS &scanOptions, XBinary::PDSTRUCT *pPdStruct);
-
     static QList<XScanEngine::SCANSTRUCT> convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
-    XScanEngine::SCAN_RESULT getScanResultProcess();
-
-public slots:
-    void process();
 
 private:
     DiE_ScriptEngine::SIGNATURE_RECORD _loadSignatureRecord(const QFileInfo &fileInfo, XBinary::FT fileType);
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(const QString &sDatabasePath, XBinary::FT fileType, XBinary::PDSTRUCT *pPdStruct);
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, const QString &sPrefix, XBinary::FT fileType);
-    void _processDetect(XScanEngine::SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const QString &sDetectFunction, const XScanEngine::SCANID &parentId, XBinary::FT fileType,
-                        XScanEngine::SCAN_OPTIONS *pOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
+    void processDetect(XScanEngine::SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const XScanEngine::SCANID &parentId, XBinary::FT fileType,
+                       XScanEngine::SCAN_OPTIONS *pOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
     bool _handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord, XScanEngine::SCAN_RESULT *pScanResult);
 
 protected:
     virtual void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
                         SCAN_OPTIONS *pOptions, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
-
-signals:
-    void scanCompleted(qint64 nTime);
-    void directoryScanFileStarted(const QString &sFileName);
-    void directoryScanResult(const XScanEngine::SCAN_RESULT &scanResult);
-    void errorMessage(const QString &sErrorMessage);
-    void warningMessage(const QString &sWarningMessage);
-    void infoMessage(const QString &sInfoMessage);
 
 private slots:
     void _errorMessage(const QString &sErrorMessage);
@@ -120,11 +97,6 @@ private:
 #ifdef QT_SCRIPTTOOLS_LIB
     QScriptEngineDebugger *g_pDebugger;
 #endif
-    QString g_sDirectoryProcess;
-    QIODevice *g_pDeviceProcess;
-    XScanEngine::SCAN_OPTIONS g_scanOptionsProcess;
-    XScanEngine::SCAN_RESULT g_scanResultProcess;
-    XBinary::PDSTRUCT *g_pPdStruct;
     //    QMutex g_mutex;
     //    QSemaphore g_semaphore;
 };
