@@ -104,7 +104,8 @@ public:
     // QList<RESULT> getListLocalResult();
     // void clearListLocalResult();
     // static RESULT stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions);
-    XSCRIPTVALUE evaluateEx(const XScanEngine::SCANID &parentId, const XScanEngine::SCANID &resultId, const QString &sProgram, const QString &sName, const QString &sFileName);
+    XSCRIPTVALUE evaluateEx(const XScanEngine::SCANID &parentId, const XScanEngine::SCANID &resultId, const QString &sProgram, const QString &sName,
+                            const QString &sFileName);
 
 private:
 #ifdef QT_SCRIPT_LIB
@@ -137,8 +138,8 @@ private:
 
     XScanEngine::SCANID g_parentId;
     XScanEngine::SCANID g_resultId;  // TODO rename
-    QString g_sName;             // TODO rename
-    QString g_sFileName;         // TODO rename
+    QString g_sName;                 // TODO rename
+    QString g_sFileName;             // TODO rename
 
     QList<BLRECORD> g_listBLRecords;
 
