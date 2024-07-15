@@ -385,6 +385,8 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
 
             ssRecord.id = resultId;
             ssRecord.parentId = parentId;
+            ssRecord.sType = tr("Unknown");
+            ssRecord.sName = tr("Unknown");
 
             listRecords.append(ssRecord);
         }
