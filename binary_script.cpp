@@ -102,13 +102,15 @@ bool Binary_Script::compare(const QString &sSignature, qint64 nOffset)
 {
     bool bResult = false;
 
-    qint32 nSignatureSize = sSignature.size();
+    QString _sSignature = XBinary::convertSignature(sSignature);
 
-    if ((nSignatureSize + nOffset < g_nHeaderSignatureSize) && (!sSignature.contains('$')) && (!sSignature.contains('#')) && (!sSignature.contains('+')) &&
-        (!sSignature.contains('%')) && (!sSignature.contains('*'))) {
-        bResult = g_pBinary->compareSignatureStrings(g_sHeaderSignature.mid(nOffset * 2, nSignatureSize * 2), sSignature);
+    qint32 nSignatureSize = _sSignature.size();
+
+    if ((nSignatureSize + nOffset < g_nHeaderSignatureSize) && (!_sSignature.contains('$')) && (!_sSignature.contains('#')) && (!_sSignature.contains('+')) &&
+        (!_sSignature.contains('%')) && (!_sSignature.contains('*'))) {
+        bResult = g_pBinary->compareSignatureStrings(g_sHeaderSignature.mid(nOffset * 2, nSignatureSize * 2), _sSignature);
     } else {
-        bResult = g_pBinary->compareSignature(&g_memoryMap, sSignature, nOffset, g_pPdStruct);
+        bResult = g_pBinary->compareSignature(&g_memoryMap, _sSignature, nOffset, g_pPdStruct);
     }
 
     return bResult;
@@ -118,13 +120,15 @@ bool Binary_Script::compareEP(const QString &sSignature, qint64 nOffset)
 {
     bool bResult = false;
 
+    QString _sSignature = XBinary::convertSignature(sSignature);
+
     qint32 nSignatureSize = sSignature.size();
 
-    if ((nSignatureSize + nOffset < g_nEntryPointSignatureSize) && (!sSignature.contains('$')) && (!sSignature.contains('#')) && (!sSignature.contains('+')) &&
-        (!sSignature.contains('%')) && (!sSignature.contains('*'))) {
-        bResult = g_pBinary->compareSignatureStrings(g_sEntryPointSignature.mid(nOffset * 2, nSignatureSize * 2), sSignature);
+    if ((nSignatureSize + nOffset < g_nEntryPointSignatureSize) && (!_sSignature.contains('$')) && (!_sSignature.contains('#')) && (!_sSignature.contains('+')) &&
+        (!_sSignature.contains('%')) && (!_sSignature.contains('*'))) {
+        bResult = g_pBinary->compareSignatureStrings(g_sEntryPointSignature.mid(nOffset * 2, nSignatureSize * 2), _sSignature);
     } else {
-        bResult = g_pBinary->compareEntryPoint(&g_memoryMap, sSignature, nOffset);  // TODO g_pPdStruct
+        bResult = g_pBinary->compareEntryPoint(&g_memoryMap, _sSignature, nOffset);  // TODO g_pPdStruct
     }
 
     return bResult;
@@ -291,13 +295,15 @@ bool Binary_Script::compareOverlay(const QString &sSignature, qint64 nOffset)
 {
     bool bResult = false;
 
+    QString _sSignature = XBinary::convertSignature(sSignature);
+
     qint32 nSignatureSize = sSignature.size();
 
-    if ((nSignatureSize + nOffset < g_nOverlaySignatureSize) && (!sSignature.contains('$')) && (!sSignature.contains('#')) && (!sSignature.contains('+')) &&
-        (!sSignature.contains('%')) && (!sSignature.contains('*'))) {
-        bResult = g_pBinary->compareSignatureStrings(g_sOverlaySignature.mid(nOffset * 2, nSignatureSize * 2), sSignature);
+    if ((nSignatureSize + nOffset < g_nOverlaySignatureSize) && (!_sSignature.contains('$')) && (!_sSignature.contains('#')) && (!_sSignature.contains('+')) &&
+        (!_sSignature.contains('%')) && (!_sSignature.contains('*'))) {
+        bResult = g_pBinary->compareSignatureStrings(g_sOverlaySignature.mid(nOffset * 2, nSignatureSize * 2), _sSignature);
     } else {
-        bResult = g_pBinary->compareOverlay(&g_memoryMap, sSignature, nOffset, g_pPdStruct);
+        bResult = g_pBinary->compareOverlay(&g_memoryMap, _sSignature, nOffset, g_pPdStruct);
     }
 
     return bResult;
