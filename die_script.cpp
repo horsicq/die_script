@@ -536,7 +536,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, bool bInit, XBinary:
     }
 
 #ifdef QT_DEBUG
-    qDebug("DiE_Script::loadDatabase: %d ms", pElapsedTimer->elapsed());
+    qDebug("DiE_Script::loadDatabase: %lld ms", pElapsedTimer->elapsed());
 #endif
 
     return g_listSignatures.count();
