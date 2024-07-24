@@ -20,7 +20,7 @@
  */
 #include "le_script.h"
 
-LE_Script::LE_Script(XLE *pLE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : MSDOS_Script(pLE, pOptions, pPdStruct)
+LE_Script::LE_Script(XLE *pLE, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : MSDOS_Script(pLE, filePart, pOptions, pPdStruct)
 {
     this->g_pLE = pLE;
 }

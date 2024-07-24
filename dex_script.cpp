@@ -20,7 +20,7 @@
  */
 #include "dex_script.h"
 
-DEX_Script::DEX_Script(XDEX *pDex, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pDex, pOptions, pPdStruct)
+DEX_Script::DEX_Script(XDEX *pDex, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pDex, filePart, pOptions, pPdStruct)
 {
     this->g_pDex = pDex;
 

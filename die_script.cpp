@@ -223,7 +223,7 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     _options.bIsVerbose = pOptions->bIsVerbose;
     _options.bIsProfiling = pOptions->bIsProfiling;
 
-    DiE_ScriptEngine scriptEngine(&g_listSignatures, &listRecords, pDevice, fileType, &_options, pPdStruct);
+    DiE_ScriptEngine scriptEngine(&g_listSignatures, &listRecords, pDevice, fileType, parentId.filePart, &_options, pPdStruct);
 
     connect(&scriptEngine, SIGNAL(errorMessage(QString)), this, SLOT(_errorMessage(QString)));
     connect(&scriptEngine, SIGNAL(warningMessage(QString)), this, SLOT(_warningMessage(QString)));

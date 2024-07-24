@@ -28,7 +28,7 @@ class COM_Script : public Binary_Script {
     Q_OBJECT
 
 public:
-    explicit COM_Script(XCOM *pCOM, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit COM_Script(XCOM *pCOM, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~COM_Script();
 
 private:

@@ -28,7 +28,7 @@ class DEX_Script : public Binary_Script {
     Q_OBJECT
 
 public:
-    explicit DEX_Script(XDEX *pDex, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit DEX_Script(XDEX *pDex, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~DEX_Script();
 
 public slots:

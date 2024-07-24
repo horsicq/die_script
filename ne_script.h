@@ -28,7 +28,7 @@ class NE_Script : public MSDOS_Script {
     Q_OBJECT
 
 public:
-    explicit NE_Script(XNE *pNE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit NE_Script(XNE *pNE, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~NE_Script();
 
 private:

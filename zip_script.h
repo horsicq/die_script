@@ -28,7 +28,7 @@ class ZIP_Script : public Archive_Script {
     Q_OBJECT
 
 public:
-    explicit ZIP_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit ZIP_Script(XZip *pZip, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~ZIP_Script();
 
 private:

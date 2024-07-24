@@ -35,7 +35,7 @@ public:
         bool bIsProfiling;
     };
 
-    explicit Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~Binary_Script();
 
 public slots:
@@ -155,6 +155,9 @@ public slots:
     qint64 detectGZIP(qint64 nOffset, qint64 nSize);
     qint64 detectZIP(qint64 nOffset, qint64 nSize);
 
+    bool isOverlay();
+    bool isResource();
+
     // alliases
     quint8 U8(qint64 nOffset);
     qint16 I8(qint64 nOffset);  // qint16 not qint8 / qint8 qjs shows as char
@@ -228,6 +231,7 @@ signals:
 
 private:
     XBinary *g_pBinary;
+    XBinary::FILEPART g_filePart;
     OPTIONS *g_pOptions;
     XBinary::PDSTRUCT *g_pPdStruct;
     XBinary::_MEMORY_MAP g_memoryMap;

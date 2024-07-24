@@ -27,7 +27,7 @@ class JAR_Script : public ZIP_Script {
     Q_OBJECT
 
 public:
-    explicit JAR_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit JAR_Script(XZip *pZip, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~JAR_Script();
 
 public slots:

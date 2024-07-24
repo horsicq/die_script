@@ -20,7 +20,7 @@
  */
 #include "archive_script.h"
 
-Archive_Script::Archive_Script(XArchive *pArchive, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pArchive, pOptions, pPdStruct)
+Archive_Script::Archive_Script(XArchive *pArchive, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pArchive, filePart, pOptions, pPdStruct)
 {
     g_pArchive = pArchive;
 

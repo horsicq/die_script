@@ -20,9 +20,10 @@
  */
 #include "binary_script.h"
 
-Binary_Script::Binary_Script(XBinary *pBinary, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
 {
     this->g_pBinary = pBinary;
+    this->g_filePart = filePart;
     this->g_pPdStruct = pPdStruct;
     this->g_pOptions = pOptions;
 
@@ -974,6 +975,16 @@ qint64 Binary_Script::detectZIP(qint64 nOffset, qint64 nSize)
     } else {
         return -1;
     }
+}
+
+bool Binary_Script::isOverlay()
+{
+    return (g_filePart == XBinary::FILEPART_OVERLAY);
+}
+
+bool Binary_Script::isResource()
+{
+    return (g_filePart == XBinary::FILEPART_RESOURCE);
 }
 
 XBinary::_MEMORY_MAP *Binary_Script::getMemoryMap()

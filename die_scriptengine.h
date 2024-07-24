@@ -96,7 +96,7 @@ public:
         QString sName;
     };
 
-    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType,
+    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType, XBinary::FILEPART filePart,
                      Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~DiE_ScriptEngine();
 

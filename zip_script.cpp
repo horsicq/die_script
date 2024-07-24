@@ -20,7 +20,7 @@
  */
 #include "zip_script.h"
 
-ZIP_Script::ZIP_Script(XZip *pZip, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Archive_Script(pZip, pOptions, pPdStruct)
+ZIP_Script::ZIP_Script(XZip *pZip, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Archive_Script(pZip, filePart, pOptions, pPdStruct)
 {
     this->g_pZip = pZip;
 }

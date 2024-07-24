@@ -31,7 +31,7 @@ class NPM_Script : public Archive_Script {
     Q_OBJECT
 
 public:
-    explicit NPM_Script(XNPM *pNpm, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit NPM_Script(XNPM *pNpm, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~NPM_Script();
 
 public slots:

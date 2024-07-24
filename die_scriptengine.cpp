@@ -20,8 +20,8 @@
  */
 #include "die_scriptengine.h"
 
-DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice,
-                                   XBinary::FT fileType, Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType, XBinary::FILEPART filePart,
+                                   Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
     : XScriptEngine()
 {
     g_parentId = {};
@@ -78,7 +78,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     _addClass(pUtilScript, "Util");
     g_listScriptClasses.append(pUtilScript);
 
-    Binary_Script *pBinaryScript = new Binary_Script(pBinary, pOptions, pPdStruct);
+    Binary_Script *pBinaryScript = new Binary_Script(pBinary, filePart, pOptions, pPdStruct);
 
     if (pBinaryScript) {
         connect(pBinaryScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -91,7 +91,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
     if (XBinary::checkFileType(XBinary::FT_COM, fileType)) {
         XCOM *pCOM = new XCOM(pDevice);
-        COM_Script *pExtraScript = new COM_Script(pCOM, pOptions, pPdStruct);
+        COM_Script *pExtraScript = new COM_Script(pCOM, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -104,7 +104,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_PE, fileType)) {
         XPE *pPE = new XPE(pDevice);
-        PE_Script *pExtraScript = new PE_Script(pPE, pOptions, pPdStruct);
+        PE_Script *pExtraScript = new PE_Script(pPE, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -117,7 +117,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_ELF, fileType)) {
         XELF *pELF = new XELF(pDevice);
-        ELF_Script *pExtraScript = new ELF_Script(pELF, pOptions, pPdStruct);
+        ELF_Script *pExtraScript = new ELF_Script(pELF, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -130,7 +130,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_MACHO, fileType)) {
         XMACH *pMACH = new XMACH(pDevice);
-        MACH_Script *pExtraScript = new MACH_Script(pMACH, pOptions, pPdStruct);
+        MACH_Script *pExtraScript = new MACH_Script(pMACH, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -143,7 +143,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_NE, fileType)) {
         XNE *pNE = new XNE(pDevice);
-        NE_Script *pExtraScript = new NE_Script(pNE, pOptions, pPdStruct);
+        NE_Script *pExtraScript = new NE_Script(pNE, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -156,7 +156,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_LE, fileType)) {
         XLE *pLE = new XLE(pDevice);
-        LE_Script *pExtraScript = new LE_Script(pLE, pOptions, pPdStruct);
+        LE_Script *pExtraScript = new LE_Script(pLE, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -169,7 +169,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_LX, fileType)) {
         XLE *pLE = new XLE(pDevice);
-        LX_Script *pExtraScript = new LX_Script(pLE, pOptions, pPdStruct);
+        LX_Script *pExtraScript = new LX_Script(pLE, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -182,7 +182,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_MSDOS, fileType)) {
         XMSDOS *pXMSDOS = new XMSDOS(pDevice);
-        MSDOS_Script *pExtraScript = new MSDOS_Script(pXMSDOS, pOptions, pPdStruct);
+        MSDOS_Script *pExtraScript = new MSDOS_Script(pXMSDOS, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -200,15 +200,15 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
         if (fileTypes.contains(XBinary::FT_ZIP)) {
             XZip *_pArchive = new XZip(pDevice);
-            pExtraScript = new Archive_Script(_pArchive, pOptions, pPdStruct);
+            pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
             g_listBinaries.append(_pArchive);
         } else if (fileTypes.contains(XBinary::FT_TARGZ)) {
             XTGZ *_pArchive = new XTGZ(pDevice);
-            pExtraScript = new Archive_Script(_pArchive, pOptions, pPdStruct);
+            pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
             g_listBinaries.append(_pArchive);
         } else if (fileTypes.contains(XBinary::FT_MACHOFAT)) {
             XMACHOFat *_pArchive = new XMACHOFat(pDevice);
-            pExtraScript = new Archive_Script(_pArchive, pOptions, pPdStruct);
+            pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
             g_listBinaries.append(_pArchive);
         }
         // TODO more
@@ -224,7 +224,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_ZIP, fileType)) {
         XZip *pZIP = new XZip(pDevice);
-        ZIP_Script *pExtraScript = new ZIP_Script(pZIP, pOptions, pPdStruct);
+        ZIP_Script *pExtraScript = new ZIP_Script(pZIP, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -237,7 +237,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_JAR, fileType)) {
         XJAR *pJAR = new XJAR(pDevice);
-        JAR_Script *pExtraScript = new JAR_Script(pJAR, pOptions, pPdStruct);
+        JAR_Script *pExtraScript = new JAR_Script(pJAR, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -250,7 +250,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_APK, fileType)) {
         XAPK *pAPK = new XAPK(pDevice);
-        APK_Script *pExtraScript = new APK_Script(pAPK, pOptions, pPdStruct);
+        APK_Script *pExtraScript = new APK_Script(pAPK, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -263,7 +263,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_IPA, fileType)) {
         XIPA *pIPA = new XIPA(pDevice);
-        IPA_Script *pExtraScript = new IPA_Script(pIPA, pOptions, pPdStruct);
+        IPA_Script *pExtraScript = new IPA_Script(pIPA, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -276,7 +276,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_NPM, fileType)) {
         XNPM *pNPNM = new XNPM(pDevice);
-        NPM_Script *pExtraScript = new NPM_Script(pNPNM, pOptions, pPdStruct);
+        NPM_Script *pExtraScript = new NPM_Script(pNPNM, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -289,7 +289,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_DEX, fileType)) {
         XDEX *pDEX = new XDEX(pDevice);
-        DEX_Script *pExtraScript = new DEX_Script(pDEX, pOptions, pPdStruct);
+        DEX_Script *pExtraScript = new DEX_Script(pDEX, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));

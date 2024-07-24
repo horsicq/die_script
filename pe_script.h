@@ -28,7 +28,7 @@ class PE_Script : public MSDOS_Script {
     Q_OBJECT
 
 public:
-    explicit PE_Script(XPE *pPE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~PE_Script();
 
 public slots:

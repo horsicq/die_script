@@ -28,7 +28,7 @@ class IPA_Script : public JAR_Script {
     Q_OBJECT
 
 public:
-    explicit IPA_Script(XIPA *pIPA, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit IPA_Script(XIPA *pIPA, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~IPA_Script();
 
 private:

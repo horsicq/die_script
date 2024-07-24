@@ -28,7 +28,7 @@ class APK_Script : public JAR_Script {
     Q_OBJECT
 
 public:
-    explicit APK_Script(XAPK *pAPK, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit APK_Script(XAPK *pAPK, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~APK_Script();
 
 public slots:

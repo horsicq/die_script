@@ -28,7 +28,7 @@ class LE_Script : public MSDOS_Script {
     Q_OBJECT
 
 public:
-    explicit LE_Script(XLE *pLE, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    explicit LE_Script(XLE *pLE, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~LE_Script();
 
 private:
