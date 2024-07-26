@@ -157,6 +157,7 @@ public slots:
 
     bool isOverlay();
     bool isResource();
+    bool isDebugData();
 
     // alliases
     quint8 U8(qint64 nOffset);

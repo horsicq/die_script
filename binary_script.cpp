@@ -987,6 +987,11 @@ bool Binary_Script::isResource()
     return (g_filePart == XBinary::FILEPART_RESOURCE);
 }
 
+bool Binary_Script::isDebugData()
+{
+    return (g_filePart == XBinary::FILEPART_DEBUGDATA);
+}
+
 XBinary::_MEMORY_MAP *Binary_Script::getMemoryMap()
 {
     return &g_memoryMap;
