@@ -52,15 +52,9 @@ public:
         XBinary::FT fileType;
         QString sName;
         QString sFilePath;
+        QString sDatabaseName;
         QString sText;
         bool bReadOnly;
-    };
-
-    struct RESULT {
-        QString sType;
-        QString sName;
-        QString sVersion;
-        QString sOptions;
     };
 
     //    struct SCAN_HEADER
@@ -77,6 +71,7 @@ public:
 
     struct SCAN_STRUCT {
         bool bIsHeuristic;
+        bool bIsUnknown;
         XScanEngine::SCANID id;
         XScanEngine::SCANID parentId;
         //        SCAN_HEADER scanHeader;
