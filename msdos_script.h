@@ -50,8 +50,8 @@ private:
     XMSDOS *g_pMSDOS;
     QList<XMSDOS::MS_RICH_RECORD> g_listRich;
     qint32 g_nNumberOfRichIDs;
-    qint64 nDosStubOffset;
-    qint64 nDosStubSize;
+    qint64 g_nDosStubOffset;
+    qint64 g_nDosStubSize;
     bool bIsDosStubPresent;
     bool bIisRichSignaturePresent;
     bool bIsLE;

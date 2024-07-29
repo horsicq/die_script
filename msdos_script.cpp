@@ -43,16 +43,16 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, XBinary::FILEPART filePart, OPTIONS *
         }
     }
 
-    nDosStubOffset = 0;
-    nDosStubSize = 0;
+    g_nDosStubOffset = 0;
+    g_nDosStubSize = 0;
     bIsDosStubPresent = false;
 
     if (bIsLE || bIsLX || bIsNE || bIsPE) {
         bIsDosStubPresent = pMSDOS->isDosStubPresent();
 
         if (bIsDosStubPresent) {
-            nDosStubOffset = pMSDOS->getDosStubOffset();
-            nDosStubSize = pMSDOS->getDosStubSize();
+            g_nDosStubOffset = pMSDOS->getDosStubOffset();
+            g_nDosStubSize = pMSDOS->getDosStubSize();
         }
     }
 }
@@ -83,12 +83,12 @@ bool MSDOS_Script::isPE()
 
 qint64 MSDOS_Script::getDosStubOffset()
 {
-    return nDosStubOffset;
+    return g_nDosStubOffset;
 }
 
 qint64 MSDOS_Script::getDosStubSize()
 {
-    return nDosStubSize;
+    return g_nDosStubSize;
 }
 
 bool MSDOS_Script::isDosStubPresent()
