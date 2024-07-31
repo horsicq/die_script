@@ -48,11 +48,17 @@ class DiE_ScriptEngine : public XScriptEngine {
     Q_OBJECT
 
 public:
+    enum DT {
+        DT_MAIN = 0,
+        DT_EXTRA,
+        DT_CUSTOM
+    };
+
     struct SIGNATURE_RECORD {
         XBinary::FT fileType;
         QString sName;
         QString sFilePath;
-        QString sDatabaseName;
+        DT databaseType;
         QString sText;
         bool bReadOnly;
     };

@@ -75,7 +75,7 @@ DiE_Script::DiE_Script(QObject *pParent) : XScanEngine(pParent)
 #endif
 }
 
-QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(const QString &sDatabasePath, const QString &sDatabaseName, XBinary::FT fileType, XBinary::PDSTRUCT *pPdStruct)
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(const QString &sDatabasePath, DiE_ScriptEngine::DT databaseType, XBinary::FT fileType, XBinary::PDSTRUCT *pPdStruct)
 {
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
 
@@ -96,7 +96,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(const QS
                 record.sName = eil.at(i).fileName();
                 record.sText = XBinary::readFile(eil.at(i).absoluteFilePath());
                 record.sFilePath = eil.at(i).absoluteFilePath();
-                record.sDatabaseName = sDatabaseName;
+                record.databaseType = databaseType;
                 listResult.append(record);
             }
         }
@@ -107,7 +107,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(const QS
     return listResult;
 }
 
-QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, const QString &sDatabaseName, const QString &sPrefix,
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, DiE_ScriptEngine::DT databaseType, const QString &sPrefix,
                                                                            XBinary::FT fileType)
 {
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
@@ -127,7 +127,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
             record.sName = fi.fileName();
             record.sText = pZip->decompress(&zipRecord, nullptr);
             record.sFilePath = zipRecord.sFileName;
-            record.sDatabaseName = sDatabaseName;
+            record.databaseType = databaseType;
             record.bReadOnly = true;
 
             listResult.append(record);
@@ -410,7 +410,7 @@ void DiE_Script::initDatabase()
     g_listSignatures.clear();
 }
 
-bool DiE_Script::loadDatabase(SCAN_OPTIONS *pScanOptions, const QString &sDatabasePath, QString sDatabaseName, XBinary::PDSTRUCT *pPdStruct)
+bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT databaseType, XBinary::PDSTRUCT *pPdStruct)
 {
     bool bResult = false;
 
@@ -438,24 +438,24 @@ bool DiE_Script::loadDatabase(SCAN_OPTIONS *pScanOptions, const QString &sDataba
                 if (zip.isValid()) {
                     QList<XArchive::RECORD> listRecords = zip.getRecords(-1, pPdStruct);  // TODO Check
 
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "", XBinary::FT_UNKNOWN));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "Binary", XBinary::FT_BINARY));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "COM", XBinary::FT_COM));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "Archive", XBinary::FT_ARCHIVE));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "ZIP", XBinary::FT_ZIP));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "JAR", XBinary::FT_JAR));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "APK", XBinary::FT_APK));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "IPA", XBinary::FT_IPA));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "NPM", XBinary::FT_NPM));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "DEB", XBinary::FT_DEB));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "DEX", XBinary::FT_DEX));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "MSDOS", XBinary::FT_MSDOS));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "LE", XBinary::FT_LE));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "LX", XBinary::FT_LX));  // TODO Check
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "NE", XBinary::FT_NE));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "PE", XBinary::FT_PE));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "ELF", XBinary::FT_ELF));
-                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, sDatabaseName, "MACH", XBinary::FT_MACHO));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "", XBinary::FT_UNKNOWN));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "Binary", XBinary::FT_BINARY));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "COM", XBinary::FT_COM));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "Archive", XBinary::FT_ARCHIVE));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "ZIP", XBinary::FT_ZIP));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "JAR", XBinary::FT_JAR));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "APK", XBinary::FT_APK));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "IPA", XBinary::FT_IPA));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "NPM", XBinary::FT_NPM));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "DEB", XBinary::FT_DEB));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "DEX", XBinary::FT_DEX));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "MSDOS", XBinary::FT_MSDOS));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "LE", XBinary::FT_LE));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "LX", XBinary::FT_LX));  // TODO Check
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "NE", XBinary::FT_NE));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "PE", XBinary::FT_PE));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "ELF", XBinary::FT_ELF));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "MACH", XBinary::FT_MACHO));
 
                     bResult = true;
                 }
@@ -463,30 +463,32 @@ bool DiE_Script::loadDatabase(SCAN_OPTIONS *pScanOptions, const QString &sDataba
                 file.close();
             }
         } else if (XBinary::isDirectoryExists(_sDatabasePath)) {
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath, sDatabaseName, XBinary::FT_UNKNOWN, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "Binary", sDatabaseName, XBinary::FT_BINARY, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "COM", sDatabaseName, XBinary::FT_COM, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "Archive", sDatabaseName, XBinary::FT_ARCHIVE, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ZIP", sDatabaseName, XBinary::FT_ZIP, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "JAR", sDatabaseName, XBinary::FT_JAR, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "APK", sDatabaseName, XBinary::FT_APK, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "IPA", sDatabaseName, XBinary::FT_IPA, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NPM", sDatabaseName, XBinary::FT_NPM, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEB", sDatabaseName, XBinary::FT_NPM, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEX", sDatabaseName, XBinary::FT_DEX, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MSDOS", sDatabaseName, XBinary::FT_MSDOS, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LE", sDatabaseName, XBinary::FT_LE, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LX", sDatabaseName, XBinary::FT_LX, pPdStruct));  // TODO Check
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NE", sDatabaseName,  XBinary::FT_NE, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "PE", sDatabaseName, XBinary::FT_PE, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ELF", sDatabaseName, XBinary::FT_ELF, pPdStruct));
-            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MACH", sDatabaseName, XBinary::FT_MACHO, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath, databaseType, XBinary::FT_UNKNOWN, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "Binary", databaseType, XBinary::FT_BINARY, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "COM", databaseType, XBinary::FT_COM, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "Archive", databaseType, XBinary::FT_ARCHIVE, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ZIP", databaseType, XBinary::FT_ZIP, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "JAR", databaseType, XBinary::FT_JAR, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "APK", databaseType, XBinary::FT_APK, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "IPA", databaseType, XBinary::FT_IPA, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NPM", databaseType, XBinary::FT_NPM, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEB", databaseType, XBinary::FT_NPM, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEX", databaseType, XBinary::FT_DEX, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MSDOS", databaseType, XBinary::FT_MSDOS, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LE", databaseType, XBinary::FT_LE, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "LX", databaseType, XBinary::FT_LX, pPdStruct));  // TODO Check
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NE", databaseType,  XBinary::FT_NE, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "PE", databaseType, XBinary::FT_PE, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ELF", databaseType, XBinary::FT_ELF, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MACH", databaseType, XBinary::FT_MACHO, pPdStruct));
 
             bResult = true;
         } else {
-            QString sErrorString = QString("%1: %2").arg(tr("Cannot load database"), sDatabasePath);
+            if (databaseType == DiE_ScriptEngine::DT_MAIN) {
+                QString sErrorString = QString("%1: %2").arg(tr("Cannot load database"), sDatabasePath);
 
-            _errorMessage(pScanOptions, sErrorString); // TODO
+                emit errorMessage(sErrorString);
+            }
         }
 
     #ifdef QT_DEBUG
@@ -682,6 +684,18 @@ QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_
     sortRecords(&listResult);
 
     return listResult;
+}
+
+bool DiE_Script::loadDatabaseFromGlobalOptions(XOptions *pXOptions)
+{
+    bool bResult = false;
+
+    initDatabase();
+    bResult = loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_MAIN_PATH).toString(), DiE_ScriptEngine::DT_MAIN);
+    loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_EXTRA_PATH).toString(), DiE_ScriptEngine::DT_EXTRA);
+    loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_CUSTOM_PATH).toString(), DiE_ScriptEngine::DT_CUSTOM);
+
+    return bResult;
 }
 
 #ifdef QT_SCRIPTTOOLS_LIB

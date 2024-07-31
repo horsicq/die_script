@@ -46,7 +46,7 @@ public:
 
     explicit DiE_Script(QObject *pParent = nullptr);
     void initDatabase();
-    bool loadDatabase(XScanEngine::SCAN_OPTIONS *pScanOptions, const QString &sDatabasePath, QString sDatabaseName, XBinary::PDSTRUCT *pPdStruct = nullptr);
+    bool loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT databaseType, XBinary::PDSTRUCT *pPdStruct = nullptr);
 
     QList<SIGNATURE_STATE> getSignatureStates();
     qint32 getNumberOfSignatures(XBinary::FT fileType);
@@ -65,9 +65,11 @@ public:
 #endif
     static QList<XScanEngine::SCANSTRUCT> convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
 
+    bool loadDatabaseFromGlobalOptions(XOptions *pXOptions);
+
 private:
-    QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(const QString &sDatabasePath, const QString &sDatabaseName, XBinary::FT fileType, XBinary::PDSTRUCT *pPdStruct);
-    QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, const QString &sDatabaseName, const QString &sPrefix, XBinary::FT fileType);
+    QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabasePath(const QString &sDatabasePath, DiE_ScriptEngine::DT databaseType, XBinary::FT fileType, XBinary::PDSTRUCT *pPdStruct);
+    QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromZip(XZip *pZip, QList<XArchive::RECORD> *pListRecords, DiE_ScriptEngine::DT databaseType, const QString &sPrefix, XBinary::FT fileType);
     void processDetect(XScanEngine::SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const XScanEngine::SCANID &parentId, XBinary::FT fileType,
                        XScanEngine::SCAN_OPTIONS *pOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
     bool _handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,
