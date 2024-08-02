@@ -85,6 +85,7 @@ Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIO
 
     g_bIsSigned = pBinary->isSigned();
     g_osInfo = pBinary->getOsInfo();
+    g_fileFormatInfo = pBinary->getFileFormatInfo(pPdStruct);
 
     XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
 }
@@ -761,6 +762,21 @@ QString Binary_Script::getOperationSystemOptions()
     }
 
     return sResult;
+}
+
+QString Binary_Script::getFileFormatName()
+{
+    return g_fileFormatInfo.sString;
+}
+
+QString Binary_Script::getFileFormatVersion()
+{
+    return g_fileFormatInfo.sString;
+}
+
+QString Binary_Script::getFileFormatOptions()
+{
+    return g_fileFormatInfo.sVersion;
 }
 
 bool Binary_Script::isSigned()

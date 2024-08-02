@@ -146,6 +146,11 @@ public slots:
     QString getOperationSystemName();
     QString getOperationSystemVersion();
     QString getOperationSystemOptions();
+
+    QString getFileFormatName();
+    QString getFileFormatVersion();
+    QString getFileFormatOptions();
+
     bool isSigned();
     QString cleanString(const QString &sString);
     qint64 startTiming();
@@ -259,6 +264,7 @@ private:
     QString g_sFileCompleteSuffix;
     QString g_sFileSuffix;
     XBinary::OSINFO g_osInfo;
+    XBinary::FILEFORMATINFO g_fileFormatInfo;
     // JPEG
     bool g_bIsJpeg;
     XJpeg *g_pJpeg;
