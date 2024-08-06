@@ -53,12 +53,12 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
     g_bIsImportPresent = pPE->isImportPresent();
     g_bIsResourcesPresent = pPE->isResourcesPresent();
 
-    g_nImportSection = pPE->getImportSection(getMemoryMap());
-    g_nExportSection = pPE->getExportSection(getMemoryMap());
-    g_nResourcesSection = pPE->getResourcesSection(getMemoryMap());
+    g_nImportSection = pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_IMPORT);
+    g_nExportSection = pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_EXPORT);
+    g_nResourcesSection = pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_RESOURCE);
     g_nEntryPointSection = pPE->getEntryPointSection(getMemoryMap());
-    g_nRelocsSection = pPE->getRelocsSection(getMemoryMap());
-    g_nTLSSection = pPE->getTLSSection(getMemoryMap());
+    g_nRelocsSection = pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_BASERELOC);
+    g_nTLSSection = pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_TLS);
 
     g_nMajorLinkerVersion = pPE->getOptionalHeader_MajorLinkerVersion();
     g_nMinorLinkerVersion = pPE->getOptionalHeader_MinorLinkerVersion();
