@@ -771,12 +771,12 @@ QString Binary_Script::getFileFormatName()
 
 QString Binary_Script::getFileFormatVersion()
 {
-    return g_fileFormatInfo.sString;
+    return g_fileFormatInfo.sVersion;
 }
 
 QString Binary_Script::getFileFormatOptions()
 {
-    return g_fileFormatInfo.sVersion;
+    return g_fileFormatInfo.sOptions;
 }
 
 bool Binary_Script::isSigned()
