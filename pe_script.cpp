@@ -37,8 +37,8 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
 
     g_nNumberOfResources = g_listResourceRecords.count();
 
-    g_listImportHeaders = pPE->getImports(getMemoryMap());
-    g_listImportRecords = pPE->getImportRecords(getMemoryMap());
+    g_listImportHeaders = pPE->getImports(getMemoryMap(), getPdStruct());
+    g_listImportRecords = pPE->getImportRecords(getMemoryMap(), getPdStruct());
 
     g_nNumberOfImports = g_listImportHeaders.count();
 
@@ -73,7 +73,7 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
 
     g_nCalculateSizeOfHeaders = pPE->calculateHeadersSize();
 
-    g_exportHeader = pPE->getExport();
+    g_exportHeader = pPE->getExport(false, getPdStruct());
     g_nNumberOfExportFunctions = g_exportHeader.listPositions.count();
 
     g_listExportFunctionNameStrings = pPE->getExportFunctionsList(&g_exportHeader);

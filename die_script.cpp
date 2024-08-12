@@ -687,6 +687,7 @@ QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_
         XScanEngine::SCANSTRUCT record = {};
 
         record.bIsHeuristic = pListScanStructs->at(i).bIsHeuristic;
+        record.bIsUnknown = pListScanStructs->at(i).bIsUnknown;
         record.id = pListScanStructs->at(i).id;
         record.parentId = pListScanStructs->at(i).parentId;
         record.sType = pListScanStructs->at(i).sType;
