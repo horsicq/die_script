@@ -52,7 +52,7 @@ private:
     qint32 g_nNumberOfRichIDs;
     qint64 g_nDosStubOffset;
     qint64 g_nDosStubSize;
-    bool bIsDosStubPresent;
+    bool g_bIsDosStubPresent;
     bool bIisRichSignaturePresent;
     bool bIsLE;
     bool bIsLX;

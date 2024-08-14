@@ -45,12 +45,12 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, XBinary::FILEPART filePart, OPTIONS *
 
     g_nDosStubOffset = 0;
     g_nDosStubSize = 0;
-    bIsDosStubPresent = false;
+    g_bIsDosStubPresent = false;
 
     if (bIsLE || bIsLX || bIsNE || bIsPE) {
-        bIsDosStubPresent = pMSDOS->isDosStubPresent();
+        g_bIsDosStubPresent = pMSDOS->isDosStubPresent();
 
-        if (bIsDosStubPresent) {
+        if (g_bIsDosStubPresent) {
             g_nDosStubOffset = pMSDOS->getDosStubOffset();
             g_nDosStubSize = pMSDOS->getDosStubSize();
         }
@@ -93,7 +93,7 @@ qint64 MSDOS_Script::getDosStubSize()
 
 bool MSDOS_Script::isDosStubPresent()
 {
-    return bIsDosStubPresent;
+    return g_bIsDosStubPresent;
 }
 
 qint32 MSDOS_Script::getNumberOfRichIDs()
