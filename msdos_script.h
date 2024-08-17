@@ -54,7 +54,7 @@ private:
     qint64 g_nDosStubSize;
     bool g_bIsDosStubPresent;
     bool g_bIisRichSignaturePresent;
-    bool bIsLE;
+    bool g_bIsLE;
     bool bIsLX;
     bool bIsNE;
     bool bIsPE;

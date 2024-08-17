@@ -25,7 +25,7 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, XBinary::FILEPART filePart, OPTIONS *
 {
     this->g_pMSDOS = pMSDOS;
 
-    bIsLE = pMSDOS->isLE();
+    g_bIsLE = pMSDOS->isLE();
     bIsLX = pMSDOS->isLX();
     bIsNE = pMSDOS->isNE();
     bIsPE = pMSDOS->isPE();
@@ -33,7 +33,7 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, XBinary::FILEPART filePart, OPTIONS *
     g_nNumberOfRichIDs = 0;
     g_bIisRichSignaturePresent = false;
 
-    if (bIsLE || bIsPE) {
+    if (g_bIsLE || bIsPE) {
         g_bIisRichSignaturePresent = pMSDOS->isRichSignaturePresent();
 
         if (g_bIisRichSignaturePresent) {
@@ -47,7 +47,7 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, XBinary::FILEPART filePart, OPTIONS *
     g_nDosStubSize = 0;
     g_bIsDosStubPresent = false;
 
-    if (bIsLE || bIsLX || bIsNE || bIsPE) {
+    if (g_bIsLE || bIsLX || bIsNE || bIsPE) {
         g_bIsDosStubPresent = pMSDOS->isDosStubPresent();
 
         if (g_bIsDosStubPresent) {
@@ -63,7 +63,7 @@ MSDOS_Script::~MSDOS_Script()
 
 bool MSDOS_Script::isLE()
 {
-    return bIsLE;
+    return g_bIsLE;
 }
 
 bool MSDOS_Script::isLX()
