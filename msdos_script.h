@@ -55,7 +55,7 @@ private:
     bool g_bIsDosStubPresent;
     bool g_bIisRichSignaturePresent;
     bool g_bIsLE;
-    bool bIsLX;
+    bool g_bIsLX;
     bool bIsNE;
     bool bIsPE;
 };

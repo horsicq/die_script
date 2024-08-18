@@ -26,7 +26,7 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, XBinary::FILEPART filePart, OPTIONS *
     this->g_pMSDOS = pMSDOS;
 
     g_bIsLE = pMSDOS->isLE();
-    bIsLX = pMSDOS->isLX();
+    g_bIsLX = pMSDOS->isLX();
     bIsNE = pMSDOS->isNE();
     bIsPE = pMSDOS->isPE();
 
@@ -47,7 +47,7 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, XBinary::FILEPART filePart, OPTIONS *
     g_nDosStubSize = 0;
     g_bIsDosStubPresent = false;
 
-    if (g_bIsLE || bIsLX || bIsNE || bIsPE) {
+    if (g_bIsLE || g_bIsLX || bIsNE || bIsPE) {
         g_bIsDosStubPresent = pMSDOS->isDosStubPresent();
 
         if (g_bIsDosStubPresent) {
@@ -68,7 +68,7 @@ bool MSDOS_Script::isLE()
 
 bool MSDOS_Script::isLX()
 {
-    return bIsLX;
+    return g_bIsLX;
 }
 
 bool MSDOS_Script::isNE()
