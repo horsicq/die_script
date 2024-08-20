@@ -27,13 +27,13 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, XBinary::FILEPART filePart, OPTIONS *
 
     g_bIsLE = pMSDOS->isLE();
     g_bIsLX = pMSDOS->isLX();
-    bIsNE = pMSDOS->isNE();
-    bIsPE = pMSDOS->isPE();
+    g_bIsNE = pMSDOS->isNE();
+    g_bIsPE = pMSDOS->isPE();
 
     g_nNumberOfRichIDs = 0;
     g_bIisRichSignaturePresent = false;
 
-    if (g_bIsLE || bIsPE) {
+    if (g_bIsLE || g_bIsPE) {
         g_bIisRichSignaturePresent = pMSDOS->isRichSignaturePresent();
 
         if (g_bIisRichSignaturePresent) {
@@ -47,7 +47,7 @@ MSDOS_Script::MSDOS_Script(XMSDOS *pMSDOS, XBinary::FILEPART filePart, OPTIONS *
     g_nDosStubSize = 0;
     g_bIsDosStubPresent = false;
 
-    if (g_bIsLE || g_bIsLX || bIsNE || bIsPE) {
+    if (g_bIsLE || g_bIsLX || g_bIsNE || g_bIsPE) {
         g_bIsDosStubPresent = pMSDOS->isDosStubPresent();
 
         if (g_bIsDosStubPresent) {
@@ -73,12 +73,12 @@ bool MSDOS_Script::isLX()
 
 bool MSDOS_Script::isNE()
 {
-    return bIsNE;
+    return g_bIsNE;
 }
 
 bool MSDOS_Script::isPE()
 {
-    return bIsPE;
+    return g_bIsPE;
 }
 
 qint64 MSDOS_Script::getDosStubOffset()

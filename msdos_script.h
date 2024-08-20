@@ -56,8 +56,8 @@ private:
     bool g_bIisRichSignaturePresent;
     bool g_bIsLE;
     bool g_bIsLX;
-    bool bIsNE;
-    bool bIsPE;
+    bool g_bIsNE;
+    bool g_bIsPE;
 };
 
 #endif  // MSDOS_SCRIPT_H
