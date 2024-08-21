@@ -110,7 +110,7 @@ public slots:
     quint64 getImageOptionalHeader(const QString &sString);
 
 private:
-    XPE *pPE;
+    XPE *g_pPE;
     qint32 g_nNumberOfSections;
     XPE::CLI_INFO g_cliInfo;
     QList<XPE::RESOURCE_RECORD> g_listResourceRecords;

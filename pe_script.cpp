@@ -22,74 +22,74 @@
 
 PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : MSDOS_Script(pPE, filePart, pOptions, pPdStruct)
 {
-    this->pPE = pPE;
+    g_pPE = pPE;
 
-    g_nNumberOfSections = pPE->getFileHeader_NumberOfSections();
+    g_nNumberOfSections = g_pPE->getFileHeader_NumberOfSections();
 
-    g_listSectionHeaders = pPE->getSectionHeaders();
-    g_listSectionRecords = pPE->getSectionRecords(&g_listSectionHeaders);
-    g_listSectionNameStrings = pPE->getSectionNames(&g_listSectionRecords);
+    g_listSectionHeaders = g_pPE->getSectionHeaders();
+    g_listSectionRecords = g_pPE->getSectionRecords(&g_listSectionHeaders);
+    g_listSectionNameStrings = g_pPE->getSectionNames(&g_listSectionRecords);
 
-    g_cliInfo = pPE->getCliInfo(true, getMemoryMap());
-    g_listResourceRecords = pPE->getResources(getMemoryMap());
+    g_cliInfo = g_pPE->getCliInfo(true, getMemoryMap());
+    g_listResourceRecords = g_pPE->getResources(getMemoryMap());
 
-    g_resourcesVersion = pPE->getResourcesVersion(&g_listResourceRecords);
+    g_resourcesVersion = g_pPE->getResourcesVersion(&g_listResourceRecords);
 
     g_nNumberOfResources = g_listResourceRecords.count();
 
-    g_listImportHeaders = pPE->getImports(getMemoryMap(), getPdStruct());
-    g_listImportRecords = pPE->getImportRecords(getMemoryMap(), getPdStruct());
+    g_listImportHeaders = g_pPE->getImports(getMemoryMap(), getPdStruct());
+    g_listImportRecords = g_pPE->getImportRecords(getMemoryMap(), getPdStruct());
 
     g_nNumberOfImports = g_listImportHeaders.count();
 
-    g_bIsNETPresent = (pPE->isNETPresent()) && (g_cliInfo.bValid);
-    g_bIs64 = pPE->is64(getMemoryMap());
-    g_bIsDll = pPE->isDll();
-    g_bIsDriver = pPE->isDriver();
-    g_bIsConsole = pPE->isConsole();
-    g_bIsSignPresent = pPE->isSignPresent();
-    g_bIsExportPresent = pPE->isExportPresent();
-    g_bIsTLSPresent = pPE->isTLSPresent();
-    g_bIsImportPresent = pPE->isImportPresent();
-    g_bIsResourcesPresent = pPE->isResourcesPresent();
+    g_bIsNETPresent = (g_pPE->isNETPresent()) && (g_cliInfo.bValid);
+    g_bIs64 = g_pPE->is64(getMemoryMap());
+    g_bIsDll = g_pPE->isDll();
+    g_bIsDriver = g_pPE->isDriver();
+    g_bIsConsole = g_pPE->isConsole();
+    g_bIsSignPresent = g_pPE->isSignPresent();
+    g_bIsExportPresent = g_pPE->isExportPresent();
+    g_bIsTLSPresent = g_pPE->isTLSPresent();
+    g_bIsImportPresent = g_pPE->isImportPresent();
+    g_bIsResourcesPresent = g_pPE->isResourcesPresent();
 
-    g_nImportSection = pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_IMPORT);
-    g_nExportSection = pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_EXPORT);
-    g_nResourcesSection = pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_RESOURCE);
-    g_nEntryPointSection = pPE->getEntryPointSection(getMemoryMap());
-    g_nRelocsSection = pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_BASERELOC);
-    g_nTLSSection = pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_TLS);
+    g_nImportSection = g_pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_IMPORT);
+    g_nExportSection = g_pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_EXPORT);
+    g_nResourcesSection = g_pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_RESOURCE);
+    g_nEntryPointSection = g_pPE->getEntryPointSection(getMemoryMap());
+    g_nRelocsSection = g_pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_BASERELOC);
+    g_nTLSSection = g_pPE->getImageDirectoryEntrySection(getMemoryMap(), XPE_DEF::S_IMAGE_DIRECTORY_ENTRY_TLS);
 
-    g_nMajorLinkerVersion = pPE->getOptionalHeader_MajorLinkerVersion();
-    g_nMinorLinkerVersion = pPE->getOptionalHeader_MinorLinkerVersion();
-    g_nSizeOfCode = pPE->getOptionalHeader_SizeOfCode();
-    g_nSizeOfUninitializedData = pPE->getOptionalHeader_SizeOfUninitializedData();
+    g_nMajorLinkerVersion = g_pPE->getOptionalHeader_MajorLinkerVersion();
+    g_nMinorLinkerVersion = g_pPE->getOptionalHeader_MinorLinkerVersion();
+    g_nSizeOfCode = g_pPE->getOptionalHeader_SizeOfCode();
+    g_nSizeOfUninitializedData = g_pPE->getOptionalHeader_SizeOfUninitializedData();
 
     g_sCompilerVersion = QString("%1.%2").arg(g_nMajorLinkerVersion).arg(g_nMinorLinkerVersion);
-    g_sGeneralOptions = QString("%1%2").arg(pPE->getTypeAsString()).arg(g_bIs64 ? ("64") : ("32"));
+    g_sGeneralOptions = QString("%1%2").arg(g_pPE->getTypeAsString()).arg(g_bIs64 ? ("64") : ("32"));
 
-    g_sFileVersion = pPE->getFileVersion(&g_resourcesVersion);
-    g_sFileVersionMS = pPE->getFileVersionMS(&g_resourcesVersion);
+    g_sFileVersion = g_pPE->getFileVersion(&g_resourcesVersion);
+    g_sFileVersionMS = g_pPE->getFileVersionMS(&g_resourcesVersion);
 
-    g_nCalculateSizeOfHeaders = pPE->calculateHeadersSize();
+    g_nCalculateSizeOfHeaders = g_pPE->calculateHeadersSize();
 
-    g_exportHeader = pPE->getExport(false, getPdStruct());
+    g_exportHeader = g_pPE->getExport(false, getPdStruct());
     g_nNumberOfExportFunctions = g_exportHeader.listPositions.count();
 
-    g_listExportFunctionNameStrings = pPE->getExportFunctionsList(&g_exportHeader);
+    g_listExportFunctionNameStrings = g_pPE->getExportFunctionsList(&g_exportHeader);
 
-    g_nImportHash64 = pPE->getImportHash64(&g_listImportRecords);
-    g_nImportHash32 = pPE->getImportHash32(&g_listImportRecords);
-    g_listImportPositionHashes = pPE->getImportPositionHashes(&g_listImportHeaders);
+    g_nImportHash64 = g_pPE->getImportHash64(&g_listImportRecords);
+    g_nImportHash32 = g_pPE->getImportHash32(&g_listImportRecords);
+    g_listImportPositionHashes = g_pPE->getImportPositionHashes(&g_listImportHeaders);
 
-    g_imageFileHeader = pPE->getFileHeader();
+    g_imageFileHeader = g_pPE->getFileHeader();
     g_imageOptionalHeader32 = {};
     g_imageOptionalHeader64 = {};
 
     if (!g_bIs64) {
-        g_imageOptionalHeader32 = pPE->getOptionalHeader32();
+        g_imageOptionalHeader32 = g_pPE->getOptionalHeader32();
     } else {
-        g_imageOptionalHeader64 = pPE->getOptionalHeader64();
+        g_imageOptionalHeader64 = g_pPE->getOptionalHeader64();
     }
 }
 
@@ -104,32 +104,32 @@ quint16 PE_Script::getNumberOfSections()
 
 QString PE_Script::getSectionName(quint32 nNumber)
 {
-    return pPE->getSection_NameAsString(nNumber, &g_listSectionNameStrings);
+    return g_pPE->getSection_NameAsString(nNumber, &g_listSectionNameStrings);
 }
 
 quint32 PE_Script::getSectionVirtualSize(quint32 nNumber)
 {
-    return pPE->getSection_VirtualSize(nNumber, &g_listSectionHeaders);
+    return g_pPE->getSection_VirtualSize(nNumber, &g_listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionVirtualAddress(quint32 nNumber)
 {
-    return pPE->getSection_VirtualAddress(nNumber, &g_listSectionHeaders);
+    return g_pPE->getSection_VirtualAddress(nNumber, &g_listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionFileSize(quint32 nNumber)
 {
-    return pPE->getSection_SizeOfRawData(nNumber, &g_listSectionHeaders);
+    return g_pPE->getSection_SizeOfRawData(nNumber, &g_listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionFileOffset(quint32 nNumber)
 {
-    return pPE->getSection_PointerToRawData(nNumber, &g_listSectionHeaders);
+    return g_pPE->getSection_PointerToRawData(nNumber, &g_listSectionHeaders);
 }
 
 quint32 PE_Script::getSectionCharacteristics(quint32 nNumber)
 {
-    return pPE->getSection_Characteristics(nNumber, &g_listSectionHeaders);
+    return g_pPE->getSection_Characteristics(nNumber, &g_listSectionHeaders);
 }
 
 quint32 PE_Script::getNumberOfResources()
@@ -169,57 +169,57 @@ QString PE_Script::getGeneralOptions()
 
 quint32 PE_Script::getResourceIdByNumber(quint32 nNumber)
 {
-    return pPE->getResourceIdByNumber(nNumber, &g_listResourceRecords);
+    return g_pPE->getResourceIdByNumber(nNumber, &g_listResourceRecords);
 }
 
 QString PE_Script::getResourceNameByNumber(quint32 nNumber)
 {
-    return pPE->getResourceNameByNumber(nNumber, &g_listResourceRecords);
+    return g_pPE->getResourceNameByNumber(nNumber, &g_listResourceRecords);
 }
 
 qint64 PE_Script::getResourceOffsetByNumber(quint32 nNumber)
 {
-    return pPE->getResourceOffsetByNumber(nNumber, &g_listResourceRecords);
+    return g_pPE->getResourceOffsetByNumber(nNumber, &g_listResourceRecords);
 }
 
 qint64 PE_Script::getResourceSizeByNumber(quint32 nNumber)
 {
-    return pPE->getResourceSizeByNumber(nNumber, &g_listResourceRecords);
+    return g_pPE->getResourceSizeByNumber(nNumber, &g_listResourceRecords);
 }
 
 quint32 PE_Script::getResourceTypeByNumber(quint32 nNumber)
 {
-    return pPE->getResourceTypeByNumber(nNumber, &g_listResourceRecords);
+    return g_pPE->getResourceTypeByNumber(nNumber, &g_listResourceRecords);
 }
 
 bool PE_Script::isNETStringPresent(const QString &sString)
 {
-    return pPE->isNETAnsiStringPresent(sString, &g_cliInfo);
+    return g_pPE->isNETAnsiStringPresent(sString, &g_cliInfo);
 }
 
 bool PE_Script::isNetObjectPresent(const QString &sString)
 {
-    return pPE->isNETAnsiStringPresent(sString, &g_cliInfo);
+    return g_pPE->isNETAnsiStringPresent(sString, &g_cliInfo);
 }
 
 bool PE_Script::isNETUnicodeStringPresent(const QString &sString)
 {
-    return pPE->isNETUnicodeStringPresent(sString, &g_cliInfo);
+    return g_pPE->isNETUnicodeStringPresent(sString, &g_cliInfo);
 }
 
 bool PE_Script::isNetUStringPresent(const QString &sString)
 {
-    return pPE->isNETUnicodeStringPresent(sString, &g_cliInfo);
+    return g_pPE->isNETUnicodeStringPresent(sString, &g_cliInfo);
 }
 
 qint64 PE_Script::findSignatureInBlob_NET(const QString &sSignature)
 {
-    return pPE->findSignatureInBlob_NET(sSignature, getMemoryMap(), getPdStruct());
+    return g_pPE->findSignatureInBlob_NET(sSignature, getMemoryMap(), getPdStruct());
 }
 
 bool PE_Script::isSignatureInBlobPresent_NET(const QString &sSignature)
 {
-    return pPE->isSignatureInBlobPresent_NET(sSignature, getMemoryMap(), getPdStruct());
+    return g_pPE->isSignatureInBlobPresent_NET(sSignature, getMemoryMap(), getPdStruct());
 }
 
 qint32 PE_Script::getNumberOfImports()
@@ -229,7 +229,7 @@ qint32 PE_Script::getNumberOfImports()
 
 QString PE_Script::getImportLibraryName(quint32 nNumber)
 {
-    return pPE->getImportLibraryName(nNumber, &g_listImportHeaders);
+    return g_pPE->getImportLibraryName(nNumber, &g_listImportHeaders);
 }
 
 bool PE_Script::isLibraryPresent(const QString &sLibraryName, bool bCheckCase)
@@ -237,9 +237,9 @@ bool PE_Script::isLibraryPresent(const QString &sLibraryName, bool bCheckCase)
     bool bResult = false;
 
     if (bCheckCase) {
-        bResult = pPE->isImportLibraryPresent(sLibraryName, &g_listImportHeaders, getPdStruct());
+        bResult = g_pPE->isImportLibraryPresent(sLibraryName, &g_listImportHeaders, getPdStruct());
     } else {
-        bResult = pPE->isImportLibraryPresentI(sLibraryName, &g_listImportHeaders, getPdStruct());
+        bResult = g_pPE->isImportLibraryPresentI(sLibraryName, &g_listImportHeaders, getPdStruct());
     }
 
     return bResult;
@@ -247,17 +247,17 @@ bool PE_Script::isLibraryPresent(const QString &sLibraryName, bool bCheckCase)
 
 bool PE_Script::isLibraryFunctionPresent(const QString &sLibraryName, const QString &sFunctionName)
 {
-    return pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &g_listImportHeaders, getPdStruct());
+    return g_pPE->isImportFunctionPresentI(sLibraryName, sFunctionName, &g_listImportHeaders, getPdStruct());
 }
 
 bool PE_Script::isFunctionPresent(const QString &sFunctionName)
 {
-    return pPE->isFunctionPresent(sFunctionName, &g_listImportHeaders, getPdStruct());
+    return g_pPE->isFunctionPresent(sFunctionName, &g_listImportHeaders, getPdStruct());
 }
 
 QString PE_Script::getImportFunctionName(quint32 nImport, quint32 nFunctionNumber)
 {
-    return pPE->getImportFunctionName(nImport, nFunctionNumber, &g_listImportHeaders);
+    return g_pPE->getImportFunctionName(nImport, nFunctionNumber, &g_listImportHeaders);
 }
 
 qint32 PE_Script::getImportSection()
@@ -302,37 +302,37 @@ quint8 PE_Script::getMinorLinkerVersion()
 
 QString PE_Script::getManifest()
 {
-    return pPE->getResourceManifest(&g_listResourceRecords);
+    return g_pPE->getResourceManifest(&g_listResourceRecords);
 }
 
 QString PE_Script::getVersionStringInfo(const QString &sKey)
 {
-    return pPE->getResourcesVersionValue(sKey, &g_resourcesVersion);
+    return g_pPE->getResourcesVersionValue(sKey, &g_resourcesVersion);
 }
 
 qint32 PE_Script::getNumberOfImportThunks(quint32 nNumber)
 {
-    return pPE->getNumberOfImportThunks(nNumber, &g_listImportHeaders);
+    return g_pPE->getNumberOfImportThunks(nNumber, &g_listImportHeaders);
 }
 
 qint64 PE_Script::getResourceNameOffset(const QString &sName)
 {
-    return pPE->getResourceNameOffset(sName, &g_listResourceRecords);
+    return g_pPE->getResourceNameOffset(sName, &g_listResourceRecords);
 }
 
 bool PE_Script::isResourceNamePresent(const QString &sName)
 {
-    return pPE->isResourceNamePresent(sName, &g_listResourceRecords);
+    return g_pPE->isResourceNamePresent(sName, &g_listResourceRecords);
 }
 
 bool PE_Script::isResourceGroupNamePresent(const QString &sName)
 {
-    return pPE->isResourceGroupNamePresent(sName, &g_listResourceRecords);
+    return g_pPE->isResourceGroupNamePresent(sName, &g_listResourceRecords);
 }
 
 bool PE_Script::isResourceGroupIdPresent(quint32 nID)
 {
-    return pPE->isResourceGroupIdPresent(nID, &g_listResourceRecords);
+    return g_pPE->isResourceGroupIdPresent(nID, &g_listResourceRecords);
 }
 
 QString PE_Script::getCompilerVersion()
@@ -352,7 +352,7 @@ bool PE_Script::isSignedFile()
 
 QString PE_Script::getSectionNameCollision(const QString &sString1, const QString &sString2)
 {
-    return pPE->getStringCollision(&g_listSectionNameStrings, sString1, sString2);
+    return g_pPE->getStringCollision(&g_listSectionNameStrings, sString1, sString2);
 }
 
 qint32 PE_Script::getSectionNumber(const QString &sSectionName)
@@ -382,7 +382,7 @@ QString PE_Script::getNETVersion()
 
 bool PE_Script::compareEP_NET(const QString &sSignature, qint64 nOffset)
 {
-    return pPE->compareSignatureOnAddress(getMemoryMap(), sSignature, getBaseAddress() + g_cliInfo.metaData.nEntryPoint + nOffset);
+    return g_pPE->compareSignatureOnAddress(getMemoryMap(), sSignature, getBaseAddress() + g_cliInfo.metaData.nEntryPoint + nOffset);
 }
 
 quint32 PE_Script::getSizeOfCode()
@@ -443,7 +443,7 @@ qint32 PE_Script::getNumberOfExportFunctions()
 
 QString PE_Script::getExportFunctionName(quint32 nNumber)
 {
-    return pPE->getStringByIndex(&g_listExportFunctionNameStrings, nNumber, -1);
+    return g_pPE->getStringByIndex(&g_listExportFunctionNameStrings, nNumber, -1);
 }
 
 bool PE_Script::isExportPresent()
@@ -483,14 +483,14 @@ bool PE_Script::isImportPositionHashPresent(qint32 nIndex, quint32 nHash)
 
 quint64 PE_Script::getImageFileHeader(const QString &sString)
 {
-    return pPE->getImageFileHeader(&g_imageFileHeader, sString);
+    return g_pPE->getImageFileHeader(&g_imageFileHeader, sString);
 }
 
 quint64 PE_Script::getImageOptionalHeader(const QString &sString)
 {
     if (!g_bIs64) {
-        return pPE->getImageOptionalHeader32(&g_imageOptionalHeader32, sString);
+        return g_pPE->getImageOptionalHeader32(&g_imageOptionalHeader32, sString);
     } else {
-        return pPE->getImageOptionalHeader64(&g_imageOptionalHeader64, sString);
+        return g_pPE->getImageOptionalHeader64(&g_imageOptionalHeader64, sString);
     }
 }
