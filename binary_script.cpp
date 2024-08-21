@@ -514,6 +514,11 @@ bool Binary_Script::isHeuristicScan()
     return g_pOptions->bIsHeuristicScan;
 }
 
+bool Binary_Script::isAggressiveScan()
+{
+    return g_pOptions->bIsAggressiveScan;
+}
+
 bool Binary_Script::isVerbose()
 {
     return g_pOptions->bIsVerbose;

@@ -31,6 +31,7 @@ public:
     struct OPTIONS {
         bool bIsDeepScan;
         bool bIsHeuristicScan;
+        bool bIsAggressiveScan;
         bool bIsVerbose;
         bool bIsProfiling;
     };
@@ -99,6 +100,7 @@ public slots:
 
     bool isDeepScan();
     bool isHeuristicScan();
+    bool isAggressiveScan();
     bool isVerbose();
     bool isProfiling();
 
