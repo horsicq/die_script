@@ -22,7 +22,6 @@
 #define ZIP_SCRIPT_H
 
 #include "archive_script.h"
-#include "xarchives.h"
 
 class ZIP_Script : public Archive_Script {
     Q_OBJECT
