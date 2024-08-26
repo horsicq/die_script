@@ -396,6 +396,10 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
 
     QList<XScanEngine::SCANSTRUCT> listScanStruct = convert(&listRecords);
 
+    if (pScanOptions->bIsSort) {
+        sortRecords(&listScanStruct);
+    }
+
     pScanResult->listRecords.append(listScanStruct);
 
     XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
@@ -707,7 +711,7 @@ QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_
         listResult.append(record);
     }
 
-    sortRecords(&listResult);
+    // sortRecords(&listResult);
 
     return listResult;
 }
