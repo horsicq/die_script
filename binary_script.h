@@ -276,7 +276,6 @@ private:
     QString g_sJpegExifCameraName;
     bool g_bIsBigEndian;
     bool g_bIsSigned;
-
     QMap<quint32, QElapsedTimer *> g_mapProfiling;
 };
 
