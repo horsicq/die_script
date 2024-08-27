@@ -64,32 +64,32 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
     QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
 
-    XBinary *pBinary = nullptr;
-
-    if (fileTypes.contains(XBinary::FT_JPEG)) {
-        pBinary = new XJpeg(pDevice);
-    } else {
-        pBinary = new XBinary(pDevice);
-    }
-
-    g_listBinaries.append(pBinary);
-
     Util_script *pUtilScript = new Util_script;
     _addClass(pUtilScript, "Util");
     g_listScriptClasses.append(pUtilScript);
 
-    Binary_Script *pBinaryScript = new Binary_Script(pBinary, filePart, pOptions, pPdStruct);
+    if (XBinary::checkFileType(XBinary::FT_BINARY, fileType)) {
+        XBinary *pBinary = nullptr;
 
-    if (pBinaryScript) {
-        connect(pBinaryScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-        connect(pBinaryScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-        connect(pBinaryScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+        if (fileTypes.contains(XBinary::FT_JPEG)) {
+            pBinary = new XJpeg(pDevice);
+        } else {
+            pBinary = new XBinary(pDevice);
+        }
+
+        Binary_Script *pExtraScript = new Binary_Script(pBinary, filePart, pOptions, pPdStruct);
+
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
+            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+        }
+
+        _addClass(pExtraScript, "Binary");
+        g_listBinaries.append(pBinary);
+        g_listScriptClasses.append(pExtraScript);
     }
-
-    _addClass(pBinaryScript, "Binary");
-    g_listScriptClasses.append(pBinaryScript);
-
-    if (XBinary::checkFileType(XBinary::FT_COM, fileType)) {
+    else if (XBinary::checkFileType(XBinary::FT_COM, fileType)) {
         XCOM *pCOM = new XCOM(pDevice);
         COM_Script *pExtraScript = new COM_Script(pCOM, filePart, pOptions, pPdStruct);
 
@@ -99,6 +99,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "COM");
         g_listBinaries.append(pCOM);
         g_listScriptClasses.append(pExtraScript);
@@ -112,6 +113,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "PE");
         g_listBinaries.append(pPE);
         g_listScriptClasses.append(pExtraScript);
@@ -125,6 +127,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "ELF");
         g_listBinaries.append(pELF);
         g_listScriptClasses.append(pExtraScript);
@@ -138,6 +141,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "MACH");
         g_listBinaries.append(pMACH);
         g_listScriptClasses.append(pExtraScript);
@@ -151,6 +155,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "NE");
         g_listBinaries.append(pNE);
         g_listScriptClasses.append(pExtraScript);
@@ -164,6 +169,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "LE");
         g_listBinaries.append(pLE);
         g_listScriptClasses.append(pExtraScript);
@@ -190,6 +196,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "MSDOS");
         g_listBinaries.append(pXMSDOS);
         g_listScriptClasses.append(pExtraScript);
@@ -219,6 +226,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "Archive");
 
         g_listScriptClasses.append(pExtraScript);
@@ -232,6 +240,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "ZIP");
         g_listBinaries.append(pZIP);
         g_listScriptClasses.append(pExtraScript);
@@ -245,6 +254,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "JAR");
         g_listBinaries.append(pJAR);
         g_listScriptClasses.append(pExtraScript);
@@ -258,6 +268,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "APK");
         g_listBinaries.append(pAPK);
         g_listScriptClasses.append(pExtraScript);
@@ -271,6 +282,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "IPA");
         g_listBinaries.append(pIPA);
         g_listScriptClasses.append(pExtraScript);
@@ -284,6 +296,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "NPM");
         g_listBinaries.append(pNPNM);
         g_listScriptClasses.append(pExtraScript);
@@ -297,6 +310,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
         }
 
+        _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "DEX");
         g_listBinaries.append(pDEX);
         g_listScriptClasses.append(pExtraScript);
