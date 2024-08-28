@@ -57,6 +57,7 @@ public slots:
     bool isNetUStringPresent(const QString &sString);
     qint64 findSignatureInBlob_NET(const QString &sSignature);
     bool isSignatureInBlobPresent_NET(const QString &sSignature);
+    bool isNetGlobalCctorPresent();
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(const QString &sLibraryName, bool bCheckCase = false);
@@ -113,6 +114,7 @@ private:
     XPE *g_pPE;
     qint32 g_nNumberOfSections;
     XPE::CLI_INFO g_cliInfo;
+    bool g_bNetGlobalCctorPresent;
     QList<XPE::RESOURCE_RECORD> g_listResourceRecords;
     qint32 g_nNumberOfResources;
     QList<XPE_DEF::IMAGE_SECTION_HEADER> g_listSectionHeaders;

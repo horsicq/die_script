@@ -31,6 +31,8 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
     g_listSectionNameStrings = g_pPE->getSectionNames(&g_listSectionRecords);
 
     g_cliInfo = g_pPE->getCliInfo(true, getMemoryMap());
+    g_bNetGlobalCctorPresent = g_pPE->isNetGlobalCctorPresent(&g_cliInfo, getPdStruct());
+
     g_listResourceRecords = g_pPE->getResources(getMemoryMap());
 
     g_resourcesVersion = g_pPE->getResourcesVersion(&g_listResourceRecords);
@@ -220,6 +222,11 @@ qint64 PE_Script::findSignatureInBlob_NET(const QString &sSignature)
 bool PE_Script::isSignatureInBlobPresent_NET(const QString &sSignature)
 {
     return g_pPE->isSignatureInBlobPresent_NET(sSignature, getMemoryMap(), getPdStruct());
+}
+
+bool PE_Script::isNetGlobalCctorPresent()
+{
+    return g_bNetGlobalCctorPresent;
 }
 
 qint32 PE_Script::getNumberOfImports()
