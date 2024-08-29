@@ -33,14 +33,14 @@ void global_script::_log(const QString &sText)
     emit _logSignal(sText);
 }
 
-// qint64 global_script::_min(qint64 nValue1,qint64 nValue2)
+// qint64 global_script::_min(qint64 nValue1, qint64 nValue2)
 //{
-//     return qMin(nValue1,nValue2);
+//     return qMin(nValue1, nValue2);
 // }
 
-// qint64 global_script::_max(qint64 nValue1,qint64 nValue2)
+// qint64 global_script::_max(qint64 nValue1, qint64 nValue2)
 //{
-//     return qMax(nValue1,nValue2);
+//     return qMax(nValue1, nValue2);
 // }
 
 void global_script::_setResult(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions)
