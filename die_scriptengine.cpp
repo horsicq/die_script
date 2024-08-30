@@ -88,8 +88,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         _addClass(pExtraScript, "Binary");
         g_listBinaries.append(pBinary);
         g_listScriptClasses.append(pExtraScript);
-    }
-    else if (XBinary::checkFileType(XBinary::FT_COM, fileType)) {
+    } else if (XBinary::checkFileType(XBinary::FT_COM, fileType)) {
         XCOM *pCOM = new XCOM(pDevice);
         COM_Script *pExtraScript = new COM_Script(pCOM, filePart, pOptions, pPdStruct);
 
