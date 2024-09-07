@@ -229,6 +229,21 @@ bool PE_Script::isNetGlobalCctorPresent()
     return g_bNetGlobalCctorPresent;
 }
 
+bool PE_Script::isNetTypePresent(QString sTypeNamespace, QString sTypeName)
+{
+    return g_pPE->isNetTypePresent(&g_cliInfo, sTypeNamespace, sTypeName, getPdStruct());
+}
+
+bool PE_Script::isNetMethodPresent(QString sTypeNamespace, QString sTypeName, QString sMethodName)
+{
+    return g_pPE->isNetMethodPresent(&g_cliInfo, sTypeNamespace, sTypeName, sMethodName, getPdStruct());
+}
+
+bool PE_Script::isNetFieldPresent(QString sTypeNamespace, QString sTypeName, QString sFieldName)
+{
+    return g_pPE->isNetFieldPresent(&g_cliInfo, sTypeNamespace, sTypeName, sFieldName, getPdStruct());
+}
+
 qint32 PE_Script::getNumberOfImports()
 {
     return g_nNumberOfImports;
