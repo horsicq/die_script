@@ -30,7 +30,7 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
     g_listSectionRecords = g_pPE->getSectionRecords(&g_listSectionHeaders);
     g_listSectionNameStrings = g_pPE->getSectionNames(&g_listSectionRecords);
 
-    g_cliInfo = g_pPE->getCliInfo(true, getMemoryMap());
+    g_cliInfo = g_pPE->getCliInfo(true, getMemoryMap(), getPdStruct());
     g_bNetGlobalCctorPresent = g_pPE->isNetGlobalCctorPresent(&g_cliInfo, getPdStruct());
 
     g_listResourceRecords = g_pPE->getResources(getMemoryMap());
