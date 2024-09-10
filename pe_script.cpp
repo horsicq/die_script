@@ -33,7 +33,7 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
     g_cliInfo = g_pPE->getCliInfo(true, getMemoryMap(), getPdStruct());
     g_bNetGlobalCctorPresent = g_pPE->isNetGlobalCctorPresent(&g_cliInfo, getPdStruct());
 
-    g_listResourceRecords = g_pPE->getResources(getMemoryMap());
+    g_listResourceRecords = g_pPE->getResources(getMemoryMap(), 10000, getPdStruct());
 
     g_resourcesVersion = g_pPE->getResourcesVersion(&g_listResourceRecords);
 
