@@ -26,7 +26,7 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
 
     g_nNumberOfSections = g_pPE->getFileHeader_NumberOfSections();
 
-    g_listSectionHeaders = g_pPE->getSectionHeaders();
+    g_listSectionHeaders = g_pPE->getSectionHeaders(getPdStruct());
     g_listSectionRecords = g_pPE->getSectionRecords(&g_listSectionHeaders);
     g_listSectionNameStrings = g_pPE->getSectionNames(&g_listSectionRecords);
 
