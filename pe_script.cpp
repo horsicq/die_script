@@ -500,7 +500,7 @@ quint64 PE_Script::getImportHash64()
 
 bool PE_Script::isImportPositionHashPresent(qint32 nIndex, quint32 nHash)
 {
-    return XPE::isImportPositionHashPresent(&g_listImportPositionHashes, nIndex, nHash);
+    return XPE::isImportPositionHashPresent(&g_listImportPositionHashes, nIndex, nHash, getPdStruct());
 }
 
 quint64 PE_Script::getImageFileHeader(const QString &sString)
