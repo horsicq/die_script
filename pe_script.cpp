@@ -28,7 +28,7 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
 
     g_listSectionHeaders = g_pPE->getSectionHeaders(getPdStruct());
     g_listSectionRecords = g_pPE->getSectionRecords(&g_listSectionHeaders, getPdStruct());
-    g_listSectionNameStrings = g_pPE->getSectionNames(&g_listSectionRecords);
+    g_listSectionNameStrings = g_pPE->getSectionNames(&g_listSectionRecords, getPdStruct());
 
     g_cliInfo = g_pPE->getCliInfo(true, getMemoryMap(), getPdStruct());
     g_bNetGlobalCctorPresent = g_pPE->isNetGlobalCctorPresent(&g_cliInfo, getPdStruct());
