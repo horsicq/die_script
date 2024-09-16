@@ -35,7 +35,7 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
 
     g_listResourceRecords = g_pPE->getResources(getMemoryMap(), 10000, getPdStruct());
 
-    g_resourcesVersion = g_pPE->getResourcesVersion(&g_listResourceRecords);
+    g_resourcesVersion = g_pPE->getResourcesVersion(&g_listResourceRecords, getPdStruct());
 
     g_nNumberOfResources = g_listResourceRecords.count();
 
@@ -80,7 +80,7 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
 
     g_listExportFunctionNameStrings = g_pPE->getExportFunctionsList(&g_exportHeader);
 
-    g_nImportHash64 = g_pPE->getImportHash64(&g_listImportRecords);
+    g_nImportHash64 = g_pPE->getImportHash64(&g_listImportRecords, getPdStruct());
     g_nImportHash32 = g_pPE->getImportHash32(&g_listImportRecords);
     g_listImportPositionHashes = g_pPE->getImportPositionHashes(&g_listImportHeaders);
 
