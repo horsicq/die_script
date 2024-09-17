@@ -78,7 +78,7 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
     g_exportHeader = g_pPE->getExport(false, getPdStruct());
     g_nNumberOfExportFunctions = g_exportHeader.listPositions.count();
 
-    g_listExportFunctionNameStrings = g_pPE->getExportFunctionsList(&g_exportHeader);
+    g_listExportFunctionNameStrings = g_pPE->getExportFunctionsList(&g_exportHeader, getPdStruct());
 
     g_nImportHash64 = g_pPE->getImportHash64(&g_listImportRecords, getPdStruct());
     g_nImportHash32 = g_pPE->getImportHash32(&g_listImportRecords, getPdStruct());
