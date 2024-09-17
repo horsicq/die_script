@@ -81,7 +81,7 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
     g_listExportFunctionNameStrings = g_pPE->getExportFunctionsList(&g_exportHeader);
 
     g_nImportHash64 = g_pPE->getImportHash64(&g_listImportRecords, getPdStruct());
-    g_nImportHash32 = g_pPE->getImportHash32(&g_listImportRecords);
+    g_nImportHash32 = g_pPE->getImportHash32(&g_listImportRecords, getPdStruct());
     g_listImportPositionHashes = g_pPE->getImportPositionHashes(&g_listImportHeaders);
 
     g_imageFileHeader = g_pPE->getFileHeader();
