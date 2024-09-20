@@ -24,7 +24,7 @@ MACH_Script::MACH_Script(XMACH *pMACH, XBinary::FILEPART filePart, OPTIONS *pOpt
 {
     this->g_pMACH = pMACH;
 
-    g_listLibraryRecords = pMACH->getLibraryRecords();
+    g_listLibraryRecords = pMACH->getLibraryRecords(XMACH_DEF::S_LC_LOAD_DYLIB);
     g_listSectionRecords = pMACH->getSectionRecords();
     g_listCommandRecords = pMACH->getCommandRecords();
     g_listSectionNameStrings = pMACH->getSectionNames(&g_listSectionRecords);
