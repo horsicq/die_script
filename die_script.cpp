@@ -141,9 +141,10 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
 void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
                                XScanEngine::SCAN_OPTIONS *pScanOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
 {
-    XBinary::PDSTRUCT pdStructEmpty = XBinary::createPdStruct();
+    XBinary::PDSTRUCT pdStructEmpty = {};
 
     if (!pPdStruct) {
+        pdStructEmpty = XBinary::createPdStruct();
         pPdStruct = &pdStructEmpty;
     }
 
