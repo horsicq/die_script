@@ -449,9 +449,10 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
         QElapsedTimer *pElapsedTimer = new QElapsedTimer;
         pElapsedTimer->start();
 #endif
-        XBinary::PDSTRUCT pdStructEmpty = XBinary::createPdStruct();
+        XBinary::PDSTRUCT pdStructEmpty = {};
 
         if (!pPdStruct) {
+            pdStructEmpty = XBinary::createPdStruct();
             pPdStruct = &pdStructEmpty;
         }
 
