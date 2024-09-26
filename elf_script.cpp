@@ -43,6 +43,8 @@ ELF_Script::ELF_Script(XELF *pELF, XBinary::FILEPART filePart, OPTIONS *pOptions
     g_listTagStruct = pELF->getTagStructs(&g_listProgramHeaders, getMemoryMap());
     g_listLibraryNames = pELF->getLibraries(getMemoryMap(), &g_listTagStruct);
 
+    g_sRunPath = pELF->getRunPath(getMemoryMap(), &g_listTagStruct).sString;
+
     g_sGeneralOptions = QString("%1 %2-%3")
                             .arg(XELF::getTypesS().value(g_elfHeader.e_type))
                             .arg(XELF::getMachinesS().value(g_elfHeader.e_machine))
@@ -184,4 +186,9 @@ bool ELF_Script::isNotePresent(const QString &sNote)
 bool ELF_Script::isLibraryPresent(const QString &sLibraryName)
 {
     return g_pELF->isStringInListPresent(&g_listLibraryNames, sLibraryName, getPdStruct());
+}
+
+QString ELF_Script::getRunPath()
+{
+    return g_sRunPath;
 }

@@ -57,6 +57,7 @@ public slots:
     bool isStringInTablePresent(const QString &sSectionName, const QString &sString);
     bool isNotePresent(const QString &sNote);
     bool isLibraryPresent(const QString &sLibraryName);
+    QString getRunPath();
 
 private:
     XELF *g_pELF;
@@ -70,6 +71,7 @@ private:
     QString g_sGeneralOptions;
     QList<QString> g_listLibraryNames;
     QList<XELF::TAG_STRUCT> g_listTagStruct;
+    QString g_sRunPath;
 };
 
 #endif  // ELF_SCRIPT_H
