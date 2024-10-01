@@ -1013,6 +1013,29 @@ bool Binary_Script::isDebugData()
     return (g_filePart == XBinary::FILEPART_DEBUGDATA);
 }
 
+QList<qint32> Binary_Script::readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace)
+{
+    QList<qint32> listResult;
+
+    QByteArray baData = g_pBinary->read_array(nOffset, nSize, g_pPdStruct);
+    qint32 _nSize = baData.size();
+    listResult.reserve(_nSize);
+
+    for(int i = 0; i < _nSize; i++)
+    {
+        if(bReplaceZeroWithSpace && baData.at(i) == 0)
+        {
+            listResult.append(32);
+        }
+        else
+        {
+            listResult.append(baData.at(i));
+        }
+    }
+
+    return listResult;
+}
+
 XBinary::_MEMORY_MAP *Binary_Script::getMemoryMap()
 {
     return &g_memoryMap;
