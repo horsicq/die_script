@@ -30,8 +30,8 @@ ELF_Script::ELF_Script(XELF *pELF, XBinary::FILEPART filePart, OPTIONS *pOptions
 
     g_nStringTableSection = pELF->getSectionStringTable(bIs64);
     g_baStringTable = pELF->getSection(g_nStringTableSection);
-    g_listSectionHeaders = pELF->getElf_ShdrList(100); // TODO pdStruct
-    g_listProgramHeaders = pELF->getElf_PhdrList(100); // TODO pdStruct
+    g_listSectionHeaders = pELF->getElf_ShdrList(100);  // TODO pdStruct
+    g_listProgramHeaders = pELF->getElf_PhdrList(100);  // TODO pdStruct
 
     g_listNotes = pELF->getNotes(&g_listProgramHeaders);
 
