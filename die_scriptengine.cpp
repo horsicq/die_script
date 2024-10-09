@@ -313,6 +313,20 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         _addClass(pExtraScript, "DEX");
         g_listBinaries.append(pDEX);
         g_listScriptClasses.append(pExtraScript);
+    } else if (XBinary::checkFileType(XBinary::FT_AMIGAHUNK, fileType)) {
+        XAmigaHunk *pAmiga = new XAmigaHunk(pDevice);
+        Amiga_Script *pExtraScript = new Amiga_Script(pAmiga, filePart, pOptions, pPdStruct);
+
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
+            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+        }
+
+        _addClass(pExtraScript, "Binary");
+        _addClass(pExtraScript, "Amiga");
+        g_listBinaries.append(pAmiga);
+        g_listScriptClasses.append(pExtraScript);
     }
 
     // TODO APKS

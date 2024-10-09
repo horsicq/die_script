@@ -6,6 +6,8 @@ include(${CMAKE_CURRENT_LIST_DIR}/../XScanEngine/xscanengine.cmake)
 set(DIE_SCRIPT_SOURCES
     ${XCAPSTONE_SOURCES}
     ${XSCANENGINE_SOURCES}
+    ${CMAKE_CURRENT_LIST_DIR}/amiga_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/amiga_script.h
     ${CMAKE_CURRENT_LIST_DIR}/archive_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/archive_script.h
     ${CMAKE_CURRENT_LIST_DIR}/binary_script.cpp

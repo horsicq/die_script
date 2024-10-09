@@ -7,6 +7,7 @@ INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 HEADERS += \
+    $$PWD/amiga_script.h \
     $$PWD/apk_script.h \
     $$PWD/archive_script.h \
     $$PWD/binary_script.h \
@@ -30,6 +31,7 @@ HEADERS += \
     $$PWD/zip_script.h
 
 SOURCES += \
+    $$PWD/amiga_script.cpp \
     $$PWD/apk_script.cpp \
     $$PWD/archive_script.cpp \
     $$PWD/binary_script.cpp \
