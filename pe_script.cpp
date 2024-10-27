@@ -25,20 +25,14 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
     g_pPE = pPE;
 
     g_nNumberOfSections = g_pPE->getFileHeader_NumberOfSections();
-
     g_listSectionHeaders = g_pPE->getSectionHeaders(getPdStruct());
     g_listSectionRecords = g_pPE->getSectionRecords(&g_listSectionHeaders, getPdStruct());
     g_listSectionNameStrings = g_pPE->getSectionNames(&g_listSectionRecords, getPdStruct());
-
     g_cliInfo = g_pPE->getCliInfo(true, getMemoryMap(), getPdStruct());
     g_bNetGlobalCctorPresent = g_pPE->isNetGlobalCctorPresent(&g_cliInfo, getPdStruct());
-
     g_listResourceRecords = g_pPE->getResources(getMemoryMap(), 10000, getPdStruct());
-
     g_resourcesVersion = g_pPE->getResourcesVersion(&g_listResourceRecords, getPdStruct());
-
     g_nNumberOfResources = g_listResourceRecords.count();
-
     g_listImportHeaders = g_pPE->getImports(getMemoryMap(), getPdStruct());
     g_listImportRecords = g_pPE->getImportRecords(getMemoryMap(), getPdStruct());
 
@@ -67,8 +61,8 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
     g_nSizeOfCode = g_pPE->getOptionalHeader_SizeOfCode();
     g_nSizeOfUninitializedData = g_pPE->getOptionalHeader_SizeOfUninitializedData();
 
-    g_sCompilerVersion = QString("%1.%2").arg(g_nMajorLinkerVersion).arg(g_nMinorLinkerVersion);
-    g_sGeneralOptions = QString("%1%2").arg(g_pPE->getTypeAsString()).arg(g_bIs64 ? ("64") : ("32"));
+    g_sCompilerVersion = QString("%1.%2").arg(QString::number(g_nMajorLinkerVersion), QString::number(g_nMinorLinkerVersion));
+    g_sGeneralOptions = QString("%1%2").arg(g_pPE->getTypeAsString(), g_bIs64 ? ("64") : ("32"));
 
     g_sFileVersion = g_pPE->getFileVersion(&g_resourcesVersion);
     g_sFileVersionMS = g_pPE->getFileVersionMS(&g_resourcesVersion);
