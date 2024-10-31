@@ -24,4 +24,24 @@ Amiga_Script::Amiga_Script(XAmigaHunk *pAmiga, XBinary::FILEPART filePart, OPTIO
     : Binary_Script(pAmiga, filePart, pOptions, pPdStruct)
 {
     g_pAmiga = pAmiga;
+
+    g_listHunks = g_pAmiga->getHunks(pPdStruct);
+    g_nNumberOfHunks=g_listHunks.count();
+}
+
+qint32 Amiga_Script::getNumberOfHunks()
+{
+    return g_nNumberOfHunks;
+}
+
+quint16 Amiga_Script::getHunkIdByNumber(qint32 nNumber)
+{
+    quint16 result=0;
+
+    if((nNumber>=0)&&(nNumber<g_nNumberOfHunks))
+    {
+        result=g_listHunks.at(nNumber).nId;
+    }
+
+    return result;
 }

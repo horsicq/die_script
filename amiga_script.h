@@ -29,8 +29,14 @@ class Amiga_Script : public Binary_Script {
 public:
     explicit Amiga_Script(XAmigaHunk *pAmiga, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
 
+public slots:
+    qint32 getNumberOfHunks();
+    quint16 getHunkIdByNumber(qint32 nNumber);
+
 private:
     XAmigaHunk *g_pAmiga;
+    QList<XAmigaHunk::HUNK> g_listHunks;
+    qint32 g_nNumberOfHunks;
 };
 
 #endif  // AMIGA_SCRIPT_H
