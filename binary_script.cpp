@@ -1013,6 +1013,11 @@ bool Binary_Script::isDebugData()
     return (g_filePart == XBinary::FILEPART_DEBUGDATA);
 }
 
+bool Binary_Script::isFilePart()
+{
+    return (g_filePart != XBinary::FILEPART_HEADER);
+}
+
 QList<qint32> Binary_Script::readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace)
 {
     QList<qint32> listResult;
