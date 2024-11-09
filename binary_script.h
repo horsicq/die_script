@@ -165,6 +165,7 @@ public slots:
     bool isOverlay();
     bool isResource();
     bool isDebugData();
+    bool isFilePart();
 
     QList<qint32> readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace = false);
 
