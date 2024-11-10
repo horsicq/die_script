@@ -216,6 +216,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             XMACHOFat *_pArchive = new XMACHOFat(pDevice);
             pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
             g_listBinaries.append(_pArchive);
+        } else if (fileTypes.contains(XBinary::FT_DOS16M) || fileTypes.contains(XBinary::FT_DOS4G)) {
+            XDOS16 *_pArchive = new XDOS16(pDevice);
+            pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
+            g_listBinaries.append(_pArchive);
         }
         // TODO more
 
@@ -298,6 +302,34 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         _addClass(pExtraScript, "Binary");
         _addClass(pExtraScript, "NPM");
         g_listBinaries.append(pNPNM);
+        g_listScriptClasses.append(pExtraScript);
+    } else if (XBinary::checkFileType(XBinary::FT_DOS16M, fileType)) {
+        XDOS16 *pDOS16 = new XDOS16(pDevice);
+        DOS16M_Script *pExtraScript = new DOS16M_Script(pDOS16, filePart, pOptions, pPdStruct);
+
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
+            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+        }
+
+        _addClass(pExtraScript, "Binary");
+        _addClass(pExtraScript, "DOS16M");
+        g_listBinaries.append(pDOS16);
+        g_listScriptClasses.append(pExtraScript);
+    } else if (XBinary::checkFileType(XBinary::FT_DOS4G, fileType)) {
+        XDOS16 *pDOS16 = new XDOS16(pDevice);
+        DOS16M_Script *pExtraScript = new DOS16M_Script(pDOS16, filePart, pOptions, pPdStruct);
+
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
+            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+        }
+
+        _addClass(pExtraScript, "Binary");
+        _addClass(pExtraScript, "DOS4G");
+        g_listBinaries.append(pDOS16);
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_DEX, fileType)) {
         XDEX *pDEX = new XDEX(pDevice);

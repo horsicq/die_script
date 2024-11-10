@@ -15,6 +15,7 @@ HEADERS += \
     $$PWD/dex_script.h \
     $$PWD/die_script.h \
     $$PWD/die_scriptengine.h \
+    $$PWD/dos16m_script.h \
     $$PWD/elf_script.h \
     $$PWD/global_script.h \
     $$PWD/ipa_script.h \
@@ -39,6 +40,7 @@ SOURCES += \
     $$PWD/dex_script.cpp \
     $$PWD/die_script.cpp \
     $$PWD/die_scriptengine.cpp \
+    $$PWD/dos16m_script.cpp \
     $$PWD/elf_script.cpp \
     $$PWD/global_script.cpp \
     $$PWD/ipa_script.cpp \

@@ -41,6 +41,7 @@
 #include "dex_script.h"
 #include "npm_script.h"
 #include "amiga_script.h"
+#include "dos16m_script.h"
 #include "util_script.h"
 #include "xscriptengine.h"
 #include "xscanengine.h"

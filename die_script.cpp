@@ -487,6 +487,8 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "PE", XBinary::FT_PE));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "ELF", XBinary::FT_ELF));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "MACH", XBinary::FT_MACHO));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "DOS16M", XBinary::FT_DOS16M));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "DOS4G", XBinary::FT_DOS4G));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "Amiga", XBinary::FT_AMIGAHUNK));
 
                     bResult = true;
@@ -513,6 +515,8 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "PE", databaseType, XBinary::FT_PE, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "ELF", databaseType, XBinary::FT_ELF, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MACH", databaseType, XBinary::FT_MACHO, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DOS16M", databaseType, XBinary::FT_DOS16M, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DOS4G", databaseType, XBinary::FT_DOS4G, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "Amiga", databaseType, XBinary::FT_AMIGAHUNK, pPdStruct));
 
             bResult = true;

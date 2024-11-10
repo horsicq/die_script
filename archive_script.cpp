@@ -37,6 +37,14 @@ Archive_Script::Archive_Script(XArchive *pArchive, XBinary::FILEPART filePart, O
         XTAR *_pArchive = dynamic_cast<XTAR *>(g_pArchive);
         if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct);
     }
+    {
+        XDOS16 *_pArchive = dynamic_cast<XDOS16 *>(g_pArchive);
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct);
+    }
+    {
+        XMACHOFat *_pArchive = dynamic_cast<XMACHOFat *>(g_pArchive);
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct);
+    }
 }
 
 bool Archive_Script::isArchiveRecordPresent(const QString &sArchiveRecord)
