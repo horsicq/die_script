@@ -20,6 +20,8 @@ set(DIE_SCRIPT_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/die_scriptengine.h
     ${CMAKE_CURRENT_LIST_DIR}/dos16m_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dos16m_script.h
+    ${CMAKE_CURRENT_LIST_DIR}/dos4g_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dos4g_script.h
     ${CMAKE_CURRENT_LIST_DIR}/elf_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elf_script.h
     ${CMAKE_CURRENT_LIST_DIR}/global_script.cpp

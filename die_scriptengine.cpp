@@ -40,6 +40,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     _addFunction(_removeResult, "_removeResult");
     _addFunction(_isStop, "_isStop");
     _addFunction(_encodingList, "_encodingList");
+    _addFunction(_isConsoleMode, "_isConsoleMode");
+    _addFunction(_isLiteMode, "_isLiteMode");
+    _addFunction(_isGuiMode, "_isGuiMode");
+    _addFunction(_isLibraryMode, "_isLibraryMode");
 #else
     connect(&g_globalScript, SIGNAL(includeScriptSignal(QString)), this, SLOT(includeScriptSlot(QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
@@ -50,6 +54,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     connect(&g_globalScript, SIGNAL(_removeResultSignal(QString, QString)), this, SLOT(_removeResultSlot(QString, QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_isStopSignal(bool *)), this, SLOT(_isStopSlot(bool *)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_encodingListSignal()), this, SLOT(_encodingListSlot()), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isConsoleModetSignal()), this, SLOT(_isConsoleModeSlot()), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isLiteModeSignal()), this, SLOT(_isLiteModeSlot()), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isGuiModeSignal()), this, SLOT(_isGuiModeSlot()), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isLibraryModeSignal()), this, SLOT(_isLibraryModeSlot()), Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&g_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
@@ -60,6 +68,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     globalObject().setProperty("_removeResult", valueGlobalScript.property("_removeResult"));
     globalObject().setProperty("_isStop", valueGlobalScript.property("_isStop"));
     globalObject().setProperty("_encodingList", valueGlobalScript.property("_encodingList"));
+    globalObject().setProperty("_isConsoleMode", valueGlobalScript.property("_isConsoleMode"));
+    globalObject().setProperty("_isLiteMode", valueGlobalScript.property("_isLiteMode"));
+    globalObject().setProperty("_isGuiMode", valueGlobalScript.property("_isGuiMode"));
+    globalObject().setProperty("_isLibraryMode", valueGlobalScript.property("_isLibraryMode"));
 #endif
 
     QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
@@ -319,7 +331,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_DOS4G, fileType)) {
         XDOS16 *pDOS16 = new XDOS16(pDevice);
-        DOS16M_Script *pExtraScript = new DOS16M_Script(pDOS16, filePart, pOptions, pPdStruct);
+        DOS4G_Script *pExtraScript = new DOS4G_Script(pDOS16, filePart, pOptions, pPdStruct);
 
         if (pExtraScript) {
             connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
@@ -567,6 +579,86 @@ QScriptValue DiE_ScriptEngine::_encodingList(QScriptContext *pContext, QScriptEn
     return result;
 }
 #endif
+#ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_isConsoleMode(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    Q_UNUSED(pContext)
+
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        bool bResult = false;
+
+        pScriptEngine->_isConsoleModeSlot(&bResult);
+
+        result = bResult;
+    }
+
+    return result;
+}
+#endif
+#ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_isGuiMode(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    Q_UNUSED(pContext)
+
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        bool bResult = false;
+
+        pScriptEngine->_isGuiModeSlot(&bResult);
+
+        result = bResult;
+    }
+
+    return result;
+}
+#endif
+#ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_isLiteMode(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    Q_UNUSED(pContext)
+
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        bool bResult = false;
+
+        pScriptEngine->_isLiteModeSlot(&bResult);
+
+        result = bResult;
+    }
+
+    return result;
+}
+#endif
+#ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_isLibraryMode(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    Q_UNUSED(pContext)
+
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        bool bResult = false;
+
+        pScriptEngine->_isLibraryModeSlot(&bResult);
+
+        result = bResult;
+    }
+
+    return result;
+}
+#endif
 
 void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
 {
@@ -702,6 +794,34 @@ void DiE_ScriptEngine::_encodingListSlot()
         emit infoMessage(listCodePages.at(i));
     }
 #endif
+}
+
+void DiE_ScriptEngine::_isConsoleModeSlot(bool *pResult)
+{
+    bool bConsole = false;
+#ifndef QT_GUI_LIB
+    bConsole = true;
+#endif
+    *pResult = bConsole && (qApp->applicationName() == "die");
+}
+
+void DiE_ScriptEngine::_isLiteModeSlot(bool *pResult)
+{
+    *pResult = (qApp->applicationName() == "diel");
+}
+
+void DiE_ScriptEngine::_isGuiModeSlot(bool *pResult)
+{
+    bool bGui = false;
+#ifdef QT_GUI_LIB
+    bGui = true;
+#endif
+    *pResult = bGui && (qApp->applicationName() == "die");
+}
+
+void DiE_ScriptEngine::_isLibraryModeSlot(bool *pResult)
+{
+    *pResult = (qApp->applicationName() == "");
 }
 
 // DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)

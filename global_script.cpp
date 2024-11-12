@@ -81,3 +81,35 @@ void global_script::_encodingList()
 {
     emit _encodingListSignal();
 }
+
+bool global_script::_isConsoleMode()
+{
+    bool bResult = false;
+    emit _isConsoleModeSignal(&bResult);
+
+    return bResult;
+}
+
+bool global_script::_isLiteMode()
+{
+    bool bResult = false;
+    emit _isLiteModeSignal(&bResult);
+
+    return bResult;
+}
+
+bool global_script::_isGuiMode()
+{
+    bool bResult = false;
+    emit _isGuiModeSignal(&bResult);
+
+    return bResult;
+}
+
+bool global_script::_isLibraryMode()
+{
+    bool bResult = false;
+    emit _isLibraryModeSignal(&bResult);
+
+    return bResult;
+}

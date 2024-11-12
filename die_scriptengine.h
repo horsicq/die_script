@@ -42,6 +42,7 @@
 #include "npm_script.h"
 #include "amiga_script.h"
 #include "dos16m_script.h"
+#include "dos4g_script.h"
 #include "util_script.h"
 #include "xscriptengine.h"
 #include "xscanengine.h"
@@ -120,6 +121,10 @@ private:
     static QScriptValue _removeResult(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _isStop(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _encodingList(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _isConsoleMode(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _isLiteMode(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _isGuiMode(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _isLibraryMode(QScriptContext *pContext, QScriptEngine *pEngine);
 #endif
 
 private slots:
@@ -131,6 +136,10 @@ private slots:
     void _removeResultSlot(const QString &sType, const QString &sName);
     void _isStopSlot(bool *pResult);
     void _encodingListSlot();
+    void _isConsoleModeSlot(bool *pResult);
+    void _isLiteModeSlot(bool *pResult);
+    void _isGuiModeSlot(bool *pResult);
+    void _isLibraryModeSlot(bool *pResult);
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;

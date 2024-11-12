@@ -41,6 +41,10 @@ public slots:
     void _removeResult(const QString &sType, const QString &sName);
     bool _isStop();
     void _encodingList();
+    bool _isConsoleMode();
+    bool _isLiteMode();
+    bool _isGuiMode();
+    bool _isLibraryMode();
 
 signals:
     void includeScriptSignal(const QString &sScript);
@@ -51,6 +55,10 @@ signals:
     void _removeResultSignal(const QString &sType, const QString &sName);
     void _isStopSignal(bool *pResult);
     void _encodingListSignal();
+    void _isConsoleModeSignal(bool *pResult);
+    void _isLiteModeSignal(bool *pResult);
+    void _isGuiModeSignal(bool *pResult);
+    void _isLibraryModeSignal(bool *pResult);
 };
 
 #endif  // GLOBAL_SCRIPT_H
