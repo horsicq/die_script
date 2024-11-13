@@ -20,7 +20,8 @@
  */
 #include "dos4g_script.h"
 
-DOS4G_Script::DOS4G_Script(XDOS16 *pXdos16, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : DOS16M_Script(pXdos16, filePart, pOptions, pPdStruct)
+DOS4G_Script::DOS4G_Script(XDOS16 *pXdos16, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+    : DOS16M_Script(pXdos16, filePart, pOptions, pPdStruct)
 {
     this->g_pXdos16 = pXdos16;
 }
