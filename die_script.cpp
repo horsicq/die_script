@@ -478,6 +478,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "APK", XBinary::FT_APK));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "IPA", XBinary::FT_IPA));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "NPM", XBinary::FT_NPM));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "MACHOFAT", XBinary::FT_MACHOFAT));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "DEB", XBinary::FT_DEB));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "DEX", XBinary::FT_DEX));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "MSDOS", XBinary::FT_MSDOS));
@@ -506,6 +507,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "APK", databaseType, XBinary::FT_APK, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "IPA", databaseType, XBinary::FT_IPA, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "NPM", databaseType, XBinary::FT_NPM, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MACHOFAT", databaseType, XBinary::FT_MACHOFAT, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEB", databaseType, XBinary::FT_NPM, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DEX", databaseType, XBinary::FT_DEX, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "MSDOS", databaseType, XBinary::FT_MSDOS, pPdStruct));
@@ -551,12 +553,18 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
     listFT.append(XBinary::FT_PE);
     listFT.append(XBinary::FT_ELF);
     listFT.append(XBinary::FT_MACHO);
+    listFT.append(XBinary::FT_ARCHIVE);
     listFT.append(XBinary::FT_ZIP);
     listFT.append(XBinary::FT_JAR);
     listFT.append(XBinary::FT_APK);
     listFT.append(XBinary::FT_IPA);
+    listFT.append(XBinary::FT_DEB);
     listFT.append(XBinary::FT_DEX);
     listFT.append(XBinary::FT_NPM);
+    listFT.append(XBinary::FT_MACHOFAT);
+    listFT.append(XBinary::FT_AMIGAHUNK);
+    listFT.append(XBinary::FT_DOS16M);
+    listFT.append(XBinary::FT_DOS4G);
 
     qint32 nNumberOfFileTypes = listFT.count();
 

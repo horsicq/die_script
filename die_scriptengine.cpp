@@ -315,6 +315,20 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         _addClass(pExtraScript, "NPM");
         g_listBinaries.append(pNPNM);
         g_listScriptClasses.append(pExtraScript);
+    } else if (XBinary::checkFileType(XBinary::FT_MACHOFAT, fileType)) {
+        XMACHOFat *pMachofat = new XMACHOFat(pDevice);
+        MACHOFAT_Script *pExtraScript = new MACHOFAT_Script(pMachofat, filePart, pOptions, pPdStruct);
+
+        if (pExtraScript) {
+            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
+            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+        }
+
+        _addClass(pExtraScript, "Binary");
+        _addClass(pExtraScript, "MACHOFAT");
+        g_listBinaries.append(pMachofat);
+        g_listScriptClasses.append(pExtraScript);
     } else if (XBinary::checkFileType(XBinary::FT_DOS16M, fileType)) {
         XDOS16 *pDOS16 = new XDOS16(pDevice);
         DOS16M_Script *pExtraScript = new DOS16M_Script(pDOS16, filePart, pOptions, pPdStruct);

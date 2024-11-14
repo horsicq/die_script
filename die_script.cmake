@@ -52,6 +52,8 @@ set(DIE_SCRIPT_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/dex_script.h
     ${CMAKE_CURRENT_LIST_DIR}/npm_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/npm_script.h
+    ${CMAKE_CURRENT_LIST_DIR}/machofat_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/machofat_script.h
     ${CMAKE_CURRENT_LIST_DIR}/util_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/util_script.h
 )
