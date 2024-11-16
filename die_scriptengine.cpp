@@ -54,10 +54,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     connect(&g_globalScript, SIGNAL(_removeResultSignal(QString, QString)), this, SLOT(_removeResultSlot(QString, QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_isStopSignal(bool *)), this, SLOT(_isStopSlot(bool *)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_encodingListSignal()), this, SLOT(_encodingListSlot()), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isConsoleModetSignal()), this, SLOT(_isConsoleModeSlot()), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isLiteModeSignal()), this, SLOT(_isLiteModeSlot()), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isGuiModeSignal()), this, SLOT(_isGuiModeSlot()), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isLibraryModeSignal()), this, SLOT(_isLibraryModeSlot()), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isConsoleModeSignal(bool *)), this, SLOT(_isConsoleModeSlot(bool *)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isLiteModeSignal(bool *)), this, SLOT(_isLiteModeSlot(bool *)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isGuiModeSignal(bool *)), this, SLOT(_isGuiModeSlot(bool *)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_isLibraryModeSignal(bool *)), this, SLOT(_isLibraryModeSlot(bool *)), Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&g_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
