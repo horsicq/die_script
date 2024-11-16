@@ -683,8 +683,12 @@ void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
     for (qint32 i = 0; i < nNumberOfSignatures; i++) {
         if (g_pSignaturesList->at(i).fileType == XBinary::FT_UNKNOWN) {
             if (g_pSignaturesList->at(i).sName.toUpper() == sScript.toUpper()) {
-                // TODO error
-                evaluate(g_pSignaturesList->at(i).sText, sScript);
+
+                XSCRIPTVALUE value = evaluate(g_pSignaturesList->at(i).sText, sScript);
+
+                if (value.isError()) {
+                    emit errorMessage(QString("includeScript %1: %2: %3").arg(sScript, value.property("lineNumber").toString(), value.toString()));
+                }
 
                 bSuccess = true;
 
