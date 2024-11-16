@@ -709,14 +709,6 @@ void DiE_ScriptEngine::_logSlot(const QString &sText)
 
 void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions)
 {
-    // RESULT record = {};
-    // record.sType = sType;
-    // record.sName = sName;
-    // record.sVersion = sVersion;
-    // record.sOptions = sOptions;
-
-    // g_listResult.append(record);
-
     bool bAdd = true;
 
     qint32 nNumberOfResults = g_listBLRecords.count();
