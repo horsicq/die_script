@@ -1,10 +1,14 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
-include(${CMAKE_CURRENT_LIST_DIR}/../XCapstone/xcapstone.cmake)
+if (NOT DEFINED XCAPSTONE_SOURCES)
+    include(${CMAKE_CURRENT_LIST_DIR}/../XCapstone/xcapstone.cmake)
+    set(DIE_SCRIPT_SOURCES ${DIE_SCRIPT_SOURCES} ${XCAPSTONE_SOURCES})
+endif()
+
 include(${CMAKE_CURRENT_LIST_DIR}/../XScanEngine/xscanengine.cmake)
 
 set(DIE_SCRIPT_SOURCES
-    ${XCAPSTONE_SOURCES}
+    ${DIE_SCRIPT_SOURCES}
     ${XSCANENGINE_SOURCES}
     ${CMAKE_CURRENT_LIST_DIR}/amiga_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/amiga_script.h
