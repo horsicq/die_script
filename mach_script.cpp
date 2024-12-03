@@ -96,3 +96,8 @@ quint32 MACH_Script::getCommandId(quint32 nNumber)
 {
     return g_pMACH->getCommandId(nNumber, &g_listCommandRecords);
 }
+
+bool MACH_Script::isCommandPresent(quint32 nNumber)
+{
+    return g_pMACH->isCommandPresent(nNumber, &g_listCommandRecords);
+}

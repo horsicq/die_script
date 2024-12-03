@@ -43,6 +43,7 @@ public slots:
     bool isSectionNamePresent(const QString &sSectionName);
     quint32 getNumberOfCommands();
     quint32 getCommandId(quint32 nNumber);
+    bool isCommandPresent(quint32 nNumber);
 
 private:
     XMACH *g_pMACH;
