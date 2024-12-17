@@ -22,7 +22,6 @@
 #define DIE_SCRIPT_H
 
 #include "die_scriptengine.h"
-#include "xscanengine.h"
 #ifdef QT_SCRIPTTOOLS_LIB
 #include <QAction>
 #include <QScriptEngineDebugger>

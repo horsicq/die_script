@@ -444,7 +444,19 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
 {
     bool bResult = false;
 
-    if (sDatabasePath != "") {
+    QString _sDatabasePath = sDatabasePath;
+
+    if (_sDatabasePath == "") {
+        if (databaseType == DiE_ScriptEngine::DT_MAIN) {
+            _sDatabasePath = "$app/db";
+        } else if (databaseType == DiE_ScriptEngine::DT_EXTRA) {
+            _sDatabasePath = "$app/db_extra";
+        } else if (databaseType == DiE_ScriptEngine::DT_CUSTOM) {
+            _sDatabasePath = "$app/db_custom";
+        }
+    }
+
+    if (_sDatabasePath != "") {
 #ifdef QT_DEBUG
         QElapsedTimer *pElapsedTimer = new QElapsedTimer;
         pElapsedTimer->start();
@@ -456,7 +468,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             pPdStruct = &pdStructEmpty;
         }
 
-        QString _sDatabasePath = XBinary::convertPathName(sDatabasePath);
+        _sDatabasePath = XBinary::convertPathName(_sDatabasePath);
 
         if (XBinary::isFileExists(_sDatabasePath)) {
             // Load from zip
@@ -524,7 +536,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             bResult = true;
         } else {
             if (databaseType == DiE_ScriptEngine::DT_MAIN) {
-                QString sErrorString = QString("%1: %2").arg(tr("Cannot load database"), sDatabasePath);
+                QString sErrorString = QString("%1: %2").arg(tr("Cannot load database"), _sDatabasePath);
 
                 emit errorMessage(sErrorString);
             }
