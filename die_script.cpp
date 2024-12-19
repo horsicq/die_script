@@ -75,6 +75,15 @@ DiE_Script::DiE_Script(QObject *pParent) : XScanEngine(pParent)
 #endif
 }
 
+DiE_Script::DiE_Script(const DiE_Script &other)
+    : XScanEngine(other)
+{
+    this->g_listSignatures = other.g_listSignatures;
+#ifdef QT_SCRIPTTOOLS_LIB
+    this->g_pDebugger = other.g_pDebugger;
+#endif
+}
+
 QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(const QString &sDatabasePath, DiE_ScriptEngine::DT databaseType, XBinary::FT fileType,
                                                                         XBinary::PDSTRUCT *pPdStruct)
 {
