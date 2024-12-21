@@ -75,8 +75,7 @@ DiE_Script::DiE_Script(QObject *pParent) : XScanEngine(pParent)
 #endif
 }
 
-DiE_Script::DiE_Script(const DiE_Script &other)
-    : XScanEngine(other)
+DiE_Script::DiE_Script(const DiE_Script &other) : XScanEngine(other)
 {
     this->g_listSignatures = other.g_listSignatures;
 #ifdef QT_SCRIPTTOOLS_LIB

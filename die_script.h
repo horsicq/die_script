@@ -44,7 +44,7 @@ public:
     };
 
     explicit DiE_Script(QObject *pParent = nullptr);
-    DiE_Script(const DiE_Script &other); // Copy constructor declaration
+    DiE_Script(const DiE_Script &other);  // Copy constructor declaration
 
     void initDatabase();
     bool loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT databaseType, XBinary::PDSTRUCT *pPdStruct = nullptr);
