@@ -172,8 +172,8 @@ public slots:
     bool isReleaseBuild();
     bool isDebugBuild();
 
-    QList<QString> getErrorMessages();
-    QList<QString> getWarningMessages();
+    QList<QString> getFormatErrorMessages();
+    QList<QString> getFormatWarningMessages();
 
     // alliases
     quint8 U8(qint64 nOffset);
