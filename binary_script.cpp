@@ -1037,6 +1037,30 @@ QList<qint32> Binary_Script::readBytes(qint64 nOffset, qint64 nSize, bool bRepla
     return listResult;
 }
 
+bool Binary_Script::isReleaseBuild()
+{
+    return g_pBinary->isReleaseBuild();
+}
+
+bool Binary_Script::isDebugBuild()
+{
+    return g_pBinary->isDebugBuild();
+}
+
+QList<QString> Binary_Script::getFormatErrorMessages()
+{
+    QList<QString> listResult;
+
+    return listResult;
+}
+
+QList<QString> Binary_Script::getFormatWarningMessages()
+{
+    QList<QString> listResult;
+
+    return listResult;
+}
+
 XBinary::_MEMORY_MAP *Binary_Script::getMemoryMap()
 {
     return &g_memoryMap;

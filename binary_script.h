@@ -169,6 +169,12 @@ public slots:
 
     QList<qint32> readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace = false);
 
+    bool isReleaseBuild();
+    bool isDebugBuild();
+
+    QList<QString> getErrorMessages();
+    QList<QString> getWarningMessages();
+
     // alliases
     quint8 U8(qint64 nOffset);
     qint16 I8(qint64 nOffset);  // qint16 not qint8 / qint8 qjs shows as char
