@@ -254,6 +254,7 @@ private:
     XBinary::_MEMORY_MAP g_memoryMap;
     XADDR g_nBaseAddress;
     csh g_disasmHandle;
+    XCapstone::DISASM_OPTIONS g_disasmOptions;
     qint64 g_nSize;
     qint64 g_nEntryPointOffset;
     qint64 g_nEntryPointAddress;
@@ -276,6 +277,8 @@ private:
     QString g_sFileSuffix;
     XBinary::OSINFO g_osInfo;
     XBinary::FILEFORMATINFO g_fileFormatInfo;
+    QList<QString> g_listFormatErrorMessages;
+    QList<QString> g_listFormatWarningMessages;
     // JPEG
     bool g_bIsJpeg;
     XJpeg *g_pJpeg;

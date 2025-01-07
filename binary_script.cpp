@@ -87,7 +87,15 @@ Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIO
     g_osInfo = pBinary->getOsInfo();
     g_fileFormatInfo = pBinary->getFileFormatInfo(pPdStruct);
 
-    XCapstone::openHandle(XBinary::getDisasmMode(&g_memoryMap), &g_disasmHandle, true);
+
+    QList<XBinary::FMT_MSG> listFmtMsg = pBinary->checkFileFormat(pPdStruct);
+    g_listFormatErrorMessages = pBinary->getFileFormatErrorMessages(&listFmtMsg);
+    g_listFormatWarningMessages = pBinary->getFileFormatWarningMessages(&listFmtMsg);
+
+    g_disasmOptions.disasmMode = XBinary::getDisasmMode(&g_memoryMap);
+    g_disasmOptions.syntax = XBinary::SYNTAX_DEFAULT;
+
+    XCapstone::openHandle(g_disasmOptions.disasmMode, &g_disasmHandle, true);
 }
 
 Binary_Script::~Binary_Script()
@@ -474,19 +482,26 @@ QString Binary_Script::getHeaderString()
 
 qint32 Binary_Script::getDisasmLength(qint64 nAddress)
 {
-    return XCapstone::getDisasmLength(g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress);
+    return XCapstone::disasm_ex(g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress, g_disasmOptions).nSize;
 }
 
 QString Binary_Script::getDisasmString(qint64 nAddress)
 {
     qint64 nOffset = XBinary::addressToOffset(&g_memoryMap, nAddress);
-    return XCapstone::disasm(g_disasmHandle, g_pBinary->getDevice(), nOffset, nAddress).sString.toUpper();
+
+    XCapstone::DISASM_RESULT _disasmResult = XCapstone::disasm_ex(g_disasmHandle, g_pBinary->getDevice(), nOffset, nAddress, g_disasmOptions);
+
+    QString sResult = _disasmResult.sMnemonic;
+    if (_disasmResult.sString != "") {
+        sResult += " " + _disasmResult.sString;
+    }
+
+    return sResult;
 }
 
 qint64 Binary_Script::getDisasmNextAddress(qint64 nAddress)
 {
-    return XCapstone::getNextAddress(XBinary::getDisasmFamily(&g_memoryMap), g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress),
-                                     nAddress);
+    return XCapstone::disasm_ex(g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress, g_disasmOptions).nNextAddress;
 }
 
 bool Binary_Script::is16()
@@ -1049,16 +1064,12 @@ bool Binary_Script::isDebugBuild()
 
 QList<QString> Binary_Script::getFormatErrorMessages()
 {
-    QList<QString> listResult;
-
-    return listResult;
+    return g_listFormatErrorMessages;
 }
 
 QList<QString> Binary_Script::getFormatWarningMessages()
 {
-    QList<QString> listResult;
-
-    return listResult;
+    return g_listFormatWarningMessages;
 }
 
 XBinary::_MEMORY_MAP *Binary_Script::getMemoryMap()
