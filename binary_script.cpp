@@ -1033,9 +1033,9 @@ bool Binary_Script::isFilePart()
     return (g_filePart != XBinary::FILEPART_HEADER);
 }
 
-QList<qint32> Binary_Script::readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace)
+QList<int> Binary_Script::readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace)
 {
-    QList<qint32> listResult;
+    QList<int> listResult;
 
     QByteArray baData = g_pBinary->read_array(nOffset, nSize, g_pPdStruct);
     qint32 _nSize = baData.size();
@@ -1062,12 +1062,12 @@ bool Binary_Script::isDebugBuild()
     return g_pBinary->isDebugBuild();
 }
 
-QList<QString> Binary_Script::getFormatErrorMessages()
+QStringList Binary_Script::getFormatErrorMessages()
 {
     return g_listFormatErrorMessages;
 }
 
-QList<QString> Binary_Script::getFormatWarningMessages()
+QStringList Binary_Script::getFormatWarningMessages()
 {
     return g_listFormatWarningMessages;
 }

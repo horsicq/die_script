@@ -167,13 +167,13 @@ public slots:
     bool isDebugData();
     bool isFilePart();
 
-    QList<qint32> readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace = false);
+    QList<int> readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace = false);
 
     bool isReleaseBuild();
     bool isDebugBuild();
 
-    QList<QString> getFormatErrorMessages();
-    QList<QString> getFormatWarningMessages();
+    QStringList getFormatErrorMessages();
+    QStringList getFormatWarningMessages();
 
     // alliases
     quint8 U8(qint64 nOffset);
