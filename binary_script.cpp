@@ -87,7 +87,6 @@ Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIO
     g_osInfo = pBinary->getOsInfo();
     g_fileFormatInfo = pBinary->getFileFormatInfo(pPdStruct);
 
-
     QList<XBinary::FMT_MSG> listFmtMsg = pBinary->checkFileFormat(pPdStruct);
     g_listFormatErrorMessages = pBinary->getFileFormatErrorMessages(&listFmtMsg);
     g_listFormatWarningMessages = pBinary->getFileFormatWarningMessages(&listFmtMsg);
