@@ -22,7 +22,7 @@
 #define BINARY_SCRIPT_H
 
 #include "xformats.h"
-#include "xcapstone.h"
+#include "xdisasmcore.h"
 
 class Binary_Script : public QObject {
     Q_OBJECT
@@ -253,8 +253,8 @@ private:
     XBinary::PDSTRUCT *g_pPdStruct;
     XBinary::_MEMORY_MAP g_memoryMap;
     XADDR g_nBaseAddress;
-    csh g_disasmHandle;
-    XCapstone::DISASM_OPTIONS g_disasmOptions;
+    XDisasmCore::DISASM_OPTIONS g_disasmOptions;
+    XDisasmCore g_disasmCore;
     qint64 g_nSize;
     qint64 g_nEntryPointOffset;
     qint64 g_nEntryPointAddress;

@@ -91,15 +91,12 @@ Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIO
     g_listFormatErrorMessages = pBinary->getFileFormatErrorMessages(&listFmtMsg);
     g_listFormatWarningMessages = pBinary->getFileFormatWarningMessages(&listFmtMsg);
 
-    g_disasmOptions.disasmMode = XBinary::getDisasmMode(&g_memoryMap);
-    g_disasmOptions.syntax = XBinary::SYNTAX_DEFAULT;
-
-    XCapstone::openHandle(g_disasmOptions.disasmMode, &g_disasmHandle, true);
+    g_disasmCore.setMode(XBinary::getDisasmMode(&g_memoryMap), XBinary::SYNTAX_DEFAULT);
 }
 
 Binary_Script::~Binary_Script()
 {
-    XCapstone::closeHandle(&g_disasmHandle);
+
 }
 
 qint64 Binary_Script::getSize()
@@ -481,14 +478,14 @@ QString Binary_Script::getHeaderString()
 
 qint32 Binary_Script::getDisasmLength(qint64 nAddress)
 {
-    return XCapstone::disasm_ex(g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress, g_disasmOptions).nSize;
+    return g_disasmCore.disAsm(g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress, g_disasmOptions).nSize;
 }
 
 QString Binary_Script::getDisasmString(qint64 nAddress)
 {
     qint64 nOffset = XBinary::addressToOffset(&g_memoryMap, nAddress);
 
-    XCapstone::DISASM_RESULT _disasmResult = XCapstone::disasm_ex(g_disasmHandle, g_pBinary->getDevice(), nOffset, nAddress, g_disasmOptions);
+    XDisasmCore::DISASM_RESULT _disasmResult = g_disasmCore.disAsm(g_pBinary->getDevice(), nOffset, nAddress, g_disasmOptions);
 
     QString sResult = _disasmResult.sMnemonic;
     if (_disasmResult.sString != "") {
@@ -500,7 +497,7 @@ QString Binary_Script::getDisasmString(qint64 nAddress)
 
 qint64 Binary_Script::getDisasmNextAddress(qint64 nAddress)
 {
-    return XCapstone::disasm_ex(g_disasmHandle, g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress, g_disasmOptions).nNextAddress;
+    return g_disasmCore.disAsm(g_pBinary->getDevice(), XBinary::addressToOffset(&g_memoryMap, nAddress), nAddress, g_disasmOptions).nNextAddress;
 }
 
 bool Binary_Script::is16()

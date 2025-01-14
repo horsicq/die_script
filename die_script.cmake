@@ -1,8 +1,8 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
-if (NOT DEFINED XCAPSTONE_SOURCES)
-    include(${CMAKE_CURRENT_LIST_DIR}/../XCapstone/xcapstone.cmake)
-    set(DIE_SCRIPT_SOURCES ${DIE_SCRIPT_SOURCES} ${XCAPSTONE_SOURCES})
+if (NOT DEFINED XDISASMCORE_SOURCES)
+    include(${CMAKE_CURRENT_LIST_DIR}/../XDisasmCore/xdisasmcore.cmake)
+    set(DIE_SCRIPT_SOURCES ${DIE_SCRIPT_SOURCES} ${XDISASMCORE_SOURCES})
 endif()
 if (NOT DEFINED XSCANENGINE_SOURCES)
     include(${CMAKE_CURRENT_LIST_DIR}/../XScanEngine/xscanengine.cmake)

@@ -65,18 +65,9 @@ SOURCES += \
     include($$PWD/../XScanEngine/xscanengine.pri)
 }
 
-contains(XCONFIG, use_capstone_x86) {
-    !contains(XCONFIG, xcapstone_x86) {
-        XCONFIG += xcapstone_x86
-        include($$PWD/../XCapstone/xcapstone_x86.pri)
-    }
-}
-
-!contains(XCONFIG, use_capstone_x86) {
-    !contains(XCONFIG, xcapstone) {
-        XCONFIG += xcapstone
-        include($$PWD/../XCapstone/xcapstone.pri)
-    }
+!contains(XCONFIG, xdisasmcore) {
+    XCONFIG += xdisasmcore
+    include($$PWD/../XDisasmCore/xdisasmcore.pri)
 }
 
 DISTFILES += \
