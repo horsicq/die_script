@@ -253,7 +253,7 @@ private:
     XBinary::PDSTRUCT *g_pPdStruct;
     XBinary::_MEMORY_MAP g_memoryMap;
     XADDR g_nBaseAddress;
-    XDisasmCore::DISASM_OPTIONS g_disasmOptions;
+    XDisasmAbstract::DISASM_OPTIONS g_disasmOptions;
     XDisasmCore g_disasmCore;
     qint64 g_nSize;
     qint64 g_nEntryPointOffset;
