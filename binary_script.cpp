@@ -96,7 +96,6 @@ Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIO
 
 Binary_Script::~Binary_Script()
 {
-
 }
 
 qint64 Binary_Script::getSize()
