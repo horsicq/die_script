@@ -172,8 +172,18 @@ public slots:
     bool isReleaseBuild();
     bool isDebugBuild();
 
-    QStringList getFormatErrorMessages();
-    QStringList getFormatWarningMessages();
+    QStringList getFormatMessages();
+
+    bool isChecksumCorrect();
+    bool isEntryPointCorrect();
+    bool isSectionAlignmentCorrect();
+    bool isFileAlignmentCorrect();
+    bool isHeaderValid();
+    bool isRelocsTableValid();
+    bool isImportTableValid();
+    bool isExportTableValid();
+    bool isResourcesTableValid();
+    bool isSectionsTableValid();
 
     // alliases
     quint8 U8(qint64 nOffset);
@@ -234,6 +244,7 @@ private:
     void _fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize);
     QElapsedTimer *_startProfiling();
     void _finishProfiling(QElapsedTimer *pElapsedTimer, const QString &sInfo);
+    bool _loadFmtChecking(XBinary::PDSTRUCT *pPdStruct);
 
 protected:
     XBinary::_MEMORY_MAP *getMemoryMap();
@@ -277,8 +288,9 @@ private:
     QString g_sFileSuffix;
     XBinary::OSINFO g_osInfo;
     XBinary::FILEFORMATINFO g_fileFormatInfo;
-    QList<QString> g_listFormatErrorMessages;
-    QList<QString> g_listFormatWarningMessages;
+    bool b_g_bIsFmtChecking;
+    QList<XBinary::FMT_MSG> g_listFmtMsg;
+    QList<QString> g_listFormatMessages;
     // JPEG
     bool g_bIsJpeg;
     XJpeg *g_pJpeg;
