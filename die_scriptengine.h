@@ -126,6 +126,9 @@ private:
     static QScriptValue _isLiteMode(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _isGuiMode(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _isLibraryMode(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _breakScan(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _getEngineVersion(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _getOS(QScriptContext *pContext, QScriptEngine *pEngine);
 #endif
 
 private slots:
@@ -141,6 +144,9 @@ private slots:
     void _isLiteModeSlot(bool *pResult);
     void _isGuiModeSlot(bool *pResult);
     void _isLibraryModeSlot(bool *pResult);
+    void _breakScanSlot();
+    void _getEngineVersionSlot(QString *pResult);
+    void _getOSSlot(QString *pResult);
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;

@@ -113,3 +113,24 @@ bool global_script::_isLibraryMode()
 
     return bResult;
 }
+
+void global_script::_breakScan()
+{
+    emit _breakScanSignal();
+}
+
+QString global_script::_getEngineVersion()
+{
+    QString sResult;
+    emit _getEngineVersionSignal(&sResult);
+
+    return sResult;
+}
+
+QString global_script::_getOS()
+{
+    QString sResult;
+    emit _getOSSignal(&sResult);
+
+    return sResult;
+}

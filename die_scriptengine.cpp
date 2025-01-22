@@ -44,6 +44,9 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     _addFunction(_isLiteMode, "_isLiteMode");
     _addFunction(_isGuiMode, "_isGuiMode");
     _addFunction(_isLibraryMode, "_isLibraryMode");
+    _addFunction(_breakScan, "_breakScan");
+    _addFunction(_getEngineVersion, "_getEngineVersion");
+    _addFunction(_getOS, "_getOS");
 #else
     connect(&g_globalScript, SIGNAL(includeScriptSignal(QString)), this, SLOT(includeScriptSlot(QString)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
@@ -58,6 +61,9 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     connect(&g_globalScript, SIGNAL(_isLiteModeSignal(bool *)), this, SLOT(_isLiteModeSlot(bool *)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_isGuiModeSignal(bool *)), this, SLOT(_isGuiModeSlot(bool *)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_isLibraryModeSignal(bool *)), this, SLOT(_isLibraryModeSlot(bool *)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_breakScanSignal()), this, SLOT(_breakScanSlot()), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_getEngineVersionSignal(QString *)), this, SLOT(_getEngineVersionSlot(QString *)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_getOSSignal(QString *)), this, SLOT(_getOSSlot(QString *)), Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&g_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
@@ -72,6 +78,9 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     globalObject().setProperty("_isLiteMode", valueGlobalScript.property("_isLiteMode"));
     globalObject().setProperty("_isGuiMode", valueGlobalScript.property("_isGuiMode"));
     globalObject().setProperty("_isLibraryMode", valueGlobalScript.property("_isLibraryMode"));
+    globalObject().setProperty("_breakScan", valueGlobalScript.property("_breakScan"));
+    globalObject().setProperty("_getEngineVersion", valueGlobalScript.property("_getEngineVersion"));
+    globalObject().setProperty("_getOS", valueGlobalScript.property("_getOS"));
 #endif
 
     QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
@@ -673,6 +682,62 @@ QScriptValue DiE_ScriptEngine::_isLibraryMode(QScriptContext *pContext, QScriptE
     return result;
 }
 #endif
+#ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_breakScan(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    Q_UNUSED(pContext)
+
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        pScriptEngine->_breakScanSlot();
+    }
+
+    return result;
+}
+#endif
+#ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_getEngineVersion(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    Q_UNUSED(pContext)
+
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        QString sResult;
+
+        pScriptEngine->_getEngineVersionSlot(&sResult);
+
+        result = sResult;
+    }
+
+    return result;
+}
+#endif
+#ifdef QT_SCRIPT_LIB
+QScriptValue DiE_ScriptEngine::_getOS(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    Q_UNUSED(pContext)
+
+    QScriptValue result;
+
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        QString sResult;
+
+        pScriptEngine->_getOSSlot(&sResult);
+
+        result = sResult;
+    }
+
+    return result;
+}
+#endif
 
 void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
 {
@@ -831,6 +896,23 @@ void DiE_ScriptEngine::_isGuiModeSlot(bool *pResult)
 void DiE_ScriptEngine::_isLibraryModeSlot(bool *pResult)
 {
     *pResult = (qApp->applicationName() == "");
+}
+
+void DiE_ScriptEngine::_breakScanSlot()
+{
+    g_pPdStruct->bIsStop = true;
+}
+
+void DiE_ScriptEngine::_getEngineVersionSlot(QString *pResult)
+{
+    QDate qDate = QDate::fromString(__DATE__, "MMM dd yyyy");
+
+    *pResult = QString("%1.%2").arg(qApp->applicationVersion(), qDate.toString("yyyy.MM.dd"));
+}
+
+void DiE_ScriptEngine::_getOSSlot(QString *pResult)
+{
+    *pResult = XOptions::getBundleIdToString(XOptions::getBundle());
 }
 
 // DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)

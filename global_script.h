@@ -45,6 +45,9 @@ public slots:
     bool _isLiteMode();
     bool _isGuiMode();
     bool _isLibraryMode();
+    void _breakScan();
+    QString _getEngineVersion();
+    QString _getOS();
 
 signals:
     void includeScriptSignal(const QString &sScript);
@@ -59,6 +62,9 @@ signals:
     void _isLiteModeSignal(bool *pResult);
     void _isGuiModeSignal(bool *pResult);
     void _isLibraryModeSignal(bool *pResult);
+    void _breakScanSignal();
+    void _getEngineVersionSignal(QString *pResult);
+    void _getOSSignal(QString *pResult);
 };
 
 #endif  // GLOBAL_SCRIPT_H
