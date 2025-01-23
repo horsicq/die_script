@@ -178,12 +178,12 @@ public slots:
     bool isEntryPointCorrect();
     bool isSectionAlignmentCorrect();
     bool isFileAlignmentCorrect();
-    bool isHeaderValid();
-    bool isRelocsTableValid();
-    bool isImportTableValid();
-    bool isExportTableValid();
-    bool isResourcesTableValid();
-    bool isSectionsTableValid();
+    bool isHeaderCorrect();
+    bool isRelocsTableCorrect();
+    bool isImportTableCorrect();
+    bool isExportTableCorrect();
+    bool isResourcesTableCorrect();
+    bool isSectionsTableCorrect();
 
     // alliases
     quint8 U8(qint64 nOffset);

@@ -1073,61 +1073,61 @@ QStringList Binary_Script::getFormatMessages()
 bool Binary_Script::isChecksumCorrect()
 {
     if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
-    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_CHECKSUM, g_pPdStruct));
+    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_CHECKSUM, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isEntryPointCorrect()
 {
     if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
-    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_ENTRYPOINT, g_pPdStruct));
+    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_ENTRYPOINT, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isSectionAlignmentCorrect()
 {
     if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
-    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_SECTIONALIGNMENT, g_pPdStruct));
+    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_SECTIONALIGNMENT, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isFileAlignmentCorrect()
 {
     if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
-    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_FILEALIGNMENT, g_pPdStruct));
+    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_FILEALIGNMENT, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
-bool Binary_Script::isHeaderValid()
+bool Binary_Script::isHeaderCorrect()
 {
     if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
-    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_HEADER, g_pPdStruct));
+    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_HEADER, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
-bool Binary_Script::isRelocsTableValid()
+bool Binary_Script::isRelocsTableCorrect()
 {
     if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
-    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_RELOCSTABLE, g_pPdStruct));
+    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_RELOCSTABLE, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
-bool Binary_Script::isImportTableValid()
+bool Binary_Script::isImportTableCorrect()
 {
     if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
-    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_IMPORTTABLE, g_pPdStruct));
+    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_IMPORTTABLE, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
-bool Binary_Script::isExportTableValid()
+bool Binary_Script::isExportTableCorrect()
 {
     if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
-    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_EXPORTTABLE, g_pPdStruct));
+    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_EXPORTTABLE, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
-bool Binary_Script::isResourcesTableValid()
+bool Binary_Script::isResourcesTableCorrect()
 {
     if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
-    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_RESOURCESTABLE, g_pPdStruct));
+    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_RESOURCESTABLE, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
-bool Binary_Script::isSectionsTableValid()
+bool Binary_Script::isSectionsTableCorrect()
 {
     if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
-    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_SECTIONSTABLE, g_pPdStruct));
+    return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_SECTIONSTABLE, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 XBinary::_MEMORY_MAP *Binary_Script::getMemoryMap()
