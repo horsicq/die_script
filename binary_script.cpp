@@ -87,7 +87,8 @@ Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIO
     g_osInfo = pBinary->getOsInfo();
     g_fileFormatInfo = pBinary->getFileFormatInfo(pPdStruct);
 
-    b_g_bIsFmtChecking = false;
+    g_bIsFmtChecking = false;
+    g_bIsFmtCheckingDeep = false;
 
     g_disasmCore.setMode(XBinary::getDisasmMode(&g_memoryMap), XBinary::SYNTAX_DEFAULT);
 }
@@ -943,10 +944,18 @@ void Binary_Script::_finishProfiling(QElapsedTimer *pElapsedTimer, const QString
     }
 }
 
-bool Binary_Script::_loadFmtChecking(XBinary::PDSTRUCT *pPdStruct)
+bool Binary_Script::_loadFmtChecking(bool bDeep, XBinary::PDSTRUCT *pPdStruct)
 {
-    g_listFmtMsg = g_pBinary->checkFileFormat(pPdStruct);
-    g_listFormatMessages = g_pBinary->getFileFormatMessages(&g_listFmtMsg);
+    if ((!g_bIsFmtCheckingDeep) && bDeep) {
+        g_bIsFmtCheckingDeep = true;
+        g_bIsFmtChecking = true;
+        g_listFmtMsg = g_pBinary->checkFileFormat(true, pPdStruct);
+        g_listFormatMessages = g_pBinary->getFileFormatMessages(&g_listFmtMsg);
+    } else if (!g_bIsFmtChecking) {
+        g_bIsFmtChecking = true;
+        g_listFmtMsg = g_pBinary->checkFileFormat(false, pPdStruct);
+        g_listFormatMessages = g_pBinary->getFileFormatMessages(&g_listFmtMsg);
+    }
 
     return true;
 }
@@ -1065,68 +1074,68 @@ bool Binary_Script::isDebugBuild()
 
 QStringList Binary_Script::getFormatMessages()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(true, g_pPdStruct);
 
     return g_listFormatMessages;
 }
 
 bool Binary_Script::isChecksumCorrect()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(true, g_pPdStruct);
     return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_CHECKSUM, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isEntryPointCorrect()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(false, g_pPdStruct);
     return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_ENTRYPOINT, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isSectionAlignmentCorrect()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(false, g_pPdStruct);
     return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_SECTIONALIGNMENT, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isFileAlignmentCorrect()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(false, g_pPdStruct);
     return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_FILEALIGNMENT, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isHeaderCorrect()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(false, g_pPdStruct);
     return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_HEADER, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isRelocsTableCorrect()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(false, g_pPdStruct);
     return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_RELOCSTABLE, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isImportTableCorrect()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(false, g_pPdStruct);
     return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_IMPORTTABLE, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isExportTableCorrect()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(false, g_pPdStruct);
     return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_EXPORTTABLE, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isResourcesTableCorrect()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(false, g_pPdStruct);
     return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_RESOURCESTABLE, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 
 bool Binary_Script::isSectionsTableCorrect()
 {
-    if (!b_g_bIsFmtChecking) b_g_bIsFmtChecking = _loadFmtChecking(g_pPdStruct);
+    _loadFmtChecking(false, g_pPdStruct);
     return !(XBinary::isFmtMsgCodePresent(&g_listFmtMsg, XBinary::FMT_MSG_CODE_INVALID_SECTIONSTABLE, XBinary::FMT_MSG_TYPE_ERROR, g_pPdStruct));
 }
 

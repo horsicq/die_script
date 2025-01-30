@@ -244,7 +244,7 @@ private:
     void _fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize);
     QElapsedTimer *_startProfiling();
     void _finishProfiling(QElapsedTimer *pElapsedTimer, const QString &sInfo);
-    bool _loadFmtChecking(XBinary::PDSTRUCT *pPdStruct);
+    bool _loadFmtChecking(bool bDeep, XBinary::PDSTRUCT *pPdStruct);
 
 protected:
     XBinary::_MEMORY_MAP *getMemoryMap();
@@ -288,7 +288,8 @@ private:
     QString g_sFileSuffix;
     XBinary::OSINFO g_osInfo;
     XBinary::FILEFORMATINFO g_fileFormatInfo;
-    bool b_g_bIsFmtChecking;
+    bool g_bIsFmtChecking;
+    bool g_bIsFmtCheckingDeep;
     QList<XBinary::FMT_MSG> g_listFmtMsg;
     QList<QString> g_listFormatMessages;
     // JPEG
