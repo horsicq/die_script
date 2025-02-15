@@ -486,8 +486,8 @@ QString Binary_Script::getDisasmString(qint64 nAddress)
     XDisasmAbstract::DISASM_RESULT _disasmResult = g_disasmCore.disAsm(g_pBinary->getDevice(), nOffset, nAddress, g_disasmOptions);
 
     QString sResult = _disasmResult.sMnemonic;
-    if (_disasmResult.sString != "") {
-        sResult += " " + _disasmResult.sString;
+    if (_disasmResult.sOperands != "") {
+        sResult += " " + _disasmResult.sOperands;
     }
 
     return sResult;
