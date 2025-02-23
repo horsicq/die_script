@@ -90,6 +90,8 @@ Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIO
     g_bIsFmtChecking = false;
     g_bIsFmtCheckingDeep = false;
 
+    g_disasmOptions = {};
+    g_disasmOptions.bIsUppercase = true;
     g_disasmCore.setMode(XBinary::getDisasmMode(&g_memoryMap));
 }
 
