@@ -211,6 +211,8 @@ public slots:
     qint64 fStr(qint64 nOffset, qint64 nSize, const QString &sString);
     bool c(const QString &sSignature, qint64 nOffset = 0);
 
+    QList<int> BA(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace = false);
+
     // function X.U8(a) { return File.read_uint8(a) }
     // function X.I8(a) { return File.read_int8(a) }
 

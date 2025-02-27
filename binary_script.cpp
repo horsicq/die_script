@@ -915,6 +915,11 @@ bool Binary_Script::c(const QString &sSignature, qint64 nOffset)
     return compare(sSignature, nOffset);
 }
 
+QList<int> Binary_Script::BA(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace)
+{
+    return readBytes(nOffset, nSize, bReplaceZeroWithSpace);
+}
+
 void Binary_Script::_fixOffsetAndSize(qint64 *pnOffset, qint64 *pnSize)
 {
     if ((*pnOffset) < g_nSize) {
