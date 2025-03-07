@@ -20,6 +20,7 @@ HEADERS += \
     $$PWD/elf_script.h \
     $$PWD/global_script.h \
     $$PWD/ipa_script.h \
+    $$PWD/javaclass_script.h \
     $$PWD/jar_script.h \
     $$PWD/le_script.h \
     $$PWD/lx_script.h \
@@ -47,6 +48,7 @@ SOURCES += \
     $$PWD/elf_script.cpp \
     $$PWD/global_script.cpp \
     $$PWD/ipa_script.cpp \
+    $$PWD/javaclass_script.cpp \
     $$PWD/jar_script.cpp \
     $$PWD/le_script.cpp \
     $$PWD/lx_script.cpp \
