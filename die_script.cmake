@@ -8,6 +8,9 @@ if (NOT DEFINED XSCANENGINE_SOURCES)
     include(${CMAKE_CURRENT_LIST_DIR}/../XScanEngine/xscanengine.cmake)
     set(DIE_SCRIPT_SOURCES ${DIE_SCRIPT_SOURCES} ${XSCANENGINE_SOURCES})
 endif()
+if (NOT DEFINED DETECTITEASY_SOURCES)
+    include(${CMAKE_CURRENT_LIST_DIR}/../Detect-It-Easy/detectiteasy.cmake)
+endif()
 
 set(DIE_SCRIPT_SOURCES
     ${DIE_SCRIPT_SOURCES}
