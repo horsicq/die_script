@@ -233,7 +233,7 @@ bool PE_Script::isNetMethodPresent(QString sTypeNamespace, QString sTypeName, QS
     return g_pPE->isNetMethodPresent(&g_cliInfo, sTypeNamespace, sTypeName, sMethodName, getPdStruct());
 }
 
-bool PE_Script::isNetFieldPresent(QString sTypeNamespace, QString sTypeName, QString sFieldName)
+bool PE_Script::isNetFieldPresent(const QString &sTypeNamespace, const QString &sTypeName, const QString &sFieldName)
 {
     return g_pPE->isNetFieldPresent(&g_cliInfo, sTypeNamespace, sTypeName, sFieldName, getPdStruct());
 }

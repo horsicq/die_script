@@ -60,7 +60,7 @@ public slots:
     bool isNetGlobalCctorPresent();
     bool isNetTypePresent(QString sTypeNamespace, QString sTypeName);
     bool isNetMethodPresent(QString sTypeNamespace, QString sTypeName, QString sMethodName);
-    bool isNetFieldPresent(QString sTypeNamespace, QString sTypeName, QString sFieldName);
+    bool isNetFieldPresent(const QString &sTypeNamespace, const QString &sTypeName, const QString &sFieldName);
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(const QString &sLibraryName, bool bCheckCase = false);
