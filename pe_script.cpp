@@ -30,6 +30,12 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
     g_listSectionNameStrings = g_pPE->getSectionNames(&g_listSectionRecords, getPdStruct());
     g_cliInfo = g_pPE->getCliInfo(true, getMemoryMap(), getPdStruct());
     g_bNetGlobalCctorPresent = g_pPE->isNetGlobalCctorPresent(&g_cliInfo, getPdStruct());
+
+    if (g_cliInfo.bValid) {
+        g_listNetAnsiStrings = g_pPE->getAnsiStrings(&g_cliInfo, getPdStruct());
+        g_listNetUnicodeStrings = g_pPE->getUnicodeStrings(&g_cliInfo, getPdStruct());
+    }
+
     g_listResourceRecords = g_pPE->getResources(getMemoryMap(), 10000, getPdStruct());
     g_resourcesVersion = g_pPE->getResourcesVersion(&g_listResourceRecords, getPdStruct());
     g_nNumberOfResources = g_listResourceRecords.count();
@@ -190,22 +196,22 @@ quint32 PE_Script::getResourceTypeByNumber(quint32 nNumber)
 
 bool PE_Script::isNETStringPresent(const QString &sString)
 {
-    return g_pPE->isNETAnsiStringPresent(sString, &g_cliInfo);
+    return g_pPE->isStringInListPresent(&g_listNetAnsiStrings, sString, getPdStruct());
 }
 
 bool PE_Script::isNetObjectPresent(const QString &sString)
 {
-    return g_pPE->isNETAnsiStringPresent(sString, &g_cliInfo);
+    return g_pPE->isStringInListPresent(&g_listNetAnsiStrings, sString, getPdStruct());
 }
 
 bool PE_Script::isNETUnicodeStringPresent(const QString &sString)
 {
-    return g_pPE->isNETUnicodeStringPresent(sString, &g_cliInfo);
+    return g_pPE->isStringInListPresent(&g_listNetUnicodeStrings, sString, getPdStruct());
 }
 
 bool PE_Script::isNetUStringPresent(const QString &sString)
 {
-    return g_pPE->isNETUnicodeStringPresent(sString, &g_cliInfo);
+    return g_pPE->isStringInListPresent(&g_listNetUnicodeStrings, sString, getPdStruct());
 }
 
 qint64 PE_Script::findSignatureInBlob_NET(const QString &sSignature)

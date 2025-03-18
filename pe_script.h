@@ -118,6 +118,8 @@ private:
     qint32 g_nNumberOfSections;
     XPE::CLI_INFO g_cliInfo;
     bool g_bNetGlobalCctorPresent;
+    QList<QString> g_listNetAnsiStrings;
+    QList<QString> g_listNetUnicodeStrings;
     QList<XPE::RESOURCE_RECORD> g_listResourceRecords;
     qint32 g_nNumberOfResources;
     QList<XPE_DEF::IMAGE_SECTION_HEADER> g_listSectionHeaders;
