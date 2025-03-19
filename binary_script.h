@@ -167,7 +167,7 @@ public slots:
     bool isDebugData();
     bool isFilePart();
 
-    QList<int> readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace = false);
+    QList<quint32> readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace = false);
 
     bool isReleaseBuild();
     bool isDebugBuild();
@@ -211,7 +211,7 @@ public slots:
     qint64 fStr(qint64 nOffset, qint64 nSize, const QString &sString);
     bool c(const QString &sSignature, qint64 nOffset = 0);
 
-    QList<int> BA(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace = false);
+    QList<quint32> BA(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace = false);
 
     // function X.U8(a) { return File.read_uint8(a) }
     // function X.I8(a) { return File.read_int8(a) }

@@ -58,7 +58,7 @@ public slots:
     qint64 findSignatureInBlob_NET(const QString &sSignature);
     bool isSignatureInBlobPresent_NET(const QString &sSignature);
     bool isNetGlobalCctorPresent();
-    bool isNetTypePresent(QString sTypeNamespace, QString sTypeName);
+    bool isNetTypePresent(const QString &sTypeNamespace, const QString &sTypeName);
     bool isNetMethodPresent(QString sTypeNamespace, QString sTypeName, QString sMethodName);
     bool isNetFieldPresent(const QString &sTypeNamespace, const QString &sTypeName, const QString &sFieldName);
     qint32 getNumberOfImports();

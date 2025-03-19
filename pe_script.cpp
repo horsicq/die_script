@@ -229,7 +229,7 @@ bool PE_Script::isNetGlobalCctorPresent()
     return g_bNetGlobalCctorPresent;
 }
 
-bool PE_Script::isNetTypePresent(QString sTypeNamespace, QString sTypeName)
+bool PE_Script::isNetTypePresent(const QString &sTypeNamespace, const QString &sTypeName)
 {
     return g_pPE->isNetTypePresent(&g_cliInfo, sTypeNamespace, sTypeName, getPdStruct());
 }
