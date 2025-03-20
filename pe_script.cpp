@@ -234,7 +234,7 @@ bool PE_Script::isNetTypePresent(const QString &sTypeNamespace, const QString &s
     return g_pPE->isNetTypePresent(&g_cliInfo, sTypeNamespace, sTypeName, getPdStruct());
 }
 
-bool PE_Script::isNetMethodPresent(QString sTypeNamespace, QString sTypeName, QString sMethodName)
+bool PE_Script::isNetMethodPresent(const QString &sTypeNamespace, const QString &sTypeName, const QString &sMethodName)
 {
     return g_pPE->isNetMethodPresent(&g_cliInfo, sTypeNamespace, sTypeName, sMethodName, getPdStruct());
 }
