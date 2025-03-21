@@ -84,7 +84,6 @@ Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIO
     }
 
     g_bIsSigned = pBinary->isSigned();
-    g_osInfo = pBinary->getOsInfo();
     g_fileFormatInfo = pBinary->getFileFormatInfo(pPdStruct);
 
     g_bIsFmtChecking = false;
@@ -758,19 +757,19 @@ QString Binary_Script::getJpegExifCameraName()
 
 QString Binary_Script::getOperationSystemName()
 {
-    return XBinary::osNameIdToString(g_osInfo.osName);
+    return XBinary::osNameIdToString(g_fileFormatInfo.osName);
 }
 
 QString Binary_Script::getOperationSystemVersion()
 {
-    return g_osInfo.sOsVersion;
+    return g_fileFormatInfo.sOsVersion;
 }
 
 QString Binary_Script::getOperationSystemOptions()
 {
-    QString sResult = QString("%1, %2, %3").arg(g_osInfo.sArch, XBinary::modeIdToString(g_osInfo.mode), g_osInfo.sType);
+    QString sResult = QString("%1, %2, %3").arg(g_fileFormatInfo.sArch, XBinary::modeIdToString(g_fileFormatInfo.mode), g_fileFormatInfo.sType);
 
-    if (g_osInfo.endian == XBinary::ENDIAN_BIG) {
+    if (g_fileFormatInfo.endian == XBinary::ENDIAN_BIG) {
         if (sResult != "") {
             sResult.append(", ");
         }
@@ -782,7 +781,7 @@ QString Binary_Script::getOperationSystemOptions()
 
 QString Binary_Script::getFileFormatName()
 {
-    return g_fileFormatInfo.sString;
+    return XBinary::getFileFormatString(&g_fileFormatInfo);
 }
 
 QString Binary_Script::getFileFormatVersion()

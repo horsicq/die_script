@@ -288,7 +288,6 @@ private:
     QString g_sFileBaseName;
     QString g_sFileCompleteSuffix;
     QString g_sFileSuffix;
-    XBinary::OSINFO g_osInfo;
     XBinary::FILEFORMATINFO g_fileFormatInfo;
     bool g_bIsFmtChecking;
     bool g_bIsFmtCheckingDeep;
