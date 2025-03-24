@@ -31,6 +31,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     g_pListScanStructs = pListScanStructs;
     g_pPdStruct = pPdStruct;
 
+    qRegisterMetaType<QList<quint32>>("QList<quint32>");
+
 #ifdef QT_SCRIPT_LIB
     _addFunction(includeScript, "includeScript");
     _addFunction(_log, "_log");
