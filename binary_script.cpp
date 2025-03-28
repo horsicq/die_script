@@ -914,7 +914,7 @@ bool Binary_Script::c(const QString &sSignature, qint64 nOffset)
     return compare(sSignature, nOffset);
 }
 
-QList<quint32> Binary_Script::BA(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace)
+QList<QVariant> Binary_Script::BA(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace)
 {
     return readBytes(nOffset, nSize, bReplaceZeroWithSpace);
 }
@@ -1049,9 +1049,9 @@ bool Binary_Script::isFilePart()
     return (g_filePart != XBinary::FILEPART_HEADER);
 }
 
-QList<quint32> Binary_Script::readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace)
+QList<QVariant> Binary_Script::readBytes(qint64 nOffset, qint64 nSize, bool bReplaceZeroWithSpace)
 {
-    QList<quint32> listResult;
+    QList<QVariant> listResult;
 
     QByteArray baData = g_pBinary->read_array(nOffset, nSize, g_pPdStruct);
     qint32 _nSize = baData.size();
