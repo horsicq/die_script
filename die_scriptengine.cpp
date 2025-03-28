@@ -101,301 +101,101 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
 
         Binary_Script *pExtraScript = new Binary_Script(pBinary, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        g_listBinaries.append(pBinary);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pBinary, pExtraScript, "Binary");
     } else if (XBinary::checkFileType(XBinary::FT_COM, fileType)) {
         XCOM *pCOM = new XCOM(pDevice);
         COM_Script *pExtraScript = new COM_Script(pCOM, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "COM");
-        g_listBinaries.append(pCOM);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pCOM, pExtraScript, "COM");
     } else if (XBinary::checkFileType(XBinary::FT_PE, fileType)) {
         XPE *pPE = new XPE(pDevice);
         PE_Script *pExtraScript = new PE_Script(pPE, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "PE");
-        g_listBinaries.append(pPE);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pPE, pExtraScript, "PE");
     } else if (XBinary::checkFileType(XBinary::FT_ELF, fileType)) {
         XELF *pELF = new XELF(pDevice);
         ELF_Script *pExtraScript = new ELF_Script(pELF, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "ELF");
-        g_listBinaries.append(pELF);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pELF, pExtraScript, "ELF");
     } else if (XBinary::checkFileType(XBinary::FT_MACHO, fileType)) {
         XMACH *pMACH = new XMACH(pDevice);
         MACH_Script *pExtraScript = new MACH_Script(pMACH, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "MACH");
-        g_listBinaries.append(pMACH);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pMACH, pExtraScript, "MACH");
     } else if (XBinary::checkFileType(XBinary::FT_NE, fileType)) {
         XNE *pNE = new XNE(pDevice);
         NE_Script *pExtraScript = new NE_Script(pNE, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "NE");
-        g_listBinaries.append(pNE);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pNE, pExtraScript, "NE");
     } else if (XBinary::checkFileType(XBinary::FT_LE, fileType)) {
         XLE *pLE = new XLE(pDevice);
         LE_Script *pExtraScript = new LE_Script(pLE, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "LE");
-        g_listBinaries.append(pLE);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pLE, pExtraScript, "LE");
     } else if (XBinary::checkFileType(XBinary::FT_LX, fileType)) {
         XLE *pLE = new XLE(pDevice);
         LX_Script *pExtraScript = new LX_Script(pLE, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "LX");
-        g_listBinaries.append(pLE);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pLE, pExtraScript, "LX");
     } else if (XBinary::checkFileType(XBinary::FT_MSDOS, fileType)) {
         XMSDOS *pXMSDOS = new XMSDOS(pDevice);
         MSDOS_Script *pExtraScript = new MSDOS_Script(pXMSDOS, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "MSDOS");
-        g_listBinaries.append(pXMSDOS);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pXMSDOS, pExtraScript, "MSDOS");
     } else if (XBinary::checkFileType(XBinary::FT_ARCHIVE, fileType)) {
         Archive_Script *pExtraScript = nullptr;
 
         QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
 
+        XBinary *_pArchive = nullptr;
+
         if (fileTypes.contains(XBinary::FT_ZIP)) {
-            XZip *_pArchive = new XZip(pDevice);
-            pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
-            g_listBinaries.append(_pArchive);
+            _pArchive = new XZip(pDevice);
+            pExtraScript = new Archive_Script((XZip *)_pArchive, filePart, pOptions, pPdStruct);
         } else if (fileTypes.contains(XBinary::FT_TARGZ)) {
-            XTGZ *_pArchive = new XTGZ(pDevice);
-            pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
-            g_listBinaries.append(_pArchive);
+           _pArchive = new XTGZ(pDevice);
+            pExtraScript = new Archive_Script((XTGZ *)_pArchive, filePart, pOptions, pPdStruct);
         } else if (fileTypes.contains(XBinary::FT_MACHOFAT)) {
-            XMACHOFat *_pArchive = new XMACHOFat(pDevice);
-            pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
-            g_listBinaries.append(_pArchive);
+            _pArchive = new XMACHOFat(pDevice);
+            pExtraScript = new Archive_Script((XMACHOFat *)_pArchive, filePart, pOptions, pPdStruct);
         } else if (fileTypes.contains(XBinary::FT_DOS16M) || fileTypes.contains(XBinary::FT_DOS4G)) {
-            XDOS16 *_pArchive = new XDOS16(pDevice);
-            pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
-            g_listBinaries.append(_pArchive);
+            _pArchive = new XDOS16(pDevice);
+            pExtraScript = new Archive_Script((XDOS16 *)_pArchive, filePart, pOptions, pPdStruct);
         }
         // TODO more
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "Archive");
-
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(_pArchive, pExtraScript, "Archive");
     } else if (XBinary::checkFileType(XBinary::FT_ZIP, fileType)) {
         XZip *pZIP = new XZip(pDevice);
         ZIP_Script *pExtraScript = new ZIP_Script(pZIP, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "ZIP");
-        g_listBinaries.append(pZIP);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pZIP, pExtraScript, "ZIP");
     } else if (XBinary::checkFileType(XBinary::FT_JAR, fileType)) {
         XJAR *pJAR = new XJAR(pDevice);
         JAR_Script *pExtraScript = new JAR_Script(pJAR, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "JAR");
-        g_listBinaries.append(pJAR);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pJAR, pExtraScript, "JAR");
     } else if (XBinary::checkFileType(XBinary::FT_APK, fileType)) {
         XAPK *pAPK = new XAPK(pDevice);
         APK_Script *pExtraScript = new APK_Script(pAPK, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "APK");
-        g_listBinaries.append(pAPK);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pAPK, pExtraScript, "APK");
     } else if (XBinary::checkFileType(XBinary::FT_IPA, fileType)) {
         XIPA *pIPA = new XIPA(pDevice);
         IPA_Script *pExtraScript = new IPA_Script(pIPA, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "IPA");
-        g_listBinaries.append(pIPA);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pIPA, pExtraScript, "IPA");
     } else if (XBinary::checkFileType(XBinary::FT_NPM, fileType)) {
         XNPM *pNPNM = new XNPM(pDevice);
         NPM_Script *pExtraScript = new NPM_Script(pNPNM, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "NPM");
-        g_listBinaries.append(pNPNM);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pNPNM, pExtraScript, "NPM");
     } else if (XBinary::checkFileType(XBinary::FT_MACHOFAT, fileType)) {
         XMACHOFat *pMachofat = new XMACHOFat(pDevice);
         MACHOFAT_Script *pExtraScript = new MACHOFAT_Script(pMachofat, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "MACHOFAT");
-        g_listBinaries.append(pMachofat);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pMachofat, pExtraScript, "MACHOFAT");
     } else if (XBinary::checkFileType(XBinary::FT_DOS16M, fileType)) {
         XDOS16 *pDOS16 = new XDOS16(pDevice);
         DOS16M_Script *pExtraScript = new DOS16M_Script(pDOS16, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "DOS16M");
-        g_listBinaries.append(pDOS16);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pDOS16, pExtraScript, "DOS16M");
     } else if (XBinary::checkFileType(XBinary::FT_DOS4G, fileType)) {
         XDOS16 *pDOS16 = new XDOS16(pDevice);
         DOS4G_Script *pExtraScript = new DOS4G_Script(pDOS16, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "DOS4G");
-        g_listBinaries.append(pDOS16);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pDOS16, pExtraScript, "DOS4G");
     } else if (XBinary::checkFileType(XBinary::FT_DEX, fileType)) {
         XDEX *pDEX = new XDEX(pDevice);
         DEX_Script *pExtraScript = new DEX_Script(pDEX, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "DEX");
-        g_listBinaries.append(pDEX);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pDEX, pExtraScript, "DEX");
     } else if (XBinary::checkFileType(XBinary::FT_AMIGAHUNK, fileType)) {
         XAmigaHunk *pAmiga = new XAmigaHunk(pDevice);
         Amiga_Script *pExtraScript = new Amiga_Script(pAmiga, filePart, pOptions, pPdStruct);
-
-        if (pExtraScript) {
-            connect(pExtraScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-            connect(pExtraScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-            connect(pExtraScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
-        }
-
-        _addClass(pExtraScript, "Binary");
-        _addClass(pExtraScript, "Amiga");
-        g_listBinaries.append(pAmiga);
-        g_listScriptClasses.append(pExtraScript);
+        _adjustScript(pAmiga, pExtraScript, "Amiga");
     }
 
     // TODO APKS
@@ -418,6 +218,24 @@ DiE_ScriptEngine::~DiE_ScriptEngine()
             delete g_listScriptClasses.at(i);
         }
     }
+}
+
+void DiE_ScriptEngine::_adjustScript(XBinary *pBinary, Binary_Script *pScript, QString sName)
+{
+    if (pScript) {
+        connect(pScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
+        connect(pScript, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
+        connect(pScript, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+    }
+
+    _addClass(pScript, "Binary");
+
+    if (sName != "Binary") {
+        _addClass(pScript, sName);
+    }
+
+    g_listBinaries.append(pBinary);
+    g_listScriptClasses.append(pScript);
 }
 
 bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
