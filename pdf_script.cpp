@@ -20,12 +20,12 @@
  */
 #include "pdf_script.h"
 
-PDFClass_Script::PDFClass_Script(XPDF *pPDF, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+PDF_Script::PDF_Script(XPDF *pPDF, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
     : Binary_Script(pPDF, filePart, pOptions, pPdStruct)
 {
     this->g_pPDF = pPDF;
 }
 
-PDFClass_Script::~PDFClass_Script()
+PDF_Script::~PDF_Script()
 {
 }

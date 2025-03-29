@@ -196,6 +196,14 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         XAmigaHunk *pAmiga = new XAmigaHunk(pDevice);
         Amiga_Script *pExtraScript = new Amiga_Script(pAmiga, filePart, pOptions, pPdStruct);
         _adjustScript(pAmiga, pExtraScript, "Amiga");
+    } else if (XBinary::checkFileType(XBinary::FT_JAVACLASS, fileType)) {
+        XJavaClass *pAmiga = new XJavaClass(pDevice);
+        JavaClass_Script *pExtraScript = new JavaClass_Script(pAmiga, filePart, pOptions, pPdStruct);
+        _adjustScript(pAmiga, pExtraScript, "JavaClass");
+    } else if (XBinary::checkFileType(XBinary::FT_PDF, fileType)) {
+        XPDF *pPDF = new XPDF(pDevice);
+        PDF_Script *pExtraScript = new PDF_Script(pPDF, filePart, pOptions, pPdStruct);
+        _adjustScript(pPDF, pExtraScript, "PDF");
     }
 
     // TODO APKS

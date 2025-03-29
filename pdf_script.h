@@ -18,21 +18,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef PDFCLASS_SCRIPT_H
-#define PDFCLASS_SCRIPT_H
+#ifndef PDF_SCRIPT_H
+#define PDF_SCRIPT_H
 
 #include "binary_script.h"
 #include "xpdf.h"
 
-class PDFClass_Script : public Binary_Script {
+class PDF_Script : public Binary_Script {
     Q_OBJECT
 
 public:
-    explicit PDFClass_Script(XPDF *pPDF, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
-    ~PDFClass_Script();
+    explicit PDF_Script(XPDF *pPDF, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    ~PDF_Script();
 
 private:
     XPDF *g_pPDF;
 };
 
-#endif  // PDFCLASS_SCRIPT_H
+#endif  // PDF_SCRIPT_H

@@ -511,6 +511,8 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "DOS16M", XBinary::FT_DOS16M));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "DOS4G", XBinary::FT_DOS4G));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "Amiga", XBinary::FT_AMIGAHUNK));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "JavaClass", XBinary::FT_JAVACLASS));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "PDF", XBinary::FT_PDF));
 
                     bResult = true;
                 }
@@ -540,6 +542,8 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DOS16M", databaseType, XBinary::FT_DOS16M, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "DOS4G", databaseType, XBinary::FT_DOS4G, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "Amiga", databaseType, XBinary::FT_AMIGAHUNK, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "JavaClass", databaseType, XBinary::FT_JAVACLASS, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "PDF", databaseType, XBinary::FT_PDF, pPdStruct));
 
             bResult = true;
         } else {
