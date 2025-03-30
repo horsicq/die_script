@@ -781,7 +781,8 @@ QString Binary_Script::getOperationSystemOptions()
 
 QString Binary_Script::getFileFormatName()
 {
-    return XBinary::getFileFormatString(&g_fileFormatInfo);
+    // return XBinary::getFileFormatString(&g_fileFormatInfo);
+    return XBinary::fileTypeIdToString(g_fileFormatInfo.fileType);
 }
 
 QString Binary_Script::getFileFormatVersion()

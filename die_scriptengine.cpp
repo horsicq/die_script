@@ -145,7 +145,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
             _pArchive = new XZip(pDevice);
             pExtraScript = new Archive_Script((XZip *)_pArchive, filePart, pOptions, pPdStruct);
         } else if (fileTypes.contains(XBinary::FT_TARGZ)) {
-           _pArchive = new XTGZ(pDevice);
+            _pArchive = new XTGZ(pDevice);
             pExtraScript = new Archive_Script((XTGZ *)_pArchive, filePart, pOptions, pPdStruct);
         } else if (fileTypes.contains(XBinary::FT_MACHOFAT)) {
             _pArchive = new XMACHOFat(pDevice);
