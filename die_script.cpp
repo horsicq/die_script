@@ -126,16 +126,16 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
     for (qint32 i = 0; i < nNumberOfRecords; i++) {
         XArchive::RECORD zipRecord = pListRecords->at(i);
 
-        if (((sPrefix == "") && (!zipRecord.sFileName.contains("/"))) ||
-            ((zipRecord.sFileName.contains("/")) && (zipRecord.sFileName.section("/", 0, 0) == sPrefix) && (zipRecord.sFileName.section("/", 1, 1) != ""))) {
-            QFileInfo fi(zipRecord.sFileName);
+        if (((sPrefix == "") && (!zipRecord.spInfo.sRecordName.contains("/"))) ||
+            ((zipRecord.spInfo.sRecordName.contains("/")) && (zipRecord.spInfo.sRecordName.section("/", 0, 0) == sPrefix) && (zipRecord.spInfo.sRecordName.section("/", 1, 1) != ""))) {
+            QFileInfo fi(zipRecord.spInfo.sRecordName);
 
             DiE_ScriptEngine::SIGNATURE_RECORD record = {};
 
             record.fileType = fileType;
             record.sName = fi.fileName();
             record.sText = pZip->decompress(&zipRecord, nullptr);
-            record.sFilePath = zipRecord.sFileName;
+            record.sFilePath = zipRecord.spInfo.sRecordName;
             record.databaseType = databaseType;
             record.bReadOnly = true;
 
