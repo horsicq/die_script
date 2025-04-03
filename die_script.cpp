@@ -127,7 +127,8 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromZip(XZip 
         XArchive::RECORD zipRecord = pListRecords->at(i);
 
         if (((sPrefix == "") && (!zipRecord.spInfo.sRecordName.contains("/"))) ||
-            ((zipRecord.spInfo.sRecordName.contains("/")) && (zipRecord.spInfo.sRecordName.section("/", 0, 0) == sPrefix) && (zipRecord.spInfo.sRecordName.section("/", 1, 1) != ""))) {
+            ((zipRecord.spInfo.sRecordName.contains("/")) && (zipRecord.spInfo.sRecordName.section("/", 0, 0) == sPrefix) &&
+             (zipRecord.spInfo.sRecordName.section("/", 1, 1) != ""))) {
             QFileInfo fi(zipRecord.spInfo.sRecordName);
 
             DiE_ScriptEngine::SIGNATURE_RECORD record = {};
@@ -298,7 +299,7 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
 
         if (bExec) {
             if (pScanOptions->scanEngineCallback) {
-                if(!pScanOptions->scanEngineCallback(signatureRecord.sName, nNumberOfSignatures, i, pScanOptions->pUserData)) {
+                if (!pScanOptions->scanEngineCallback(signatureRecord.sName, nNumberOfSignatures, i, pScanOptions->pUserData)) {
                     pPdStruct->bIsStop = true;
                 }
             }
