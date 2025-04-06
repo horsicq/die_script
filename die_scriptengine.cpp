@@ -228,7 +228,7 @@ DiE_ScriptEngine::~DiE_ScriptEngine()
     }
 }
 
-void DiE_ScriptEngine::_adjustScript(XBinary *pBinary, Binary_Script *pScript, QString sName)
+void DiE_ScriptEngine::_adjustScript(XBinary *pBinary, Binary_Script *pScript, const QString &sName)
 {
     if (pScript) {
         connect(pScript, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));

@@ -107,7 +107,7 @@ public:
                      Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~DiE_ScriptEngine();
 
-    void _adjustScript(XBinary *pBinary, Binary_Script *pScript, QString sName);
+    void _adjustScript(XBinary *pBinary, Binary_Script *pScript, const QString &sName);
 
     bool handleError(XSCRIPTVALUE value, QString *psErrorString);
     // QList<RESULT> getListLocalResult();
