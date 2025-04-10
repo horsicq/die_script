@@ -289,6 +289,7 @@ private:
     QString g_sFileCompleteSuffix;
     QString g_sFileSuffix;
     XBinary::FILEFORMATINFO g_fileFormatInfo;
+    QString g_sFileFormatInfoString;
     bool g_bIsFmtChecking;
     bool g_bIsFmtCheckingDeep;
     QList<XBinary::FMT_MSG> g_listFmtMsg;

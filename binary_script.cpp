@@ -85,6 +85,7 @@ Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIO
 
     g_bIsSigned = pBinary->isSigned();
     g_fileFormatInfo = pBinary->getFileFormatInfo(pPdStruct);
+    g_sFileFormatInfoString = XBinary::getFileFormatInfoString(&g_fileFormatInfo);
 
     g_bIsFmtChecking = false;
     g_bIsFmtCheckingDeep = false;
@@ -792,7 +793,7 @@ QString Binary_Script::getFileFormatVersion()
 
 QString Binary_Script::getFileFormatOptions()
 {
-    return g_fileFormatInfo.sOptions;
+    return g_sFileFormatInfoString;
 }
 
 bool Binary_Script::isSigned()
