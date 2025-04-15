@@ -82,7 +82,6 @@ public:
     //    };
 
     struct SCAN_STRUCT {
-        bool bIsHeuristic;
         bool bIsUnknown;
         XScanEngine::SCANID id;
         XScanEngine::SCANID parentId;
