@@ -31,8 +31,12 @@ public:
     explicit PDF_Script(XPDF *pPDF, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~PDF_Script();
 
+public slots:
+    QList<QVariant> getValuesByKey(const QString &sKey);
+
 private:
     XPDF *g_pPDF;
+    QList<XPDF::OBJECT> g_listObjects;
 };
 
 #endif  // PDF_SCRIPT_H

@@ -254,6 +254,10 @@ bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
         // TODO Check more information
         *psErrorString = QString("%1: %2").arg(value.property("lineNumber").toString(), value.toString());
 
+#ifdef QT_DEBUG
+        qDebug("%s", (*psErrorString).toUtf8().data());
+#endif
+
         bResult = false;
     }
 
@@ -596,6 +600,10 @@ void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
 
 void DiE_ScriptEngine::_logSlot(const QString &sText)
 {
+#ifdef QT_DEBUG
+    qDebug("LOG: %s", sText.toUtf8().data());
+#endif
+
     emit infoMessage(sText);
 }
 

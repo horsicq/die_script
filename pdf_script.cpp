@@ -23,8 +23,14 @@
 PDF_Script::PDF_Script(XPDF *pPDF, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pPDF, filePart, pOptions, pPdStruct)
 {
     this->g_pPDF = pPDF;
+    g_listObjects = pPDF->getObjects();
 }
 
 PDF_Script::~PDF_Script()
 {
+}
+
+QList<QVariant> PDF_Script::getValuesByKey(const QString &sKey)
+{
+    return XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
 }
