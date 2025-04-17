@@ -23,7 +23,7 @@
 PDF_Script::PDF_Script(XPDF *pPDF, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Binary_Script(pPDF, filePart, pOptions, pPdStruct)
 {
     this->g_pPDF = pPDF;
-    g_listObjects = pPDF->getObjects();
+    g_listObjects = pPDF->getObjects(20, getPdStruct());
 }
 
 PDF_Script::~PDF_Script()
