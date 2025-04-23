@@ -495,7 +495,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             if (file.open(QIODevice::ReadOnly)) {
                 XZip zip(&file);
 
-                if (zip.isValid()) {
+                if (zip.isValid(pPdStruct)) {
                     QList<XArchive::RECORD> listRecords = zip.getRecords(-1, pPdStruct);  // TODO Check
 
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "", XBinary::FT_UNKNOWN));
