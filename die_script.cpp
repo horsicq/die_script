@@ -433,7 +433,8 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     bool bResult = false;
 
     QString sErrorString;
-    if (pScriptEngine->handleError(scriptValue, &sErrorString)) {
+    QString sPrefix = QString("%1/%2").arg(XBinary::fileTypeIdToString(pSignatureRecord->fileType), pSignatureRecord->sName);
+    if (pScriptEngine->handleError(sPrefix, scriptValue, &sErrorString)) {
         bResult = true;
     } else {
         XScanEngine::ERROR_RECORD errorRecord = {};

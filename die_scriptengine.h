@@ -108,7 +108,7 @@ public:
 
     void _adjustScript(XBinary *pBinary, Binary_Script *pScript, const QString &sName);
 
-    bool handleError(XSCRIPTVALUE value, QString *psErrorString);
+    bool handleError(QString sPrefix, XSCRIPTVALUE value, QString *psErrorString);
     // QList<RESULT> getListLocalResult();
     // void clearListLocalResult();
     // static RESULT stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions);

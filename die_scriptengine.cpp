@@ -246,13 +246,13 @@ void DiE_ScriptEngine::_adjustScript(XBinary *pBinary, Binary_Script *pScript, c
     g_listScriptClasses.append(pScript);
 }
 
-bool DiE_ScriptEngine::handleError(XSCRIPTVALUE value, QString *psErrorString)
+bool DiE_ScriptEngine::handleError(QString sPrefix, XSCRIPTVALUE value, QString *psErrorString)
 {
     bool bResult = true;
 
     if (value.isError()) {
         // TODO Check more information
-        *psErrorString = QString("%1: %2").arg(value.property("lineNumber").toString(), value.toString());
+        *psErrorString = QString("%1: %2: %4").arg(sPrefix, value.property("lineNumber").toString(), value.toString());
 
 #ifdef QT_DEBUG
         qDebug("%s", (*psErrorString).toUtf8().data());
