@@ -24,9 +24,11 @@ APK_Script::APK_Script(XAPK *pAPK, XBinary::FILEPART filePart, OPTIONS *pOptions
 {
     this->g_pAPK = pAPK;
 
-    QByteArray baAndroidManifest = XArchives::decompress(pAPK->getDevice(), "AndroidManifest.xml");
+    XArchive::RECORD record = pAPK->getArchiveRecord("AndroidManifest.xml", getArchiveRecords(), pPdStruct);
+
+    QByteArray baAndroidManifest = XArchives::decompress(pAPK->getDevice(), &record, pPdStruct);
     if (baAndroidManifest.size() > 0) {
-        g_sAndroidManifest = XAndroidBinary::getDecoded(&baAndroidManifest);
+        g_sAndroidManifest = XAndroidBinary::getDecoded(&baAndroidManifest, pPdStruct);
     }
 }
 
