@@ -94,7 +94,7 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabasePath(const QS
 
     qint32 nNumberOfFiles = eil.count();
 
-    for (qint32 i = 0; (i < nNumberOfFiles) && (!(pPdStruct->bIsStop)); i++) {
+    for (qint32 i = 0; (i < nNumberOfFiles) && XBinary::isPdStructNotCanceled(pPdStruct); i++) {
         if (eil.at(i).isFile()) {
             QString sSuffix = eil.at(i).suffix().toLower();
 
