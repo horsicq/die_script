@@ -46,6 +46,7 @@
 #include "dos4g_script.h"
 #include "javaclass_script.h"
 #include "pdf_script.h"
+#include "cfbf_script.h"
 #include "util_script.h"
 #include "xscriptengine.h"
 #include "xscanengine.h"

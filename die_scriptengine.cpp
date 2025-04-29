@@ -204,6 +204,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         XPDF *pPDF = new XPDF(pDevice);
         PDF_Script *pExtraScript = new PDF_Script(pPDF, filePart, pOptions, pPdStruct);
         _adjustScript(pPDF, pExtraScript, "PDF");
+    } else if (XBinary::checkFileType(XBinary::FT_CFBF, fileType)) {
+        XCFBF *pCFBF = new XCFBF(pDevice);
+        CFBF_Script *pExtraScript = new CFBF_Script(pCFBF, filePart, pOptions, pPdStruct);
+        _adjustScript(pCFBF, pExtraScript, "CFBF");
     }
 
     // TODO APKS

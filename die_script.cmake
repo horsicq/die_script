@@ -68,4 +68,6 @@ set(DIE_SCRIPT_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/javaclass_script.h
     ${CMAKE_CURRENT_LIST_DIR}/pdf_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pdf_script.h
+    ${CMAKE_CURRENT_LIST_DIR}/cfbf_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cfbf_script.h
 )
