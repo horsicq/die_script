@@ -186,7 +186,7 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     bool bGlobalInit = false;
     bool bInit = false;
 
-    for (qint32 i = 0; (i < nNumberOfSignatures) && (!(pPdStruct->bIsStop)); i++) {
+    for (qint32 i = 0; (i < nNumberOfSignatures) && XBinary::isPdStructNotCanceled(pPdStruct); i++) {
         if (g_listSignatures.at(i).sName == "_init") {
             if (g_listSignatures.at(i).fileType == XBinary::FT_UNKNOWN) {
                 srGlobalInit = g_listSignatures.at(i);
@@ -236,7 +236,7 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     qint32 _nFreeIndex = XBinary::getFreeIndex(pPdStruct);
     XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfSignatures);
 
-    for (qint32 i = 0; (i < nNumberOfSignatures) && (!(pPdStruct->bIsStop)); i++) {
+    for (qint32 i = 0; (i < nNumberOfSignatures) && XBinary::isPdStructNotCanceled(pPdStruct); i++) {
         DiE_ScriptEngine::SIGNATURE_RECORD signatureRecord = g_listSignatures.at(i);
 
         XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, signatureRecord.sName);
