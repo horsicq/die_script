@@ -29,32 +29,38 @@ Archive_Script::Archive_Script(XArchive *pArchive, XBinary::FILEPART filePart, O
 
     if (!bIsArchive) {
         XZip *_pArchive = dynamic_cast<XZip *>(g_pArchive);
-        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;;
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;
+        ;
     }
 
     if (!bIsArchive) {
         XTGZ *_pArchive = dynamic_cast<XTGZ *>(g_pArchive);
-        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;;
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;
+        ;
     }
 
     if (!bIsArchive) {
         XTAR *_pArchive = dynamic_cast<XTAR *>(g_pArchive);
-        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;;
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;
+        ;
     }
 
     if (!bIsArchive) {
         XDOS16 *_pArchive = dynamic_cast<XDOS16 *>(g_pArchive);
-        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;;
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;
+        ;
     }
 
     if (!bIsArchive) {
         XMACHOFat *_pArchive = dynamic_cast<XMACHOFat *>(g_pArchive);
-        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;;
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;
+        ;
     }
 
     if (!bIsArchive) {
         XRar *_pArchive = dynamic_cast<XRar *>(g_pArchive);
-        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;;
+        if (_pArchive) g_listArchiveRecords = _pArchive->getRecords(20000, pPdStruct), bIsArchive = true;
+        ;
     }
 }
 
