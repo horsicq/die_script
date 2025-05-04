@@ -479,13 +479,6 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
         QElapsedTimer *pElapsedTimer = new QElapsedTimer;
         pElapsedTimer->start();
 #endif
-        XBinary::PDSTRUCT pdStructEmpty = {};
-
-        if (!pPdStruct) {
-            pdStructEmpty = XBinary::createPdStruct();
-            pPdStruct = &pdStructEmpty;
-        }
-
         _sDatabasePath = XBinary::convertPathName(_sDatabasePath);
 
         if (XBinary::isFileExists(_sDatabasePath)) {
