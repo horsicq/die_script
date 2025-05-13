@@ -300,7 +300,7 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
         if (bExec) {
             if (pScanOptions->scanEngineCallback) {
                 if (!pScanOptions->scanEngineCallback(signatureRecord.sName, nNumberOfSignatures, i, pScanOptions->pUserData)) {
-                    pPdStruct->bIsStop = true;
+                    XBinary::setPdStructStopped(pPdStruct);
                 }
             }
         }

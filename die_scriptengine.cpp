@@ -694,7 +694,7 @@ void DiE_ScriptEngine::_removeResultSlot(const QString &sType, const QString &sN
 
 void DiE_ScriptEngine::_isStopSlot(bool *pResult)
 {
-    *pResult = (g_pPdStruct->bIsStop);
+    *pResult = XBinary::isPdStructStopped(g_pPdStruct);
 }
 
 void DiE_ScriptEngine::_encodingListSlot()
@@ -740,7 +740,7 @@ void DiE_ScriptEngine::_isLibraryModeSlot(bool *pResult)
 
 void DiE_ScriptEngine::_breakScanSlot()
 {
-    g_pPdStruct->bIsStop = true;
+    XBinary::setPdStructStopped(g_pPdStruct);
 }
 
 void DiE_ScriptEngine::_getEngineVersionSlot(QString *pResult)
