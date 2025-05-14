@@ -47,6 +47,8 @@
 #include "javaclass_script.h"
 #include "pdf_script.h"
 #include "cfbf_script.h"
+#include "image_script.h"
+#include "jpeg_script.h"
 #include "util_script.h"
 #include "xscriptengine.h"
 #include "xscanengine.h"

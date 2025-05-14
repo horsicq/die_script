@@ -85,21 +85,12 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     globalObject().setProperty("_getOS", valueGlobalScript.property("_getOS"));
 #endif
 
-    QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
-
     Util_script *pUtilScript = new Util_script;
     _addClass(pUtilScript, "Util");
     g_listScriptClasses.append(pUtilScript);
 
     if (XBinary::checkFileType(XBinary::FT_BINARY, fileType)) {
-        XBinary *pBinary = nullptr;
-
-        if (fileTypes.contains(XBinary::FT_JPEG)) {
-            pBinary = new XJpeg(pDevice);
-        } else {
-            pBinary = new XBinary(pDevice);
-        }
-
+        XBinary *pBinary = new XBinary(pDevice);
         Binary_Script *pExtraScript = new Binary_Script(pBinary, filePart, pOptions, pPdStruct);
         _adjustScript(pBinary, pExtraScript, "Binary");
     } else if (XBinary::checkFileType(XBinary::FT_COM, fileType)) {
@@ -156,6 +147,19 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
         // TODO more
         _adjustScript(_pArchive, pExtraScript, "Archive");
+    } else if (XBinary::checkFileType(XBinary::FT_IMAGE, fileType)) {
+        Image_Script *pExtraScript = nullptr;
+
+        QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
+
+        XBinary *_pImage = nullptr;
+
+        if (fileTypes.contains(XBinary::FT_JPEG)) {
+            _pImage = new XJpeg(pDevice);
+            pExtraScript = new Jpeg_Script((XJpeg *)_pImage, filePart, pOptions, pPdStruct);
+        }
+        // TODO more
+        _adjustScript(_pImage, pExtraScript, "Image");
     } else if (XBinary::checkFileType(XBinary::FT_ZIP, fileType)) {
         XZip *pZIP = new XZip(pDevice);
         ZIP_Script *pExtraScript = new ZIP_Script(pZIP, filePart, pOptions, pPdStruct);
@@ -208,6 +212,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         XCFBF *pCFBF = new XCFBF(pDevice);
         CFBF_Script *pExtraScript = new CFBF_Script(pCFBF, filePart, pOptions, pPdStruct);
         _adjustScript(pCFBF, pExtraScript, "CFBF");
+    } else if (XBinary::checkFileType(XBinary::FT_JPEG, fileType)) {
+        XJpeg *pJpeg = new XJpeg(pDevice);
+        Jpeg_Script *pExtraScript = new Jpeg_Script(pJpeg, filePart, pOptions, pPdStruct);
+        _adjustScript(pJpeg, pExtraScript, "Jpeg");
     }
 
     // TODO APKS

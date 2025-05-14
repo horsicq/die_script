@@ -70,19 +70,6 @@ Binary_Script::Binary_Script(XBinary *pBinary, XBinary::FILEPART filePart, OPTIO
         g_sHeaderString = pBinary->read_ansiString(0, qMin(g_nSize, (qint64)0x1000));
     }
 
-    g_bIsJpeg = false;
-    g_osJpegExif = XBinary::OFFSETSIZE();
-
-    g_pJpeg = dynamic_cast<XJpeg *>(pBinary);
-
-    if (g_pJpeg) {
-        g_bIsJpeg = true;
-        g_listJpegChunks = g_pJpeg->getChunks(pPdStruct);
-        g_osJpegExif = g_pJpeg->getExif(&g_listJpegChunks);
-        g_listJpegExifChunks = g_pJpeg->getExifChunks(g_osJpegExif);
-        g_sJpegExifCameraName = g_pJpeg->getExifCameraName(g_osJpegExif, &g_listJpegExifChunks);
-    }
-
     g_bIsSigned = pBinary->isSigned();
     g_fileFormatInfo = pBinary->getFileFormatInfo(pPdStruct);
     g_sFileFormatInfoString = XBinary::getFileFormatInfoString(&g_fileFormatInfo);
@@ -700,60 +687,6 @@ quint16 Binary_Script::read_bcd_uint32(qint64 nOffset, bool bIsBigEndian)
 quint16 Binary_Script::read_bcd_uint64(qint64 nOffset, bool bIsBigEndian)
 {
     return g_pBinary->read_bcd_uint64(nOffset, bIsBigEndian);
-}
-
-bool Binary_Script::isJpeg()
-{
-    return g_bIsJpeg;
-}
-
-QString Binary_Script::getJpegComment()
-{
-    QString sResult;
-
-    if (g_pJpeg) {
-        sResult = g_pJpeg->getComment(&g_listJpegChunks);
-    }
-
-    return sResult;
-}
-
-QString Binary_Script::getJpegDqtMD5()
-{
-    QString sResult;
-
-    if (g_pJpeg) {
-        sResult = g_pJpeg->getDqtMD5(&g_listJpegChunks);
-    }
-
-    return sResult;
-}
-
-bool Binary_Script::isJpegChunkPresent(qint32 nID)
-{
-    bool bResult = false;
-
-    if (g_pJpeg) {
-        bResult = g_pJpeg->isChunkPresent(&g_listJpegChunks, (qint8)nID);
-    }
-
-    return bResult;
-}
-
-bool Binary_Script::isJpegExifPresent()
-{
-    bool bResult = false;
-
-    if (g_pJpeg) {
-        bResult = g_pJpeg->isExifPresent(g_osJpegExif);
-    }
-
-    return bResult;
-}
-
-QString Binary_Script::getJpegExifCameraName()
-{
-    return g_sJpegExifCameraName;
 }
 
 QString Binary_Script::getOperationSystemName()

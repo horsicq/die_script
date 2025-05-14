@@ -138,13 +138,6 @@ public slots:
     quint16 read_bcd_uint32(qint64 nOffset, bool bIsBigEndian = false);
     quint16 read_bcd_uint64(qint64 nOffset, bool bIsBigEndian = false);
 
-    bool isJpeg();
-    QString getJpegComment();
-    QString getJpegDqtMD5();
-    bool isJpegChunkPresent(qint32 nID);
-    bool isJpegExifPresent();
-    QString getJpegExifCameraName();
-
     QString getOperationSystemName();
     QString getOperationSystemVersion();
     QString getOperationSystemOptions();
@@ -294,13 +287,6 @@ private:
     bool g_bIsFmtCheckingDeep;
     QList<XBinary::FMT_MSG> g_listFmtMsg;
     QList<QString> g_listFormatMessages;
-    // JPEG
-    bool g_bIsJpeg;
-    XJpeg *g_pJpeg;
-    QList<XJpeg::CHUNK> g_listJpegChunks;
-    XBinary::OFFSETSIZE g_osJpegExif;
-    QList<XTiff::CHUNK> g_listJpegExifChunks;
-    QString g_sJpegExifCameraName;
     bool g_bIsBigEndian;
     bool g_bIsSigned;
     QMap<quint32, QElapsedTimer *> g_mapProfiling;

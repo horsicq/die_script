@@ -517,6 +517,8 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "JavaClass", XBinary::FT_JAVACLASS));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "PDF", XBinary::FT_PDF));
                     g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "CFBF", XBinary::FT_CFBF));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "Image", XBinary::FT_IMAGE));
+                    g_listSignatures.append(_loadDatabaseFromZip(&zip, &listRecords, databaseType, "JPEG", XBinary::FT_JPEG));
 
                     bResult = true;
                 }
@@ -549,6 +551,8 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "JavaClass", databaseType, XBinary::FT_JAVACLASS, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "PDF", databaseType, XBinary::FT_PDF, pPdStruct));
             g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "CFBF", databaseType, XBinary::FT_CFBF, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "Image", databaseType, XBinary::FT_IMAGE, pPdStruct));
+            g_listSignatures.append(_loadDatabasePath(_sDatabasePath + QDir::separator() + "JPEG", databaseType, XBinary::FT_JPEG, pPdStruct));
 
             bResult = true;
         } else {

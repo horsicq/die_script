@@ -20,9 +20,11 @@ HEADERS += \
     $$PWD/dos4g_script.h \
     $$PWD/elf_script.h \
     $$PWD/global_script.h \
+    $$PWD/image_script.h \
     $$PWD/ipa_script.h \
     $$PWD/javaclass_script.h \
     $$PWD/jar_script.h \
+    $$PWD/jpeg_script.h \
     $$PWD/le_script.h \
     $$PWD/lx_script.h \
     $$PWD/mach_script.h \
@@ -50,9 +52,11 @@ SOURCES += \
     $$PWD/dos4g_script.cpp \
     $$PWD/elf_script.cpp \
     $$PWD/global_script.cpp \
+    $$PWD/image_script.cpp \
     $$PWD/ipa_script.cpp \
     $$PWD/javaclass_script.cpp \
     $$PWD/jar_script.cpp \
+    $$PWD/jpeg_script.cpp \
     $$PWD/le_script.cpp \
     $$PWD/lx_script.cpp \
     $$PWD/mach_script.cpp \
