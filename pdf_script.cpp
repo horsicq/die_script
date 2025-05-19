@@ -32,5 +32,50 @@ PDF_Script::~PDF_Script()
 
 QList<QVariant> PDF_Script::getValuesByKey(const QString &sKey)
 {
-    return XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
+    QList<XBinary::XVARIANT> listXVariants =  XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
+
+    QList<QVariant> listResult;
+
+    qint32 nNumberOfXVariants = listXVariants.count();
+
+    for (qint32 i = 0; i < nNumberOfXVariants; i++) {
+        listResult.append(listXVariants.at(i).var.toString());
+    }
+
+    return listResult;
+}
+
+QList<QVariant> PDF_Script::getStringValuesByKey(const QString &sKey)
+{
+    QList<XBinary::XVARIANT> listXVariants =  XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
+
+    QList<QVariant> listResult;
+
+    qint32 nNumberOfXVariants = listXVariants.count();
+
+    for (qint32 i = 0; i < nNumberOfXVariants; i++) {
+        if (listXVariants.at(i).varType == XBinary::VT_STRING) {
+            listResult.append(listXVariants.at(i).var.toString());
+        }
+    }
+
+    return listResult;
+}
+
+bool PDF_Script::isValuesHexByKey(const QString &sKey)
+{
+    QList<XBinary::XVARIANT> listXVariants =  XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
+
+    bool bResult = false;
+
+    qint32 nNumberOfXVariants = listXVariants.count();
+
+    for (qint32 i = 0; i < nNumberOfXVariants; i++) {
+        if (listXVariants.at(i).varType == XBinary::VT_HEX) {
+            bResult = true;
+            break;
+        }
+    }
+
+    return bResult;
 }
