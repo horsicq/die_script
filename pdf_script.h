@@ -38,7 +38,7 @@ public slots:
 
 private:
     XPDF *g_pPDF;
-    QList<XPDF::OBJECT_EX> g_listObjects;
+    QList<XPDF::XPART> g_listObjects;
 };
 
 #endif  // PDF_SCRIPT_H
