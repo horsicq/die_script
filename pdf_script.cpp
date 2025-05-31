@@ -32,7 +32,7 @@ PDF_Script::~PDF_Script()
 
 QList<QVariant> PDF_Script::getValuesByKey(const QString &sKey)
 {
-    QList<XBinary::XVARIANT> listXVariants =  XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
+    QList<XBinary::XVARIANT> listXVariants = XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
 
     QList<QVariant> listResult;
 
@@ -47,7 +47,7 @@ QList<QVariant> PDF_Script::getValuesByKey(const QString &sKey)
 
 QList<QVariant> PDF_Script::getStringValuesByKey(const QString &sKey)
 {
-    QList<XBinary::XVARIANT> listXVariants =  XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
+    QList<XBinary::XVARIANT> listXVariants = XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
 
     QList<QVariant> listResult;
 
@@ -64,7 +64,7 @@ QList<QVariant> PDF_Script::getStringValuesByKey(const QString &sKey)
 
 bool PDF_Script::isValuesHexByKey(const QString &sKey)
 {
-    QList<XBinary::XVARIANT> listXVariants =  XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
+    QList<XBinary::XVARIANT> listXVariants = XPDF::getValuesByKey(&g_listObjects, sKey, getPdStruct());
 
     bool bResult = false;
 
