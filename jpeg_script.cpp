@@ -26,8 +26,8 @@ Jpeg_Script::Jpeg_Script(XJpeg *pJpeg, XBinary::FILEPART filePart, OPTIONS *pOpt
 
     g_listChunks = g_pJpeg->getChunks(pPdStruct);
     g_osExif = g_pJpeg->getExif(&g_listChunks);
-    g_listExifChunks = g_pJpeg->getExifChunks(g_osExif);
-    g_sExifCameraName = g_pJpeg->getExifCameraName(g_osExif, &g_listExifChunks);
+    g_listExifChunks = XTiff::getExifChunks(pJpeg->getDevice(), g_osExif);
+    g_sExifCameraName = XTiff::getExifCameraName(pJpeg->getDevice(), g_osExif, &g_listExifChunks);
 }
 
 QString Jpeg_Script::getComment()
