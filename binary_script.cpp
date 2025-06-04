@@ -933,10 +933,10 @@ qint64 Binary_Script::endTiming(qint64 nHandle, const QString &sInfo)
 
 qint64 Binary_Script::detectZLIB(qint64 nOffset, qint64 nSize)
 {
-    XBinary::FILEFORMATINFO ffi = XFormats::getFileFormatInfo(XBinary::FT_ZLIB, g_pBinary->getDevice(), false, -1, g_pPdStruct, nOffset, nSize);
+    qint64 nResult = XFormats::getFileFormatSize(XBinary::FT_ZLIB, g_pBinary->getDevice(), false, -1, g_pPdStruct, nOffset, nSize);
 
-    if (ffi.bIsValid) {
-        return ffi.nSize;
+    if (nResult) {
+        return nResult;
     } else {
         return -1;
     }
@@ -944,10 +944,10 @@ qint64 Binary_Script::detectZLIB(qint64 nOffset, qint64 nSize)
 
 qint64 Binary_Script::detectGZIP(qint64 nOffset, qint64 nSize)
 {
-    XBinary::FILEFORMATINFO ffi = XFormats::getFileFormatInfo(XBinary::FT_GZIP, g_pBinary->getDevice(), false, -1, g_pPdStruct, nOffset, nSize);
+    qint64 nResult = XFormats::getFileFormatSize(XBinary::FT_GZIP, g_pBinary->getDevice(), false, -1, g_pPdStruct, nOffset, nSize);
 
-    if (ffi.bIsValid) {
-        return ffi.nSize;
+    if (nResult) {
+        return nResult;
     } else {
         return -1;
     }
@@ -955,10 +955,10 @@ qint64 Binary_Script::detectGZIP(qint64 nOffset, qint64 nSize)
 
 qint64 Binary_Script::detectZIP(qint64 nOffset, qint64 nSize)
 {
-    XBinary::FILEFORMATINFO ffi = XFormats::getFileFormatInfo(XBinary::FT_ZIP, g_pBinary->getDevice(), false, -1, g_pPdStruct, nOffset, nSize);
+    qint64 nResult = XFormats::getFileFormatSize(XBinary::FT_ZIP, g_pBinary->getDevice(), false, -1, g_pPdStruct, nOffset, nSize);
 
-    if (ffi.bIsValid) {
-        return ffi.nSize;
+    if (nResult) {
+        return nResult;
     } else {
         return -1;
     }
