@@ -23,7 +23,7 @@
 bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2)
 {
     if (sr1.fileType != sr2.fileType) {
-        return false; // Different file types cannot be compared directly
+        return false;  // Different file types cannot be compared directly
     }
 
     if ((sr1.sName == "_init") && (sr2.sName == "_init")) {
@@ -88,7 +88,7 @@ DiE_Script::DiE_Script(const DiE_Script &other) : XScanEngine(other)
 }
 
 QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromPath(const QString &sDatabasePath, DiE_ScriptEngine::DT databaseType, XBinary::FT fileType,
-                                                                        XBinary::PDSTRUCT *pPdStruct)
+                                                                            XBinary::PDSTRUCT *pPdStruct)
 {
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
 
@@ -120,8 +120,8 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromPath(cons
     return listResult;
 }
 
-QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromArchive(XArchive *pArchive, QList<XArchive::RECORD> *pListRecords, DiE_ScriptEngine::DT databaseType,
-                                                                               const QString &sPrefix, XBinary::FT fileType)
+QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromArchive(XArchive *pArchive, QList<XArchive::RECORD> *pListRecords,
+                                                                               DiE_ScriptEngine::DT databaseType, const QString &sPrefix, XBinary::FT fileType)
 {
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> listResult;
 

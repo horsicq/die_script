@@ -70,9 +70,9 @@ public:
 
 private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromPath(const QString &sDatabasePath, DiE_ScriptEngine::DT databaseType, XBinary::FT fileType,
-                                                                XBinary::PDSTRUCT *pPdStruct);
+                                                                    XBinary::PDSTRUCT *pPdStruct);
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromArchive(XArchive *pArchive, QList<XArchive::RECORD> *pListRecords, DiE_ScriptEngine::DT databaseType,
-                                                                   const QString &sPrefix, XBinary::FT fileType);  // TODO pdStruct
+                                                                       const QString &sPrefix, XBinary::FT fileType);  // TODO pdStruct
     void processDetect(XScanEngine::SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const XScanEngine::SCANID &parentId, XBinary::FT fileType,
                        XScanEngine::SCAN_OPTIONS *pScanOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
     bool _handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,
