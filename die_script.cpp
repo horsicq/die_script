@@ -22,35 +22,36 @@
 
 bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2)
 {
-    if (sr1.fileType != sr2.fileType) {
-        return false;  // Different file types cannot be compared directly
-    }
-
-    if ((sr1.sName == "_init") && (sr2.sName == "_init")) {
+    if (sr1.fileType > sr2.fileType) {
         return false;
     }
 
-    if (sr1.sName == "_init") {
-        return true;
-    } else if (sr2.sName == "_init") {
-        return false;
-    }
+    // if ((sr1.sName == "_init") && (sr2.sName == "_init")) {
+    //     return false;
+    // }
+
+    // if (sr1.sName == "_init") {
+    //     return true;
+    // } else if (sr2.sName == "_init") {
+    //     return false;
+    // }
+
+    QString sPrio1 = "9";
+    QString sPrio2 = "9";
 
     qint32 nPos1 = sr1.sName.count(".");
     qint32 nPos2 = sr2.sName.count(".");
 
     if ((nPos1 > 1) && (nPos2 > 1)) {
-        QString sPrio1 = sr1.sName.section(".", nPos1 - 1, nPos1 - 1);
-        QString sPrio2 = sr2.sName.section(".", nPos2 - 1, nPos2 - 1);
+        sPrio1 = sr1.sName.section(".", nPos1 - 1, nPos1 - 1);
+        sPrio2 = sr2.sName.section(".", nPos2 - 1, nPos2 - 1);
+    }
 
-        if ((sPrio1 != "") && (sPrio2 != "")) {
-            if (sPrio1 > sPrio2) {
-                return false;
-            } else if (sPrio1 < sPrio2) {
-                return true;
-            } else if (sPrio1 == sPrio2) {
-                return (sr1.sName.section(".", nPos1 - 2, nPos1 - 2) < sr2.sName.section(".", nPos2 - 2, nPos2 - 2));
-            }
+    if ((sPrio1 != "") && (sPrio2 != "")) {
+        if (sPrio1 > sPrio2) {
+            return false;
+        } else if (sPrio1 < sPrio2) {
+            return true;
         }
     }
 
@@ -276,6 +277,10 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
             if (sSignatureFilePath != "")  // TODO Check!
             {
                 if (sSignatureFilePath != signatureRecord.sFilePath) {
+                    bExec = false;
+                }
+            } else {
+                if (signatureRecord.sName == "_init") {
                     bExec = false;
                 }
             }

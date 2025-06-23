@@ -26,6 +26,7 @@
 
 class Util_script : public QObject {
     Q_OBJECT
+
 public:
     explicit Util_script(QObject *pParent = nullptr);
 

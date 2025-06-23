@@ -129,24 +129,14 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         Archive_Script *pExtraScript = nullptr;
 
         QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
+        XBinary::FT _fileType = XBinary::_getPrefFileType(&fileTypes);
 
-        XBinary *_pArchive = nullptr;
+        XArchive *_pArchive = XArchives::getClass(_fileType, pDevice);
 
-        if (fileTypes.contains(XBinary::FT_ZIP)) {
-            _pArchive = new XZip(pDevice);
-            pExtraScript = new Archive_Script((XZip *)_pArchive, filePart, pOptions, pPdStruct);
-        } else if (fileTypes.contains(XBinary::FT_TARGZ)) {
-            _pArchive = new XTGZ(pDevice);
-            pExtraScript = new Archive_Script((XTGZ *)_pArchive, filePart, pOptions, pPdStruct);
-        } else if (fileTypes.contains(XBinary::FT_MACHOFAT)) {
-            _pArchive = new XMACHOFat(pDevice);
-            pExtraScript = new Archive_Script((XMACHOFat *)_pArchive, filePart, pOptions, pPdStruct);
-        } else if (fileTypes.contains(XBinary::FT_DOS16M) || fileTypes.contains(XBinary::FT_DOS4G)) {
-            _pArchive = new XDOS16(pDevice);
-            pExtraScript = new Archive_Script((XDOS16 *)_pArchive, filePart, pOptions, pPdStruct);
+        if (_pArchive) {
+            pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
+            _adjustScript(_pArchive, pExtraScript, "Archive");
         }
-        // TODO more
-        _adjustScript(_pArchive, pExtraScript, "Archive");
     } else if (XBinary::checkFileType(XBinary::FT_IMAGE, fileType)) {
         Image_Script *pExtraScript = nullptr;
 
