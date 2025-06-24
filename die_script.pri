@@ -33,6 +33,7 @@ HEADERS += \
     $$PWD/pe_script.h \
     $$PWD/pdf_script.h \
     $$PWD/npm_script.h \
+    $$PWD/rar_script.h \
     $$PWD/machofat_script.h \
     $$PWD/util_script.h \
     $$PWD/xscriptengine.h \
@@ -65,6 +66,7 @@ SOURCES += \
     $$PWD/pe_script.cpp \
     $$PWD/pdf_script.cpp \
     $$PWD/npm_script.cpp \
+    $$PWD/rar_script.cpp \
     $$PWD/machofat_script.cpp \
     $$PWD/util_script.cpp \
     $$PWD/xscriptengine.cpp \
