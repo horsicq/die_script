@@ -20,7 +20,7 @@
  */
 #include "rar_script.h"
 
-RAR_Script::RAR_Script(XRar *pRar, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Archive_Script(pZip, filePart, pOptions, pPdStruct)
+RAR_Script::RAR_Script(XRar *pRar, XBinary::FILEPART filePart, OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct) : Archive_Script(pRar, filePart, pOptions, pPdStruct)
 {
     this->g_pRar = pRar;
 }

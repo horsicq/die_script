@@ -150,6 +150,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         }
         // TODO more
         _adjustScript(_pImage, pExtraScript, "Image");
+    } else if (XBinary::checkFileType(XBinary::FT_RAR, fileType)) {
+        XRar *pRAR = new XRar(pDevice);
+        RAR_Script *pExtraScript = new RAR_Script(pRAR, filePart, pOptions, pPdStruct);
+        _adjustScript(pRAR, pExtraScript, "RAR");
     } else if (XBinary::checkFileType(XBinary::FT_ZIP, fileType)) {
         XZip *pZIP = new XZip(pDevice);
         ZIP_Script *pExtraScript = new ZIP_Script(pZIP, filePart, pOptions, pPdStruct);

@@ -40,6 +40,7 @@
 #include "ipa_script.h"
 #include "dex_script.h"
 #include "npm_script.h"
+#include "rar_script.h"
 #include "machofat_script.h"
 #include "amiga_script.h"
 #include "dos16m_script.h"
