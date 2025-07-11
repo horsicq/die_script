@@ -61,6 +61,8 @@ public slots:
     bool isNetTypePresent(const QString &sTypeNamespace, const QString &sTypeName);
     bool isNetMethodPresent(const QString &sTypeNamespace, const QString &sTypeName, const QString &sMethodName);
     bool isNetFieldPresent(const QString &sTypeNamespace, const QString &sTypeName, const QString &sFieldName);
+    QString getNetModuleName();
+    QString getNetAssemblyName();
     qint32 getNumberOfImports();
     QString getImportLibraryName(quint32 nNumber);
     bool isLibraryPresent(const QString &sLibraryName, bool bCheckCase = false);
@@ -163,6 +165,8 @@ private:
     XPE_DEF::IMAGE_FILE_HEADER g_imageFileHeader;
     XPE_DEF::IMAGE_OPTIONAL_HEADER32 g_imageOptionalHeader32;
     XPE_DEF::IMAGE_OPTIONAL_HEADER64 g_imageOptionalHeader64;
+    QString g_sNetModuleName;
+    QString g_sNetAssemblyName;
 };
 
 #endif  // PE_SCRIPT_H

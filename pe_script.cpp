@@ -34,6 +34,8 @@ PE_Script::PE_Script(XPE *pPE, XBinary::FILEPART filePart, OPTIONS *pOptions, XB
     if (g_cliInfo.bValid) {
         g_listNetAnsiStrings = g_pPE->getAnsiStrings(&g_cliInfo, getPdStruct());
         g_listNetUnicodeStrings = g_pPE->getUnicodeStrings(&g_cliInfo, getPdStruct());
+        g_sNetModuleName = g_pPE->getMetadataModuleName(&g_cliInfo, 0);
+        g_sNetAssemblyName = g_pPE->getMetadataAssemblyName(&g_cliInfo, 0);
     }
 
     g_listResourceRecords = g_pPE->getResources(getMemoryMap(), 10000, getPdStruct());
@@ -242,6 +244,16 @@ bool PE_Script::isNetMethodPresent(const QString &sTypeNamespace, const QString 
 bool PE_Script::isNetFieldPresent(const QString &sTypeNamespace, const QString &sTypeName, const QString &sFieldName)
 {
     return g_pPE->isNetFieldPresent(&g_cliInfo, sTypeNamespace, sTypeName, sFieldName, getPdStruct());
+}
+
+QString PE_Script::getNetModuleName()
+{
+    return g_sNetModuleName;
+}
+
+QString PE_Script::getNetAssemblyName()
+{
+    return g_sNetAssemblyName;
 }
 
 qint32 PE_Script::getNumberOfImports()
