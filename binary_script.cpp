@@ -414,7 +414,13 @@ bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, const QString &
 
     QElapsedTimer *pTimer = _startProfiling();
 
-    bResult = g_pBinary->isSignatureInLoadSegmentPresent(&g_memoryMap, nNumber, sSignature, g_pPdStruct);
+    qint32 _nNumber = nNumber;
+    QString sObjectName = objectName();
+    if (objectName() == "PE_script") {
+        _nNumber++;
+    }
+
+    bResult = g_pBinary->isSignatureInFilePartPresent(&g_memoryMap, _nNumber, sSignature, g_pPdStruct);
 
     if (pTimer) {
         _finishProfiling(pTimer, QString("isSignatureInSectionPresent[%1]: %2 ").arg(sSignature, QString::number(nNumber)));
