@@ -415,8 +415,9 @@ bool Binary_Script::isSignatureInSectionPresent(quint32 nNumber, const QString &
     QElapsedTimer *pTimer = _startProfiling();
 
     qint32 _nNumber = nNumber;
-    QString sObjectName = objectName();
-    if (objectName() == "PE_script") {
+    QString sClassName = metaObject()->className();
+
+    if (sClassName == "PE_Script") {
         _nNumber++;
     }
 
