@@ -11,7 +11,7 @@ HEADERS += \
     $$PWD/apk_script.h \
     $$PWD/archive_script.h \
     $$PWD/binary_script.h \
-	$$PWD/cfbf_script.h \
+    $$PWD/cfbf_script.h \
     $$PWD/com_script.h \
     $$PWD/dex_script.h \
     $$PWD/die_script.h \
@@ -44,7 +44,7 @@ SOURCES += \
     $$PWD/apk_script.cpp \
     $$PWD/archive_script.cpp \
     $$PWD/binary_script.cpp \
-	$$PWD/cfbf_script.cpp \
+    $$PWD/cfbf_script.cpp \
     $$PWD/com_script.cpp \
     $$PWD/dex_script.cpp \
     $$PWD/die_script.cpp \
