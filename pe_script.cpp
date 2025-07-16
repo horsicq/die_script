@@ -475,9 +475,19 @@ qint32 PE_Script::getNumberOfExportFunctions()
     return g_nNumberOfExportFunctions;
 }
 
+qint32 PE_Script::getNumberOfExports()
+{
+    return getNumberOfExportFunctions();
+}
+
 QString PE_Script::getExportFunctionName(quint32 nNumber)
 {
     return g_pPE->getStringByIndex(&g_listExportFunctionNameStrings, nNumber, -1);
+}
+
+QString PE_Script::getExportNameByNumber(quint32 nNumber)
+{
+    return getExportFunctionName(nNumber);
 }
 
 bool PE_Script::isExportPresent()

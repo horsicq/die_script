@@ -103,7 +103,9 @@ public slots:
     bool isExportFunctionPresent(const QString &sFunctionName);
     bool isExportFunctionPresentExp(const QString &sFunctionName);
     qint32 getNumberOfExportFunctions();
+    qint32 getNumberOfExports();
     QString getExportFunctionName(quint32 nNumber);
+    QString getExportNameByNumber(quint32 nNumber);
     bool isExportPresent();
     bool isTLSPresent();
     bool isImportPresent();
