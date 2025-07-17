@@ -134,3 +134,11 @@ QString global_script::_getOS()
 
     return sResult;
 }
+
+QString global_script::_getQtVersion()
+{
+    QString sResult;
+    emit _getQtVersionSignal(&sResult);
+
+    return sResult;
+}

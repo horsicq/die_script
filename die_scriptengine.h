@@ -154,6 +154,7 @@ private slots:
     void _breakScanSlot();
     void _getEngineVersionSlot(QString *pResult);
     void _getOSSlot(QString *pResult);
+    void _getQtVersionSlot(QString *pResult);
 
 private:
     QList<SIGNATURE_RECORD> *g_pSignaturesList;

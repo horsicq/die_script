@@ -48,6 +48,7 @@ public slots:
     void _breakScan();
     QString _getEngineVersion();
     QString _getOS();
+    QString _getQtVersion();
 
 signals:
     void includeScriptSignal(const QString &sScript);
@@ -65,6 +66,7 @@ signals:
     void _breakScanSignal();
     void _getEngineVersionSignal(QString *pResult);
     void _getOSSignal(QString *pResult);
+    void _getQtVersionSignal(QString *pResult);
 };
 
 #endif  // GLOBAL_SCRIPT_H

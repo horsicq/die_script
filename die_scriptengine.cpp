@@ -66,6 +66,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     connect(&g_globalScript, SIGNAL(_breakScanSignal()), this, SLOT(_breakScanSlot()), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_getEngineVersionSignal(QString *)), this, SLOT(_getEngineVersionSlot(QString *)), Qt::DirectConnection);
     connect(&g_globalScript, SIGNAL(_getOSSignal(QString *)), this, SLOT(_getOSSlot(QString *)), Qt::DirectConnection);
+    connect(&g_globalScript, SIGNAL(_getQtVersionSignal(QString *)), this, SLOT(_getQtVersionSlot(QString *)), Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&g_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
@@ -83,6 +84,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     globalObject().setProperty("_breakScan", valueGlobalScript.property("_breakScan"));
     globalObject().setProperty("_getEngineVersion", valueGlobalScript.property("_getEngineVersion"));
     globalObject().setProperty("_getOS", valueGlobalScript.property("_getOS"));
+    globalObject().setProperty("_getQtVersion", valueGlobalScript.property("_getQtVersion"));
 #endif
 
     Util_script *pUtilScript = new Util_script;
@@ -755,6 +757,11 @@ void DiE_ScriptEngine::_getEngineVersionSlot(QString *pResult)
 void DiE_ScriptEngine::_getOSSlot(QString *pResult)
 {
     *pResult = XOptions::getBundleIdToString(XOptions::getBundle());
+}
+
+void DiE_ScriptEngine::_getQtVersionSlot(QString *pResult)
+{
+    *pResult = QString("%1.%2.%3").arg(QString::number(QT_VERSION_MAJOR), QString::number(QT_VERSION_MINOR), QString::number(QT_VERSION_PATCH));
 }
 
 // DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)

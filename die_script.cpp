@@ -760,7 +760,7 @@ QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_
         record.varInfo2 = pListScanStructs->at(i).sSignatureFileName;
         // record.sResult = pListScanStructs->at(i).sResult;
 
-        record.globalColor = typeToColor(record.sType);
+        record.globalColorRecord = typeToGlobalColorRecord(record.sType);
         record.nPrio = typeToPrio(record.sType);
         record.bIsProtection = isProtection(record.sType);
         record.sType = translateType(record.sType);
