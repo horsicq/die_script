@@ -149,6 +149,9 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         if (fileTypes.contains(XBinary::FT_JPEG)) {
             _pImage = new XJpeg(pDevice);
             pExtraScript = new Jpeg_Script((XJpeg *)_pImage, filePart, pOptions, pPdStruct);
+        } else if (fileTypes.contains(XBinary::FT_PNG)) {
+            _pImage = new XPNG(pDevice);
+            pExtraScript = new PNG_Script((XPNG *)_pImage, filePart, pOptions, pPdStruct);
         }
         // TODO more
         _adjustScript(_pImage, pExtraScript, "Image");
@@ -212,6 +215,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         XJpeg *pJpeg = new XJpeg(pDevice);
         Jpeg_Script *pExtraScript = new Jpeg_Script(pJpeg, filePart, pOptions, pPdStruct);
         _adjustScript(pJpeg, pExtraScript, "Jpeg");
+    } else if (XBinary::checkFileType(XBinary::FT_PNG, fileType)) {
+        XPNG *pPNG = new XPNG(pDevice);
+        PNG_Script *pExtraScript = new PNG_Script(pPNG, filePart, pOptions, pPdStruct);
+        _adjustScript(pPNG, pExtraScript, "PNG");
     }
 
     // TODO APKS
