@@ -130,22 +130,22 @@ private slots:
     void _getQtVersionSlot(QString *pResult);
 
 private:
-    QList<SIGNATURE_RECORD> *g_pSignaturesList;
-    QList<SCAN_STRUCT> *g_pListScanStructs;
-    QList<XBinary *> g_listBinaries;
-    QList<QObject *> g_listScriptClasses;
-    XBinary::PDSTRUCT *g_pPdStruct;
+    QList<SIGNATURE_RECORD> *m_pSignaturesList;
+    QList<SCAN_STRUCT> *m_pListScanStructs;
+    QList<XBinary *> m_listBinaries;
+    QList<QObject *> m_listScriptClasses;
+    XBinary::PDSTRUCT *m_pPdStruct;
 
-    XScanEngine::SCANID g_parentId;
-    XScanEngine::SCANID g_resultId;  // TODO rename
-    QString g_sName;                 // TODO rename
-    QString g_sFileName;             // TODO rename
+    XScanEngine::SCANID m_parentId;
+    XScanEngine::SCANID m_resultId;  // TODO rename
+    QString m_sName;                 // TODO rename
+    QString m_sFileName;             // TODO rename
 
-    QList<BLRECORD> g_listBLRecords;
+    QList<BLRECORD> m_listBLRecords;
 
-    // QList<RESULT> g_listResult; // TODO remove
+    // QList<RESULT> m_listResult; // TODO remove
 #ifndef QT_SCRIPT_LIB
-    global_script g_globalScript;
+    global_script m_globalScript;
 #endif
 };
 

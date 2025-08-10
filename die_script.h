@@ -83,12 +83,12 @@ protected:
                                 SCAN_OPTIONS *pOptions, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
 
 private:
-    QList<DiE_ScriptEngine::SIGNATURE_RECORD> g_listSignatures;
+    QList<DiE_ScriptEngine::SIGNATURE_RECORD> m_listSignatures;
 #ifdef QT_SCRIPTTOOLS_LIB
-    QScriptEngineDebugger *g_pDebugger;
+    QScriptEngineDebugger *m_pDebugger;
 #endif
-    //    QMutex g_mutex;
-    //    QSemaphore g_semaphore;
+    //    QMutex m_mutex;
+    //    QSemaphore m_semaphore;
 };
 
 #endif  // DIE_SCRIPT_H
