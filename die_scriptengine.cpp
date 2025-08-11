@@ -50,25 +50,25 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
     _addFunction(_getEngineVersion, "_getEngineVersion");
     _addFunction(_getOS, "_getOS");
 #else
-    connect(&g_globalScript, SIGNAL(includeScriptSignal(QString)), this, SLOT(includeScriptSlot(QString)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_setResultSignal(QString, QString, QString, QString)), this, SLOT(_setResultSlot(QString, QString, QString, QString)),
+    connect(&m_globalScript, SIGNAL(includeScriptSignal(QString)), this, SLOT(includeScriptSlot(QString)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_setResultSignal(QString, QString, QString, QString)), this, SLOT(_setResultSlot(QString, QString, QString, QString)),
             Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isResultPresentSignal(bool *, QString, QString)), this, SLOT(_isResultPresentSlot(bool *, QString, QString)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_getNumberOfResultsSignal(qint32 *, QString)), this, SLOT(_getNumberOfResultsSlot(qint32 *, QString)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_removeResultSignal(QString, QString)), this, SLOT(_removeResultSlot(QString, QString)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isStopSignal(bool *)), this, SLOT(_isStopSlot(bool *)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_encodingListSignal()), this, SLOT(_encodingListSlot()), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isConsoleModeSignal(bool *)), this, SLOT(_isConsoleModeSlot(bool *)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isLiteModeSignal(bool *)), this, SLOT(_isLiteModeSlot(bool *)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isGuiModeSignal(bool *)), this, SLOT(_isGuiModeSlot(bool *)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_isLibraryModeSignal(bool *)), this, SLOT(_isLibraryModeSlot(bool *)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_breakScanSignal()), this, SLOT(_breakScanSlot()), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_getEngineVersionSignal(QString *)), this, SLOT(_getEngineVersionSlot(QString *)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_getOSSignal(QString *)), this, SLOT(_getOSSlot(QString *)), Qt::DirectConnection);
-    connect(&g_globalScript, SIGNAL(_getQtVersionSignal(QString *)), this, SLOT(_getQtVersionSlot(QString *)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_isResultPresentSignal(bool *, QString, QString)), this, SLOT(_isResultPresentSlot(bool *, QString, QString)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_getNumberOfResultsSignal(qint32 *, QString)), this, SLOT(_getNumberOfResultsSlot(qint32 *, QString)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_removeResultSignal(QString, QString)), this, SLOT(_removeResultSlot(QString, QString)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_isStopSignal(bool *)), this, SLOT(_isStopSlot(bool *)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_encodingListSignal()), this, SLOT(_encodingListSlot()), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_isConsoleModeSignal(bool *)), this, SLOT(_isConsoleModeSlot(bool *)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_isLiteModeSignal(bool *)), this, SLOT(_isLiteModeSlot(bool *)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_isGuiModeSignal(bool *)), this, SLOT(_isGuiModeSlot(bool *)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_isLibraryModeSignal(bool *)), this, SLOT(_isLibraryModeSlot(bool *)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_breakScanSignal()), this, SLOT(_breakScanSlot()), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_getEngineVersionSignal(QString *)), this, SLOT(_getEngineVersionSlot(QString *)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_getOSSignal(QString *)), this, SLOT(_getOSSlot(QString *)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(_getQtVersionSignal(QString *)), this, SLOT(_getQtVersionSlot(QString *)), Qt::DirectConnection);
 
-    QJSValue valueGlobalScript = newQObject(&g_globalScript);
+    QJSValue valueGlobalScript = newQObject(&m_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
     globalObject().setProperty("_log", valueGlobalScript.property("_log"));
     globalObject().setProperty("_setResult", valueGlobalScript.property("_setResult"));
