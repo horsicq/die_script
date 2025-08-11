@@ -24,12 +24,12 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
                                    XBinary::FT fileType, XBinary::FILEPART filePart, Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
     : XScriptEngine()
 {
-    g_parentId = {};
-    g_resultId = {};
+    m_parentId = {};
+    m_resultId = {};
 
-    g_pSignaturesList = pSignaturesList;
-    g_pListScanStructs = pListScanStructs;
-    g_pPdStruct = pPdStruct;
+    m_pSignaturesList = pSignaturesList;
+    m_pListScanStructs = pListScanStructs;
+    m_pPdStruct = pPdStruct;
 
     // qRegisterMetaType<QList<quint32>>("QList<quint32>");
 
@@ -89,7 +89,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 
     Util_script *pUtilScript = new Util_script;
     _addClass(pUtilScript, "Util");
-    g_listScriptClasses.append(pUtilScript);
+    m_listScriptClasses.append(pUtilScript);
 
     if (XBinary::checkFileType(XBinary::FT_BINARY, fileType)) {
         XBinary *pBinary = new XBinary(pDevice);
@@ -227,18 +227,18 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
 DiE_ScriptEngine::~DiE_ScriptEngine()
 {
     {
-        qint32 nNumberOfRecords = g_listBinaries.count();
+        qint32 nNumberOfRecords = m_listBinaries.count();
 
         for (qint32 i = 0; i < nNumberOfRecords; i++) {
-            delete g_listBinaries.at(i);
+            delete m_listBinaries.at(i);
         }
     }
 
     {
-        qint32 nNumberOfRecords = g_listScriptClasses.count();
+        qint32 nNumberOfRecords = m_listScriptClasses.count();
 
         for (qint32 i = 0; i < nNumberOfRecords; i++) {
-            delete g_listScriptClasses.at(i);
+            delete m_listScriptClasses.at(i);
         }
     }
 }
@@ -257,8 +257,8 @@ void DiE_ScriptEngine::_adjustScript(XBinary *pBinary, Binary_Script *pScript, c
         _addClass(pScript, sName);
     }
 
-    g_listBinaries.append(pBinary);
-    g_listScriptClasses.append(pScript);
+    m_listBinaries.append(pBinary);
+    m_listScriptClasses.append(pScript);
 }
 
 bool DiE_ScriptEngine::handleError(QString sPrefix, XSCRIPTVALUE value, QString *psErrorString)
@@ -282,10 +282,10 @@ bool DiE_ScriptEngine::handleError(QString sPrefix, XSCRIPTVALUE value, QString 
 XSCRIPTVALUE DiE_ScriptEngine::evaluateEx(const XScanEngine::SCANID &parentId, const XScanEngine::SCANID &resultId, const QString &sProgram, const QString &sName,
                                           const QString &sFileName)
 {
-    g_parentId = parentId;
-    g_resultId = resultId;
-    g_sName = sName;
-    g_sFileName = sFileName;
+    m_parentId = parentId;
+    m_resultId = resultId;
+    m_sName = sName;
+    m_sFileName = sFileName;
 
     return evaluate(sProgram, sFileName);
 }
@@ -590,12 +590,12 @@ void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
 {
     bool bSuccess = false;
 
-    qint32 nNumberOfSignatures = g_pSignaturesList->count();
+    qint32 nNumberOfSignatures = m_pSignaturesList->count();
 
     for (qint32 i = 0; i < nNumberOfSignatures; i++) {
-        if (g_pSignaturesList->at(i).fileType == XBinary::FT_UNKNOWN) {
-            if (g_pSignaturesList->at(i).sName.toUpper() == sScript.toUpper()) {
-                XSCRIPTVALUE value = evaluate(g_pSignaturesList->at(i).sText, sScript);
+        if (m_pSignaturesList->at(i).fileType == XBinary::FT_UNKNOWN) {
+            if (m_pSignaturesList->at(i).sName.toUpper() == sScript.toUpper()) {
+                XSCRIPTVALUE value = evaluate(m_pSignaturesList->at(i).sText, sScript);
 
                 if (value.isError()) {
                     emit errorMessage(QString("includeScript %1: %2: %3").arg(sScript, value.property("lineNumber").toString(), value.toString()));
@@ -626,11 +626,11 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
 {
     bool bAdd = true;
 
-    qint32 nNumberOfResults = g_listBLRecords.count();
+    qint32 nNumberOfResults = m_listBLRecords.count();
 
     for (qint32 i = 0; i < nNumberOfResults; i++) {
-        if ((g_listBLRecords.at(i).sType.toUpper() == sType.toUpper()) &&
-            ((g_listBLRecords.at(i).sName.toUpper() == sName.toUpper()) || (g_listBLRecords.at(i).sName == ""))) {
+        if ((m_listBLRecords.at(i).sType.toUpper() == sType.toUpper()) &&
+            ((m_listBLRecords.at(i).sName.toUpper() == sName.toUpper()) || (m_listBLRecords.at(i).sName == ""))) {
             bAdd = false;
             break;
         }
@@ -640,11 +640,11 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
         DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
 
         // TODO IDs
-        ssRecord.id = g_resultId;
-        ssRecord.parentId = g_parentId;
+        ssRecord.id = m_resultId;
+        ssRecord.parentId = m_parentId;
 
-        ssRecord.sSignature = g_sName;
-        ssRecord.sSignatureFileName = g_sFileName;
+        ssRecord.sSignature = m_sName;
+        ssRecord.sSignatureFileName = m_sFileName;
 
         ssRecord.sType = sType;
         ssRecord.sName = sName;
@@ -653,7 +653,7 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
         // ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
         // ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
 
-        g_pListScanStructs->append(ssRecord);
+        m_pListScanStructs->append(ssRecord);
     }
 }
 
@@ -661,10 +661,10 @@ void DiE_ScriptEngine::_isResultPresentSlot(bool *pbResult, const QString &sType
 {
     *pbResult = false;
 
-    qint32 nNumberOfResults = g_pListScanStructs->count();
+    qint32 nNumberOfResults = m_pListScanStructs->count();
 
     for (qint32 i = 0; i < nNumberOfResults; i++) {
-        if ((g_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) && ((g_pListScanStructs->at(i).sName.toUpper() == sName.toUpper()) || (sName == ""))) {
+        if ((m_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) && ((m_pListScanStructs->at(i).sName.toUpper() == sName.toUpper()) || (sName == ""))) {
             *pbResult = true;
             break;
         }
@@ -675,10 +675,10 @@ void DiE_ScriptEngine::_getNumberOfResultsSlot(qint32 *pnResult, const QString &
 {
     *pnResult = 0;
 
-    qint32 nNumberOfResults = g_pListScanStructs->count();
+    qint32 nNumberOfResults = m_pListScanStructs->count();
 
     for (qint32 i = 0; i < nNumberOfResults; i++) {
-        if ((g_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) || (sType == "")) {
+        if ((m_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) || (sType == "")) {
             (*pnResult)++;
         }
     }
@@ -690,14 +690,14 @@ void DiE_ScriptEngine::_removeResultSlot(const QString &sType, const QString &sN
     blRecord.sType = sType;
     blRecord.sName = sName;
 
-    g_listBLRecords.append(blRecord);
+    m_listBLRecords.append(blRecord);
 
-    qint32 nNumberOfResults = g_pListScanStructs->count();
+    qint32 nNumberOfResults = m_pListScanStructs->count();
 
     for (qint32 i = 0; i < nNumberOfResults; i++) {
-        if ((g_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) &&
-            ((g_pListScanStructs->at(i).sName.toUpper() == sName.toUpper()) || (g_pListScanStructs->at(i).sName == ""))) {
-            g_pListScanStructs->removeAt(i);
+        if ((m_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) &&
+            ((m_pListScanStructs->at(i).sName.toUpper() == sName.toUpper()) || (m_pListScanStructs->at(i).sName == ""))) {
+            m_pListScanStructs->removeAt(i);
             break;
         }
     }
@@ -705,7 +705,7 @@ void DiE_ScriptEngine::_removeResultSlot(const QString &sType, const QString &sN
 
 void DiE_ScriptEngine::_isStopSlot(bool *pResult)
 {
-    *pResult = XBinary::isPdStructStopped(g_pPdStruct);
+    *pResult = XBinary::isPdStructStopped(m_pPdStruct);
 }
 
 void DiE_ScriptEngine::_encodingListSlot()
@@ -751,7 +751,7 @@ void DiE_ScriptEngine::_isLibraryModeSlot(bool *pResult)
 
 void DiE_ScriptEngine::_breakScanSlot()
 {
-    XBinary::setPdStructStopped(g_pPdStruct);
+    XBinary::setPdStructStopped(m_pPdStruct);
 }
 
 void DiE_ScriptEngine::_getEngineVersionSlot(QString *pResult)
