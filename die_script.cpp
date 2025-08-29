@@ -530,7 +530,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
 
                 file.close();
             }
-        } else if (XBinary::isDirectoryExists(_sDatabasePath)) {
+    } else if (XBinary::isDirectoryExists(_sDatabasePath)) {
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath, databaseType, XBinary::FT_UNKNOWN, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "Binary", databaseType, XBinary::FT_BINARY, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "COM", databaseType, XBinary::FT_COM, pPdStruct));
@@ -541,7 +541,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "IPA", databaseType, XBinary::FT_IPA, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "NPM", databaseType, XBinary::FT_NPM, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "MACHOFAT", databaseType, XBinary::FT_MACHOFAT, pPdStruct));
-            m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "DEB", databaseType, XBinary::FT_NPM, pPdStruct));
+            m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "DEB", databaseType, XBinary::FT_DEB, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "DEX", databaseType, XBinary::FT_DEX, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "MSDOS", databaseType, XBinary::FT_MSDOS, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "LE", databaseType, XBinary::FT_LE, pPdStruct));
@@ -595,6 +595,13 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
     listFT.append(XBinary::FT_PE);
     listFT.append(XBinary::FT_ELF);
     listFT.append(XBinary::FT_MACHO);
+    // Additional formats loaded by the database that were missing here
+    listFT.append(XBinary::FT_PDF);
+    listFT.append(XBinary::FT_CFBF);
+    listFT.append(XBinary::FT_IMAGE);
+    listFT.append(XBinary::FT_JPEG);
+    listFT.append(XBinary::FT_PNG);
+    listFT.append(XBinary::FT_RAR);
     listFT.append(XBinary::FT_ARCHIVE);
     listFT.append(XBinary::FT_ZIP);
     listFT.append(XBinary::FT_JAR);
