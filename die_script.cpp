@@ -530,7 +530,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
 
                 file.close();
             }
-    } else if (XBinary::isDirectoryExists(_sDatabasePath)) {
+        } else if (XBinary::isDirectoryExists(_sDatabasePath)) {
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath, databaseType, XBinary::FT_UNKNOWN, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "Binary", databaseType, XBinary::FT_BINARY, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "COM", databaseType, XBinary::FT_COM, pPdStruct));
