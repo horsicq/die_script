@@ -87,8 +87,6 @@ private:
 #ifdef QT_SCRIPTTOOLS_LIB
     QScriptEngineDebugger *m_pDebugger;
 #endif
-    //    QMutex m_mutex;
-    //    QSemaphore m_semaphore;
 };
 
 #endif  // DIE_SCRIPT_H
