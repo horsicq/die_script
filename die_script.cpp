@@ -116,8 +116,6 @@ QList<DiE_ScriptEngine::SIGNATURE_RECORD> DiE_Script::_loadDatabaseFromPath(cons
         }
     }
 
-    // std::sort(listResult.begin(), listResult.end(), sort_signature_prio);
-
     return listResult;
 }
 
