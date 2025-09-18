@@ -593,7 +593,6 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
     listFT.append(XBinary::FT_PE);
     listFT.append(XBinary::FT_ELF);
     listFT.append(XBinary::FT_MACHO);
-    // Additional formats loaded by the database that were missing here
     listFT.append(XBinary::FT_PDF);
     listFT.append(XBinary::FT_CFBF);
     listFT.append(XBinary::FT_IMAGE);
