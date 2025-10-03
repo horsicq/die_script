@@ -199,6 +199,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         XAmigaHunk *pAmiga = new XAmigaHunk(pDevice);
         Amiga_Script *pExtraScript = new Amiga_Script(pAmiga, filePart, pOptions, pPdStruct);
         _adjustScript(pAmiga, pExtraScript, "Amiga");
+    } else if (XBinary::checkFileType(XBinary::FT_ATARIST, fileType)) {
+        XAtariST *pAtariST = new XAtariST(pDevice);
+        AtariST_Script *pExtraScript = new AtariST_Script(pAtariST, filePart, pOptions, pPdStruct);
+        _adjustScript(pAtariST, pExtraScript, "AtariST");
     } else if (XBinary::checkFileType(XBinary::FT_JAVACLASS, fileType)) {
         XJavaClass *pAmiga = new XJavaClass(pDevice);
         JavaClass_Script *pExtraScript = new JavaClass_Script(pAmiga, filePart, pOptions, pPdStruct);

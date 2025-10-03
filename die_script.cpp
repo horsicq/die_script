@@ -515,6 +515,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "DOS16M", XBinary::FT_DOS16M));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "DOS4G", XBinary::FT_DOS4G));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "Amiga", XBinary::FT_AMIGAHUNK));
+                    m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "AtariST", XBinary::FT_ATARIST));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "JavaClass", XBinary::FT_JAVACLASS));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "PDF", XBinary::FT_PDF));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "CFBF", XBinary::FT_CFBF));
@@ -552,6 +553,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "DOS16M", databaseType, XBinary::FT_DOS16M, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "DOS4G", databaseType, XBinary::FT_DOS4G, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "Amiga", databaseType, XBinary::FT_AMIGAHUNK, pPdStruct));
+            m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "AtariST", databaseType, XBinary::FT_ATARIST, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "JavaClass", databaseType, XBinary::FT_JAVACLASS, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "PDF", databaseType, XBinary::FT_PDF, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "CFBF", databaseType, XBinary::FT_CFBF, pPdStruct));
@@ -610,6 +612,7 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
     listFT.append(XBinary::FT_NPM);
     listFT.append(XBinary::FT_MACHOFAT);
     listFT.append(XBinary::FT_AMIGAHUNK);
+    listFT.append(XBinary::FT_ATARIST);
     listFT.append(XBinary::FT_DOS16M);
     listFT.append(XBinary::FT_DOS4G);
 
