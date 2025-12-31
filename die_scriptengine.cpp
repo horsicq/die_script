@@ -159,6 +159,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         XRar *pRAR = new XRar(pDevice);
         RAR_Script *pExtraScript = new RAR_Script(pRAR, filePart, pOptions, pPdStruct);
         _adjustScript(pRAR, pExtraScript, "RAR");
+    } else if (XBinary::checkFileType(XBinary::FT_ISO9660, fileType)) {
+        XISO9660 *pISO = new XISO9660(pDevice);
+        ISO9660_Script *pExtraScript = new ISO9660_Script(pISO, filePart, pOptions, pPdStruct);
+        _adjustScript(pISO, pExtraScript, "ISO9660");
     } else if (XBinary::checkFileType(XBinary::FT_ZIP, fileType)) {
         XZip *pZIP = new XZip(pDevice);
         ZIP_Script *pExtraScript = new ZIP_Script(pZIP, filePart, pOptions, pPdStruct);

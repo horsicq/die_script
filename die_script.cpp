@@ -524,6 +524,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "JPEG", XBinary::FT_JPEG));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "PNG", XBinary::FT_PNG));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "RAR", XBinary::FT_RAR));
+                    m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "ISO9660", XBinary::FT_ISO9660));
 
                     bResult = true;
                 }
@@ -562,6 +563,7 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "JPEG", databaseType, XBinary::FT_JPEG, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "PNG", databaseType, XBinary::FT_PNG, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "RAR", databaseType, XBinary::FT_RAR, pPdStruct));
+            m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "ISO9660", databaseType, XBinary::FT_ISO9660, pPdStruct));
 
             bResult = true;
         } else {
@@ -603,6 +605,7 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
     listFT.append(XBinary::FT_JPEG);
     listFT.append(XBinary::FT_PNG);
     listFT.append(XBinary::FT_RAR);
+    listFT.append(XBinary::FT_ISO9660);
     listFT.append(XBinary::FT_ARCHIVE);
     listFT.append(XBinary::FT_ZIP);
     listFT.append(XBinary::FT_JAR);
