@@ -211,6 +211,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         XJavaClass *pAmiga = new XJavaClass(pDevice);
         JavaClass_Script *pExtraScript = new JavaClass_Script(pAmiga, filePart, pOptions, pPdStruct);
         _adjustScript(pAmiga, pExtraScript, "JavaClass");
+    } else if (XBinary::checkFileType(XBinary::FT_PYC, fileType)) {
+        XPYC *pPYC = new XPYC(pDevice);
+        PYC_Script *pExtraScript = new PYC_Script(pPYC, filePart, pOptions, pPdStruct);
+        _adjustScript(pPYC, pExtraScript, "PYC");
     } else if (XBinary::checkFileType(XBinary::FT_PDF, fileType)) {
         XPDF *pPDF = new XPDF(pDevice);
         PDF_Script *pExtraScript = new PDF_Script(pPDF, filePart, pOptions, pPdStruct);
