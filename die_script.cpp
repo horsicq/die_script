@@ -770,6 +770,8 @@ QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_
         record.parentId = pListScanStructs->at(i).parentId;
         record.sType = pListScanStructs->at(i).sType;
         record.sName = pListScanStructs->at(i).sName;
+        record.type = recordTypeStringToId(pListScanStructs->at(i).sType);
+        record.name = recordNameStringToId(pListScanStructs->at(i).sName);
         record.sVersion = pListScanStructs->at(i).sVersion;
         record.sInfo = pListScanStructs->at(i).sOptions;
         record.varInfo = pListScanStructs->at(i).sSignature;
