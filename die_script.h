@@ -58,8 +58,6 @@ public:
     STATS getStats();
     bool isSignaturesPresent(XBinary::FT fileType);
 
-    static QString getErrorsString(XScanEngine::SCAN_RESULT *pScanResult);                        // TODO move to XBinary
-    static QList<QString> getErrorsAndWarningsStringList(XScanEngine::SCAN_RESULT *pScanResult);  // TODO move to XBinary
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();

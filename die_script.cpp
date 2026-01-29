@@ -728,32 +728,6 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
     return bResult;
 }
 
-QString DiE_Script::getErrorsString(XScanEngine::SCAN_RESULT *pScanResult)
-{
-    QString sResult;
-
-    qint32 nNumberOfErrors = pScanResult->listErrors.count();
-
-    for (qint32 i = 0; i < nNumberOfErrors; i++) {
-        sResult += QString("%1: %2\n").arg(pScanResult->listErrors.at(i).sScript, pScanResult->listErrors.at(i).sErrorString);
-    }
-
-    return sResult;
-}
-
-QList<QString> DiE_Script::getErrorsAndWarningsStringList(XScanEngine::SCAN_RESULT *pScanResult)
-{
-    QList<QString> listResult;
-
-    qint32 nNumberOfErrors = pScanResult->listErrors.count();
-
-    for (qint32 i = 0; i < nNumberOfErrors; i++) {
-        listResult.append(QString("%1: %2").arg(pScanResult->listErrors.at(i).sScript, pScanResult->listErrors.at(i).sErrorString));
-    }
-
-    return listResult;
-}
-
 QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs)
 {
     QList<XScanEngine::SCANSTRUCT> listResult;
