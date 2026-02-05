@@ -162,14 +162,8 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
     XScanEngine::SCANID resultId = {};
 
-    XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(fileType, XBinary::MAPMODE_UNKNOWN, pDevice, false, -1, pPdStruct);
-
     resultId.fileType = fileType;
     resultId.sUuid = XBinary::generateUUID();
-    resultId.sArch = memoryMap.sArch;
-    resultId.mode = memoryMap.mode;
-    resultId.endian = memoryMap.endian;
-    resultId.sType = memoryMap.sType;
     resultId.nOffset = XIODevice::getInitLocation(pDevice);
     resultId.nSize = pDevice->size();
     resultId.filePart = XBinary::FILEPART_HEADER;
