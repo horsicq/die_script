@@ -199,6 +199,8 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     _options.bIsHeuristicScan = pScanOptions->bIsHeuristicScan;
     _options.bIsAggressiveScan = pScanOptions->bIsAggressiveScan;
     _options.bIsRecursiveScan = pScanOptions->bIsRecursiveScan;
+    _options.bIsResourcesScan = pScanOptions->bIsResourcesScan;
+    _options.bIsArchivesScan = pScanOptions->bIsArchivesScan;
     _options.bIsOverlayScan = pScanOptions->bIsOverlayScan;
     _options.bIsVerbose = pScanOptions->bIsVerbose;
     _options.bIsProfiling = pScanOptions->bLogProfiling;
