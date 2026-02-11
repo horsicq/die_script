@@ -770,11 +770,27 @@ QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_
 bool DiE_Script::loadDatabaseFromGlobalOptions(XOptions *pXOptions)
 {
     bool bResult = false;
-
     initDatabase();
-    bResult = loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_MAIN_PATH).toString(), DiE_ScriptEngine::DT_MAIN);
-    loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_EXTRA_PATH).toString(), DiE_ScriptEngine::DT_EXTRA);
-    loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_CUSTOM_PATH).toString(), DiE_ScriptEngine::DT_CUSTOM);
+
+    const bool bNative = XOptions::isNative();
+
+    QString sMainPath = pXOptions->getValue(XOptions::ID_SCAN_DATABASE_MAIN_PATH).toString();
+    QString sExtraPath = pXOptions->getValue(XOptions::ID_SCAN_DATABASE_EXTRA_PATH).toString();
+    QString sCustomPath = pXOptions->getValue(XOptions::ID_SCAN_DATABASE_CUSTOM_PATH).toString();
+
+    // If native mode, override with AppLocalDataLocation paths
+    if (bNative) {
+        QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+        sMainPath = appDataPath + "/db";
+        sExtraPath = appDataPath + "/db_extra";
+        sCustomPath = appDataPath + "/db_custom";
+
+        qDebug() << "DiE_Script::loadDatabaseFromGlobalOptions(): Native mode - using AppLocalDataLocation:" << appDataPath;
+    }
+
+    bResult = loadDatabase(sMainPath, DiE_ScriptEngine::DT_MAIN);
+    loadDatabase(sExtraPath, DiE_ScriptEngine::DT_EXTRA);
+    loadDatabase(sCustomPath, DiE_ScriptEngine::DT_CUSTOM);
 
     return bResult;
 }
@@ -792,3 +808,4 @@ void DiE_Script::removeDebugger()
     this->m_pDebugger = nullptr;
 }
 #endif
+
