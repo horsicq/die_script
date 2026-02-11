@@ -79,6 +79,7 @@ private:
 protected:
     virtual void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
                                 SCAN_OPTIONS *pOptions, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
+    virtual QString getEngineName();
 
 private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> m_listSignatures;

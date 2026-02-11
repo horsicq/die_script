@@ -445,6 +445,11 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     return bResult;
 }
 
+QString DiE_Script::getEngineName()
+{
+    return QString("die");
+}
+
 void DiE_Script::_processDetect(SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType, SCAN_OPTIONS *pOptions,
                                 bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
 {
