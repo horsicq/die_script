@@ -630,6 +630,7 @@ void DiE_ScriptEngine::_logSlot(const QString &sText)
 #ifdef QT_DEBUG
     qDebug("LOG: %s", sText.toUtf8().data());
 #endif
+    XBinary::setPdStructInfoString(m_pPdStruct, sText);
 
     emit infoMessage(sText);
 }
