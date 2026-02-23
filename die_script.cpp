@@ -204,6 +204,7 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     _options.bIsOverlayScan = pScanOptions->bIsOverlayScan;
     _options.bIsVerbose = pScanOptions->bIsVerbose;
     _options.bIsProfiling = pScanOptions->bLogProfiling;
+    _options.sScanID = pScanOptions->sScanID;
 
     DiE_ScriptEngine scriptEngine(&m_listSignatures, &listRecords, pDevice, fileType, parentId.filePart, &_options, pPdStruct);
 
