@@ -1,4 +1,4 @@
-/* Copyright (c) 2019-2025 hors<horsicq@gmail.com>
+/* Copyright (c) 2019-2026 hors<horsicq@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -159,6 +159,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         XRar *pRAR = new XRar(pDevice);
         RAR_Script *pExtraScript = new RAR_Script(pRAR, filePart, pOptions, pPdStruct);
         _adjustScript(pRAR, pExtraScript, "RAR");
+    } else if (XBinary::checkFileType(XBinary::FT_ISO9660, fileType)) {
+        XISO9660 *pISO = new XISO9660(pDevice);
+        ISO9660_Script *pExtraScript = new ISO9660_Script(pISO, filePart, pOptions, pPdStruct);
+        _adjustScript(pISO, pExtraScript, "ISO9660");
     } else if (XBinary::checkFileType(XBinary::FT_ZIP, fileType)) {
         XZip *pZIP = new XZip(pDevice);
         ZIP_Script *pExtraScript = new ZIP_Script(pZIP, filePart, pOptions, pPdStruct);
@@ -207,6 +211,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<DiE_ScriptEngine::SIGNATURE_RECORD> *pS
         XJavaClass *pAmiga = new XJavaClass(pDevice);
         JavaClass_Script *pExtraScript = new JavaClass_Script(pAmiga, filePart, pOptions, pPdStruct);
         _adjustScript(pAmiga, pExtraScript, "JavaClass");
+    } else if (XBinary::checkFileType(XBinary::FT_PYC, fileType)) {
+        XPYC *pPYC = new XPYC(pDevice);
+        PYC_Script *pExtraScript = new PYC_Script(pPYC, filePart, pOptions, pPdStruct);
+        _adjustScript(pPYC, pExtraScript, "PYC");
     } else if (XBinary::checkFileType(XBinary::FT_PDF, fileType)) {
         XPDF *pPDF = new XPDF(pDevice);
         PDF_Script *pExtraScript = new PDF_Script(pPDF, filePart, pOptions, pPdStruct);
@@ -622,6 +630,7 @@ void DiE_ScriptEngine::_logSlot(const QString &sText)
 #ifdef QT_DEBUG
     qDebug("LOG: %s", sText.toUtf8().data());
 #endif
+    XBinary::setPdStructInfoString(m_pPdStruct, sText);
 
     emit infoMessage(sText);
 }

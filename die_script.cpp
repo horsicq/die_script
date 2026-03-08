@@ -1,4 +1,4 @@
-/* Copyright (c) 2019-2025 hors<horsicq@gmail.com>
+/* Copyright (c) 2019-2026 hors<horsicq@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -162,14 +162,8 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
     XScanEngine::SCANID resultId = {};
 
-    XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(fileType, XBinary::MAPMODE_UNKNOWN, pDevice, false, -1, pPdStruct);
-
     resultId.fileType = fileType;
     resultId.sUuid = XBinary::generateUUID();
-    resultId.sArch = memoryMap.sArch;
-    resultId.mode = memoryMap.mode;
-    resultId.endian = memoryMap.endian;
-    resultId.sType = memoryMap.sType;
     resultId.nOffset = XIODevice::getInitLocation(pDevice);
     resultId.nSize = pDevice->size();
     resultId.filePart = XBinary::FILEPART_HEADER;
@@ -205,8 +199,12 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     _options.bIsHeuristicScan = pScanOptions->bIsHeuristicScan;
     _options.bIsAggressiveScan = pScanOptions->bIsAggressiveScan;
     _options.bIsRecursiveScan = pScanOptions->bIsRecursiveScan;
+    _options.bIsResourcesScan = pScanOptions->bIsResourcesScan;
+    _options.bIsArchivesScan = pScanOptions->bIsArchivesScan;
+    _options.bIsOverlayScan = pScanOptions->bIsOverlayScan;
     _options.bIsVerbose = pScanOptions->bIsVerbose;
     _options.bIsProfiling = pScanOptions->bLogProfiling;
+    _options.sScanID = pScanOptions->sScanID;
 
     DiE_ScriptEngine scriptEngine(&m_listSignatures, &listRecords, pDevice, fileType, parentId.filePart, &_options, pPdStruct);
 
@@ -448,6 +446,11 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     return bResult;
 }
 
+QString DiE_Script::getEngineName()
+{
+    return QString("die");
+}
+
 void DiE_Script::_processDetect(SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType, SCAN_OPTIONS *pOptions,
                                 bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
 {
@@ -518,12 +521,14 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "Amiga", XBinary::FT_AMIGAHUNK));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "AtariST", XBinary::FT_ATARIST));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "JavaClass", XBinary::FT_JAVACLASS));
+                    m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "PYC", XBinary::FT_PYC));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "PDF", XBinary::FT_PDF));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "CFBF", XBinary::FT_CFBF));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "Image", XBinary::FT_IMAGE));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "JPEG", XBinary::FT_JPEG));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "PNG", XBinary::FT_PNG));
                     m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "RAR", XBinary::FT_RAR));
+                    m_listSignatures.append(_loadDatabaseFromArchive(&zip, &listRecords, databaseType, "ISO9660", XBinary::FT_ISO9660));
 
                     bResult = true;
                 }
@@ -556,12 +561,14 @@ bool DiE_Script::loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "Amiga", databaseType, XBinary::FT_AMIGAHUNK, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "AtariST", databaseType, XBinary::FT_ATARIST, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "JavaClass", databaseType, XBinary::FT_JAVACLASS, pPdStruct));
+            m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "PYC", databaseType, XBinary::FT_PYC, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "PDF", databaseType, XBinary::FT_PDF, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "CFBF", databaseType, XBinary::FT_CFBF, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "Image", databaseType, XBinary::FT_IMAGE, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "JPEG", databaseType, XBinary::FT_JPEG, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "PNG", databaseType, XBinary::FT_PNG, pPdStruct));
             m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "RAR", databaseType, XBinary::FT_RAR, pPdStruct));
+            m_listSignatures.append(_loadDatabaseFromPath(_sDatabasePath + QDir::separator() + "ISO9660", databaseType, XBinary::FT_ISO9660, pPdStruct));
 
             bResult = true;
         } else {
@@ -603,6 +610,7 @@ QList<DiE_Script::SIGNATURE_STATE> DiE_Script::getSignatureStates()
     listFT.append(XBinary::FT_JPEG);
     listFT.append(XBinary::FT_PNG);
     listFT.append(XBinary::FT_RAR);
+    listFT.append(XBinary::FT_ISO9660);
     listFT.append(XBinary::FT_ARCHIVE);
     listFT.append(XBinary::FT_ZIP);
     listFT.append(XBinary::FT_JAR);
@@ -723,32 +731,6 @@ bool DiE_Script::isSignaturesPresent(XBinary::FT fileType)
     return bResult;
 }
 
-QString DiE_Script::getErrorsString(XScanEngine::SCAN_RESULT *pScanResult)
-{
-    QString sResult;
-
-    qint32 nNumberOfErrors = pScanResult->listErrors.count();
-
-    for (qint32 i = 0; i < nNumberOfErrors; i++) {
-        sResult += QString("%1: %2\n").arg(pScanResult->listErrors.at(i).sScript, pScanResult->listErrors.at(i).sErrorString);
-    }
-
-    return sResult;
-}
-
-QList<QString> DiE_Script::getErrorsAndWarningsStringList(XScanEngine::SCAN_RESULT *pScanResult)
-{
-    QList<QString> listResult;
-
-    qint32 nNumberOfErrors = pScanResult->listErrors.count();
-
-    for (qint32 i = 0; i < nNumberOfErrors; i++) {
-        listResult.append(QString("%1: %2").arg(pScanResult->listErrors.at(i).sScript, pScanResult->listErrors.at(i).sErrorString));
-    }
-
-    return listResult;
-}
-
 QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs)
 {
     QList<XScanEngine::SCANSTRUCT> listResult;
@@ -765,6 +747,8 @@ QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_
         record.parentId = pListScanStructs->at(i).parentId;
         record.sType = pListScanStructs->at(i).sType;
         record.sName = pListScanStructs->at(i).sName;
+        record.type = recordTypeStringToId(pListScanStructs->at(i).sType);
+        record.name = recordNameStringToId(pListScanStructs->at(i).sName);
         record.sVersion = pListScanStructs->at(i).sVersion;
         record.sInfo = pListScanStructs->at(i).sOptions;
         record.varInfo = pListScanStructs->at(i).sSignature;

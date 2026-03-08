@@ -1,4 +1,4 @@
-/* Copyright (c) 2019-2025 hors<horsicq@gmail.com>
+/* Copyright (c) 2019-2026 hors<horsicq@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -58,8 +58,6 @@ public:
     STATS getStats();
     bool isSignaturesPresent(XBinary::FT fileType);
 
-    static QString getErrorsString(XScanEngine::SCAN_RESULT *pScanResult);                        // TODO move to XBinary
-    static QList<QString> getErrorsAndWarningsStringList(XScanEngine::SCAN_RESULT *pScanResult);  // TODO move to XBinary
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
@@ -81,6 +79,7 @@ private:
 protected:
     virtual void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
                                 SCAN_OPTIONS *pOptions, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
+    virtual QString getEngineName();
 
 private:
     QList<DiE_ScriptEngine::SIGNATURE_RECORD> m_listSignatures;
