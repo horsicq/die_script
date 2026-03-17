@@ -27,37 +27,12 @@
 #include <QScriptEngineDebugger>
 #endif
 
-bool sort_signature_prio(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2);
-bool sort_signature_name(const DiE_ScriptEngine::SIGNATURE_RECORD &sr1, const DiE_ScriptEngine::SIGNATURE_RECORD &sr2);
-
 class DiE_Script : public XScanEngine {
     Q_OBJECT
 
 public:
-    struct STATS {
-        QMap<QString, qint32> mapTypes;
-    };
-
-    struct SIGNATURE_STATE {
-        XBinary::FT fileType;
-        qint32 nNumberOfSignatures;
-    };
-
     explicit DiE_Script(QObject *pParent = nullptr);
     DiE_Script(const DiE_Script &other);  // Copy constructor declaration
-
-    void initDatabase();
-    bool loadDatabase(const QString &sDatabasePath, DiE_ScriptEngine::DT databaseType, XBinary::PDSTRUCT *pPdStruct = nullptr);
-
-    QList<SIGNATURE_STATE> getSignatureStates();
-    qint32 getNumberOfSignatures(XBinary::FT fileType);
-    QList<DiE_ScriptEngine::SIGNATURE_RECORD> *getSignatures();
-
-    DiE_ScriptEngine::SIGNATURE_RECORD getSignatureByFilePath(const QString &sSignatureFilePath);
-    bool updateSignature(const QString &sSignatureFilePath, const QString &sText);
-    STATS getStats();
-    bool isSignaturesPresent(XBinary::FT fileType);
-
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
@@ -65,24 +40,18 @@ public:
     static QList<XScanEngine::SCANSTRUCT> convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
 
     bool loadDatabaseFromGlobalOptions(XOptions *pXOptions);
+    virtual bool isSignatureValid(const QString &sSignatureFilePath);
 
 private:
-    QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromPath(const QString &sDatabasePath, DiE_ScriptEngine::DT databaseType, XBinary::FT fileType,
-                                                                    XBinary::PDSTRUCT *pPdStruct);
-    QList<DiE_ScriptEngine::SIGNATURE_RECORD> _loadDatabaseFromArchive(XArchive *pArchive, QList<XArchive::RECORD> *pListRecords, DiE_ScriptEngine::DT databaseType,
-                                                                       const QString &sPrefix, XBinary::FT fileType);  // TODO pdStruct
     void processDetect(XScanEngine::SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const XScanEngine::SCANID &parentId, XBinary::FT fileType,
                        XScanEngine::SCAN_OPTIONS *pScanOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
-    bool _handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, DiE_ScriptEngine::SIGNATURE_RECORD *pSignatureRecord,
-                      XScanEngine::SCAN_RESULT *pScanResult);
+    bool _handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, XScanEngine::SIGNATURE_RECORD *pSignatureRecord, XScanEngine::SCAN_RESULT *pScanResult);
 
 protected:
     virtual void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
                                 SCAN_OPTIONS *pOptions, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
     virtual QString getEngineName();
 
-private:
-    QList<DiE_ScriptEngine::SIGNATURE_RECORD> m_listSignatures;
 #ifdef QT_SCRIPTTOOLS_LIB
     QScriptEngineDebugger *m_pDebugger;
 #endif

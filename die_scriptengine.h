@@ -31,33 +31,6 @@ class DiE_ScriptEngine : public XScriptEngine {
     Q_OBJECT
 
 public:
-    enum DT {
-        DT_MAIN = 0,
-        DT_EXTRA,
-        DT_CUSTOM
-    };
-
-    struct SIGNATURE_RECORD {
-        XBinary::FT fileType;
-        QString sName;
-        QString sFilePath;
-        DT databaseType;
-        QString sText;
-        bool bReadOnly;
-    };
-
-    //    struct SCAN_HEADER
-    //    {
-    //        XBinary::FT fileType;
-    //        QString sArch;
-    //        XBinary::MODE mode;
-    //        bool bIsBigEndian;
-    //        QString sType;
-    //        qint64 nSize;
-    //        qint64 nOffset;
-    //        XBinary::FILEPART filePart;
-    //    };
-
     struct SCAN_STRUCT {
         bool bIsUnknown;
         XScanEngine::SCANID id;
@@ -79,8 +52,8 @@ public:
         QString sName;
     };
 
-    DiE_ScriptEngine(QList<SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType, XBinary::FILEPART filePart,
-                     Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType,
+                     XBinary::FILEPART filePart, Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
     ~DiE_ScriptEngine();
 
     void _adjustScript(XBinary *pBinary, Binary_Script *pScript, const QString &sName);
@@ -130,7 +103,7 @@ private slots:
     void _getQtVersionSlot(QString *pResult);
 
 private:
-    QList<SIGNATURE_RECORD> *m_pSignaturesList;
+    QList<XScanEngine::SIGNATURE_RECORD> *m_pSignaturesList;
     QList<SCAN_STRUCT> *m_pListScanStructs;
     QList<XBinary *> m_listBinaries;
     QList<QObject *> m_listScriptClasses;
