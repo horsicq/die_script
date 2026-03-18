@@ -39,8 +39,8 @@ public:
 #endif
     static QList<XScanEngine::SCANSTRUCT> convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
 
-    bool loadDatabaseFromGlobalOptions(XOptions *pXOptions);
-    virtual bool isSignatureValid(const QString &sSignatureFilePath);
+    // bool loadDatabaseFromGlobalOptions(XOptions *pXOptions);
+    virtual bool isSignatureFileValid(const QString &sSignatureFilePath);
 
 private:
     void processDetect(XScanEngine::SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const XScanEngine::SCANID &parentId, XBinary::FT fileType,

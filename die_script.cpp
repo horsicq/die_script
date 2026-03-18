@@ -378,19 +378,19 @@ QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_
     return listResult;
 }
 
-bool DiE_Script::loadDatabaseFromGlobalOptions(XOptions *pXOptions)
-{
-    bool bResult = false;
+// bool DiE_Script::loadDatabaseFromGlobalOptions(XOptions *pXOptions)
+// {
+//     bool bResult = false;
 
-    initDatabase();
-    bResult = loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_MAIN_PATH).toString(), DT_MAIN);
-    loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_EXTRA_PATH).toString(), DT_EXTRA);
-    loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_CUSTOM_PATH).toString(), DT_CUSTOM);
+//     initDatabase();
+//     bResult = loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_MAIN_PATH).toString(), DT_MAIN);
+//     loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_EXTRA_PATH).toString(), DT_EXTRA);
+//     loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_CUSTOM_PATH).toString(), DT_CUSTOM);
 
-    return bResult;
-}
+//     return bResult;
+// }
 
-bool DiE_Script::isSignatureValid(const QString &sSignatureFilePath)
+bool DiE_Script::isSignatureFileValid(const QString &sSignatureFilePath)
 {
     bool bResult = false;
 
