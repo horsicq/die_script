@@ -11,10 +11,10 @@ endif()
 if (NOT DEFINED DETECTITEASY_SOURCES)
     include(${CMAKE_CURRENT_LIST_DIR}/../Detect-It-Easy/detectiteasy.cmake)
 endif()
-if (NOT DEFINED XGITHUB_SOURCES)
-    include(${CMAKE_CURRENT_LIST_DIR}/../XGithub/xgithub.cmake)
-    set(DIE_SCRIPT_SOURCES ${DIE_SCRIPT_SOURCES} ${XGITHUB_SOURCES})
-endif()
+# if (NOT DEFINED XGITHUB_SOURCES)
+#     include(${CMAKE_CURRENT_LIST_DIR}/../XGithub/xgithub.cmake)
+#     set(DIE_SCRIPT_SOURCES ${DIE_SCRIPT_SOURCES} ${XGITHUB_SOURCES})
+# endif()
 
 set(DIE_SCRIPT_SOURCES
     ${DIE_SCRIPT_SOURCES}
@@ -22,8 +22,8 @@ set(DIE_SCRIPT_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/die_script.h
     ${CMAKE_CURRENT_LIST_DIR}/die_scriptengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/die_scriptengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/die_scriptdatabaseupdate.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/die_scriptdatabaseupdate.h
+    # ${CMAKE_CURRENT_LIST_DIR}/die_scriptdatabaseupdate.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/die_scriptdatabaseupdate.h
     ${CMAKE_CURRENT_LIST_DIR}/global_script.cpp
     ${CMAKE_CURRENT_LIST_DIR}/global_script.h
     ${CMAKE_CURRENT_LIST_DIR}/xscriptengine.cpp
