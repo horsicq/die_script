@@ -51,6 +51,7 @@ protected:
     virtual void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
                                 SCAN_OPTIONS *pOptions, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
     virtual QString getEngineName();
+    virtual SCANENGINETYPE getEngineType();
 
 #ifdef QT_SCRIPTTOOLS_LIB
     QScriptEngineDebugger *m_pDebugger;
