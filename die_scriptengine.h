@@ -26,6 +26,7 @@
 #include "util_script.h"
 #include "xscriptengine.h"
 #include "xscanengine.h"
+#include "xscanengineprocess.h"
 
 class DiE_ScriptEngine : public XScriptEngine {
     Q_OBJECT
