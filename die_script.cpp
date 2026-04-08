@@ -51,7 +51,7 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     resultId.sUuid = XBinary::generateUUID();
     resultId.nOffset = XIODevice::getInitLocation(pDevice);
     resultId.nSize = pDevice->size();
-    resultId.filePart = XBinary::FILEPART_HEADER;
+    resultId.filePart = parentId.filePart;
 
     qint32 nNumberOfSignatures = m_listSignatures.count();
 
