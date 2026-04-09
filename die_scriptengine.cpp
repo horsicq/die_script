@@ -133,7 +133,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
         QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
         XBinary::FT _fileType = XBinary::_getPrefFileType(&fileTypes);
 
-        XArchive *_pArchive = XArchives::getClass(_fileType, pDevice);
+        XArchive *_pArchive = static_cast<XArchive *>(XFormats::getClass(_fileType, pDevice));
 
         if (_pArchive) {
             pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
