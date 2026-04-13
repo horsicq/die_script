@@ -32,29 +32,35 @@ class DiE_Script : public XScanEngine {
 
 public:
     explicit DiE_Script(QObject *pParent = nullptr);
-    DiE_Script(const DiE_Script &other);  // Copy constructor declaration
+    DiE_Script(const DiE_Script &other);
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
 #endif
-    static QList<XScanEngine::SCANSTRUCT> convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
+    static QList<XScanEngine::SCANSTRUCT> convert(const QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
 
     // bool loadDatabaseFromGlobalOptions(XOptions *pXOptions);
-    virtual bool isSignatureFileValid(const QString &sSignatureFilePath);
+    bool isSignatureFileValid(const QString &sSignatureFilePath) override;
 
 private:
     void processDetect(XScanEngine::SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const XScanEngine::SCANID &parentId, XBinary::FT fileType,
                        XScanEngine::SCAN_OPTIONS *pScanOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
-    bool _handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, XScanEngine::SIGNATURE_RECORD *pSignatureRecord, XScanEngine::SCAN_RESULT *pScanResult);
+    bool _handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, const XScanEngine::SIGNATURE_RECORD *pSignatureRecord,
+                      XScanEngine::SCAN_RESULT *pScanResult);
+    bool _shouldExecuteSignature(const SIGNATURE_RECORD &signatureRecord, XBinary::FT fileType, const SCAN_OPTIONS *pScanOptions, const QString &sSignatureFilePath) const;
+    void _executeInitSignature(DiE_ScriptEngine *pScriptEngine, const SIGNATURE_RECORD &signatureRecord, SCAN_RESULT *pScanResult);
+    void _executeSignature(DiE_ScriptEngine *pScriptEngine, const QString &sDetectFunction, const SIGNATURE_RECORD &signatureRecord, const SCANID &parentId,
+                           const SCANID &resultId, SCAN_RESULT *pScanResult, SCAN_OPTIONS *pScanOptions);
+    void _handleElapsedTime(const SIGNATURE_RECORD &signatureRecord, qint64 nElapsedTime, SCAN_RESULT *pScanResult, const SCAN_OPTIONS *pScanOptions);
 
 protected:
-    virtual void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
-                                SCAN_OPTIONS *pOptions, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
-    virtual QString getEngineName();
-    virtual SCANENGINETYPE getEngineType();
+    void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
+                        SCAN_OPTIONS *pOptions, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct) override;
+    QString getEngineName() override;
+    SCANENGINETYPE getEngineType() override;
 
 #ifdef QT_SCRIPTTOOLS_LIB
-    QScriptEngineDebugger *m_pDebugger;
+    QScriptEngineDebugger *m_pDebugger = nullptr;
 #endif
 };
 

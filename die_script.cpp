@@ -20,31 +20,72 @@
  */
 #include "die_script.h"
 
-DiE_Script::DiE_Script(QObject *pParent) : XScanEngine(pParent)
-{
-#ifdef QT_SCRIPTTOOLS_LIB
-    m_pDebugger = nullptr;
-#endif
-}
+#include <QElapsedTimer>
 
-DiE_Script::DiE_Script(const DiE_Script &other) : XScanEngine(other)
-{
-    m_listSignatures = other.m_listSignatures;
-#ifdef QT_SCRIPTTOOLS_LIB
-    m_pDebugger = other.m_pDebugger;
-#endif
-}
+namespace {
+const char *const g_sDefaultDetectFunction = "detect";
+const char *const g_sInitSignatureName = "_init";
 
-void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
-                               XScanEngine::SCAN_OPTIONS *pScanOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
-{
-    QString sDetectFunction = "detect";
+struct INIT_SIGNATURES {
+    bool bHasGlobalInit = false;
+    XScanEngine::SIGNATURE_RECORD srGlobalInit = {};
+    bool bHasTypeInit = false;
+    XScanEngine::SIGNATURE_RECORD srTypeInit = {};
+};
 
-    if (pScanOptions->sDetectFunction != "") {
-        sDetectFunction = pScanOptions->sDetectFunction;
+QString getDetectFunctionName(const XScanEngine::SCAN_OPTIONS *pScanOptions)
+{
+    if ((pScanOptions == nullptr) || pScanOptions->sDetectFunction.isEmpty()) {
+        return QString::fromLatin1(g_sDefaultDetectFunction);
     }
 
-    QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
+    return pScanOptions->sDetectFunction;
+}
+
+QString getSignaturePrefix(const QString &sSignatureName)
+{
+    return sSignatureName.section(".", 0, 0).toUpper();
+}
+
+bool isDeepScanSignature(const XScanEngine::SIGNATURE_RECORD &signatureRecord)
+{
+    const QString sPrefix = getSignaturePrefix(signatureRecord.sName);
+
+    return (sPrefix == QLatin1String("DS")) || (sPrefix == QLatin1String("EP"));
+}
+
+bool isHeuristicSignature(const XScanEngine::SIGNATURE_RECORD &signatureRecord)
+{
+    return (getSignaturePrefix(signatureRecord.sName) == QLatin1String("HEUR"));
+}
+
+bool shouldMeasureElapsedTime(const XScanEngine::SCAN_OPTIONS *pScanOptions)
+{
+    return (pScanOptions != nullptr) && (pScanOptions->bShowScanTime || pScanOptions->bLogProfiling);
+}
+
+Binary_Script::OPTIONS createScriptOptions(const XScanEngine::SCAN_OPTIONS *pScanOptions)
+{
+    Binary_Script::OPTIONS options = {};
+
+    if (pScanOptions != nullptr) {
+        options.bIsDeepScan = pScanOptions->bIsDeepScan;
+        options.bIsHeuristicScan = pScanOptions->bIsHeuristicScan;
+        options.bIsAggressiveScan = pScanOptions->bIsAggressiveScan;
+        options.bIsRecursiveScan = pScanOptions->bIsRecursiveScan;
+        options.bIsResourcesScan = pScanOptions->bIsResourcesScan;
+        options.bIsArchivesScan = pScanOptions->bIsArchivesScan;
+        options.bIsOverlayScan = pScanOptions->bIsOverlayScan;
+        options.bIsVerbose = pScanOptions->bIsVerbose;
+        options.bIsProfiling = pScanOptions->bLogProfiling;
+        options.sScanID = pScanOptions->sScanID;
+    }
+
+    return options;
+}
+
+XScanEngine::SCANID createResultId(QIODevice *pDevice, const XScanEngine::SCANID &parentId, XBinary::FT fileType)
+{
     XScanEngine::SCANID resultId = {};
 
     resultId.fileType = fileType;
@@ -53,49 +94,66 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     resultId.nSize = pDevice->size();
     resultId.filePart = parentId.filePart;
 
-    qint32 nNumberOfSignatures = m_listSignatures.count();
+    return resultId;
+}
 
-    SIGNATURE_RECORD srGlobalInit = {};
-    SIGNATURE_RECORD srInit = {};
+INIT_SIGNATURES findInitSignatures(const QList<XScanEngine::SIGNATURE_RECORD> &listSignatures, XBinary::FT fileType, XBinary::PDSTRUCT *pPdStruct)
+{
+    INIT_SIGNATURES result = {};
+    const qint32 nNumberOfSignatures = listSignatures.count();
 
-    bool bGlobalInit = false;
-    bool bInit = false;
+    for (qint32 i = 0; (i < nNumberOfSignatures) && ((pPdStruct == nullptr) || XBinary::isPdStructNotCanceled(pPdStruct)); i++) {
+        const XScanEngine::SIGNATURE_RECORD &signatureRecord = listSignatures.at(i);
 
-    for (qint32 i = 0; (i < nNumberOfSignatures) && XBinary::isPdStructNotCanceled(pPdStruct); i++) {
-        if (m_listSignatures.at(i).sName == "_init") {
-            if (m_listSignatures.at(i).fileType == XBinary::FT_UNKNOWN) {
-                srGlobalInit = m_listSignatures.at(i);
-                bGlobalInit = true;
-            }
-
-            if (XBinary::checkFileType(m_listSignatures.at(i).fileType, fileType)) {
-                srInit = m_listSignatures.at(i);
-                bInit = true;
-            }
+        if (signatureRecord.sName != QLatin1String(g_sInitSignatureName)) {
+            continue;
         }
 
-        if (bGlobalInit && bInit) {
+        if (signatureRecord.fileType == XBinary::FT_UNKNOWN) {
+            result.srGlobalInit = signatureRecord;
+            result.bHasGlobalInit = true;
+        }
+
+        if (XBinary::checkFileType(signatureRecord.fileType, fileType)) {
+            result.srTypeInit = signatureRecord;
+            result.bHasTypeInit = true;
+        }
+
+        if (result.bHasGlobalInit && result.bHasTypeInit) {
             break;
         }
     }
 
-    Binary_Script::OPTIONS _options = {};
-    _options.bIsDeepScan = pScanOptions->bIsDeepScan;
-    _options.bIsHeuristicScan = pScanOptions->bIsHeuristicScan;
-    _options.bIsAggressiveScan = pScanOptions->bIsAggressiveScan;
-    _options.bIsRecursiveScan = pScanOptions->bIsRecursiveScan;
-    _options.bIsResourcesScan = pScanOptions->bIsResourcesScan;
-    _options.bIsArchivesScan = pScanOptions->bIsArchivesScan;
-    _options.bIsOverlayScan = pScanOptions->bIsOverlayScan;
-    _options.bIsVerbose = pScanOptions->bIsVerbose;
-    _options.bIsProfiling = pScanOptions->bLogProfiling;
-    _options.sScanID = pScanOptions->sScanID;
+    return result;
+}
+}  // namespace
 
-    DiE_ScriptEngine scriptEngine(&m_listSignatures, &listRecords, pDevice, fileType, parentId.filePart, &_options, pPdStruct);
+DiE_Script::DiE_Script(QObject *pParent) : XScanEngine(pParent)
+{
+}
 
-    connect(&scriptEngine, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-    connect(&scriptEngine, SIGNAL(warningMessage(QString)), this, SIGNAL(warningMessage(QString)));
-    connect(&scriptEngine, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
+DiE_Script::DiE_Script(const DiE_Script &other) : XScanEngine(other)
+{
+#ifdef QT_SCRIPTTOOLS_LIB
+    m_pDebugger = other.m_pDebugger;
+#endif
+}
+
+void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
+                               XScanEngine::SCAN_OPTIONS *pScanOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
+{
+    const QString sDetectFunction = getDetectFunctionName(pScanOptions);
+    QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
+    const XScanEngine::SCANID resultId = createResultId(pDevice, parentId, fileType);
+    const qint32 nNumberOfSignatures = m_listSignatures.count();
+    const INIT_SIGNATURES initSignatures = findInitSignatures(m_listSignatures, fileType, pPdStruct);
+
+    Binary_Script::OPTIONS scriptOptions = createScriptOptions(pScanOptions);
+    DiE_ScriptEngine scriptEngine(&m_listSignatures, &listRecords, pDevice, fileType, parentId.filePart, &scriptOptions, pPdStruct);
+
+    connect(&scriptEngine, &DiE_ScriptEngine::errorMessage, this, &DiE_Script::errorMessage);
+    connect(&scriptEngine, &DiE_ScriptEngine::warningMessage, this, &DiE_Script::warningMessage);
+    connect(&scriptEngine, &DiE_ScriptEngine::infoMessage, this, &DiE_Script::infoMessage);
 
 #ifdef QT_SCRIPTTOOLS_LIB
     if (m_pDebugger) {
@@ -104,196 +162,48 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
 #endif
 
     if (nNumberOfSignatures) {
-        if (bGlobalInit) {
-            _handleError(&scriptEngine, scriptEngine.evaluate(srGlobalInit.sText, srGlobalInit.sFilePath), &srGlobalInit, pScanResult);
+        if (initSignatures.bHasGlobalInit) {
+            _executeInitSignature(&scriptEngine, initSignatures.srGlobalInit, pScanResult);
         }
 
-        if (bInit) {
-            _handleError(&scriptEngine, scriptEngine.evaluate(srInit.sText, srInit.sFilePath), &srInit, pScanResult);
+        if (initSignatures.bHasTypeInit) {
+            _executeInitSignature(&scriptEngine, initSignatures.srTypeInit, pScanResult);
         }
     }
 
-    qint32 _nFreeIndex = XBinary::getFreeIndex(pPdStruct);
-    XBinary::setPdStructInit(pPdStruct, _nFreeIndex, nNumberOfSignatures);
+    const qint32 nProgressIndex = XBinary::getFreeIndex(pPdStruct);
+    XBinary::setPdStructInit(pPdStruct, nProgressIndex, nNumberOfSignatures);
 
     for (qint32 i = 0; (i < nNumberOfSignatures) && XBinary::isPdStructNotCanceled(pPdStruct); i++) {
-        SIGNATURE_RECORD signatureRecord = m_listSignatures.at(i);
+        const SIGNATURE_RECORD &signatureRecord = m_listSignatures.at(i);
 
-        XBinary::setPdStructStatus(pPdStruct, _nFreeIndex, signatureRecord.sName);
+        XBinary::setPdStructStatus(pPdStruct, nProgressIndex, signatureRecord.sName);
 
-        bool bExec = false;
+        const bool bExec = _shouldExecuteSignature(signatureRecord, fileType, pScanOptions, sSignatureFilePath);
 
-        if (XBinary::checkFileType(signatureRecord.fileType, fileType)) {
-            bExec = true;
-        }
-
-        if (bExec) {
-            if (pScanOptions->sSignatureName != "") {
-                if (pScanOptions->sSignatureName != signatureRecord.sName) {
-                    bExec = false;
-                }
+        if (bExec && pScanOptions->scanEngineCallback) {
+            if (!pScanOptions->scanEngineCallback(signatureRecord.sName, nNumberOfSignatures, i, pScanOptions->pUserData)) {
+                XBinary::setPdStructStopped(pPdStruct);
             }
         }
 
         if (bExec) {
-            if (!pScanOptions->bIsDeepScan) {
-                QString sPrefix = signatureRecord.sName.section(".", 0, 0).toUpper();
-
-                if ((sPrefix == "DS") || (sPrefix == "EP")) {
-                    bExec = false;
-                }
-            }
+            _executeSignature(&scriptEngine, sDetectFunction, signatureRecord, parentId, resultId, pScanResult, pScanOptions);
         }
 
-        if (bExec) {
-            if (!pScanOptions->bIsHeuristicScan) {
-                QString sPrefix = signatureRecord.sName.section(".", 0, 0).toUpper();
-
-                if (sPrefix == "HEUR") {
-                    bExec = false;
-                }
-            }
-        }
-
-        if (bExec) {
-            if (sSignatureFilePath != "")  // TODO Check!
-            {
-                if (sSignatureFilePath != signatureRecord.sFilePath) {
-                    bExec = false;
-                }
-            } else {
-                if (signatureRecord.sName == "_init") {
-                    bExec = false;
-                }
-            }
-        }
-
-        if (bExec) {
-            if (signatureRecord.databaseType != DT_MAIN) {
-                bool _bExec = false;
-                if (pScanOptions->bUseCustomDatabase && (signatureRecord.databaseType == DT_CUSTOM)) {
-                    _bExec = true;
-                } else if (pScanOptions->bUseExtraDatabase && (signatureRecord.databaseType == DT_EXTRA)) {
-                    _bExec = true;
-                }
-
-                bExec = _bExec;
-            }
-        }
-
-        if (bExec) {
-            if (pScanOptions->scanEngineCallback) {
-                if (!pScanOptions->scanEngineCallback(signatureRecord.sName, nNumberOfSignatures, i, pScanOptions->pUserData)) {
-                    XBinary::setPdStructStopped(pPdStruct);
-                }
-            }
-        }
-
-        if (bExec) {
-            // scriptEngine.clearListLocalResult();
-            if (pScanOptions->bLogProfiling) {
-                emit warningMessage(QString("%1").arg(signatureRecord.sName));
-            }
-
-            QElapsedTimer *pElapsedTimer = nullptr;
-
-            if ((pScanOptions->bShowScanTime) || (pScanOptions->bLogProfiling)) {
-                pElapsedTimer = new QElapsedTimer;
-                pElapsedTimer->start();
-            }
-
-            XSCRIPTVALUE script = scriptEngine.evaluateEx(parentId, resultId, signatureRecord.sText, signatureRecord.sName, signatureRecord.sFilePath);
-
-            if (_handleError(&scriptEngine, script, &signatureRecord, pScanResult)) {
-#ifdef QT_SCRIPTTOOLS_LIB
-                if (m_pDebugger) {
-                    m_pDebugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
-                }
-#endif
-                XSCRIPTVALUE _scriptValue = scriptEngine.globalObject().property(sDetectFunction);
-
-                if (_handleError(&scriptEngine, _scriptValue, &signatureRecord, pScanResult)) {
-                    XSCRIPTVALUELIST valuelist;
-
-                    if (sDetectFunction == "detect") {
-                        valuelist << pScanOptions->bShowType << pScanOptions->bShowVersion << pScanOptions->bShowInfo;
-                    }
-
-#ifdef QT_SCRIPT_LIB
-                    QScriptValue result = _scriptValue.call(script, valuelist);
-#else
-                    QJSValue result = _scriptValue.callWithInstance(script, valuelist);
-#endif
-
-                    if (_handleError(&scriptEngine, result, &signatureRecord, pScanResult)) {
-                        // // TODO getResult
-                        // QString sResult = result.toString();
-
-                        // QList<DiE_ScriptEngine::RESULT> listLocalResult = scriptEngine.getListLocalResult();
-                        // qint32 nNumberOfDetects = listLocalResult.count();
-
-                        // if ((nNumberOfDetects == 0) && (sResult != "")) {
-                        //     listLocalResult.append(DiE_ScriptEngine::stringToResult(sResult, pOptions->bShowType, pOptions->bShowVersion, pOptions->bShowOptions));
-                        // }
-
-                        // for (qint32 j = 0; j < nNumberOfDetects; j++) {
-                        //     DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
-
-                        //     // TODO IDs
-                        //     ssRecord.id = resultId;
-                        //     ssRecord.parentId = parentId;
-
-                        //     ssRecord.sSignature = signatureRecord.sName;
-                        //     ssRecord.sSignatureFileName = signatureRecord.sFilePath;
-                        //     ssRecord.sType = listLocalResult.at(j).sType;
-                        //     ssRecord.sName = listLocalResult.at(j).sName;
-                        //     ssRecord.sVersion = listLocalResult.at(j).sVersion;
-                        //     ssRecord.sOptions = listLocalResult.at(j).sOptions;
-                        //     ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
-                        //     ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
-
-                        //     listRecords.append(ssRecord);
-                        // }
-                    }
-                }
-            }
-
-            if (pElapsedTimer) {
-                qint64 nElapsedTime = pElapsedTimer->elapsed();
-                delete pElapsedTimer;
-
-                if (pScanOptions->bShowScanTime) {
-                    XScanEngine::DEBUG_RECORD debugRecord = {};
-                    debugRecord.sScript = signatureRecord.sName;
-                    debugRecord.nElapsedTime = nElapsedTime;
-
-                    // #ifdef QT_DEBUG
-                    //                     qDebug("%s: %lld msec", debugRecord.sScript.toLatin1().data(), debugRecord.nElapsedTime);
-                    // #endif
-                    pScanResult->listDebugRecords.append(debugRecord);
-                }
-
-                if (pScanOptions->bLogProfiling) {
-                    emit warningMessage(QString("%1: [%2 ms]").arg(signatureRecord.sName, QString::number(nElapsedTime)));
-                }
-            }
-        }
-
-        XBinary::setPdStructCurrentIncrement(pPdStruct, _nFreeIndex);
+        XBinary::setPdStructCurrentIncrement(pPdStruct, nProgressIndex);
     }
 
-    if (bAddUnknown) {
-        if (listRecords.count() == 0) {
-            DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
+    if (bAddUnknown && listRecords.isEmpty()) {
+        DiE_ScriptEngine::SCAN_STRUCT scanStruct = {};
 
-            ssRecord.id = resultId;
-            ssRecord.parentId = parentId;
-            ssRecord.sType = tr("Unknown");
-            ssRecord.sName = tr("Unknown");
-            ssRecord.bIsUnknown = true;
+        scanStruct.id = resultId;
+        scanStruct.parentId = parentId;
+        scanStruct.sType = tr("Unknown");
+        scanStruct.sName = tr("Unknown");
+        scanStruct.bIsUnknown = true;
 
-            listRecords.append(ssRecord);
-        }
+        listRecords.append(scanStruct);
     }
 
     QList<XScanEngine::SCANSTRUCT> listScanStruct = convert(&listRecords);
@@ -304,19 +214,19 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
 
     pScanResult->listRecords.append(listScanStruct);
 
-    XBinary::setPdStructFinished(pPdStruct, _nFreeIndex);
+    XBinary::setPdStructFinished(pPdStruct, nProgressIndex);
 
     if (pScanID) {
         *pScanID = resultId;
     }
 }
 
-bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, SIGNATURE_RECORD *pSignatureRecord, XScanEngine::SCAN_RESULT *pScanResult)
+bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, const SIGNATURE_RECORD *pSignatureRecord, XScanEngine::SCAN_RESULT *pScanResult)
 {
     bool bResult = false;
 
     QString sErrorString;
-    QString sPrefix = QString("%1/%2").arg(XBinary::fileTypeIdToString(pSignatureRecord->fileType), pSignatureRecord->sName);
+    const QString sPrefix = QString("%1/%2").arg(XBinary::fileTypeIdToString(pSignatureRecord->fileType), pSignatureRecord->sName);
     if (pScriptEngine->handleError(sPrefix, scriptValue, &sErrorString)) {
         bResult = true;
     } else {
@@ -330,9 +240,129 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     return bResult;
 }
 
+bool DiE_Script::_shouldExecuteSignature(const SIGNATURE_RECORD &signatureRecord, XBinary::FT fileType, const SCAN_OPTIONS *pScanOptions,
+                                         const QString &sSignatureFilePath) const
+{
+    if (pScanOptions == nullptr) {
+        return false;
+    }
+
+    if (!XBinary::checkFileType(signatureRecord.fileType, fileType)) {
+        return false;
+    }
+
+    if (!pScanOptions->sSignatureName.isEmpty() && (pScanOptions->sSignatureName != signatureRecord.sName)) {
+        return false;
+    }
+
+    if (!pScanOptions->bIsDeepScan && isDeepScanSignature(signatureRecord)) {
+        return false;
+    }
+
+    if (!pScanOptions->bIsHeuristicScan && isHeuristicSignature(signatureRecord)) {
+        return false;
+    }
+
+    if (!sSignatureFilePath.isEmpty()) {
+        if (sSignatureFilePath != signatureRecord.sFilePath) {
+            return false;
+        }
+    } else if (signatureRecord.sName == QLatin1String(g_sInitSignatureName)) {
+        return false;
+    }
+
+    if (signatureRecord.databaseType == DT_MAIN) {
+        return true;
+    }
+
+    if (pScanOptions->bUseCustomDatabase && (signatureRecord.databaseType == DT_CUSTOM)) {
+        return true;
+    }
+
+    if (pScanOptions->bUseExtraDatabase && (signatureRecord.databaseType == DT_EXTRA)) {
+        return true;
+    }
+
+    return false;
+}
+
+void DiE_Script::_executeInitSignature(DiE_ScriptEngine *pScriptEngine, const SIGNATURE_RECORD &signatureRecord, SCAN_RESULT *pScanResult)
+{
+    _handleError(pScriptEngine, pScriptEngine->evaluate(signatureRecord.sText, signatureRecord.sFilePath), &signatureRecord, pScanResult);
+}
+
+void DiE_Script::_executeSignature(DiE_ScriptEngine *pScriptEngine, const QString &sDetectFunction, const SIGNATURE_RECORD &signatureRecord, const SCANID &parentId,
+                                   const SCANID &resultId, SCAN_RESULT *pScanResult, SCAN_OPTIONS *pScanOptions)
+{
+    if ((pScriptEngine == nullptr) || (pScanResult == nullptr) || (pScanOptions == nullptr)) {
+        return;
+    }
+
+    if (pScanOptions->bLogProfiling) {
+        emit warningMessage(signatureRecord.sName);
+    }
+
+    QElapsedTimer elapsedTimer;
+    const bool bMeasureTime = shouldMeasureElapsedTime(pScanOptions);
+
+    if (bMeasureTime) {
+        elapsedTimer.start();
+    }
+
+    XSCRIPTVALUE scriptObject = pScriptEngine->evaluateEx(parentId, resultId, signatureRecord.sText, signatureRecord.sName, signatureRecord.sFilePath);
+
+    if (_handleError(pScriptEngine, scriptObject, &signatureRecord, pScanResult)) {
+#ifdef QT_SCRIPTTOOLS_LIB
+        if (m_pDebugger) {
+            m_pDebugger->action(QScriptEngineDebugger::InterruptAction)->trigger();
+        }
+#endif
+        XSCRIPTVALUE scriptFunction = pScriptEngine->globalObject().property(sDetectFunction);
+
+        if (_handleError(pScriptEngine, scriptFunction, &signatureRecord, pScanResult)) {
+            XSCRIPTVALUELIST valueList;
+
+            if (sDetectFunction == QLatin1String(g_sDefaultDetectFunction)) {
+                valueList << pScanOptions->bShowType << pScanOptions->bShowVersion << pScanOptions->bShowInfo;
+            }
+
+#ifdef QT_SCRIPT_LIB
+            QScriptValue result = scriptFunction.call(scriptObject, valueList);
+#else
+            QJSValue result = scriptFunction.callWithInstance(scriptObject, valueList);
+#endif
+
+            _handleError(pScriptEngine, result, &signatureRecord, pScanResult);
+        }
+    }
+
+    if (bMeasureTime) {
+        _handleElapsedTime(signatureRecord, elapsedTimer.elapsed(), pScanResult, pScanOptions);
+    }
+}
+
+void DiE_Script::_handleElapsedTime(const SIGNATURE_RECORD &signatureRecord, qint64 nElapsedTime, SCAN_RESULT *pScanResult, const SCAN_OPTIONS *pScanOptions)
+{
+    if ((pScanResult == nullptr) || (pScanOptions == nullptr)) {
+        return;
+    }
+
+    if (pScanOptions->bShowScanTime) {
+        XScanEngine::DEBUG_RECORD debugRecord = {};
+        debugRecord.sScript = signatureRecord.sName;
+        debugRecord.nElapsedTime = nElapsedTime;
+
+        pScanResult->listDebugRecords.append(debugRecord);
+    }
+
+    if (pScanOptions->bLogProfiling) {
+        emit warningMessage(QString("%1: [%2 ms]").arg(signatureRecord.sName, QString::number(nElapsedTime)));
+    }
+}
+
 QString DiE_Script::getEngineName()
 {
-    return QString("die");
+    return QStringLiteral("die");
 }
 
 XScanEngine::SCANENGINETYPE DiE_Script::getEngineType()
@@ -346,9 +376,13 @@ void DiE_Script::_processDetect(SCANID *pScanID, SCAN_RESULT *pScanResult, QIODe
     processDetect(pScanID, pScanResult, pDevice, parentId, fileType, pOptions, "", bAddUnknown, pPdStruct);
 }
 
-QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs)
+QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(const QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs)
 {
     QList<XScanEngine::SCANSTRUCT> listResult;
+
+    if (pListScanStructs == nullptr) {
+        return listResult;
+    }
 
     qint32 nNumberOfRecords = pListScanStructs->count();
 
@@ -395,31 +429,27 @@ QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(QList<DiE_ScriptEngine::SCAN_
 
 bool DiE_Script::isSignatureFileValid(const QString &sSignatureFilePath)
 {
-    bool bResult = false;
+    const QFileInfo fileInfo(sSignatureFilePath);
 
-    QFileInfo fileInfo(sSignatureFilePath);
-
-    if (fileInfo.isFile()) {
-        QString sExt = fileInfo.suffix().toLower();
-
-        if ((sExt == "sg") || (sExt == "")) {
-            bResult = true;
-        }
+    if (!fileInfo.isFile()) {
+        return false;
     }
 
-    return bResult;
+    const QString sExt = fileInfo.suffix().toLower();
+
+    return (sExt == QLatin1String("sg")) || sExt.isEmpty();
 }
 
 #ifdef QT_SCRIPTTOOLS_LIB
 void DiE_Script::setDebugger(QScriptEngineDebugger *pDebugger)
 {
-    this->m_pDebugger = pDebugger;
+    m_pDebugger = pDebugger;
 }
 #endif
 
 #ifdef QT_SCRIPTTOOLS_LIB
 void DiE_Script::removeDebugger()
 {
-    this->m_pDebugger = nullptr;
+    m_pDebugger = nullptr;
 }
 #endif
