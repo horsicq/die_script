@@ -427,6 +427,11 @@ QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(const QList<DiE_ScriptEngine:
 //     return bResult;
 // }
 
+bool DiE_Script::isDatabaseUsing()
+{
+    return true;
+}
+
 bool DiE_Script::isSignatureFileValid(const QString &sSignatureFilePath)
 {
     const QFileInfo fileInfo(sSignatureFilePath);

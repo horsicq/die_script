@@ -41,6 +41,7 @@ public:
 
     // bool loadDatabaseFromGlobalOptions(XOptions *pXOptions);
     bool isSignatureFileValid(const QString &sSignatureFilePath) override;
+    bool isDatabaseUsing() override;
 
 private:
     void processDetect(XScanEngine::SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const XScanEngine::SCANID &parentId, XBinary::FT fileType,
