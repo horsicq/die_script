@@ -79,11 +79,11 @@ DiE_ScriptDatabaseUpdate::UPDATE_RESULT DiE_ScriptDatabaseUpdate::updateDatabase
     }
 
     if (dbInfo.sDbUrl.isEmpty()) {
-        result.sErrorString = tr("No db.zip found in release");
+        result.sErrorString = tr("No %1 found in release").arg(QString("db.zip"));
         return result;
     }
 
-    emit infoMessage(tr("Updating main database..."));
+    emit infoMessage(tr("Updating main database") + QString("..."));
 
     QString sError;
 
@@ -110,11 +110,11 @@ DiE_ScriptDatabaseUpdate::UPDATE_RESULT DiE_ScriptDatabaseUpdate::updateDatabase
     }
 
     if (dbInfo.sDbExtraUrl.isEmpty()) {
-        result.sErrorString = tr("No db_extra.zip found in release");
+        result.sErrorString = tr("No %1 found in release").arg(QString("db_extra.zip"));
         return result;
     }
 
-    emit infoMessage(tr("Updating extra database..."));
+    emit infoMessage(tr("Updating extra database") + QString("..."));
 
     QString sError;
 
@@ -143,7 +143,7 @@ DiE_ScriptDatabaseUpdate::UPDATE_RESULT DiE_ScriptDatabaseUpdate::updateDatabase
     result.bSuccess = true;
 
     if (!dbInfo.sDbUrl.isEmpty()) {
-        emit infoMessage(tr("Updating main database..."));
+        emit infoMessage(tr("Updating main database") + QString("..."));
 
         QString sError;
 
@@ -157,7 +157,7 @@ DiE_ScriptDatabaseUpdate::UPDATE_RESULT DiE_ScriptDatabaseUpdate::updateDatabase
     }
 
     if (result.bSuccess && !dbInfo.sDbExtraUrl.isEmpty()) {
-        emit infoMessage(tr("Updating extra database..."));
+        emit infoMessage(tr("Updating extra database") + QString("..."));
 
         QString sError;
 
@@ -187,7 +187,7 @@ bool DiE_ScriptDatabaseUpdate::_downloadAndExtract(const QString &sUrl, const QS
     emit infoMessage(QString("Downloading: %1").arg(sUrl));
 
     if (!XGitHub::downloadFile(sUrl, sTempZipPath)) {
-        *psError = tr("Failed to download file: %1").arg(sUrl);
+        *psError = tr("Failed to download file") + QString(": %1").arg(sUrl);
         return false;
     }
 
