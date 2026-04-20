@@ -781,7 +781,7 @@ void DiE_ScriptEngine::_getOSSlot(QString *pResult)
 
 void DiE_ScriptEngine::_getQtVersionSlot(QString *pResult)
 {
-    *pResult = QString("%1.%2.%3").arg(QString::number(QT_VERSION_MAJOR), QString::number(QT_VERSION_MINOR), QString::number(QT_VERSION_PATCH));
+    *pResult = QString::fromLatin1(QT_VERSION_STR);
 }
 
 // DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)
