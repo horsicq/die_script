@@ -48,15 +48,16 @@ private:
                        XScanEngine::SCAN_OPTIONS *pScanOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct);
     bool _handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scriptValue, const XScanEngine::SIGNATURE_RECORD *pSignatureRecord,
                       XScanEngine::SCAN_RESULT *pScanResult);
-    bool _shouldExecuteSignature(const SIGNATURE_RECORD &signatureRecord, XBinary::FT fileType, const SCAN_OPTIONS *pScanOptions, const QString &sSignatureFilePath) const;
+    bool _shouldExecuteSignature(const SIGNATURE_RECORD &signatureRecord, XBinary::FT fileType, const SCAN_OPTIONS *pScanOptions,
+                                 const QString &sSignatureFilePath) const;
     void _executeInitSignature(DiE_ScriptEngine *pScriptEngine, const SIGNATURE_RECORD &signatureRecord, SCAN_RESULT *pScanResult);
     void _executeSignature(DiE_ScriptEngine *pScriptEngine, const QString &sDetectFunction, const SIGNATURE_RECORD &signatureRecord, const SCANID &parentId,
                            const SCANID &resultId, SCAN_RESULT *pScanResult, SCAN_OPTIONS *pScanOptions);
     void _handleElapsedTime(const SIGNATURE_RECORD &signatureRecord, qint64 nElapsedTime, SCAN_RESULT *pScanResult, const SCAN_OPTIONS *pScanOptions);
 
 protected:
-    void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
-                        SCAN_OPTIONS *pOptions, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct) override;
+    void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType, SCAN_OPTIONS *pOptions,
+                        bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct) override;
     QString getEngineName() override;
     SCANENGINETYPE getEngineType() override;
 
