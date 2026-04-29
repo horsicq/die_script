@@ -56,10 +56,10 @@ private:
     void _handleElapsedTime(const SIGNATURE_RECORD &signatureRecord, qint64 nElapsedTime, SCAN_RESULT *pScanResult, const SCAN_OPTIONS *pScanOptions);
 
 protected:
-    void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType, SCAN_OPTIONS *pOptions,
+    virtual void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType, SCAN_OPTIONS *pOptions,
                         bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct) override;
-    QString getEngineName() override;
-    SCANENGINETYPE getEngineType() override;
+    virtual QString getEngineName() override;
+    virtual SCANENGINETYPE getEngineType() override;
 
 #ifdef QT_SCRIPTTOOLS_LIB
     QScriptEngineDebugger *m_pDebugger = nullptr;
