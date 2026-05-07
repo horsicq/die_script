@@ -23,7 +23,7 @@
 
 #include <QDir>
 #include <QTemporaryDir>
-#include "xgithub.h"
+// #include "xgithub.h"
 #include "xzip.h"
 
 class DiE_ScriptDatabaseUpdate : public QObject {

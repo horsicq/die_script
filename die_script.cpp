@@ -64,26 +64,6 @@ bool shouldMeasureElapsedTime(const XScanEngine::SCAN_OPTIONS *pScanOptions)
     return (pScanOptions != nullptr) && (pScanOptions->bShowScanTime || pScanOptions->bLogProfiling);
 }
 
-Binary_Script::OPTIONS createScriptOptions(const XScanEngine::SCAN_OPTIONS *pScanOptions)
-{
-    Binary_Script::OPTIONS options = {};
-
-    if (pScanOptions != nullptr) {
-        options.bIsDeepScan = pScanOptions->bIsDeepScan;
-        options.bIsHeuristicScan = pScanOptions->bIsHeuristicScan;
-        options.bIsAggressiveScan = pScanOptions->bIsAggressiveScan;
-        options.bIsRecursiveScan = pScanOptions->bIsRecursiveScan;
-        options.bIsResourcesScan = pScanOptions->bIsResourcesScan;
-        options.bIsArchivesScan = pScanOptions->bIsArchivesScan;
-        options.bIsOverlayScan = pScanOptions->bIsOverlayScan;
-        options.bIsVerbose = pScanOptions->bIsVerbose;
-        options.bIsProfiling = pScanOptions->bLogProfiling;
-        options.sScanID = pScanOptions->sScanID;
-    }
-
-    return options;
-}
-
 XScanEngine::SCANID createResultId(QIODevice *pDevice, const XScanEngine::SCANID &parentId, XBinary::FT fileType)
 {
     XScanEngine::SCANID resultId = {};
@@ -143,13 +123,12 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
                                XScanEngine::SCAN_OPTIONS *pScanOptions, const QString &sSignatureFilePath, bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
 {
     const QString sDetectFunction = getDetectFunctionName(pScanOptions);
-    QList<DiE_ScriptEngine::SCAN_STRUCT> listRecords;
+    QList<SCANSTRUCT> listRecords;
     const XScanEngine::SCANID resultId = createResultId(pDevice, parentId, fileType);
     const qint32 nNumberOfSignatures = m_listSignatures.count();
     const INIT_SIGNATURES initSignatures = findInitSignatures(m_listSignatures, fileType, pPdStruct);
 
-    Binary_Script::OPTIONS scriptOptions = createScriptOptions(pScanOptions);
-    DiE_ScriptEngine scriptEngine(&m_listSignatures, &listRecords, pDevice, fileType, parentId.filePart, &scriptOptions, pPdStruct);
+    DiE_ScriptEngine scriptEngine(&m_listSignatures, &listRecords, pDevice, fileType, parentId.filePart, pScanOptions, pPdStruct);
 
     connect(&scriptEngine, &DiE_ScriptEngine::errorMessage, this, &DiE_Script::errorMessage);
     connect(&scriptEngine, &DiE_ScriptEngine::warningMessage, this, &DiE_Script::warningMessage);
@@ -191,11 +170,15 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
             _executeSignature(&scriptEngine, sDetectFunction, signatureRecord, parentId, resultId, pScanResult, pScanOptions);
         }
 
+        if (scriptEngine.isStopped()) {
+            break;
+        }
+
         XBinary::setPdStructCurrentIncrement(pPdStruct, nProgressIndex);
     }
 
     if (bAddUnknown && listRecords.isEmpty()) {
-        DiE_ScriptEngine::SCAN_STRUCT scanStruct = {};
+        XScanEngine::SCANSTRUCT scanStruct = {};
 
         scanStruct.id = resultId;
         scanStruct.parentId = parentId;
@@ -206,13 +189,13 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
         listRecords.append(scanStruct);
     }
 
-    QList<XScanEngine::SCANSTRUCT> listScanStruct = convert(&listRecords);
+    // QList<XScanEngine::SCANSTRUCT> listScanStruct = convert(&listRecords);
 
     if (pScanOptions->bIsSort) {
-        sortRecords(&listScanStruct);
+        sortRecords(&listRecords);
     }
 
-    pScanResult->listRecords.append(listScanStruct);
+    pScanResult->listRecords.append(listRecords);
 
     XBinary::setPdStructFinished(pPdStruct, nProgressIndex);
 
@@ -374,45 +357,6 @@ void DiE_Script::_processDetect(SCANID *pScanID, SCAN_RESULT *pScanResult, QIODe
                                 bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct)
 {
     processDetect(pScanID, pScanResult, pDevice, parentId, fileType, pOptions, "", bAddUnknown, pPdStruct);
-}
-
-QList<XScanEngine::SCANSTRUCT> DiE_Script::convert(const QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs)
-{
-    QList<XScanEngine::SCANSTRUCT> listResult;
-
-    if (pListScanStructs == nullptr) {
-        return listResult;
-    }
-
-    qint32 nNumberOfRecords = pListScanStructs->count();
-
-    for (qint32 i = 0; i < nNumberOfRecords; i++) {
-        XScanEngine::SCANSTRUCT record = {};
-
-        record.bIsHeuristic = isHeurType(pListScanStructs->at(i).sType);
-        record.bIsAHeuristic = isAHeurType(pListScanStructs->at(i).sType);
-        record.bIsUnknown = pListScanStructs->at(i).bIsUnknown;
-        record.id = pListScanStructs->at(i).id;
-        record.parentId = pListScanStructs->at(i).parentId;
-        record.sType = pListScanStructs->at(i).sType;
-        record.sName = pListScanStructs->at(i).sName;
-        record.type = recordTypeStringToId(pListScanStructs->at(i).sType);
-        record.name = recordNameStringToId(pListScanStructs->at(i).sName);
-        record.sVersion = pListScanStructs->at(i).sVersion;
-        record.sInfo = pListScanStructs->at(i).sOptions;
-        record.varInfo = pListScanStructs->at(i).sSignature;
-        record.varInfo2 = pListScanStructs->at(i).sSignatureFileName;
-        // record.sResult = pListScanStructs->at(i).sResult;
-
-        record.nPrio = typeToPrio(record.sType);
-        record.bIsProtection = isProtection(record.sType);
-
-        listResult.append(record);
-    }
-
-    // sortRecords(&listResult);
-
-    return listResult;
 }
 
 // bool DiE_Script::loadDatabaseFromGlobalOptions(XOptions *pXOptions)

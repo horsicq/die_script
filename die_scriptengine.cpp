@@ -20,8 +20,8 @@
  */
 #include "die_scriptengine.h"
 
-DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType,
-                                   XBinary::FILEPART filePart, Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct)
+DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignaturesList, QList<XScanEngine::SCANSTRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType,
+                                   XBinary::FILEPART filePart, XScanEngine::SCAN_OPTIONS *pScanOptions, XBinary::PDSTRUCT *pPdStruct)
     : XScriptEngine()
 {
     m_parentId = {};
@@ -29,7 +29,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
 
     m_pSignaturesList = pSignaturesList;
     m_pListScanStructs = pListScanStructs;
+    m_pScanOptions = pScanOptions;
     m_pPdStruct = pPdStruct;
+
+    m_bIsStop = false;
 
     // qRegisterMetaType<QList<quint32>>("QList<quint32>");
 
@@ -87,45 +90,47 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
     globalObject().setProperty("_getQtVersion", valueGlobalScript.property("_getQtVersion"));
 #endif
 
+    Binary_Script::OPTIONS scriptOptions = XScanEngine::createScriptOptions(pScanOptions);
+
     Util_script *pUtilScript = new Util_script;
     _addClass(pUtilScript, "Util");
     m_listScriptClasses.append(pUtilScript);
 
     if (XBinary::checkFileType(XBinary::FT_BINARY, fileType)) {
         XBinary *pBinary = new XBinary(pDevice);
-        Binary_Script *pExtraScript = new Binary_Script(pBinary, filePart, pOptions, pPdStruct);
+        Binary_Script *pExtraScript = new Binary_Script(pBinary, filePart, scriptOptions, pPdStruct);
         _adjustScript(pBinary, pExtraScript, "Binary");
     } else if (XBinary::checkFileType(XBinary::FT_COM, fileType)) {
         XCOM *pCOM = new XCOM(pDevice);
-        COM_Script *pExtraScript = new COM_Script(pCOM, filePart, pOptions, pPdStruct);
+        COM_Script *pExtraScript = new COM_Script(pCOM, filePart, scriptOptions, pPdStruct);
         _adjustScript(pCOM, pExtraScript, "COM");
     } else if (XBinary::checkFileType(XBinary::FT_PE, fileType)) {
         XPE *pPE = new XPE(pDevice);
-        PE_Script *pExtraScript = new PE_Script(pPE, filePart, pOptions, pPdStruct);
+        PE_Script *pExtraScript = new PE_Script(pPE, filePart, scriptOptions, pPdStruct);
         _adjustScript(pPE, pExtraScript, "PE");
     } else if (XBinary::checkFileType(XBinary::FT_ELF, fileType)) {
         XELF *pELF = new XELF(pDevice);
-        ELF_Script *pExtraScript = new ELF_Script(pELF, filePart, pOptions, pPdStruct);
+        ELF_Script *pExtraScript = new ELF_Script(pELF, filePart, scriptOptions, pPdStruct);
         _adjustScript(pELF, pExtraScript, "ELF");
     } else if (XBinary::checkFileType(XBinary::FT_MACHO, fileType)) {
         XMACH *pMACH = new XMACH(pDevice);
-        MACH_Script *pExtraScript = new MACH_Script(pMACH, filePart, pOptions, pPdStruct);
+        MACH_Script *pExtraScript = new MACH_Script(pMACH, filePart, scriptOptions, pPdStruct);
         _adjustScript(pMACH, pExtraScript, "MACH");
     } else if (XBinary::checkFileType(XBinary::FT_NE, fileType)) {
         XNE *pNE = new XNE(pDevice);
-        NE_Script *pExtraScript = new NE_Script(pNE, filePart, pOptions, pPdStruct);
+        NE_Script *pExtraScript = new NE_Script(pNE, filePart, scriptOptions, pPdStruct);
         _adjustScript(pNE, pExtraScript, "NE");
     } else if (XBinary::checkFileType(XBinary::FT_LE, fileType)) {
         XLE *pLE = new XLE(pDevice);
-        LE_Script *pExtraScript = new LE_Script(pLE, filePart, pOptions, pPdStruct);
+        LE_Script *pExtraScript = new LE_Script(pLE, filePart, scriptOptions, pPdStruct);
         _adjustScript(pLE, pExtraScript, "LE");
     } else if (XBinary::checkFileType(XBinary::FT_LX, fileType)) {
         XLE *pLE = new XLE(pDevice);
-        LX_Script *pExtraScript = new LX_Script(pLE, filePart, pOptions, pPdStruct);
+        LX_Script *pExtraScript = new LX_Script(pLE, filePart, scriptOptions, pPdStruct);
         _adjustScript(pLE, pExtraScript, "LX");
     } else if (XBinary::checkFileType(XBinary::FT_MSDOS, fileType)) {
         XMSDOS *pXMSDOS = new XMSDOS(pDevice);
-        MSDOS_Script *pExtraScript = new MSDOS_Script(pXMSDOS, filePart, pOptions, pPdStruct);
+        MSDOS_Script *pExtraScript = new MSDOS_Script(pXMSDOS, filePart, scriptOptions, pPdStruct);
         _adjustScript(pXMSDOS, pExtraScript, "MSDOS");
     } else if (XBinary::checkFileType(XBinary::FT_ARCHIVE, fileType)) {
         Archive_Script *pExtraScript = nullptr;
@@ -136,7 +141,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
         XArchive *_pArchive = static_cast<XArchive *>(XFormats::getClass(_fileType, pDevice));
 
         if (_pArchive) {
-            pExtraScript = new Archive_Script(_pArchive, filePart, pOptions, pPdStruct);
+            pExtraScript = new Archive_Script(_pArchive, filePart, scriptOptions, pPdStruct);
             _adjustScript(_pArchive, pExtraScript, "Archive");
         }
     } else if (XBinary::checkFileType(XBinary::FT_IMAGE, fileType)) {
@@ -148,88 +153,88 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
 
         if (fileTypes.contains(XBinary::FT_JPEG)) {
             _pImage = new XJpeg(pDevice);
-            pExtraScript = new Jpeg_Script((XJpeg *)_pImage, filePart, pOptions, pPdStruct);
+            pExtraScript = new Jpeg_Script((XJpeg *)_pImage, filePart, scriptOptions, pPdStruct);
         } else if (fileTypes.contains(XBinary::FT_PNG)) {
             _pImage = new XPNG(pDevice);
-            pExtraScript = new PNG_Script((XPNG *)_pImage, filePart, pOptions, pPdStruct);
+            pExtraScript = new PNG_Script((XPNG *)_pImage, filePart, scriptOptions, pPdStruct);
         }
         // TODO more
         _adjustScript(_pImage, pExtraScript, "Image");
     } else if (XBinary::checkFileType(XBinary::FT_RAR, fileType)) {
         XRar *pRAR = new XRar(pDevice);
-        RAR_Script *pExtraScript = new RAR_Script(pRAR, filePart, pOptions, pPdStruct);
+        RAR_Script *pExtraScript = new RAR_Script(pRAR, filePart, scriptOptions, pPdStruct);
         _adjustScript(pRAR, pExtraScript, "RAR");
     } else if (XBinary::checkFileType(XBinary::FT_ISO9660, fileType)) {
         XISO9660 *pISO = new XISO9660(pDevice);
-        ISO9660_Script *pExtraScript = new ISO9660_Script(pISO, filePart, pOptions, pPdStruct);
+        ISO9660_Script *pExtraScript = new ISO9660_Script(pISO, filePart, scriptOptions, pPdStruct);
         _adjustScript(pISO, pExtraScript, "ISO9660");
     } else if (XBinary::checkFileType(XBinary::FT_ZIP, fileType)) {
         XZip *pZIP = new XZip(pDevice);
-        ZIP_Script *pExtraScript = new ZIP_Script(pZIP, filePart, pOptions, pPdStruct);
+        ZIP_Script *pExtraScript = new ZIP_Script(pZIP, filePart, scriptOptions, pPdStruct);
         _adjustScript(pZIP, pExtraScript, "ZIP");
     } else if (XBinary::checkFileType(XBinary::FT_JAR, fileType)) {
         XJAR *pJAR = new XJAR(pDevice);
-        JAR_Script *pExtraScript = new JAR_Script(pJAR, filePart, pOptions, pPdStruct);
+        JAR_Script *pExtraScript = new JAR_Script(pJAR, filePart, scriptOptions, pPdStruct);
         _adjustScript(pJAR, pExtraScript, "JAR");
     } else if (XBinary::checkFileType(XBinary::FT_APK, fileType)) {
         XAPK *pAPK = new XAPK(pDevice);
-        APK_Script *pExtraScript = new APK_Script(pAPK, filePart, pOptions, pPdStruct);
+        APK_Script *pExtraScript = new APK_Script(pAPK, filePart, scriptOptions, pPdStruct);
         _adjustScript(pAPK, pExtraScript, "APK");
     } else if (XBinary::checkFileType(XBinary::FT_IPA, fileType)) {
         XIPA *pIPA = new XIPA(pDevice);
-        IPA_Script *pExtraScript = new IPA_Script(pIPA, filePart, pOptions, pPdStruct);
+        IPA_Script *pExtraScript = new IPA_Script(pIPA, filePart, scriptOptions, pPdStruct);
         _adjustScript(pIPA, pExtraScript, "IPA");
     } else if (XBinary::checkFileType(XBinary::FT_NPM, fileType)) {
         XNPM *pNPNM = new XNPM(pDevice);
-        NPM_Script *pExtraScript = new NPM_Script(pNPNM, filePart, pOptions, pPdStruct);
+        NPM_Script *pExtraScript = new NPM_Script(pNPNM, filePart, scriptOptions, pPdStruct);
         _adjustScript(pNPNM, pExtraScript, "NPM");
     } else if (XBinary::checkFileType(XBinary::FT_MACHOFAT, fileType)) {
         XMACHOFat *pMachofat = new XMACHOFat(pDevice);
-        MACHOFAT_Script *pExtraScript = new MACHOFAT_Script(pMachofat, filePart, pOptions, pPdStruct);
+        MACHOFAT_Script *pExtraScript = new MACHOFAT_Script(pMachofat, filePart, scriptOptions, pPdStruct);
         _adjustScript(pMachofat, pExtraScript, "MACHOFAT");
     } else if (XBinary::checkFileType(XBinary::FT_DOS16M, fileType)) {
         XDOS16 *pDOS16 = new XDOS16(pDevice);
-        DOS16M_Script *pExtraScript = new DOS16M_Script(pDOS16, filePart, pOptions, pPdStruct);
+        DOS16M_Script *pExtraScript = new DOS16M_Script(pDOS16, filePart, scriptOptions, pPdStruct);
         _adjustScript(pDOS16, pExtraScript, "DOS16M");
     } else if (XBinary::checkFileType(XBinary::FT_DOS4G, fileType)) {
         XDOS16 *pDOS16 = new XDOS16(pDevice);
-        DOS4G_Script *pExtraScript = new DOS4G_Script(pDOS16, filePart, pOptions, pPdStruct);
+        DOS4G_Script *pExtraScript = new DOS4G_Script(pDOS16, filePart, scriptOptions, pPdStruct);
         _adjustScript(pDOS16, pExtraScript, "DOS4G");
     } else if (XBinary::checkFileType(XBinary::FT_DEX, fileType)) {
         XDEX *pDEX = new XDEX(pDevice);
-        DEX_Script *pExtraScript = new DEX_Script(pDEX, filePart, pOptions, pPdStruct);
+        DEX_Script *pExtraScript = new DEX_Script(pDEX, filePart, scriptOptions, pPdStruct);
         _adjustScript(pDEX, pExtraScript, "DEX");
     } else if (XBinary::checkFileType(XBinary::FT_AMIGAHUNK, fileType)) {
         XAmigaHunk *pAmiga = new XAmigaHunk(pDevice);
-        Amiga_Script *pExtraScript = new Amiga_Script(pAmiga, filePart, pOptions, pPdStruct);
+        Amiga_Script *pExtraScript = new Amiga_Script(pAmiga, filePart, scriptOptions, pPdStruct);
         _adjustScript(pAmiga, pExtraScript, "Amiga");
     } else if (XBinary::checkFileType(XBinary::FT_ATARIST, fileType)) {
         XAtariST *pAtariST = new XAtariST(pDevice);
-        AtariST_Script *pExtraScript = new AtariST_Script(pAtariST, filePart, pOptions, pPdStruct);
+        AtariST_Script *pExtraScript = new AtariST_Script(pAtariST, filePart, scriptOptions, pPdStruct);
         _adjustScript(pAtariST, pExtraScript, "AtariST");
     } else if (XBinary::checkFileType(XBinary::FT_JAVACLASS, fileType)) {
         XJavaClass *pAmiga = new XJavaClass(pDevice);
-        JavaClass_Script *pExtraScript = new JavaClass_Script(pAmiga, filePart, pOptions, pPdStruct);
+        JavaClass_Script *pExtraScript = new JavaClass_Script(pAmiga, filePart, scriptOptions, pPdStruct);
         _adjustScript(pAmiga, pExtraScript, "JavaClass");
     } else if (XBinary::checkFileType(XBinary::FT_PYC, fileType)) {
         XPYC *pPYC = new XPYC(pDevice);
-        PYC_Script *pExtraScript = new PYC_Script(pPYC, filePart, pOptions, pPdStruct);
+        PYC_Script *pExtraScript = new PYC_Script(pPYC, filePart, scriptOptions, pPdStruct);
         _adjustScript(pPYC, pExtraScript, "PYC");
     } else if (XBinary::checkFileType(XBinary::FT_PDF, fileType)) {
         XPDF *pPDF = new XPDF(pDevice);
-        PDF_Script *pExtraScript = new PDF_Script(pPDF, filePart, pOptions, pPdStruct);
+        PDF_Script *pExtraScript = new PDF_Script(pPDF, filePart, scriptOptions, pPdStruct);
         _adjustScript(pPDF, pExtraScript, "PDF");
     } else if (XBinary::checkFileType(XBinary::FT_CFBF, fileType)) {
         XCFBF *pCFBF = new XCFBF(pDevice);
-        CFBF_Script *pExtraScript = new CFBF_Script(pCFBF, filePart, pOptions, pPdStruct);
+        CFBF_Script *pExtraScript = new CFBF_Script(pCFBF, filePart, scriptOptions, pPdStruct);
         _adjustScript(pCFBF, pExtraScript, "CFBF");
     } else if (XBinary::checkFileType(XBinary::FT_JPEG, fileType)) {
         XJpeg *pJpeg = new XJpeg(pDevice);
-        Jpeg_Script *pExtraScript = new Jpeg_Script(pJpeg, filePart, pOptions, pPdStruct);
+        Jpeg_Script *pExtraScript = new Jpeg_Script(pJpeg, filePart, scriptOptions, pPdStruct);
         _adjustScript(pJpeg, pExtraScript, "Jpeg");
     } else if (XBinary::checkFileType(XBinary::FT_PNG, fileType)) {
         XPNG *pPNG = new XPNG(pDevice);
-        PNG_Script *pExtraScript = new PNG_Script(pPNG, filePart, pOptions, pPdStruct);
+        PNG_Script *pExtraScript = new PNG_Script(pPNG, filePart, scriptOptions, pPdStruct);
         _adjustScript(pPNG, pExtraScript, "PNG");
     }
 
@@ -300,6 +305,11 @@ XSCRIPTVALUE DiE_ScriptEngine::evaluateEx(const XScanEngine::SCANID &parentId, c
     m_sFileName = sFileName;
 
     return evaluate(sProgram, sFileName);
+}
+
+bool DiE_ScriptEngine::isStopped()
+{
+    return m_bIsStop;
 }
 
 // QList<DiE_ScriptEngine::RESULT> DiE_ScriptEngine::getListLocalResult()
@@ -635,7 +645,7 @@ void DiE_ScriptEngine::_logSlot(const QString &sText)
     emit infoMessage(sText);
 }
 
-void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions)
+void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, const QString &sInfo)
 {
     bool bAdd = true;
 
@@ -650,23 +660,49 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
     }
 
     if (bAdd) {
-        DiE_ScriptEngine::SCAN_STRUCT ssRecord = {};
+        XScanEngine::SCANSTRUCT ssRecord = {};
 
         // TODO IDs
         ssRecord.id = m_resultId;
         ssRecord.parentId = m_parentId;
 
-        ssRecord.sSignature = m_sName;
-        ssRecord.sSignatureFileName = m_sFileName;
+        ssRecord.varInfo = m_sName;
+        ssRecord.varInfo2 = m_sFileName;
 
         ssRecord.sType = sType;
+        ssRecord.bIsHeuristic = XScanEngine::isHeurType(sType);
+        ssRecord.bIsAHeuristic = XScanEngine::isAHeurType(sType);
+        ssRecord.nPrio = XScanEngine::typeToPrio(sType);
+        ssRecord.bIsProtection = XScanEngine::isProtection(sType);
+        ssRecord.bIsBundle = XScanEngine::isBundle(sType);
+        ssRecord.type = XScanEngine::recordTypeStringToId(sType);
+        ssRecord.name = XScanEngine::recordNameStringToId(sName);
+
         ssRecord.sName = sName;
         ssRecord.sVersion = sVersion;
-        ssRecord.sOptions = sOptions;
+        ssRecord.sInfo = sInfo;
         // ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
         // ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
 
-        m_pListScanStructs->append(ssRecord);
+        bool bAdd = false;
+        bool bStop = false;
+
+        if (m_pScanOptions->bIsFirstWrapperScan) {
+            if (ssRecord.bIsProtection || ssRecord.bIsBundle) {
+                bAdd = true;
+                bStop = true;
+            }
+        } else {
+            bAdd = true;
+        }
+
+        if (bAdd) {
+            m_pListScanStructs->append(ssRecord);
+        }
+
+        if (bStop) {
+            m_bIsStop = true;
+        }
     }
 }
 

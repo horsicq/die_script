@@ -32,29 +32,13 @@ class DiE_ScriptEngine : public XScriptEngine {
     Q_OBJECT
 
 public:
-    struct SCAN_STRUCT {
-        bool bIsUnknown;
-        XScanEngine::SCANID id;
-        XScanEngine::SCANID parentId;
-        //        SCAN_HEADER scanHeader;
-        //        XBinary::FT fileType;
-        // QString sFullString;
-        QString sType;
-        // QString sResult;
-        QString sName;
-        QString sVersion;
-        QString sOptions;
-        QString sSignature;
-        QString sSignatureFileName;
-    };
-
     struct BLRECORD {
         QString sType;
         QString sName;
     };
 
-    DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignaturesList, QList<SCAN_STRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType,
-                     XBinary::FILEPART filePart, Binary_Script::OPTIONS *pOptions, XBinary::PDSTRUCT *pPdStruct);
+    DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignaturesList, QList<XScanEngine::SCANSTRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType,
+                     XBinary::FILEPART filePart, XScanEngine::SCAN_OPTIONS *pScanOptions, XBinary::PDSTRUCT *pPdStruct);
     ~DiE_ScriptEngine();
 
     void _adjustScript(XBinary *pBinary, Binary_Script *pScript, const QString &sName);
@@ -65,6 +49,8 @@ public:
     // static RESULT stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions);
     XSCRIPTVALUE evaluateEx(const XScanEngine::SCANID &parentId, const XScanEngine::SCANID &resultId, const QString &sProgram, const QString &sName,
                             const QString &sFileName);
+
+    bool isStopped();
 
 private:
 #ifdef QT_SCRIPT_LIB
@@ -88,7 +74,7 @@ private:
 private slots:
     void includeScriptSlot(const QString &sScript);
     void _logSlot(const QString &sText);
-    void _setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions);
+    void _setResultSlot(const QString &sType, const QString &sName, const QString &sVersion, const QString &sInfo);
     void _isResultPresentSlot(bool *pbResult, const QString &sType, const QString &sName);
     void _getNumberOfResultsSlot(qint32 *pnResult, const QString &sType);
     void _removeResultSlot(const QString &sType, const QString &sName);
@@ -105,9 +91,10 @@ private slots:
 
 private:
     QList<XScanEngine::SIGNATURE_RECORD> *m_pSignaturesList;
-    QList<SCAN_STRUCT> *m_pListScanStructs;
+    QList<XScanEngine::SCANSTRUCT> *m_pListScanStructs;
     QList<XBinary *> m_listBinaries;
     QList<QObject *> m_listScriptClasses;
+    XScanEngine::SCAN_OPTIONS *m_pScanOptions;
     XBinary::PDSTRUCT *m_pPdStruct;
 
     XScanEngine::SCANID m_parentId;
@@ -116,6 +103,7 @@ private:
     QString m_sFileName;             // TODO rename
 
     QList<BLRECORD> m_listBLRecords;
+    bool m_bIsStop;
 
     // QList<RESULT> m_listResult; // TODO remove
 #ifndef QT_SCRIPT_LIB

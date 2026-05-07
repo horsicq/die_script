@@ -37,7 +37,7 @@ public:
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
 #endif
-    static QList<XScanEngine::SCANSTRUCT> convert(const QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
+    // static QList<XScanEngine::SCANSTRUCT> convert(const QList<DiE_ScriptEngine::SCAN_STRUCT> *pListScanStructs);
 
     // bool loadDatabaseFromGlobalOptions(XOptions *pXOptions);
     bool isSignatureFileValid(const QString &sSignatureFilePath) override;
