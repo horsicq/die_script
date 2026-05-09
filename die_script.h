@@ -32,7 +32,9 @@ class DiE_Script : public XScanEngine {
 
 public:
     explicit DiE_Script(QObject *pParent = nullptr);
-    DiE_Script(const DiE_Script &other);
+    Q_DISABLE_COPY(DiE_Script)
+
+    void copySignaturesFrom(const DiE_Script &other);
 #ifdef QT_SCRIPTTOOLS_LIB
     void setDebugger(QScriptEngineDebugger *pDebugger);
     void removeDebugger();
@@ -56,10 +58,10 @@ private:
     void _handleElapsedTime(const SIGNATURE_RECORD &signatureRecord, qint64 nElapsedTime, SCAN_RESULT *pScanResult, const SCAN_OPTIONS *pScanOptions);
 
 protected:
-    virtual void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType, SCAN_OPTIONS *pOptions,
+    void _processDetect(XScanEngine::SCANID *pScanID, SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType, SCAN_OPTIONS *pOptions,
                         bool bAddUnknown, XBinary::PDSTRUCT *pPdStruct) override;
-    virtual QString getEngineName() override;
-    virtual SCANENGINETYPE getEngineType() override;
+    QString getEngineName() override;
+    SCANENGINETYPE getEngineType() override;
 
 #ifdef QT_SCRIPTTOOLS_LIB
     QScriptEngineDebugger *m_pDebugger = nullptr;

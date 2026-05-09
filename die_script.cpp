@@ -112,11 +112,9 @@ DiE_Script::DiE_Script(QObject *pParent) : XScanEngine(pParent)
 {
 }
 
-DiE_Script::DiE_Script(const DiE_Script &other) : XScanEngine(other)
+void DiE_Script::copySignaturesFrom(const DiE_Script &other)
 {
-#ifdef QT_SCRIPTTOOLS_LIB
-    m_pDebugger = other.m_pDebugger;
-#endif
+    m_listSignatures = other.m_listSignatures;
 }
 
 void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanResult, QIODevice *pDevice, const SCANID &parentId, XBinary::FT fileType,
