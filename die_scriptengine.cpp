@@ -284,7 +284,7 @@ bool DiE_ScriptEngine::handleError(QString sPrefix, XSCRIPTVALUE value, QString 
 
     if (value.isError()) {
         // TODO Check more information
-        *psErrorString = QString("%1: %2: %4").arg(sPrefix, value.property("lineNumber").toString(), value.toString());
+        *psErrorString = QString("%1: %2: %4").arg(sPrefix).arg(value.property("lineNumber").toString()).arg(value.toString());
 
 #ifdef QT_DEBUG
         qDebug("%s", (*psErrorString).toUtf8().data());
@@ -620,7 +620,7 @@ void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
                 XSCRIPTVALUE value = evaluate(m_pSignaturesList->at(i).sText, sScript);
 
                 if (value.isError()) {
-                    emit errorMessage(QString("includeScript %1: %2: %3").arg(sScript, value.property("lineNumber").toString(), value.toString()));
+                    emit errorMessage(QString("includeScript %1: %2: %3").arg(sScript).arg(value.property("lineNumber").toString()).arg(value.toString()));
                 }
 
                 bSuccess = true;
@@ -631,7 +631,7 @@ void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
     }
 
     if (!bSuccess) {
-        emit errorMessage(QString("%1: %2").arg(tr("Cannot find"), sScript));
+        emit errorMessage(QString("%1: %2").arg(tr("Cannot find")).arg(sScript));
     }
 }
 
@@ -681,8 +681,8 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
         ssRecord.sName = sName;
         ssRecord.sVersion = sVersion;
         ssRecord.sInfo = sInfo;
-        // ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType, ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
-        // ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName, ssRecord.sVersion, ssRecord.sOptions);
+        // ssRecord.sFullString = QString("%1: %2(%3)[%4]").arg(ssRecord.sType).arg(ssRecord.sName).arg(ssRecord.sVersion).arg(ssRecord.sOptions);
+        // ssRecord.sResult = QString("%1(%2)[%3]").arg(ssRecord.sName).arg(ssRecord.sVersion).arg(ssRecord.sOptions);
 
         bool bAdd = false;
         bool bStop = false;
@@ -807,7 +807,7 @@ void DiE_ScriptEngine::_getEngineVersionSlot(QString *pResult)
 {
     QDate qDate = QDate::fromString(__DATE__, "MMM dd yyyy");
 
-    *pResult = QString("%1.%2").arg(qApp->applicationVersion(), qDate.toString("yyyy.MM.dd"));
+    *pResult = QString("%1.%2").arg(qApp->applicationVersion()).arg(qDate.toString("yyyy.MM.dd"));
 }
 
 void DiE_ScriptEngine::_getOSSlot(QString *pResult)

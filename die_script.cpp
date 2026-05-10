@@ -207,7 +207,7 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
     bool bResult = false;
 
     QString sErrorString;
-    const QString sPrefix = QString("%1/%2").arg(XBinary::fileTypeIdToString(pSignatureRecord->fileType), pSignatureRecord->sName);
+    const QString sPrefix = QString("%1/%2").arg(XBinary::fileTypeIdToString(pSignatureRecord->fileType)).arg(pSignatureRecord->sName);
     if (pScriptEngine->handleError(sPrefix, scriptValue, &sErrorString)) {
         bResult = true;
     } else {
@@ -337,7 +337,7 @@ void DiE_Script::_handleElapsedTime(const SIGNATURE_RECORD &signatureRecord, qin
     }
 
     if (pScanOptions->bLogProfiling) {
-        emit warningMessage(QString("%1: [%2 ms]").arg(signatureRecord.sName, QString::number(nElapsedTime)));
+        emit warningMessage(QString("%1: [%2 ms]").arg(signatureRecord.sName).arg(QString::number(nElapsedTime)));
     }
 }
 
