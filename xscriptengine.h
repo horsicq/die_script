@@ -25,7 +25,9 @@
 #ifdef QT_SCRIPT_LIB
 #include <QScriptEngine>
 #else
+#ifdef QT_QML_LIB
 #include <QJSEngine>
+#endif
 #endif
 
 #ifdef QT_SCRIPT_LIB
@@ -33,9 +35,15 @@
 #define XSCRIPTVALUE QScriptValue
 #define XSCRIPTVALUELIST QScriptValueList
 #else
+#ifdef QT_QML_LIB
 #define XSCRIPTENGINE QJSEngine
 #define XSCRIPTVALUE QJSValue
 #define XSCRIPTVALUELIST QJSValueList
+#else
+#define XSCRIPTENGINE QObject
+#define XSCRIPTVALUE QObject
+#define XSCRIPTVALUELIST QObject
+#endif
 #endif
 
 class XScriptEngine : public XSCRIPTENGINE {
