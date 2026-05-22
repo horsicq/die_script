@@ -673,8 +673,8 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
         ssRecord.bIsHeuristic = XScanEngine::isHeurType(sType);
         ssRecord.bIsAHeuristic = XScanEngine::isAHeurType(sType);
         ssRecord.nPrio = XScanEngine::typeToPrio(sType);
-        ssRecord.bIsProtection = XScanEngine::isProtection(sType);
-        ssRecord.bIsBundle = XScanEngine::isBundle(sType);
+        // ssRecord.bIsProtection = XScanEngine::isProtection(sType);
+        // ssRecord.bIsBundle = XScanEngine::isBundle(sType);
         ssRecord.type = XScanEngine::recordTypeStringToId(sType);
         ssRecord.name = XScanEngine::recordNameStringToId(sName);
 
@@ -688,7 +688,7 @@ void DiE_ScriptEngine::_setResultSlot(const QString &sType, const QString &sName
         bool bStop = false;
 
         if (m_pScanOptions->bIsFirstWrapperScan) {
-            if (ssRecord.bIsProtection || ssRecord.bIsBundle) {
+            if (XScanEngine::isProtection(sType) || XScanEngine::isBundle(sType)) {
                 bAdd = true;
                 bStop = true;
             }
