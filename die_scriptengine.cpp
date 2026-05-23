@@ -20,8 +20,8 @@
  */
 #include "die_scriptengine.h"
 
-DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignaturesList, QList<XScanEngine::SCANSTRUCT> *pListScanStructs, QIODevice *pDevice, XBinary::FT fileType,
-                                   XBinary::FILEPART filePart, XScanEngine::SCAN_OPTIONS *pScanOptions, XBinary::PDSTRUCT *pPdStruct)
+DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignaturesList, QList<XScanEngine::SCANSTRUCT> *pListScanStructs, QIODevice *pDevice,
+                                   XBinary::FT fileType, XBinary::FILEPART filePart, XScanEngine::SCAN_OPTIONS *pScanOptions, XBinary::PDSTRUCT *pPdStruct)
     : XScriptEngine()
 {
     m_parentId = {};
