@@ -64,18 +64,7 @@ bool shouldMeasureElapsedTime(const XScanEngine::SCAN_OPTIONS *pScanOptions)
     return (pScanOptions != nullptr) && (pScanOptions->bShowScanTime || pScanOptions->bLogProfiling);
 }
 
-XScanEngine::SCANID createResultId(QIODevice *pDevice, const XScanEngine::SCANID &parentId, XBinary::FT fileType)
-{
-    XScanEngine::SCANID resultId = {};
 
-    resultId.fileType = fileType;
-    resultId.sUuid = XBinary::generateUUID();
-    resultId.nOffset = XIODevice::getInitLocation(pDevice);
-    resultId.nSize = pDevice->size();
-    resultId.filePart = parentId.filePart;
-
-    return resultId;
-}
 
 INIT_SIGNATURES findInitSignatures(const QList<XScanEngine::SIGNATURE_RECORD> &listSignatures, XBinary::FT fileType, XBinary::PDSTRUCT *pPdStruct)
 {
@@ -122,7 +111,7 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
 {
     const QString sDetectFunction = getDetectFunctionName(pScanOptions);
     QList<SCANSTRUCT> listRecords;
-    const XScanEngine::SCANID resultId = createResultId(pDevice, parentId, fileType);
+    const XScanEngine::SCANID resultId = XScanEngine::createResultId(pDevice, parentId, fileType);
     const qint32 nNumberOfSignatures = m_listSignatures.count();
     const INIT_SIGNATURES initSignatures = findInitSignatures(m_listSignatures, fileType, pPdStruct);
 
