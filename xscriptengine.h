@@ -21,7 +21,7 @@
 #ifndef XSCRIPTENGINE_H
 #define XSCRIPTENGINE_H
 
-#include "global_script.h"
+#include "die_global_script.h"
 #ifdef QT_SCRIPT_LIB
 #include <QScriptEngine>
 #else

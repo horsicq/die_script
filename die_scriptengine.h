@@ -107,7 +107,7 @@ private:
 
     // QList<RESULT> m_listResult; // TODO remove
 #ifndef QT_SCRIPT_LIB
-    global_script m_globalScript;
+    die_global_script m_globalScript;
 #endif
 };
 
