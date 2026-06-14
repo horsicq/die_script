@@ -24,8 +24,8 @@ set(DIE_SCRIPT_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/die_scriptengine.h
     # ${CMAKE_CURRENT_LIST_DIR}/die_scriptdatabaseupdate.cpp
     # ${CMAKE_CURRENT_LIST_DIR}/die_scriptdatabaseupdate.h
-    ${CMAKE_CURRENT_LIST_DIR}/global_script.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/global_script.h
+    ${CMAKE_CURRENT_LIST_DIR}/die_global_script.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/die_global_script.h
     ${CMAKE_CURRENT_LIST_DIR}/xscriptengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xscriptengine.h
     ${CMAKE_CURRENT_LIST_DIR}/util_script.cpp
