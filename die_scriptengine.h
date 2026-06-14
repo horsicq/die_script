@@ -105,7 +105,6 @@ private:
     QList<BLRECORD> m_listBLRecords;
     bool m_bIsStop;
 
-    // QList<RESULT> m_listResult; // TODO remove
 #ifndef QT_SCRIPT_LIB
     die_global_script m_globalScript;
 #endif
