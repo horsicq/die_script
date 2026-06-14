@@ -9,14 +9,14 @@ DEPENDPATH += $$PWD
 HEADERS += \
     $$PWD/die_script.h \
     $$PWD/die_scriptengine.h \
-    $$PWD/global_script.h \
+    $$PWD/die_global_script.h \
     $$PWD/util_script.h \
     $$PWD/xscriptengine.h 
 
 SOURCES += \
     $$PWD/die_script.cpp \
     $$PWD/die_scriptengine.cpp \
-    $$PWD/global_script.cpp \
+    $$PWD/die_global_script.cpp \
     $$PWD/util_script.cpp \
     $$PWD/xscriptengine.cpp
 

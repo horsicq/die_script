@@ -18,37 +18,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "global_script.h"
-global_script::global_script(QObject *pParent) : QObject(pParent)
+#include "die_global_script.h"
+die_global_script::die_global_script(QObject *pParent) : QObject(pParent)
 {
 }
 
-void global_script::includeScript(const QString &sScript)
+void die_global_script::includeScript(const QString &sScript)
 {
     emit includeScriptSignal(sScript);
 }
 
-void global_script::_log(const QString &sText)
+void die_global_script::_log(const QString &sText)
 {
     emit _logSignal(sText);
 }
 
-// qint64 global_script::_min(qint64 nValue1, qint64 nValue2)
+// qint64 die_global_script::_min(qint64 nValue1, qint64 nValue2)
 //{
 //     return qMin(nValue1, nValue2);
 // }
 
-// qint64 global_script::_max(qint64 nValue1, qint64 nValue2)
+// qint64 die_global_script::_max(qint64 nValue1, qint64 nValue2)
 //{
 //     return qMax(nValue1, nValue2);
 // }
 
-void global_script::_setResult(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions)
+void die_global_script::_setResult(const QString &sType, const QString &sName, const QString &sVersion, const QString &sOptions)
 {
     emit _setResultSignal(sType, sName, sVersion, sOptions);
 }
 
-bool global_script::_isResultPresent(const QString &sType, const QString &sName)
+bool die_global_script::_isResultPresent(const QString &sType, const QString &sName)
 {
     bool bResult = false;
     emit _isResultPresentSignal(&bResult, sType, sName);
@@ -56,7 +56,7 @@ bool global_script::_isResultPresent(const QString &sType, const QString &sName)
     return bResult;
 }
 
-qint32 global_script::_getNumberOfResults(const QString &sType)
+qint32 die_global_script::_getNumberOfResults(const QString &sType)
 {
     qint32 nResult = 0;
     emit _getNumberOfResultsSignal(&nResult, sType);
@@ -64,12 +64,12 @@ qint32 global_script::_getNumberOfResults(const QString &sType)
     return nResult;
 }
 
-void global_script::_removeResult(const QString &sType, const QString &sName)
+void die_global_script::_removeResult(const QString &sType, const QString &sName)
 {
     emit _removeResultSignal(sType, sName);
 }
 
-bool global_script::_isStop()
+bool die_global_script::_isStop()
 {
     bool bResult = false;
     emit _isStopSignal(&bResult);
@@ -77,12 +77,12 @@ bool global_script::_isStop()
     return bResult;
 }
 
-void global_script::_encodingList()
+void die_global_script::_encodingList()
 {
     emit _encodingListSignal();
 }
 
-bool global_script::_isConsoleMode()
+bool die_global_script::_isConsoleMode()
 {
     bool bResult = false;
     emit _isConsoleModeSignal(&bResult);
@@ -90,7 +90,7 @@ bool global_script::_isConsoleMode()
     return bResult;
 }
 
-bool global_script::_isLiteMode()
+bool die_global_script::_isLiteMode()
 {
     bool bResult = false;
     emit _isLiteModeSignal(&bResult);
@@ -98,7 +98,7 @@ bool global_script::_isLiteMode()
     return bResult;
 }
 
-bool global_script::_isGuiMode()
+bool die_global_script::_isGuiMode()
 {
     bool bResult = false;
     emit _isGuiModeSignal(&bResult);
@@ -106,7 +106,7 @@ bool global_script::_isGuiMode()
     return bResult;
 }
 
-bool global_script::_isLibraryMode()
+bool die_global_script::_isLibraryMode()
 {
     bool bResult = false;
     emit _isLibraryModeSignal(&bResult);
@@ -114,12 +114,12 @@ bool global_script::_isLibraryMode()
     return bResult;
 }
 
-void global_script::_breakScan()
+void die_global_script::_breakScan()
 {
     emit _breakScanSignal();
 }
 
-QString global_script::_getEngineVersion()
+QString die_global_script::_getEngineVersion()
 {
     QString sResult;
     emit _getEngineVersionSignal(&sResult);
@@ -127,7 +127,7 @@ QString global_script::_getEngineVersion()
     return sResult;
 }
 
-QString global_script::_getOS()
+QString die_global_script::_getOS()
 {
     QString sResult;
     emit _getOSSignal(&sResult);
@@ -135,7 +135,7 @@ QString global_script::_getOS()
     return sResult;
 }
 
-QString global_script::_getQtVersion()
+QString die_global_script::_getQtVersion()
 {
     QString sResult;
     emit _getQtVersionSignal(&sResult);

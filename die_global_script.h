@@ -18,17 +18,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef GLOBAL_SCRIPT_H
-#define GLOBAL_SCRIPT_H
+#ifndef DIE_GLOBAL_SCRIPT_H
+#define DIE_GLOBAL_SCRIPT_H
 
-// TODO rename to die_global_script
 #include "xoptions.h"
 
-class global_script : public QObject {
+class die_global_script : public QObject {
     Q_OBJECT
 
 public:
-    explicit global_script(QObject *pParent = nullptr);
+    explicit die_global_script(QObject *pParent = nullptr);
 
 public slots:
     void includeScript(const QString &sScript);
@@ -69,4 +68,4 @@ signals:
     void _getQtVersionSignal(QString *pResult);
 };
 
-#endif  // GLOBAL_SCRIPT_H
+#endif  // DIE_GLOBAL_SCRIPT_H
