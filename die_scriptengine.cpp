@@ -236,6 +236,10 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
         XPNG *pPNG = new XPNG(pDevice);
         PNG_Script *pExtraScript = new PNG_Script(pPNG, filePart, scriptOptions, pPdStruct);
         _adjustScript(pPNG, pExtraScript, "PNG");
+    } else if (XBinary::checkFileType(XBinary::FT_CLI_ASSEMBLY, fileType)) {
+        XCLIAssembly *pCliAssembly = new XCLIAssembly(pDevice);
+        DOTNET_Script *pExtraScript = new DOTNET_Script(pCliAssembly, filePart, scriptOptions, pPdStruct);
+        _adjustScript(pCliAssembly, pExtraScript, "DOTNET");
     }
 
     // TODO APKS
