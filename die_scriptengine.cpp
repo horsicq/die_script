@@ -135,7 +135,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
     } else if (XBinary::checkFileType(XBinary::FT_ARCHIVE, fileType)) {
         Archive_Script *pExtraScript = nullptr;
 
-        QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
+        QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, XBinary::FT_FLAG_ARCHIVES);
         XBinary::FT _fileType = XBinary::_getPrefFileType(&fileTypes);
 
         XArchive *_pArchive = static_cast<XArchive *>(XFormats::createClass(_fileType, pDevice));
@@ -147,7 +147,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
     } else if (XBinary::checkFileType(XBinary::FT_IMAGE, fileType)) {
         Image_Script *pExtraScript = nullptr;
 
-        QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, true);
+        QSet<XBinary::FT> fileTypes = XBinary::getFileTypes(pDevice, XBinary::FT_FLAG_IMAGES);
 
         XBinary *_pImage = nullptr;
 
