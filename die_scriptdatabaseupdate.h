@@ -36,23 +36,19 @@ public:
         QDateTime dtPublished;
         QString sDbUrl;
         qint64 nDbSize;
-        QString sDbExtraUrl;
-        qint64 nDbExtraSize;
     };
 
     struct UPDATE_RESULT {
         bool bSuccess;
         QString sErrorString;
         bool bDbUpdated;
-        bool bDbExtraUpdated;
     };
 
     explicit DiE_ScriptDatabaseUpdate(QObject *pParent = nullptr);
 
     DATABASE_INFO getRemoteDatabaseInfo();
     UPDATE_RESULT updateDatabaseMain(const QString &sDbPath);
-    UPDATE_RESULT updateDatabaseExtra(const QString &sDbExtraPath);
-    UPDATE_RESULT updateDatabases(const QString &sDbPath, const QString &sDbExtraPath);
+    UPDATE_RESULT updateDatabases(const QString &sDbPath);
 
 signals:
     void errorMessage(QString sText);
@@ -66,7 +62,6 @@ private:
     static const QString S_GITHUB_REPO;
     static const QString S_RELEASE_TAG;
     static const QString S_DB_ZIP_NAME;
-    static const QString S_DB_EXTRA_ZIP_NAME;
 };
 
 #endif  // DIE_SCRIPTDATABASEUPDATE_H

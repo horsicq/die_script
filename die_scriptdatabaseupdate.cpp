@@ -25,7 +25,6 @@ const QString DiE_ScriptDatabaseUpdate::S_GITHUB_USER = "horsicq";
 const QString DiE_ScriptDatabaseUpdate::S_GITHUB_REPO = "Detect-It-Easy";
 const QString DiE_ScriptDatabaseUpdate::S_RELEASE_TAG = "current-database";
 const QString DiE_ScriptDatabaseUpdate::S_DB_ZIP_NAME = "db.zip";
-const QString DiE_ScriptDatabaseUpdate::S_DB_EXTRA_ZIP_NAME = "db_extra.zip";
 
 DiE_ScriptDatabaseUpdate::DiE_ScriptDatabaseUpdate(QObject *pParent) : QObject(pParent)
 {
@@ -53,9 +52,6 @@ DiE_ScriptDatabaseUpdate::DATABASE_INFO DiE_ScriptDatabaseUpdate::getRemoteDatab
             if (record.sName == S_DB_ZIP_NAME) {
                 result.sDbUrl = record.sSrc;
                 result.nDbSize = record.nSize;
-            } else if (record.sName == S_DB_EXTRA_ZIP_NAME) {
-                result.sDbExtraUrl = record.sSrc;
-                result.nDbExtraSize = record.nSize;
             }
         }
     } else {
@@ -98,38 +94,7 @@ DiE_ScriptDatabaseUpdate::UPDATE_RESULT DiE_ScriptDatabaseUpdate::updateDatabase
     return result;
 }
 
-DiE_ScriptDatabaseUpdate::UPDATE_RESULT DiE_ScriptDatabaseUpdate::updateDatabaseExtra(const QString &sDbExtraPath)
-{
-    UPDATE_RESULT result = {};
-
-    DATABASE_INFO dbInfo = getRemoteDatabaseInfo();
-
-    if (!dbInfo.bValid) {
-        result.sErrorString = tr("Failed to get remote database info");
-        return result;
-    }
-
-    if (dbInfo.sDbExtraUrl.isEmpty()) {
-        result.sErrorString = tr("No %1 found in release").arg(QString("db_extra.zip"));
-        return result;
-    }
-
-    emit infoMessage(tr("Updating extra database") + QString("..."));
-
-    QString sError;
-
-    if (_downloadAndExtract(dbInfo.sDbExtraUrl, sDbExtraPath, &sError)) {
-        result.bSuccess = true;
-        result.bDbExtraUpdated = true;
-        emit infoMessage(tr("Extra database updated successfully"));
-    } else {
-        result.sErrorString = sError;
-    }
-
-    return result;
-}
-
-DiE_ScriptDatabaseUpdate::UPDATE_RESULT DiE_ScriptDatabaseUpdate::updateDatabases(const QString &sDbPath, const QString &sDbExtraPath)
+DiE_ScriptDatabaseUpdate::UPDATE_RESULT DiE_ScriptDatabaseUpdate::updateDatabases(const QString &sDbPath)
 {
     UPDATE_RESULT result = {};
 
@@ -150,20 +115,6 @@ DiE_ScriptDatabaseUpdate::UPDATE_RESULT DiE_ScriptDatabaseUpdate::updateDatabase
         if (_downloadAndExtract(dbInfo.sDbUrl, sDbPath, &sError)) {
             result.bDbUpdated = true;
             emit infoMessage(tr("Main database updated successfully"));
-        } else {
-            result.bSuccess = false;
-            result.sErrorString = sError;
-        }
-    }
-
-    if (result.bSuccess && !dbInfo.sDbExtraUrl.isEmpty()) {
-        emit infoMessage(tr("Updating extra database") + QString("..."));
-
-        QString sError;
-
-        if (_downloadAndExtract(dbInfo.sDbExtraUrl, sDbExtraPath, &sError)) {
-            result.bDbExtraUpdated = true;
-            emit infoMessage(tr("Extra database updated successfully"));
         } else {
             result.bSuccess = false;
             result.sErrorString = sError;

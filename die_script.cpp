@@ -249,10 +249,6 @@ bool DiE_Script::_shouldExecuteSignature(const SIGNATURE_RECORD &signatureRecord
         return true;
     }
 
-    if (pScanOptions->bUseExtraDatabase && (signatureRecord.databaseType == DT_EXTRA)) {
-        return true;
-    }
-
     return false;
 }
 
@@ -352,7 +348,6 @@ void DiE_Script::_processDetect(SCANID *pScanID, SCAN_RESULT *pScanResult, QIODe
 
 //     initDatabase();
 //     bResult = loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_MAIN_PATH).toString(), DT_MAIN);
-//     loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_EXTRA_PATH).toString(), DT_EXTRA);
 //     loadDatabase(pXOptions->getValue(XOptions::ID_SCAN_DATABASE_CUSTOM_PATH).toString(), DT_CUSTOM);
 
 //     return bResult;
