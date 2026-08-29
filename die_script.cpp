@@ -64,8 +64,6 @@ bool shouldMeasureElapsedTime(const XScanEngine::SCAN_OPTIONS *pScanOptions)
     return (pScanOptions != nullptr) && (pScanOptions->bShowScanTime || pScanOptions->bLogProfiling);
 }
 
-
-
 INIT_SIGNATURES findInitSignatures(const QList<XScanEngine::SIGNATURE_RECORD> &listSignatures, XBinary::FT fileType, XBinary::PDSTRUCT *pPdStruct)
 {
     INIT_SIGNATURES result = {};
