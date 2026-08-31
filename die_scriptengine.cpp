@@ -162,7 +162,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
         _adjustScript(_pImage, pExtraScript, "Image");
     } else if (XBinary::checkFileType(XBinary::FT_RAR, fileType)) {
         XRar *pRAR = new XRar(pDevice);
-        RAR_Script *pExtraScript = new RAR_Script(pRAR, filePart, scriptOptions, pPdStruct);
+        Archive_Script *pExtraScript = new Archive_Script(pRAR, filePart, scriptOptions, pPdStruct);
         _adjustScript(pRAR, pExtraScript, "RAR");
     } else if (XBinary::checkFileType(XBinary::FT_ISO9660, fileType)) {
         XISO9660 *pISO = new XISO9660(pDevice);
