@@ -142,3 +142,11 @@ QString die_global_script::_getQtVersion()
 
     return sResult;
 }
+
+QString die_global_script::scanBufferForEncryptedPe(const QVariant &varData, qint64 nSize)
+{
+    QString sResult;
+    emit scanBufferForEncryptedPeSignal(&sResult, varData, nSize);
+
+    return sResult;
+}

@@ -69,6 +69,7 @@ private:
     static QScriptValue _breakScan(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _getEngineVersion(QScriptContext *pContext, QScriptEngine *pEngine);
     static QScriptValue _getOS(QScriptContext *pContext, QScriptEngine *pEngine);
+    static QScriptValue _scanBufferForEncryptedPe(QScriptContext *pContext, QScriptEngine *pEngine);
 #endif
 
 private slots:
@@ -88,6 +89,7 @@ private slots:
     void _getEngineVersionSlot(QString *pResult);
     void _getOSSlot(QString *pResult);
     void _getQtVersionSlot(QString *pResult);
+    void _scanBufferForEncryptedPeSlot(QString *pResult, const QVariant &varData, qint64 nSize);
 
 private:
     QList<XScanEngine::SIGNATURE_RECORD> *m_pSignaturesList;

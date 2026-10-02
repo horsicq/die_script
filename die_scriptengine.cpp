@@ -52,6 +52,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
     _addFunction(_breakScan, "_breakScan");
     _addFunction(_getEngineVersion, "_getEngineVersion");
     _addFunction(_getOS, "_getOS");
+    _addFunction(_scanBufferForEncryptedPe, "scanBufferForEncryptedPe");
 #else
     connect(&m_globalScript, SIGNAL(includeScriptSignal(QString)), this, SLOT(includeScriptSlot(QString)), Qt::DirectConnection);
     connect(&m_globalScript, SIGNAL(_logSignal(QString)), this, SLOT(_logSlot(QString)), Qt::DirectConnection);
@@ -70,6 +71,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
     connect(&m_globalScript, SIGNAL(_getEngineVersionSignal(QString *)), this, SLOT(_getEngineVersionSlot(QString *)), Qt::DirectConnection);
     connect(&m_globalScript, SIGNAL(_getOSSignal(QString *)), this, SLOT(_getOSSlot(QString *)), Qt::DirectConnection);
     connect(&m_globalScript, SIGNAL(_getQtVersionSignal(QString *)), this, SLOT(_getQtVersionSlot(QString *)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(scanBufferForEncryptedPeSignal(QString *, QVariant, qint64)), this,
+            SLOT(_scanBufferForEncryptedPeSlot(QString *, QVariant, qint64)), Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&m_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
@@ -88,6 +91,7 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
     globalObject().setProperty("_getEngineVersion", valueGlobalScript.property("_getEngineVersion"));
     globalObject().setProperty("_getOS", valueGlobalScript.property("_getOS"));
     globalObject().setProperty("_getQtVersion", valueGlobalScript.property("_getQtVersion"));
+    globalObject().setProperty("scanBufferForEncryptedPe", valueGlobalScript.property("scanBufferForEncryptedPe"));
 #endif
 
     Binary_Script::OPTIONS scriptOptions = XScanEngine::createScriptOptions(pScanOptions);
@@ -610,6 +614,30 @@ QScriptValue DiE_ScriptEngine::_getOS(QScriptContext *pContext, QScriptEngine *p
 
     return result;
 }
+
+QScriptValue DiE_ScriptEngine::_scanBufferForEncryptedPe(QScriptContext *pContext, QScriptEngine *pEngine)
+{
+    QScriptValue result;
+    DiE_ScriptEngine *pScriptEngine = static_cast<DiE_ScriptEngine *>(pEngine);
+
+    if (pScriptEngine) {
+        QString sResult;
+        QVariant varData;
+        qint64 nSize = -1;
+
+        if (pContext->argumentCount() > 0) {
+            varData = pContext->argument(0).toVariant();
+        }
+        if (pContext->argumentCount() > 1) {
+            nSize = pContext->argument(1).toInteger();
+        }
+
+        pScriptEngine->_scanBufferForEncryptedPeSlot(&sResult, varData, nSize);
+        result = sResult;
+    }
+
+    return result;
+}
 #endif
 
 void DiE_ScriptEngine::includeScriptSlot(const QString &sScript)
@@ -822,6 +850,34 @@ void DiE_ScriptEngine::_getOSSlot(QString *pResult)
 void DiE_ScriptEngine::_getQtVersionSlot(QString *pResult)
 {
     *pResult = QString::fromLatin1(QT_VERSION_STR);
+}
+
+void DiE_ScriptEngine::_scanBufferForEncryptedPeSlot(QString *pResult, const QVariant &varData, qint64 nSize)
+{
+    if (!pResult) {
+        return;
+    }
+
+    if (varData.type() == QVariant::ByteArray) {
+        QByteArray ba = varData.toByteArray();
+        qint64 sz = (nSize >= 0 && nSize <= ba.size()) ? nSize : ba.size();
+        *pResult = XBinary::scanBufferForEncryptedPe(ba.constData(), sz);
+    } else if (varData.canConvert<QVariantList>()) {
+        QVariantList list = varData.toList();
+        qint32 count = (nSize >= 0 && nSize <= list.size()) ? (qint32)nSize : list.size();
+        QByteArray ba;
+        ba.resize(count);
+        char *pData = ba.data();
+        for (qint32 i = 0; i < count; i++) {
+            pData[i] = (char)(list.at(i).toUInt() & 0xFF);
+        }
+        *pResult = XBinary::scanBufferForEncryptedPe(ba.constData(), count);
+    } else if (varData.canConvert<qint64>() && (nSize > 0) && !m_listBinaries.isEmpty()) {
+        qint64 nOffset = varData.toLongLong();
+        *pResult = m_listBinaries.first()->scanBufferForEncryptedPe(nOffset, nSize, m_pPdStruct);
+    } else {
+        *pResult = QString();
+    }
 }
 
 // DiE_ScriptEngine::RESULT DiE_ScriptEngine::stringToResult(const QString &sString, bool bShowType, bool bShowVersion, bool bShowOptions)

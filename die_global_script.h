@@ -48,6 +48,7 @@ public slots:
     QString _getEngineVersion();
     QString _getOS();
     QString _getQtVersion();
+    QString scanBufferForEncryptedPe(const QVariant &varData, qint64 nSize = -1);
 
 signals:
     void includeScriptSignal(const QString &sScript);
@@ -66,6 +67,7 @@ signals:
     void _getEngineVersionSignal(QString *pResult);
     void _getOSSignal(QString *pResult);
     void _getQtVersionSignal(QString *pResult);
+    void scanBufferForEncryptedPeSignal(QString *pResult, const QVariant &varData, qint64 nSize);
 };
 
 #endif  // DIE_GLOBAL_SCRIPT_H
