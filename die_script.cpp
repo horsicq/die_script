@@ -364,7 +364,16 @@ bool DiE_Script::isSignatureFileValid(const QString &sSignatureFilePath)
         return false;
     }
 
-    const QString sExt = fileInfo.suffix().toLower();
+    return isSignatureNameValid(fileInfo.fileName());
+}
+
+bool DiE_Script::isSignatureNameValid(const QString &sSignatureName)
+{
+    if (sSignatureName.isEmpty()) {
+        return false;
+    }
+
+    const QString sExt = QFileInfo(sSignatureName).suffix().toLower();
 
     return (sExt == QLatin1String("sg")) || sExt.isEmpty();
 }

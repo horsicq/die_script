@@ -43,6 +43,7 @@ public:
 
     // bool loadDatabaseFromGlobalOptions(XOptions *pXOptions);
     bool isSignatureFileValid(const QString &sSignatureFilePath) override;
+    bool isSignatureNameValid(const QString &sSignatureName) override;
     bool isDatabaseUsing() override;
 
 private:
