@@ -71,8 +71,8 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
     connect(&m_globalScript, SIGNAL(_getEngineVersionSignal(QString *)), this, SLOT(_getEngineVersionSlot(QString *)), Qt::DirectConnection);
     connect(&m_globalScript, SIGNAL(_getOSSignal(QString *)), this, SLOT(_getOSSlot(QString *)), Qt::DirectConnection);
     connect(&m_globalScript, SIGNAL(_getQtVersionSignal(QString *)), this, SLOT(_getQtVersionSlot(QString *)), Qt::DirectConnection);
-    connect(&m_globalScript, SIGNAL(scanBufferForEncryptedPeSignal(QString *, QVariant, qint64)), this,
-            SLOT(_scanBufferForEncryptedPeSlot(QString *, QVariant, qint64)), Qt::DirectConnection);
+    connect(&m_globalScript, SIGNAL(scanBufferForEncryptedPeSignal(QString *, QVariant, qint64)), this, SLOT(_scanBufferForEncryptedPeSlot(QString *, QVariant, qint64)),
+            Qt::DirectConnection);
 
     QJSValue valueGlobalScript = newQObject(&m_globalScript);
     globalObject().setProperty("includeScript", valueGlobalScript.property("includeScript"));
