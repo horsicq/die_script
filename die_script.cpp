@@ -112,6 +112,7 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
     const XScanEngine::SCANID resultId = XScanEngine::createResultId(pDevice, parentId, fileType);
     const qint32 nNumberOfSignatures = m_listSignatures.count();
     const INIT_SIGNATURES initSignatures = findInitSignatures(m_listSignatures, fileType, pPdStruct);
+    const TAG_FILTER tagFilter = createTagFilter(pScanOptions);
 
     DiE_ScriptEngine scriptEngine(&m_listSignatures, &listRecords, pDevice, fileType, parentId.filePart, pScanOptions, pPdStruct);
 
@@ -143,7 +144,7 @@ void DiE_Script::processDetect(SCANID *pScanID, XScanEngine::SCAN_RESULT *pScanR
 
         XBinary::setPdStructStatus(pPdStruct, nProgressIndex, signatureRecord.sName);
 
-        const bool bExec = _shouldExecuteSignature(signatureRecord, fileType, pScanOptions, sSignatureFilePath);
+        const bool bExec = _shouldExecuteSignature(signatureRecord, fileType, pScanOptions, sSignatureFilePath, tagFilter);
 
         if (bExec && pScanOptions->scanEngineCallback) {
             if (!pScanOptions->scanEngineCallback(signatureRecord.sName, nNumberOfSignatures, i, pScanOptions->pUserData)) {
@@ -209,7 +210,7 @@ bool DiE_Script::_handleError(DiE_ScriptEngine *pScriptEngine, XSCRIPTVALUE scri
 }
 
 bool DiE_Script::_shouldExecuteSignature(const SIGNATURE_RECORD &signatureRecord, XBinary::FT fileType, const SCAN_OPTIONS *pScanOptions,
-                                         const QString &sSignatureFilePath) const
+                                          const QString &sSignatureFilePath, const TAG_FILTER &tagFilter) const
 {
     if (pScanOptions == nullptr) {
         return false;
@@ -236,6 +237,10 @@ bool DiE_Script::_shouldExecuteSignature(const SIGNATURE_RECORD &signatureRecord
             return false;
         }
     } else if (signatureRecord.sName == QLatin1String(g_sInitSignatureName)) {
+        return false;
+    }
+
+    if (!isSignatureTagAllowed(signatureRecord, tagFilter)) {
         return false;
     }
 
