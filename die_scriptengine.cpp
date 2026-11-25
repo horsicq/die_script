@@ -215,7 +215,17 @@ DiE_ScriptEngine::DiE_ScriptEngine(QList<XScanEngine::SIGNATURE_RECORD> *pSignat
     } else if (XBinary::checkFileType(XBinary::FT_ATARIST, fileType)) {
         XAtariST *pAtariST = new XAtariST(pDevice);
         AtariST_Script *pExtraScript = new AtariST_Script(pAtariST, filePart, scriptOptions, pPdStruct);
-        _adjustScript(pAtariST, pExtraScript, "AtariST");
+        _adjustScript(pAtariST, pExtraScript, "GEMDOS");
+        _addClass(pExtraScript, "AtariST");  // legacy name of GEMDOS
+    } else if (XBinary::checkFileType(XBinary::FT_FAT, fileType)) {
+        // Floppy disk images: the Binary methods under the database folder's name (db/FAT, db/MSA).
+        XBinary *pFAT = new XBinary(pDevice);
+        Binary_Script *pExtraScript = new Binary_Script(pFAT, filePart, scriptOptions, pPdStruct);
+        _adjustScript(pFAT, pExtraScript, "FAT");
+    } else if (XBinary::checkFileType(XBinary::FT_MSA, fileType)) {
+        XBinary *pMSA = new XBinary(pDevice);
+        Binary_Script *pExtraScript = new Binary_Script(pMSA, filePart, scriptOptions, pPdStruct);
+        _adjustScript(pMSA, pExtraScript, "MSA");
     } else if (XBinary::checkFileType(XBinary::FT_JAVACLASS, fileType)) {
         XJavaClass *pAmiga = new XJavaClass(pDevice);
         JavaClass_Script *pExtraScript = new JavaClass_Script(pAmiga, filePart, scriptOptions, pPdStruct);
@@ -773,13 +783,12 @@ void DiE_ScriptEngine::_removeResultSlot(const QString &sType, const QString &sN
 
     m_listBLRecords.append(blRecord);
 
-    qint32 nNumberOfResults = m_pListScanStructs->count();
-
-    for (qint32 i = 0; i < nNumberOfResults; i++) {
+    // Remove every result of the type whose name matches; an empty name is a
+    // wildcard for the whole type, as in the blacklist check for later results.
+    for (qint32 i = m_pListScanStructs->count() - 1; i >= 0; i--) {
         if ((m_pListScanStructs->at(i).sType.toUpper() == sType.toUpper()) &&
-            ((m_pListScanStructs->at(i).sName.toUpper() == sName.toUpper()) || (m_pListScanStructs->at(i).sName == ""))) {
+            ((sName == "") || (m_pListScanStructs->at(i).sName.toUpper() == sName.toUpper()))) {
             m_pListScanStructs->removeAt(i);
-            break;
         }
     }
 }
